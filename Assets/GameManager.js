@@ -7,8 +7,8 @@ var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
 var verseReference : GUIText;
-var scoreLabel : TextMesh;
-var feedbackLabel : TextMesh;
+var scoreLabel : GUIText;
+var feedbackLabel : GUIText;
 var shouldStartNextVerse : boolean = false;
 var verseText : TextAsset;
 var verses : Array = new Array();
@@ -91,14 +91,16 @@ function SetupUI() {
 	verseReference.gameObject.transform.position = new Vector3(
 		screenBounds.x+screenBounds.width*0.1f,
 		screenBounds.y-screenBounds.height*0.15f);
-		*/
+		
 	scoreLabel.gameObject.transform.position = new Vector3(
 		screenBounds.x+screenBounds.width*0.9f,
 		screenBounds.y-screenBounds.height*0.15f);
+		
 	feedbackLabel.gameObject.transform.position = new Vector3(
 		screenBounds.x+screenBounds.width*0.5f,
 		screenBounds.y-screenBounds.height*0.7f
 	);
+	*/
 	feedbackLabel.text = "";
 	setScore(0);
 }
