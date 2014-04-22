@@ -73,6 +73,7 @@ function returnToVerse () {
 	collider2D.enabled = false;
 	rigidbody2D.fixedAngle = true;
 	rigidbody2D.gravityScale = 0;
+	rigidbody2D.isKinematic = true;
 	rigidbody2D.velocity = new Vector3(0,0,0);
 	transform.rotation = new Quaternion.Euler(0,0,0);
 	calculateVersePosition();

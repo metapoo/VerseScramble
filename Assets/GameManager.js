@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+enum Difficulty {Easy, Medium, Hard};
+
 var mainCam : Camera;
 var wordLabel : WordLabel;
 var topWall : BoxCollider2D;
@@ -14,6 +16,7 @@ var verseText : TextAsset;
 var verses : Array = new Array();
 var references : Array = new Array();
 var verseIndex = 0;
+var difficulty : Difficulty = Difficulty.Easy;
 
 static var currentWord : String;
 static var words : Array = new Array();
@@ -87,20 +90,6 @@ function addScore(dScore : int) {
 }
 
 function SetupUI() {
-/*
-	verseReference.gameObject.transform.position = new Vector3(
-		screenBounds.x+screenBounds.width*0.1f,
-		screenBounds.y-screenBounds.height*0.15f);
-		
-	scoreLabel.gameObject.transform.position = new Vector3(
-		screenBounds.x+screenBounds.width*0.9f,
-		screenBounds.y-screenBounds.height*0.15f);
-		
-	feedbackLabel.gameObject.transform.position = new Vector3(
-		screenBounds.x+screenBounds.width*0.5f,
-		screenBounds.y-screenBounds.height*0.7f
-	);
-	*/
 	feedbackLabel.text = "";
 	setScore(0);
 }
@@ -126,6 +115,7 @@ function nextWord() {
 }
 
 function Start () {
+	Application.targetFrameRate = 60;
 	
 	SetupWalls();
 	SetupUI();
@@ -162,6 +152,49 @@ function SetVerseReference (reference : String) {
 	verseReference.text = reference;
 }
 
+function SplitVerse (verse : String) {
+	var phraseLength = 5;
+	switch (difficulty) {
+		case Difficulty.Easy:
+			phraseLength = 20;
+			break;
+		case Difficulty.Medium:
+			phraseLength = 10;
+			break;
+		case Difficulty.Hard:
+			phraseLength = 5;
+			break;
+	}
+	
+	var wordsArray : Array;
+	var phraseArray : Array = new Array();
+	wordsArray = verse.Split(" "[0]);
+	var phrase : String = "";
+	var newPhrase : String = "";
+	for (word in wordsArray) {
+		newPhrase = phrase + word + " ";
+		if (newPhrase.Length > phraseLength) {
+		  var newPhraseDiff = Mathf.Abs(newPhrase.Length - phraseLength);
+		  var phraseDiff = Mathf.Abs(phrase.Length - phraseLength);
+		  if ((newPhraseDiff < phraseDiff) || (phrase == "")) {
+			  phraseArray.push(newPhrase);
+			  phrase = "";
+		  } else {
+		      // use previous phrase if it's closer to the limit
+		  	  phraseArray.push(phrase);
+		  	  phrase = word + " ";
+		  }
+		} else {
+		  phrase = newPhrase;
+		}
+		
+	}
+	if (phrase != "") {
+		phraseArray.push(phrase);
+	}
+	return phraseArray;
+}
+
 function StartNewVerse() {
 	lastWordTime = Time.time;
 	streak = 0;
@@ -177,7 +210,7 @@ function StartNewVerse() {
 	
 	SetVerseReference(references[verseIndex]);
 	var verse : String = verses[verseIndex];
-	words = verse.Split(" "[0]);
+	words = SplitVerse(verse);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
 	
@@ -195,7 +228,7 @@ function StartNewVerse() {
 	verseIndex += 1;
 }
 
-function delayStartNewVerse() {
+function DelayStartNewVerse() {
 		shouldStartNextVerse = false;
 		yield WaitForSeconds(3);
 		StartNewVerse();
@@ -203,6 +236,6 @@ function delayStartNewVerse() {
 
 function Update () {
 	if (shouldStartNextVerse) {
-		delayStartNewVerse();
+		DelayStartNewVerse();
 	}
 }
