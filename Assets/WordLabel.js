@@ -11,12 +11,13 @@ var gotoVerse : boolean = false;
 var returnedToVerse : boolean = false;
 var startTime : float;
 var gameManager : GameManager;
+var scoreManager : ScoreManager;
 
 function setWord(w : String) {
 	label.text = w;
 	word = w;
 	var length = word.Length;
-	transform.localScale.x = .25*(length+1);
+	transform.localScale.x = .125*(length+1);
 	var ratio = transform.localScale.x/transform.localScale.y;
 	label.transform.localScale.x = label.transform.localScale.y/ratio;
 }
@@ -25,7 +26,8 @@ function Start () {
     var screenBounds = GameManager.screenBounds;
 	startPosition = new Vector3(screenBounds.x+screenBounds.width*.1,screenBounds.y-screenBounds.height*0.3);
 	versePosition = startPosition;
-	gameManager = GameObject.Find("_GM").GetComponent("GameManager");
+	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
+	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
 }
 
 function Update () {
@@ -87,12 +89,12 @@ function OnMouseDown() {
 	if (word == GameManager.currentWord) {
 		GetComponent(SpriteRenderer).color = Color.white;
 		returnToVerse();
-		gameManager.wordCorrect();
+		gameManager.HandleWordCorrect();
 	} else {
 		var oldColor : Color = GetComponent(SpriteRenderer).color;
 		GetComponent(SpriteRenderer).color = Color.red;
 		yield WaitForSeconds(0.1);
 		GetComponent(SpriteRenderer).color = oldColor;
-		gameManager.wordWrong();
+		gameManager.HandleWordWrong();
 	}
 }

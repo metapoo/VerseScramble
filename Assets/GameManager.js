@@ -16,7 +16,8 @@ var verseText : TextAsset;
 var verses : Array = new Array();
 var references : Array = new Array();
 var verseIndex = 0;
-var difficulty : Difficulty = Difficulty.Easy;
+var difficulty : Difficulty = Difficulty.Hard;
+var scoreManager : ScoreManager;
 
 static var currentWord : String;
 static var words : Array = new Array();
@@ -26,6 +27,7 @@ static var score = 0;
 static var highScore = 0;
 static var screenBounds : Rect;
 static var streak : int = 0;
+static var moves : int = 0;
 static var lastWordTime : float;
 
 function SetupWalls () {
@@ -49,49 +51,19 @@ function SetupWalls () {
 	topWall.center.y-bottomWall.center.y);
 }
 
-function wordCorrect() {
+function HandleWordWrong() {
+	scoreManager.HandleWordWrong();
+}
+
+function HandleWordCorrect() {
 	var elapsedTime : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
-	addScore(Mathf.Max((4-elapsedTime),1)*(1+streak*0.5));
-	Debug.Log("elapsed time: " + elapsedTime);
-	if (elapsedTime < 2) {
-		streak += 1;
-		if (streak == 5) {
-			showFeedback("Nice Streak!", 1);
-		} else if (streak == 10) {
-			showFeedback("You're doing great!", 1);
-		} else if (streak == 15) {
-			showFeedback("Hallelujah!", 1);
-		}
-		updateScoreLabel();
-	}
+	scoreManager.HandleWordCorrect(elapsedTime);
 }
 
-function wordWrong() {
-	streak = 0;
-	addScore(-10);
-}
-
-function setScore(newScore : int) {
-	if (newScore < 0) newScore = 0;
-	score = newScore;
-	if (score > highScore) {
-		highScore = score;
-	}
-	updateScoreLabel();
-}
-
-function updateScoreLabel() {
-	scoreLabel.text = " score: " + score + " high: " + highScore + "  streak: " + streak ;
-}
-
-function addScore(dScore : int) {
-	setScore(score+dScore);
-}
 
 function SetupUI() {
 	feedbackLabel.text = "";
-	setScore(0);
 }
 
 function showFeedback(feedbackText : String, time : float) {
@@ -116,6 +88,7 @@ function nextWord() {
 
 function Start () {
 	Application.targetFrameRate = 60;
+	difficulty = Difficulty.Medium;
 	
 	SetupWalls();
 	SetupUI();
@@ -159,13 +132,13 @@ function SplitVerse (verse : String) {
 			phraseLength = 20;
 			break;
 		case Difficulty.Medium:
-			phraseLength = 10;
+			phraseLength = 12;
 			break;
 		case Difficulty.Hard:
-			phraseLength = 5;
+			phraseLength = 6;
 			break;
 	}
-	
+	Debug.Log("phrase length = " + phraseLength);
 	var wordsArray : Array;
 	var phraseArray : Array = new Array();
 	wordsArray = verse.Split(" "[0]);
@@ -197,9 +170,7 @@ function SplitVerse (verse : String) {
 
 function StartNewVerse() {
 	lastWordTime = Time.time;
-	streak = 0;
-	setScore(0);
-	updateScoreLabel();
+	scoreManager.resetScore();
 	var wordObject : WordLabel;
 	for (wordObject in wordObjects) {
 		Destroy(wordObject.gameObject);
