@@ -12,12 +12,10 @@ var verseReference : GUIText;
 var scoreLabel : GUIText;
 var feedbackLabel : GUIText;
 var shouldStartNextVerse : boolean = false;
-var verseText : TextAsset;
-var verses : Array = new Array();
 var references : Array = new Array();
-var verseIndex = 0;
 var difficulty : Difficulty = Difficulty.Hard;
 var scoreManager : ScoreManager;
+var verseManager : VerseManager;
 
 static var currentWord : String;
 static var words : Array = new Array();
@@ -92,33 +90,7 @@ function Start () {
 	
 	SetupWalls();
 	SetupUI();
-	LoadVerses();
 	StartNewVerse();
-}
-
-function LoadVerses() {
-  	var lines = verseText.text.Split("\n"[0]);
-  	var line : String;
-  	for (line in lines) {
-  		Debug.Log(line);
-  		var parts = line.Split([": "], System.StringSplitOptions.None);
-  		if (parts.Length != 2) continue;
-  		
-  		var verse = parts[1];
-  		var badLetter : String;
-  		for (badLetter in new Array(",",":",".","“","”",";")) {
-	  		verse = verse.Replace(badLetter,"");
-	  	}
-	  	for (badLetter in new Array("-","—","  ","\t")) {
-	  		verse = verse.Replace(badLetter," ");
-	  	}
-	  	
-  		var reference = parts[0];
-  		verses.push(verse);
-  		references.push(reference);
-  		Debug.Log("parts[1] = " + parts[1]);
-  		Debug.Log("reference = " + reference + " verse = " + verse);
-  	}
 }
 
 function SetVerseReference (reference : String) {
@@ -169,6 +141,7 @@ function SplitVerse (verse : String) {
 }
 
 function StartNewVerse() {
+	
 	lastWordTime = Time.time;
 	scoreManager.resetScore();
 	var wordObject : WordLabel;
@@ -179,8 +152,8 @@ function StartNewVerse() {
 	
 	var clone : WordLabel;
 	
-	SetVerseReference(references[verseIndex]);
-	var verse : String = verses[verseIndex];
+	SetVerseReference(verseManager.currentReference());
+	var verse : String = verseManager.currentVerse();
 	words = SplitVerse(verse);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
@@ -196,12 +169,12 @@ function StartNewVerse() {
 		var y = Random.Range(screenBounds.y-screenBounds.height+h*0.5,screenBounds.y-h*0.5);
 		clone.transform.position = new Vector3(x,y,0);
 	}
-	verseIndex += 1;
 }
 
 function DelayStartNewVerse() {
 		shouldStartNextVerse = false;
 		yield WaitForSeconds(3);
+		verseManager.GotoNextVerse();
 		StartNewVerse();
 }
 
