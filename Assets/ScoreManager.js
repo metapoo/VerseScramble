@@ -19,7 +19,7 @@ function HandleWordWrong() {
 }
 
 function HandleWordCorrect(elapsedTime : float) {
-	var baseTime = 4;
+	var baseTime = 5;
 	if (moves == 0) {
 		baseTime = 10;
 	}
@@ -55,6 +55,8 @@ function addScore(dScore : int) {
 }
 
 function resetScore() {
+	mistakes = 0;
+	moves = 0;
 	streak = 0;
 	setScore(0);
 	updateScoreLabel();

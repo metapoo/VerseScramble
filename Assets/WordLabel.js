@@ -12,6 +12,7 @@ var returnedToVerse : boolean = false;
 var startTime : float;
 var gameManager : GameManager;
 var scoreManager : ScoreManager;
+var hinting : boolean = false;
 
 function setWord(w : String) {
 	label.text = w;
@@ -100,14 +101,28 @@ function returnToVerse () {
 	gameManager.nextWord();
 }
 
+function HintAt() {
+	var oldColor : Color = GetComponent(SpriteRenderer).color;
+	var blinkColor : Color = Color(0.2,0.8,0.2,1.0);
+	hinting = true;
+	
+	while (hinting) {
+		GetComponent(SpriteRenderer).color = blinkColor;
+		yield WaitForSeconds(0.2);
+		GetComponent(SpriteRenderer).color = oldColor;
+		yield WaitForSeconds(0.2);
+	}		
+}
+
 function OnMouseDown() {  
+	hinting = false;
 	if (word == GameManager.currentWord) {
 		GetComponent(SpriteRenderer).color = Color.white;
 		returnToVerse();
 		gameManager.HandleWordCorrect();
 	} else {
 		var oldColor : Color = GetComponent(SpriteRenderer).color;
-		GetComponent(SpriteRenderer).color = Color.red;
+		GetComponent(SpriteRenderer).color = Color(1.0,0.5,0.5,0.8);
 		yield WaitForSeconds(0.1);
 		GetComponent(SpriteRenderer).color = oldColor;
 		gameManager.HandleWordWrong();

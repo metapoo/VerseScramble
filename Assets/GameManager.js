@@ -18,6 +18,9 @@ var difficulty : Difficulty = Difficulty.Easy;
 var scoreManager : ScoreManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
+var timeUntilHint : int = 15;
+
+private var wordHinted : boolean = false;
 
 static var currentWord : String;
 static var words : Array = new Array();
@@ -70,7 +73,6 @@ function HandleWordCorrect() {
 	scoreManager.HandleWordCorrect(elapsedTime);
 }
 
-
 function SetupUI() {
 	feedbackLabel.text = "";
 }
@@ -83,6 +85,7 @@ function showFeedback(feedbackText : String, time : float) {
 
 function nextWord() {
 	if (wordIndex == -1) return null;
+	wordHinted = false;
 	wordIndex += 1;
 	if (wordIndex >= words.length) {
 		currentWord = null;
@@ -101,7 +104,7 @@ function Start () {
 	
 	SetupWalls();
 	SetupUI();
-	StartNewVerse();
+	SetupVerse();
 }
 
 function SetVerseReference (reference : String) {
@@ -169,7 +172,7 @@ function Cleanup () {
 	wordObjects.clear();
 }
 
-function StartNewVerse() {
+function SetupVerse() {
 	Cleanup();
 	lastWordTime = Time.time;
 	
@@ -178,7 +181,10 @@ function StartNewVerse() {
 	var reference = verseManager.currentReference();
 	SetVerseReference(reference);
 	verseMetadata = verseManager.GetVerseMetadata(reference);
-	difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
+	Debug.Log(verseMetadata["difficulty"]);	
+	if (verseMetadata["difficulty"] != null) {
+		difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
+	}
 	
 	var verse : String = verseManager.currentVerse();
 	words = SplitVerse(verse);
@@ -197,11 +203,28 @@ function StartNewVerse() {
 	}
 }
 
+function StartNextDifficulty() {
+	switch(difficulty) {
+		case(Difficulty.Easy):
+			difficulty = difficulty.Medium;
+			break;
+		case(Difficulty.Medium):
+			difficulty = difficulty.Hard;
+			break;
+	}
+	verseMetadata["difficulty"] = parseInt(difficulty);
+	verseManager.SaveVerseMetadata(verseMetadata);
+	SetupVerse();
+}
+
+function StartAnotherVerse() {
+	verseManager.GotoNextVerse();
+	SetupVerse();
+}
+
 function DelayStartNewVerse() {
 		finished = false;
 		yield WaitForSeconds(3);
-		verseManager.GotoNextVerse();
-		StartNewVerse();
 }
 
 function HandleVerseFinished() {
@@ -214,6 +237,18 @@ function HandleVerseFinished() {
 }
 
 function Update () {
+	var elapsedTime : float = Time.time - lastWordTime;
+	if (!wordHinted && (elapsedTime > timeUntilHint)) {
+		wordHinted = true;
+		scoreManager.mistakes += 1;
+		var wObject : WordLabel;
+		for (wObject in wordObjects) {
+			if (wObject.word == currentWord) {
+				wObject.HintAt();
+			}
+		}
+	}
+	
 	if (finished) {
 		HandleVerseFinished();
 		//DelayStartNewVerse();

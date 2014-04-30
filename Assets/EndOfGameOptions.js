@@ -10,7 +10,15 @@ private var windowRect : Rect;
 function DoMyWindow (windowID : int) {
 	GUILayout.Space(10);
 	var mistakes = scoreManager.mistakes;
+	var clicked = false;
+	
 	var text = "You made " + mistakes + " mistakes.";
+	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
+		text += " Make zero mistakes to advance to the next stage of difficulty.";
+	} else if (gameManager.difficulty != Difficulty.Hard) {
+	    text += " You qualify for the next stage of difficulty!";
+	}
+	
 	if (scoreManager.highScore == scoreManager.score) {
 		text += " You got a high score of " + scoreManager.score + "!";
 	}
@@ -18,19 +26,28 @@ function DoMyWindow (windowID : int) {
 	
 	if (mistakes == 0) {
 		if (GUILayout.Button ("Advance to Next Stage")) {
+			clicked = true;
+			gameManager.StartNextDifficulty();
 		}
 	}
 	if (GUILayout.Button ("Try Again")) {
 		print ("Got a click");
-		gameManager.StartNewVerse();
-		Destroy(this);
-		return;
+		gameManager.SetupVerse();
+		clicked = true;
 	}
 	if (GUILayout.Button ("Try Another Verse")) {
+		gameManager.StartAnotherVerse();
+		clicked = true;
 	}
 	if (GUILayout.Button ("Back to Menu")) {
 		gameManager.Cleanup();
 		Application.LoadLevel("verselist");
+		clicked = true;
+	}
+	
+	if (clicked) {
+		Destroy(this);
+		return;
 	}
 }
 
