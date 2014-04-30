@@ -4,6 +4,7 @@ public enum Difficulty {Easy, Medium, Hard};
 
 var mainCam : Camera;
 var wordLabel : WordLabel;
+var endOfGameOptions : EndOfGameOptions;
 var topWall : BoxCollider2D;
 var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
@@ -11,7 +12,7 @@ var rightWall : BoxCollider2D;
 var verseReference : GUIText;
 var scoreLabel : GUIText;
 var feedbackLabel : GUIText;
-var shouldStartNextVerse : boolean = false;
+var finished : boolean = false;
 var references : Array = new Array();
 var difficulty : Difficulty = Difficulty.Easy;
 var scoreManager : ScoreManager;
@@ -29,10 +30,13 @@ static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
 
+private var windowRect : Rect;
+
+
 function OnGUI() {
-     var screenScale: float = Screen.width / 480.0;
-     var scaledMatrix: Matrix4x4 = Matrix4x4.identity.Scale(Vector3(screenScale,screenScale,screenScale));
-     GUI.matrix = scaledMatrix;
+    var screenScale: float = Screen.width / 480.0;
+    var scaledMatrix: Matrix4x4 = Matrix4x4.identity.Scale(Vector3(screenScale,screenScale,screenScale));
+    GUI.matrix = scaledMatrix;
 }
 
 function SetupWalls () {
@@ -84,7 +88,7 @@ function nextWord() {
 		currentWord = null;
 		wordIndex = -1;
 		showFeedback("Awesome!",3);
-		shouldStartNextVerse = true;
+		finished = true;
 		return null;
 	}
 	currentWord = words[wordIndex];
@@ -156,15 +160,18 @@ function GetDifficultyFromInt(difficultyInt : int) {
 	return Difficulty.Easy;
 }
 
-function StartNewVerse() {
-	
-	lastWordTime = Time.time;
+function Cleanup () {
 	scoreManager.resetScore();
-	var wordObject : WordLabel;
-	for (wordObject in wordObjects) {
-		Destroy(wordObject.gameObject);
+	var wObject : WordLabel;
+	for (wObject in wordObjects) {
+		Destroy(wObject.gameObject);
 	}
 	wordObjects.clear();
+}
+
+function StartNewVerse() {
+	Cleanup();
+	lastWordTime = Time.time;
 	
 	var clone : WordLabel;
 	
@@ -191,20 +198,24 @@ function StartNewVerse() {
 }
 
 function DelayStartNewVerse() {
-		shouldStartNextVerse = false;
+		finished = false;
 		yield WaitForSeconds(3);
 		verseManager.GotoNextVerse();
 		StartNewVerse();
 }
 
 function HandleVerseFinished() {
+	finished = false;
+	yield WaitForSeconds(2);
 	Debug.Log("verse finished");
 	scoreManager.HandleFinished();
+	Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+	
 }
 
 function Update () {
-	if (shouldStartNextVerse) {
+	if (finished) {
 		HandleVerseFinished();
-		DelayStartNewVerse();
+		//DelayStartNewVerse();
 	}
 }
