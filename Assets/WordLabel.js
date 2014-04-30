@@ -16,13 +16,28 @@ var scoreManager : ScoreManager;
 function setWord(w : String) {
 	label.text = w;
 	word = w;
+	var textWidth = label.renderer.bounds.size.x;
+	var sr : SpriteRenderer = GetComponent("SpriteRenderer");
+	var spriteWidth = sr.sprite.bounds.size.x;
+	
+	Debug.Log("text width: " + textWidth);
+	Debug.Log("sprite width: " + spriteWidth);
+	
+	var padding = spriteWidth*0.5;
 	var length = word.Length;
-	transform.localScale.x = .125*(length+1);
-	var ratio = transform.localScale.x/transform.localScale.y;
+	transform.localScale.x = (textWidth + padding) / spriteWidth;
+	var yAdjust = 0.65f;
+	transform.localScale.y = yAdjust*transform.localScale.y;
+	
+	var ratio = transform.localScale.x/transform.localScale.y*yAdjust;
+	
 	label.transform.localScale.x = label.transform.localScale.y/ratio;
+	label.transform.localScale.y = label.transform.localScale.y*(1/yAdjust);
+	
 }
 
 function Start () {
+
     var screenBounds = GameManager.screenBounds;
 	startPosition = new Vector3(screenBounds.x+screenBounds.width*.1,screenBounds.y-screenBounds.height*0.3);
 	versePosition = startPosition;

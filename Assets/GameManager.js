@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-enum Difficulty {Easy, Medium, Hard};
+public enum Difficulty {Easy, Medium, Hard};
 
 var mainCam : Camera;
 var wordLabel : WordLabel;
@@ -13,9 +13,10 @@ var scoreLabel : GUIText;
 var feedbackLabel : GUIText;
 var shouldStartNextVerse : boolean = false;
 var references : Array = new Array();
-var difficulty : Difficulty = Difficulty.Hard;
+var difficulty : Difficulty = Difficulty.Easy;
 var scoreManager : ScoreManager;
 var verseManager : VerseManager;
+var verseMetadata : Hashtable;
 
 static var currentWord : String;
 static var words : Array = new Array();
@@ -27,6 +28,12 @@ static var screenBounds : Rect;
 static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
+
+function OnGUI() {
+     var screenScale: float = Screen.width / 480.0;
+     var scaledMatrix: Matrix4x4 = Matrix4x4.identity.Scale(Vector3(screenScale,screenScale,screenScale));
+     GUI.matrix = scaledMatrix;
+}
 
 function SetupWalls () {
 	var w = mainCam.pixelWidth;
@@ -86,7 +93,7 @@ function nextWord() {
 
 function Start () {
 	Application.targetFrameRate = 60;
-	difficulty = Difficulty.Medium;
+	difficulty = Difficulty.Easy;
 	
 	SetupWalls();
 	SetupUI();
@@ -140,6 +147,15 @@ function SplitVerse (verse : String) {
 	return phraseArray;
 }
 
+function GetDifficultyFromInt(difficultyInt : int) {
+	switch(difficultyInt) {
+		case 0: return Difficulty.Easy;
+		case 1: return Difficulty.Medium;
+		case 2: return Difficulty.Hard;
+	}
+	return Difficulty.Easy;
+}
+
 function StartNewVerse() {
 	
 	lastWordTime = Time.time;
@@ -152,14 +168,17 @@ function StartNewVerse() {
 	
 	var clone : WordLabel;
 	
-	SetVerseReference(verseManager.currentReference());
+	var reference = verseManager.currentReference();
+	SetVerseReference(reference);
+	verseMetadata = verseManager.GetVerseMetadata(reference);
+	difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
+	
 	var verse : String = verseManager.currentVerse();
 	words = SplitVerse(verse);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
 	
 	for (word in words) {
-		
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
 		clone.setWord(word);
 		wordObjects.push(clone);
@@ -178,8 +197,14 @@ function DelayStartNewVerse() {
 		StartNewVerse();
 }
 
+function HandleVerseFinished() {
+	Debug.Log("verse finished");
+	scoreManager.HandleFinished();
+}
+
 function Update () {
 	if (shouldStartNextVerse) {
+		HandleVerseFinished();
 		DelayStartNewVerse();
 	}
 }

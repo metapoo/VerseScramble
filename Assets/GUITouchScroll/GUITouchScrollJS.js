@@ -19,7 +19,7 @@ public var numRows : int;
 public var rowSize : Vector2;
 public var windowMargin : Vector2;
 public var listMargin : Vector2;
-public var verseText : TextAsset;
+public var verseManager : VerseManager;
 
 private var windowRect :Rect;   // calculated bounds of the window that holds the scrolling list
 private var listSize : Vector2; // calculated dimensions of the scrolling list placed inside the window
@@ -73,6 +73,7 @@ function Update() //check for touch
 		if ( selected > -1 )
 		{
 			Debug.Log("Player selected row " + selected);
+			HandleRowSelected(selected);
 		}
 		else
 		{
@@ -85,6 +86,19 @@ function Update() //check for touch
 
 }
 
+function HandleRowSelected(selected : int) {
+	Debug.Log("selecting verse " + selected);
+	verseManager.verseIndex = selected;
+	verseManager.Save();
+	Application.LoadLevel("scramble");
+}
+
+function Start () 
+{
+	verseManager.LoadVerses();
+	numRows = verseManager.verses.length;
+}
+
 function OnGUI () //this deals with the display
 {
 	GUI.skin = optionsSkin;
@@ -92,8 +106,9 @@ function OnGUI () //this deals with the display
 	windowRect = Rect(windowMargin.x, windowMargin.y,
 						Screen.width - (2*windowMargin.x), Screen.height - (2*windowMargin.y)); //this draws the bg
 	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
+	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
 	
-	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "GUI Scrolling with Touches"); //this draws the frame
+	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "Verses"); //this draws the frame
 }
 
 function DoWindow (windowID : int) //here you build the table
@@ -114,7 +129,9 @@ function DoWindow (windowID : int) //here you build the table
              rBtn.yMin <= (scrollPosition.y + rScrollFrame.height) )
        	{
 			var fClicked : boolean = false;
-			var rowLabel : String = "Row Number " + iRow; //this is what will be written in the rows
+			var reference = verseManager.references[iRow];
+			var metadata = verseManager.GetVerseMetadata(reference);
+			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"]; //this is what will be written in the rows
 		
 			if ( iRow == selected )
 			{
@@ -128,6 +145,7 @@ function DoWindow (windowID : int) //here you build the table
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked && Application.platform != RuntimePlatform.IPhonePlayer )
 			{
+				HandleRowSelected(iRow);
 				Debug.Log("Player mouse-clicked on row " + iRow);
 			}
 		}

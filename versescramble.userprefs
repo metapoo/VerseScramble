@@ -1,13 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameManager.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/ScoreManager.js">
     <Files>
-      <File FileName="Assets/GameManager.js" Line="99" Column="1" />
-      <File FileName="Assets/WordLabel.js" Line="91" Column="16" />
+      <File FileName="Assets/GameManager.js" Line="150" Column="19" />
+      <File FileName="Assets/WordLabel.js" Line="92" Column="21" />
       <File FileName="Assets/verses.txt" Line="1" Column="1" />
-      <File FileName="Assets/ScoreManager.js" Line="37" Column="21" />
+      <File FileName="Assets/ScoreManager.js" Line="50" Column="9" />
       <File FileName="Assets/GUITouchScroll/GUITouchScroll.cs" Line="1" Column="1" />
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="32" Column="3" />
+      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="134" Column="84" />
+      <File FileName="Assets/VerseManager.js" Line="102" Column="1" />
+      <File FileName="Assets/plugins/JSONUtils.js" Line="46" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

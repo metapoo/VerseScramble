@@ -1,21 +1,30 @@
 ﻿#pragma strict
 
 var scoreLabel : GUIText;
-var difficulty : Difficulty = Difficulty.Hard;
 var score = 0;
-var highScore = 0;
 var streak : int = 0;
 var moves : int = 0;
+var mistakes : int = 0;
 var gameManager : GameManager;
-
+var verseManager : VerseManager;
+var verseMetadata : Hashtable;
+var highScore : int;
 
 function HandleWordWrong() {
 	streak = 0;
-	addScore(-10);
+	var dScore = score*0.5;
+	addScore(-1*dScore);
+	moves = moves + 1;
+	mistakes = mistakes + 1;
 }
 
 function HandleWordCorrect(elapsedTime : float) {
-	addScore(Mathf.Max((4-elapsedTime),1)*(1+streak*0.5));
+	var baseTime = 4;
+	if (moves == 0) {
+		baseTime = 10;
+	}
+	addScore(Mathf.Max((baseTime-elapsedTime),1)*(1+streak*0.5));
+	
 	Debug.Log("elapsed time: " + elapsedTime);
 	if (elapsedTime < 3) {
 		streak += 1;
@@ -28,19 +37,17 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 		updateScoreLabel();
 	}
+	moves = moves + 1;
 }
 
 function setScore(newScore : int) {
 	if (newScore < 0) newScore = 0;
 	score = newScore;
-	if (score > highScore) {
-		highScore = score;
-	}
 	updateScoreLabel();
 }
 
 function updateScoreLabel() {
-	scoreLabel.text = " score: " + score + " high: " + highScore + "  streak: " + streak ;
+	scoreLabel.text = " score: " + score + "  streak: " + streak ;
 }
 
 function addScore(dScore : int) {
@@ -57,7 +64,20 @@ function SetupUI() {
 	setScore(0);
 }
 
+function HandleFinished() {
+	Debug.Log("score = " + score + " high = " + highScore);
+	if (score > highScore) {
+		highScore = score;
+		verseMetadata["high_score"] = highScore;
+		verseManager.SaveVerseMetadata(verseMetadata);
+	}
+}
+
 function Start () {
+	var reference = verseManager.currentReference();
+	verseMetadata = verseManager.GetVerseMetadata(reference);
+	highScore = verseMetadata["high_score"];
+	
 	SetupUI();
 }
 
