@@ -12,7 +12,7 @@ private var timeTouchPhaseEnded = 0f;
 private var previousDelta : float = 0f;
 
 public var scrollPosition : Vector2 ;
-
+public var mainCam : Camera;
 public var inertiaDuration : float = 0.75f;
 // size of the window and scrollable list
 public var numRows : int;
@@ -99,8 +99,21 @@ function Start ()
 	numRows = verseManager.verses.length;
 }
 
+public static function AutoResize(screenWidth:int, screenHeight:int):void
+{
+    var resizeRatio:Vector2 = Vector2(Screen.width / parseFloat(screenWidth), Screen.height / parseFloat(screenHeight));
+    GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3(resizeRatio.x, resizeRatio.y, 1.0));
+}
+
 function OnGUI () //this deals with the display
 {
+	var originalWidth = mainCam.pixelWidth;
+	var originalHeight = mainCam.pixelHeight;
+
+	AutoResize(originalWidth, originalHeight);
+ 
+  	// Do you GUI here
+ 
 	GUI.skin = optionsSkin;
 	
 	windowRect = Rect(windowMargin.x, windowMargin.y,
@@ -109,6 +122,8 @@ function OnGUI () //this deals with the display
 	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "Verses"); //this draws the frame
+	
+
 }
 
 function DoWindow (windowID : int) //here you build the table

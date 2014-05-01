@@ -5,6 +5,7 @@ public enum Difficulty {Easy, Medium, Hard};
 var mainCam : Camera;
 var wordLabel : WordLabel;
 var endOfGameOptions : EndOfGameOptions;
+var endOfGameOptionsClone : EndOfGameOptions;
 var topWall : BoxCollider2D;
 var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
@@ -37,9 +38,7 @@ private var windowRect : Rect;
 
 
 function OnGUI() {
-    var screenScale: float = Screen.width / 480.0;
-    var scaledMatrix: Matrix4x4 = Matrix4x4.identity.Scale(Vector3(screenScale,screenScale,screenScale));
-    GUI.matrix = scaledMatrix;
+
 }
 
 function SetupWalls () {
@@ -91,7 +90,7 @@ function nextWord() {
 		currentWord = null;
 		wordIndex = -1;
 		showFeedback("Awesome!",3);
-		finished = true;
+		HandleVerseFinished();
 		return null;
 	}
 	currentWord = words[wordIndex];
@@ -159,8 +158,9 @@ function GetDifficultyFromInt(difficultyInt : int) {
 		case 0: return Difficulty.Easy;
 		case 1: return Difficulty.Medium;
 		case 2: return Difficulty.Hard;
+		default:
+		return Difficulty.Easy;
 	}
-	return Difficulty.Easy;
 }
 
 function Cleanup () {
@@ -173,6 +173,9 @@ function Cleanup () {
 }
 
 function SetupVerse() {
+	finished = false;
+	endOfGameOptionsClone = null;
+	
 	Cleanup();
 	lastWordTime = Time.time;
 	
@@ -222,35 +225,28 @@ function StartAnotherVerse() {
 	SetupVerse();
 }
 
-function DelayStartNewVerse() {
-		finished = false;
-		yield WaitForSeconds(3);
-}
-
 function HandleVerseFinished() {
-	finished = false;
+	finished = true;
 	yield WaitForSeconds(2);
 	Debug.Log("verse finished");
 	scoreManager.HandleFinished();
-	Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
-	
+	endOfGameOptionsClone = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
 }
 
 function Update () {
 	var elapsedTime : float = Time.time - lastWordTime;
-	if (!wordHinted && (elapsedTime > timeUntilHint)) {
+	
+	if (!wordHinted && !finished && (elapsedTime > timeUntilHint)) {
+		Debug.Log("finished = " + finished);
 		wordHinted = true;
 		scoreManager.mistakes += 1;
 		var wObject : WordLabel;
 		for (wObject in wordObjects) {
 			if (wObject.word == currentWord) {
 				wObject.HintAt();
+				break;
 			}
 		}
 	}
 	
-	if (finished) {
-		HandleVerseFinished();
-		//DelayStartNewVerse();
-	}
 }
