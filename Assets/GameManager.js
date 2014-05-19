@@ -11,7 +11,6 @@ var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
 var verseReference : GUIText;
-var scoreLabel : GUIText;
 var feedbackLabel : GUIText;
 var finished : boolean = false;
 var references : Array = new Array();
@@ -19,7 +18,7 @@ var difficulty : Difficulty = Difficulty.Easy;
 var scoreManager : ScoreManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
-var timeUntilHint : int = 15;
+var timeUntilHint : int ;
 
 private var wordHinted : boolean = false;
 
@@ -237,9 +236,9 @@ function Update () {
 	var elapsedTime : float = Time.time - lastWordTime;
 	
 	if (!wordHinted && !finished && (elapsedTime > timeUntilHint)) {
-		Debug.Log("finished = " + finished);
+		Debug.Log("timeUntilHint = " + timeUntilHint);
 		wordHinted = true;
-		scoreManager.mistakes += 1;
+		
 		var wObject : WordLabel;
 		for (wObject in wordObjects) {
 			if (wObject.word == currentWord) {
@@ -248,5 +247,4 @@ function Update () {
 			}
 		}
 	}
-	
 }

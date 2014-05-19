@@ -9,6 +9,8 @@ var gameManager : GameManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var highScore : int;
+var totalElapsedTime : int = 0;
+var startTime : int;
 
 function HandleWordWrong() {
 	streak = 0;
@@ -47,7 +49,7 @@ function setScore(newScore : int) {
 }
 
 function updateScoreLabel() {
-	scoreLabel.text = " score: " + score + "  streak: " + streak ;
+	scoreLabel.text = " mistakes: " + mistakes + " time: " + totalElapsedTime;
 }
 
 function addScore(dScore : int) {
@@ -79,10 +81,14 @@ function Start () {
 	var reference = verseManager.currentReference();
 	verseMetadata = verseManager.GetVerseMetadata(reference);
 	highScore = verseMetadata["high_score"];
+	startTime = Time.time;
 	
 	SetupUI();
 }
 
 function Update () {
-
+	if (!gameManager.finished) {
+		totalElapsedTime = Time.time - startTime;
+		updateScoreLabel();
+	}
 }

@@ -2,7 +2,8 @@
 
 //Original Script in C from http://www.mindthecube.com/blog/2010/09/adding-iphone-touches-to-unitygui-scrollview/comment-page-1#comment-2935
 
-public var optionsSkin : GUISkin; // this sets an optionSkin to load from skins
+public var customSkin : GUISkin; // this sets an optionSkin to load from skins
+
 public var rowSelectedStyle : GUIStyle; //this sets the row style within the script, you can add more styles and skins.
 
 // Internal variables for managing touches and drags
@@ -107,14 +108,9 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 
 function OnGUI () //this deals with the display
 {
-	var originalWidth = mainCam.pixelWidth;
-	var originalHeight = mainCam.pixelHeight;
-
-	AutoResize(originalWidth, originalHeight);
- 
-  	// Do you GUI here
- 
-	GUI.skin = optionsSkin;
+	Screen.SetResolution(1024, 768, false);
+ 	
+	GUI.skin = customSkin;
 	
 	windowRect = Rect(windowMargin.x, windowMargin.y,
 						Screen.width - (2*windowMargin.x), Screen.height - (2*windowMargin.y)); //this draws the bg
@@ -150,7 +146,8 @@ function DoWindow (windowID : int) //here you build the table
 		
 			if ( iRow == selected )
 			{
-				fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
+				//fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
+				fClicked = GUI.Button(rBtn, rowLabel);
 			}
 			else
 			{
