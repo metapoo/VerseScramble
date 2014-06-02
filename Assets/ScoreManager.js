@@ -76,17 +76,18 @@ function difficultyMultiplier(difficulty : Difficulty) {
 		case Difficulty.Easy:
 			return 1;
 		case Difficulty.Medium:
-			return 2;
+			return 3;
 		case Difficulty.Hard:
-			return 4;
+			return 6;
 	}
 	return 1;
 }
 
 function calculateScore() {
  	var verse : String = verseManager.currentVerse();
- 	var verseLength = verse.Length*0.33;
- 	score = (verseLength - totalElapsedTime)*difficultyMultiplier(gameManager.difficulty);
+ 	var verseLength = verse.Length;
+ 	var diffMult = difficultyMultiplier(gameManager.difficulty);
+ 	score = (verseLength*0.33*diffMult - totalElapsedTime)*diffMult;
  	for (var i=0;i<mistakes;i++) {
  		score = score * 0.8f;
  	}

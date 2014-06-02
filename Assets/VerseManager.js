@@ -41,6 +41,38 @@ function SaveVerseMetadata(metadata : Hashtable) {
 	PlayerPrefs.SetString("vm_"+reference, metadataJSON);
 }
 
+function MasteredVersesKey(difficulty : Difficulty) {
+	var diffkey = "easy";
+	switch(difficulty) {
+		case Difficulty.Easy:
+			diffkey = "easy";
+			break;
+		case Difficulty.Medium:
+			diffkey = "medium";
+			break;
+		case difficulty.Hard:
+			diffkey = "hard";
+			break;
+	}
+	var key = diffkey + "_verses_mastered";
+	return key;
+}
+
+function HandleVerseMastered(difficulty : Difficulty, reference : String) {
+	var verseMetadata = GetVerseMetadata(reference);
+	
+}
+
+function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
+	var diffkey : String = MasteredVersesKey(difficulty);
+	PlayerPrefs.SetInt(diffkey, numVerses);
+}
+
+function GetMasteredVerses(difficulty : Difficulty) {
+	var diffkey = MasteredVersesKey(difficulty);
+	return PlayerPrefs.GetInt(diffkey);
+}
+
 function GetVerseMetadata(reference : String) {
 	var key = "vm_"+reference;
 	var metadataJSON : String = null;
