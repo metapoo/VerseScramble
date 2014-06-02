@@ -163,7 +163,7 @@ function GetDifficultyFromInt(difficultyInt : int) {
 }
 
 function Cleanup () {
-	scoreManager.resetScore();
+	scoreManager.resetStats();
 	var wObject : WordLabel;
 	for (wObject in wordObjects) {
 		Destroy(wObject.gameObject);

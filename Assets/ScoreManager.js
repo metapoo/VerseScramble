@@ -2,7 +2,6 @@
 
 var scoreLabel : GUIText;
 var score = 0;
-var newScore = 0;
 var streak : int = 0;
 var moves : int = 0;
 var mistakes : int = 0;
@@ -15,8 +14,6 @@ var startTime : int;
 
 function HandleWordWrong() {
 	streak = 0;
-	var dScore = score*0.5;
-	addScore(-1*dScore);
 	moves = moves + 1;
 	mistakes = mistakes + 1;
 }
@@ -26,7 +23,6 @@ function HandleWordCorrect(elapsedTime : float) {
 	if (moves == 0) {
 		baseTime = 10;
 	}
-	addScore(Mathf.Max((baseTime-elapsedTime),1)*(1+streak*0.5));
 	
 	Debug.Log("elapsed time: " + elapsedTime);
 	if (elapsedTime < 3) {
@@ -38,15 +34,8 @@ function HandleWordCorrect(elapsedTime : float) {
 		} else if (streak == 15) {
 			gameManager.showFeedback("Hallelujah!", 1);
 		}
-		updateScoreLabel();
 	}
 	moves = moves + 1;
-}
-
-function setScore(newScore : int) {
-	if (newScore < 0) newScore = 0;
-	score = newScore;
-	updateScoreLabel();
 }
 
 function calculatedTime() {
@@ -54,24 +43,19 @@ function calculatedTime() {
 }
 
 function updateScoreLabel() {
-	calculateNewScore();
-	scoreLabel.text = " mistakes: " + mistakes + " time: " + calculatedTime() + " score: " + newScore;
+	calculateScore();
+	scoreLabel.text = " mistakes: " + mistakes + " time: " + calculatedTime() + " score: " + score;
 }
 
-function addScore(dScore : int) {
-	setScore(score+dScore);
-}
-
-function resetScore() {
+function resetStats() {
 	mistakes = 0;
 	moves = 0;
 	streak = 0;
-	setScore(0);
 	updateScoreLabel();
 }
 
 function SetupUI() {
-	setScore(0);
+	updateScoreLabel();
 }
 
 function HandleFinished() {
@@ -99,14 +83,14 @@ function difficultyMultiplier(difficulty : Difficulty) {
 	return 1;
 }
 
-function calculateNewScore() {
+function calculateScore() {
  	var verse : String = verseManager.currentVerse();
- 	var verseLength = verse.Length;
- 	newScore = (verseLength - totalElapsedTime)*difficultyMultiplier(gameManager.difficulty);
+ 	var verseLength = verse.Length*0.33;
+ 	score = (verseLength - totalElapsedTime)*difficultyMultiplier(gameManager.difficulty);
  	for (var i=0;i<mistakes;i++) {
- 		newScore = newScore * 0.8f;
+ 		score = score * 0.8f;
  	}
- 	return newScore;
+ 	return score;
 }
 
 function Start () {
