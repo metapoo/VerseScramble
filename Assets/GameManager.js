@@ -207,16 +207,7 @@ function SetupVerse() {
 }
 
 function StartNextDifficulty() {
-	switch(difficulty) {
-		case(Difficulty.Easy):
-			difficulty = difficulty.Medium;
-			break;
-		case(Difficulty.Medium):
-			difficulty = difficulty.Hard;
-			break;
-	}
-	verseMetadata["difficulty"] = parseInt(difficulty);
-	verseManager.SaveVerseMetadata(verseMetadata);
+	verseManager.upgradeDifficultyForVerse(verseMetadata);
 	SetupVerse();
 }
 

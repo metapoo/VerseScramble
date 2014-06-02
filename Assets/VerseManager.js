@@ -7,6 +7,7 @@ var references : Array = new Array();
 var verseIndex = 0;
 var verseText : TextAsset;
 var numVerses = 0;
+var gameManager : GameManager;
 
 function currentVerse() {
 	return verses[verseIndex];
@@ -58,9 +59,32 @@ function MasteredVersesKey(difficulty : Difficulty) {
 	return key;
 }
 
-function HandleVerseMastered(difficulty : Difficulty, reference : String) {
-	var verseMetadata = GetVerseMetadata(reference);
-	
+function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
+	var difficulty : Difficulty = gameManager.GetDifficultyFromInt(verseMetadata["difficulty"]);
+	switch(difficulty) {
+		case(Difficulty.Easy):
+			difficulty = difficulty.Medium;
+			break;
+		case(Difficulty.Medium):
+			difficulty = difficulty.Hard;
+			break;
+	}
+	verseMetadata["difficulty"] = parseInt(difficulty);
+	SaveVerseMetadata(verseMetadata);
+}
+
+
+function HandleVerseMastered(difficulty : Difficulty, verseMetadata : Hashtable) {
+	var currentDifficultyInt : int = verseMetadata["difficulty"];
+	var newDifficultyInt : int = parseInt(difficulty);
+	if (newDifficultyInt > currentDifficultyInt) {
+		var masteredVerses : int = GetMasteredVerses(difficulty);
+		masteredVerses += 1;
+		SetMasteredVerses(difficulty, masteredVerses);
+		upgradeDifficultyForVerse(verseMetadata);
+	} else {
+		
+	}
 }
 
 function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
