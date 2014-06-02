@@ -67,6 +67,7 @@ function Update() //check for touch
 		selected = -1;
 		previousDelta = touch.deltaPosition.y;
 		scrollPosition.y += touch.deltaPosition.y;
+
 	}
 	else if (touch.phase == TouchPhase.Ended && fInsideList)
 	{
@@ -113,13 +114,11 @@ function OnGUI () //this deals with the display
 	GUI.skin = customSkin;
 	
 	windowRect = Rect(windowMargin.x, windowMargin.y,
-						Screen.width - (2*windowMargin.x), Screen.height - (2*windowMargin.y)); //this draws the bg
+					  Screen.width - (2*windowMargin.x), Screen.height - (2*windowMargin.y)); //this draws the bg
 	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
 	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "Verses"); //this draws the frame
-	
-
 }
 
 function DoWindow (windowID : int) //here you build the table
@@ -143,16 +142,18 @@ function DoWindow (windowID : int) //here you build the table
 			var reference = verseManager.references[iRow];
 			var metadata = verseManager.GetVerseMetadata(reference);
 			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"]; //this is what will be written in the rows
-		
+		/*
 			if ( iRow == selected )
 			{
-				//fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
-				fClicked = GUI.Button(rBtn, rowLabel);
+				fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
+				//fClicked = GUI.Button(rBtn, rowLabel);
 			}
 			else
 			{
 				fClicked = GUI.Button(rBtn, rowLabel);
 			}
+		*/
+			fClicked = GUI.Button(rBtn, rowLabel);
 			
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked && Application.platform != RuntimePlatform.IPhonePlayer )
@@ -182,9 +183,9 @@ function TouchToRowIndex(touchPos : Vector2) : int //this checks which row was t
 	yy -= windowMargin.y;   // adjust for window y offset
 	yy -= listMargin.y;     // adjust for scrolling list offset within the window
 	irow = yy / rowSize.y;
-	
+
 	irow = Mathf.Min(irow, numRows); // they might have touched beyond last row
-             
+
 	return irow;
 }
 

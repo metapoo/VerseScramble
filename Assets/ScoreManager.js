@@ -2,6 +2,7 @@
 
 var scoreLabel : GUIText;
 var score = 0;
+var newScore = 0;
 var streak : int = 0;
 var moves : int = 0;
 var mistakes : int = 0;
@@ -48,8 +49,13 @@ function setScore(newScore : int) {
 	updateScoreLabel();
 }
 
+function calculatedTime() {
+ 	return totalElapsedTime + mistakes*5;
+}
+
 function updateScoreLabel() {
-	scoreLabel.text = " mistakes: " + mistakes + " time: " + totalElapsedTime;
+	calculateNewScore();
+	scoreLabel.text = " mistakes: " + mistakes + " time: " + calculatedTime() + " score: " + newScore;
 }
 
 function addScore(dScore : int) {
@@ -77,12 +83,37 @@ function HandleFinished() {
 	}
 }
 
+function resetTime() {
+	startTime = Time.time;
+}
+
+function difficultyMultiplier(difficulty : Difficulty) {
+	switch(difficulty) {
+		case Difficulty.Easy:
+			return 1;
+		case Difficulty.Medium:
+			return 2;
+		case Difficulty.Hard:
+			return 4;
+	}
+	return 1;
+}
+
+function calculateNewScore() {
+ 	var verse : String = verseManager.currentVerse();
+ 	var verseLength = verse.Length;
+ 	newScore = (verseLength - totalElapsedTime)*difficultyMultiplier(gameManager.difficulty);
+ 	for (var i=0;i<mistakes;i++) {
+ 		newScore = newScore * 0.8f;
+ 	}
+ 	return newScore;
+}
+
 function Start () {
 	var reference = verseManager.currentReference();
 	verseMetadata = verseManager.GetVerseMetadata(reference);
 	highScore = verseMetadata["high_score"];
-	startTime = Time.time;
-	
+	resetTime();	
 	SetupUI();
 }
 

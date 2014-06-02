@@ -172,6 +172,7 @@ function Cleanup () {
 }
 
 function SetupVerse() {
+	scoreManager.resetTime();
 	finished = false;
 	endOfGameOptionsClone = null;
 	
