@@ -24,7 +24,7 @@ function setWord(w : String) {
 	var padding = spriteWidth*0.5;
 	var length = word.Length;
 	transform.localScale.x = (textWidth + padding) / spriteWidth;
-	var yAdjust = 0.65f;
+	var yAdjust = 0.55f;
 	transform.localScale.y = yAdjust*transform.localScale.y;
 	
 	var ratio = transform.localScale.x/transform.localScale.y*yAdjust;
@@ -73,10 +73,10 @@ function calculateVersePosition () {
 	
 	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y);
 	var screenBounds = GameManager.screenBounds;
-	var maxX = screenBounds.x + screenBounds.width*0.85;
+	var maxX = screenBounds.x + screenBounds.width*0.9;
 	var vSpacing = renderer.bounds.size.y;
 	
-	if (destination.x > maxX) {
+	if (destination.x + wordWidth*0.5 + spacing*0.5f > maxX) {
 		versePosition = new Vector3(startPosition.x,
 									versePosition.y-vSpacing,
 									0);

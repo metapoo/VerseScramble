@@ -16,19 +16,23 @@ function DoMyWindow (windowID : int) {
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
 	var diffString = verseManager.DifficultyToString(difficulty);
-	var text = "You made " + mistakes + " mistakes.";
-	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
-		text += " Make zero mistakes to master this verse.";
-	} else if (gameManager.difficulty != Difficulty.Hard) {
-	    text += " You've mastered this verse! So far you have mastered " + masteredVerses + " in " + diffString + " difficulty";
-	    if (difficulty != Difficulty.Hard) {
-	    	text += " Unlock " + (verseManager.verses.length - masteredVerses) + " more verses to unlock " +
-	    	verseManager.DifficultyToString(nextDifficulty) + " difficulty.";
-	    }
-	}
+	var text = "";
 	
+
 	if (scoreManager.highScore == scoreManager.score) {
 		text += " You got a high score of " + scoreManager.score + "!";
+	}
+	
+	text += "You made " + mistakes + " mistakes, ";
+	
+	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
+		text += " make zero mistakes to master this verse.";
+	} else if (gameManager.difficulty != Difficulty.Hard) {
+	    text += " and mastered this verse! So far you have mastered " + masteredVerses + " in " + diffString + " difficulty";
+	    if (difficulty != Difficulty.Hard) {
+	    	text += " master " + (verseManager.verses.length - masteredVerses) + " more verses to unlock " +
+	    	verseManager.DifficultyToString(nextDifficulty) + " difficulty.";
+	    }
 	}
 	
 	GUILayout.TextArea(text);

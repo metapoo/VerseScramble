@@ -19,6 +19,7 @@ var scoreManager : ScoreManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var timeUntilHint : int ;
+var exitButton : BoxCollider2D;
 
 private var wordHinted : boolean = false;
 
@@ -56,6 +57,10 @@ function SetupWalls () {
 	rightWall.size = leftWall.size;
 	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f, 0f);
 
+	exitButton.transform.position = new Vector3(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x-0.75f,
+									  mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f,
+									  0);
+									
 	screenBounds = Rect(leftWall.center.x,topWall.center.y,
 	rightWall.center.x-leftWall.center.x,
 	topWall.center.y-bottomWall.center.y);
