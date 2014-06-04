@@ -2,6 +2,7 @@
 
 public var scoreManager : ScoreManager;
 public var gameManager : GameManager;
+public var verseManager : VerseManager;
 public var mainCam : Camera;
 public var customSkin : GUISkin;
 private var windowRect : Rect;
@@ -11,17 +12,25 @@ function DoMyWindow (windowID : int) {
 	GUILayout.Space(10);
 	var mistakes = scoreManager.mistakes;
 	var clicked = false;
-	
+	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
+	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
+	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
+	var diffString = verseManager.DifficultyToString(difficulty);
 	var text = "You made " + mistakes + " mistakes.";
 	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
-		text += " Make zero mistakes to advance to the next stage of difficulty.";
+		text += " Make zero mistakes to master this verse.";
 	} else if (gameManager.difficulty != Difficulty.Hard) {
-	    text += " You qualify for the next stage of difficulty!";
+	    text += " You've mastered this verse! So far you have mastered " + masteredVerses + " in " + diffString + " difficulty";
+	    if (difficulty != Difficulty.Hard) {
+	    	text += " Unlock " + (verseManager.verses.length - masteredVerses) + " more verses to unlock " +
+	    	verseManager.DifficultyToString(nextDifficulty) + " difficulty.";
+	    }
 	}
 	
 	if (scoreManager.highScore == scoreManager.score) {
 		text += " You got a high score of " + scoreManager.score + "!";
 	}
+	
 	GUILayout.TextArea(text);
 	
 	if (mistakes == 0) {
@@ -67,6 +76,7 @@ function Start () {
 	mainCam = GameObject.Find("MainCamera").GetComponent("Camera");
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
+	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
 }
 
 function Update () {

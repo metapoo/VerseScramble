@@ -21,9 +21,6 @@ function setWord(w : String) {
 	var sr : SpriteRenderer = GetComponent("SpriteRenderer");
 	var spriteWidth = sr.sprite.bounds.size.x;
 	
-	Debug.Log("text width: " + textWidth);
-	Debug.Log("sprite width: " + spriteWidth);
-	
 	var padding = spriteWidth*0.5;
 	var length = word.Length;
 	transform.localScale.x = (textWidth + padding) / spriteWidth;

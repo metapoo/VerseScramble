@@ -1,6 +1,6 @@
 ﻿#pragma strict
 
-public enum Difficulty {Easy, Medium, Hard};
+public enum Difficulty {Easy, Medium, Hard, Impossible};
 
 var mainCam : Camera;
 var wordLabel : WordLabel;
@@ -98,7 +98,7 @@ function nextWord() {
 
 function Start () {
 	Application.targetFrameRate = 60;
-	difficulty = Difficulty.Easy;
+	difficulty = verseManager.GetCurrentDifficulty();
 	
 	SetupWalls();
 	SetupUI();
@@ -157,6 +157,7 @@ function GetDifficultyFromInt(difficultyInt : int) {
 		case 0: return Difficulty.Easy;
 		case 1: return Difficulty.Medium;
 		case 2: return Difficulty.Hard;
+		case 3: return Difficulty.Impossible;
 		default:
 		return Difficulty.Easy;
 	}
@@ -172,7 +173,7 @@ function Cleanup () {
 }
 
 function SetupVerse() {
-	scoreManager.resetTime();
+	scoreManager.reset();
 	finished = false;
 	endOfGameOptionsClone = null;
 	
@@ -184,9 +185,9 @@ function SetupVerse() {
 	var reference = verseManager.currentReference();
 	SetVerseReference(reference);
 	verseMetadata = verseManager.GetVerseMetadata(reference);
-	Debug.Log(verseMetadata["difficulty"]);	
+	Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
 	if (verseMetadata["difficulty"] != null) {
-		difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
+		//difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	}
 	
 	var verse : String = verseManager.currentVerse();

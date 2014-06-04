@@ -24,7 +24,6 @@ function HandleWordCorrect(elapsedTime : float) {
 		baseTime = 10;
 	}
 	
-	Debug.Log("elapsed time: " + elapsedTime);
 	if (elapsedTime < 3) {
 		streak += 1;
 		if (streak == 5) {
@@ -59,11 +58,14 @@ function SetupUI() {
 }
 
 function HandleFinished() {
-	Debug.Log("score = " + score + " high = " + highScore);
+	Debug.Log("score = " + score + " high = " + highScore + " verse difficulty = " + verseMetadata["difficulty"]);
 	if (score > highScore) {
 		highScore = score;
 		verseMetadata["high_score"] = highScore;
 		verseManager.SaveVerseMetadata(verseMetadata);
+	}
+	if ((mistakes == 0) && (score > 0)) {
+		verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
 	}
 }
 
@@ -71,14 +73,22 @@ function resetTime() {
 	startTime = Time.time;
 }
 
+function reset() {
+	resetTime();
+	var reference = verseManager.currentReference();
+	verseMetadata = verseManager.GetVerseMetadata(reference);
+	highScore = verseMetadata["high_score"];
+	resetTime();	
+}
+
 function difficultyMultiplier(difficulty : Difficulty) {
 	switch(difficulty) {
 		case Difficulty.Easy:
 			return 1;
 		case Difficulty.Medium:
-			return 3;
+			return 2;
 		case Difficulty.Hard:
-			return 6;
+			return 4;
 	}
 	return 1;
 }
@@ -94,11 +104,8 @@ function calculateScore() {
  	return score;
 }
 
-function Start () {
-	var reference = verseManager.currentReference();
-	verseMetadata = verseManager.GetVerseMetadata(reference);
-	highScore = verseMetadata["high_score"];
-	resetTime();	
+function Start() {
+	reset();
 	SetupUI();
 }
 

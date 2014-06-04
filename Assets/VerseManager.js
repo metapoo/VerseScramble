@@ -21,11 +21,12 @@ function GotoNextVerse() {
 	var nextVerseIndex = Random.Range(0, verses.length);
 	
 	if (verseIndex == nextVerseIndex) {
-		verseIndex = verseIndex + 1;
+		GotoNextVerse();
+		return;
 	} else {
 		verseIndex = nextVerseIndex;
 	}
-	
+	Debug.Log("going to verse " + verseIndex);
 	Save();
 }
 
@@ -68,6 +69,9 @@ function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
 		case(Difficulty.Medium):
 			difficulty = difficulty.Hard;
 			break;
+		case(difficulty.Hard):
+			difficulty = difficulty.Impossible;
+			break;
 	}
 	verseMetadata["difficulty"] = parseInt(difficulty);
 	SaveVerseMetadata(verseMetadata);
@@ -75,16 +79,14 @@ function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
 
 
 function HandleVerseMastered(difficulty : Difficulty, verseMetadata : Hashtable) {
-	var currentDifficultyInt : int = verseMetadata["difficulty"];
-	var newDifficultyInt : int = parseInt(difficulty);
-	if (newDifficultyInt > currentDifficultyInt) {
-		var masteredVerses : int = GetMasteredVerses(difficulty);
-		masteredVerses += 1;
-		SetMasteredVerses(difficulty, masteredVerses);
+	var verseDifficultyInt : int = verseMetadata["difficulty"];
+	var difficultyInt : int = parseInt(difficulty);
+	Debug.Log ( verseDifficultyInt + " vs " + difficultyInt);
+	
+	if (difficultyInt >= verseDifficultyInt) {
 		upgradeDifficultyForVerse(verseMetadata);
-	} else {
-		
-	}
+	}	
+	SyncMasteredVerses(difficulty);	
 }
 
 function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
@@ -92,9 +94,52 @@ function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
 	PlayerPrefs.SetInt(diffkey, numVerses);
 }
 
+function DifficultyToString(difficulty : Difficulty) {
+	switch (difficulty) {
+		case Difficulty.Easy: return "easy";
+		case Difficulty.Medium: return "medium";
+		case Difficulty.Hard: return "hard";
+		case difficulty.Impossible: return "impossible";
+	}		
+}
+
+function GetCurrentDifficulty() {
+	var numMastered = GetMasteredVerses(Difficulty.Easy);
+	if (numMastered < verses.length) return Difficulty.Easy;
+	numMastered = GetMasteredVerses(Difficulty.Medium);
+	if (numMastered < verses.length) return Difficulty.Medium;
+	numMastered = GetMasteredVerses(Difficulty.Hard);
+	if (numMastered < verses.length) return Difficulty.Hard;
+	return Difficulty.Hard;
+}
+
+function GetNextDifficulty() {
+	var difficulty = GetCurrentDifficulty();
+	switch (difficulty) {
+		case Difficulty.Easy: return Difficulty.Medium;
+		case Difficulty.Medium: return Difficulty.Hard;
+		case difficulty.Hard: return Difficulty.Impossible;
+	}
+	return difficulty.Hard;
+}
+
+
 function GetMasteredVerses(difficulty : Difficulty) {
 	var diffkey = MasteredVersesKey(difficulty);
 	return PlayerPrefs.GetInt(diffkey);
+}
+
+function SyncMasteredVerses(difficulty : Difficulty) {
+	var masteredVerses = 0;
+	Debug.Log("references length: " + references.length);
+	for (var reference in references) {
+		var verseMetadata =	GetVerseMetadata(reference);
+		var currentDifficultyInt : int = verseMetadata["difficulty"];
+		if (currentDifficultyInt > parseInt(difficulty)) {
+			masteredVerses += 1;
+		}
+	}
+	SetMasteredVerses(difficulty, masteredVerses);
 }
 
 function GetVerseMetadata(reference : String) {

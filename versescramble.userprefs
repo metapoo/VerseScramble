@@ -1,12 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/ScoreManager.js">
     <Files>
+      <File FileName="Assets/ScoreManager.js" Line="13" Column="21" />
       <File FileName="../biblecannon/Assets/NewBehaviourScript.js" Line="1" Column="1" />
-      <File FileName="Assets/ScoreManager.js" Line="56" Column="75" />
-      <File FileName="Assets/GameManager.js" Line="239" Column="49" />
+      <File FileName="Assets/ScoreManager.js" Line="90" Column="34" />
+      <File FileName="Assets/GameManager.js" Line="155" Column="30" />
       <File FileName="Assets/EndOfGameOptions.js" Line="14" Column="2" />
-      <File FileName="Assets/VerseManager.js" Line="24" Column="6" />
+      <File FileName="Assets/VerseManager.js" Line="62" Column="50" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
