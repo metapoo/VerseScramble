@@ -8,6 +8,7 @@ var verseIndex = 0;
 var verseText : TextAsset;
 var numVerses = 0;
 var gameManager : GameManager;
+var totalScore : int = -1;
 
 function currentVerse() {
 	return verses[verseIndex];
@@ -111,6 +112,23 @@ function GetCurrentDifficulty() {
 	numMastered = GetMasteredVerses(Difficulty.Hard);
 	if (numMastered < verses.length) return Difficulty.Hard;
 	return Difficulty.Hard;
+}
+
+function GetCachedTotalScore() {
+	if (totalScore == -1) {
+		totalScore = 0;
+		for (reference in references) {
+			var verseMetadata : Hashtable =	GetVerseMetadata(reference);
+			var highScore : int = verseMetadata["high_score"];
+			totalScore +=  highScore;
+		}
+	} 
+	return totalScore;
+}
+
+function GetMasteredVersesPercentage() {
+	var numMastered : float = GetMasteredVerses(GetCurrentDifficulty());
+	return parseInt(100 * numMastered / verses.length);
 }
 
 function GetNextDifficulty() {

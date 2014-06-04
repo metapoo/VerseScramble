@@ -36,13 +36,14 @@ function DoMyWindow (windowID : int) {
 	}
 	
 	GUILayout.TextArea(text);
-	
+	/*
 	if (mistakes == 0) {
 		if (GUILayout.Button ("Advance to Next Stage")) {
 			clicked = true;
 			gameManager.StartNextDifficulty();
 		}
-	}
+	}*/
+	
 	if (GUILayout.Button ("Try Again")) {
 		print ("Got a click");
 		gameManager.SetupVerse();

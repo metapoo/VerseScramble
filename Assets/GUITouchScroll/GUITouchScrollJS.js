@@ -117,12 +117,21 @@ function OnGUI () //this deals with the display
 					  Screen.width - (2*windowMargin.x), Screen.height - (2*windowMargin.y)); //this draws the bg
 	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
 	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
+
+	var headerRect = Rect(windowMargin.x, 0,
+						  Screen.width - (2*windowMargin.x), 55);
+	
+	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
+	var totalScore = verseManager.GetCachedTotalScore();
+	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Verses Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
+	GUI.TextArea(headerRect, headerText);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "Verses"); //this draws the frame
 }
 
 function DoWindow (windowID : int) //here you build the table
 {
+
 	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
 	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowSize.y);
 	
