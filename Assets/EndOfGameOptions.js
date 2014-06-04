@@ -23,14 +23,14 @@ function DoMyWindow (windowID : int) {
 		text += " You got a high score of " + scoreManager.score + "!";
 	}
 	
-	text += "You made " + mistakes + " mistakes, ";
+	text += "You made " + mistakes + " mistakes";
 	
 	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
-		text += " make zero mistakes to master this verse.";
+		text += ", make zero mistakes to master this verse.";
 	} else if (gameManager.difficulty != Difficulty.Hard) {
 	    text += " and mastered this verse! So far you have mastered " + masteredVerses + " in " + diffString + " difficulty";
 	    if (difficulty != Difficulty.Hard) {
-	    	text += " master " + (verseManager.verses.length - masteredVerses) + " more verses to unlock " +
+	    	text += ", master " + (verseManager.verses.length - masteredVerses) + " more verses to unlock " +
 	    	verseManager.DifficultyToString(nextDifficulty) + " difficulty.";
 	    }
 	}

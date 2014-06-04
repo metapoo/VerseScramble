@@ -113,8 +113,8 @@ function OnGUI () //this deals with the display
  	
 	GUI.skin = customSkin;
 	
-	windowRect = Rect(windowMargin.x, windowMargin.y,
-					  Screen.width - (2*windowMargin.x), Screen.height - (2*windowMargin.y)); //this draws the bg
+	windowRect = Rect(windowMargin.x, windowMargin.y+10,
+					  Screen.width - (2*windowMargin.x), Screen.height - windowMargin.y*2); //this draws the bg
 	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
 	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
 
@@ -138,6 +138,9 @@ function DoWindow (windowID : int) //here you build the table
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	
 	var rBtn :Rect = Rect(0, 0, rowSize.x, rowSize.y);
+	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
+	var diffString = verseManager.DifficultyToString(difficulty);
+	var masteredYesNo = "yes";
 	
 	for (var iRow : int = 0; 
 		iRow < numRows;
@@ -150,7 +153,14 @@ function DoWindow (windowID : int) //here you build the table
 			var fClicked : boolean = false;
 			var reference = verseManager.references[iRow];
 			var metadata = verseManager.GetVerseMetadata(reference);
-			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"]; //this is what will be written in the rows
+			var verseDifficulty : int = metadata["difficulty"];
+			if (verseDifficulty > parseInt(difficulty)) {
+				masteredYesNo = "yes";
+			} else {
+				masteredYesNo = "no";
+			}
+			
+			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"] + "\t\t mastered " + diffString + ": " + masteredYesNo; //this is what will be written in the rows
 		/*
 			if ( iRow == selected )
 			{
