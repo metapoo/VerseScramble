@@ -123,7 +123,7 @@ function OnGUI () //this deals with the display
 	
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	var totalScore = verseManager.GetCachedTotalScore();
-	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Verses Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
+	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
 	GUI.TextArea(headerRect, headerText);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "Verses"); //this draws the frame
@@ -140,7 +140,7 @@ function DoWindow (windowID : int) //here you build the table
 	var rBtn :Rect = Rect(0, 0, rowSize.x, rowSize.y);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
-	var masteredYesNo = "yes";
+	
 	
 	for (var iRow : int = 0; 
 		iRow < numRows;
@@ -154,13 +154,14 @@ function DoWindow (windowID : int) //here you build the table
 			var reference = verseManager.references[iRow];
 			var metadata = verseManager.GetVerseMetadata(reference);
 			var verseDifficulty : int = metadata["difficulty"];
-			if (verseDifficulty > parseInt(difficulty)) {
-				masteredYesNo = "yes";
-			} else {
-				masteredYesNo = "no";
-			}
+			var mastered : boolean = false;
 			
-			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"] + "\t\t mastered " + diffString + ": " + masteredYesNo; //this is what will be written in the rows
+			if (verseDifficulty > parseInt(difficulty)) {
+				mastered = true;
+				// verse was mastered
+			} 
+			
+			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"]; //this is what will be written in the rows
 		/*
 			if ( iRow == selected )
 			{
@@ -172,7 +173,11 @@ function DoWindow (windowID : int) //here you build the table
 				fClicked = GUI.Button(rBtn, rowLabel);
 			}
 		*/
-			fClicked = GUI.Button(rBtn, rowLabel);
+			if (mastered) {
+				fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
+			} else {
+				fClicked = GUI.Button(rBtn, rowLabel);
+			}
 			
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked && Application.platform != RuntimePlatform.IPhonePlayer )
