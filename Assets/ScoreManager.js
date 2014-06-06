@@ -47,7 +47,9 @@ function calculatedTime() {
 function updateScoreLabel() {
 	calculateScore();
 	scoreLabel.text = "score: " + score;
-	timeLabel.text = "" + (maxTime - totalElapsedTime);
+	var timeLeft = (maxTime - totalElapsedTime);
+	if (timeLeft < 0) timeLeft = 0;
+	timeLabel.text = "" + timeLeft;
 }
 
 function resetStats() {
@@ -109,6 +111,7 @@ function calculateScore() {
  	if (maxMoves == 0) maxMoves = 1;
  	
  	score = parseInt(score * ( 1.0f * moves / maxMoves));
+ 	if (score < 0) score = 0;
  	return score;
 }
 
