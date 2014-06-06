@@ -230,6 +230,7 @@ function StartNextDifficulty() {
 function StartAnotherVerse() {
 	verseManager.GotoNextVerse();
 	SetupVerse();
+	SetupBackground();
 }
 
 function HandleVerseFinished() {
