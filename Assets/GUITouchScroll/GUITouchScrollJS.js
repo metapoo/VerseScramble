@@ -109,8 +109,6 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 
 function OnGUI () //this deals with the display
 {
-	Screen.SetResolution(1024, 768, false);
- 	
 	GUI.skin = customSkin;
 	
 	windowRect = Rect(windowMargin.x, windowMargin.y+10,
@@ -126,7 +124,7 @@ function OnGUI () //this deals with the display
 	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
 	GUI.TextArea(headerRect, headerText);
 	
-	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "Verses"); //this draws the frame
+	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), ""); //this draws the frame
 }
 
 function DoWindow (windowID : int) //here you build the table

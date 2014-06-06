@@ -130,6 +130,11 @@ function DifficultyToString(difficulty : Difficulty) {
 }
 
 function GetCurrentDifficulty() {
+	var maxDifficulty : Difficulty = GetCurrentDifficultyAllowed();
+	return maxDifficulty;
+}
+
+function GetCurrentDifficultyAllowed() {
 	var numMastered = GetMasteredVerses(Difficulty.Easy);
 	if (numMastered < verses.length) return Difficulty.Easy;
 	numMastered = GetMasteredVerses(Difficulty.Medium);
