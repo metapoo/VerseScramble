@@ -1,10 +1,13 @@
 ﻿#pragma strict
 
 var scoreLabel : GUIText;
+var timeLabel : GUIText;
 var score = 0;
 var streak : int = 0;
 var moves : int = 0;
+var maxMoves : int = 1;
 var mistakes : int = 0;
+var maxTime : int = 0;
 var gameManager : GameManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
@@ -43,7 +46,8 @@ function calculatedTime() {
 
 function updateScoreLabel() {
 	calculateScore();
-	scoreLabel.text = " mistakes: " + mistakes + " time: " + calculatedTime() + " score: " + score;
+	scoreLabel.text = "score: " + score;
+	timeLabel.text = "" + (maxTime - totalElapsedTime);
 }
 
 function resetStats() {
@@ -74,7 +78,6 @@ function resetTime() {
 }
 
 function reset() {
-	resetTime();
 	var reference = verseManager.currentReference();
 	verseMetadata = verseManager.GetVerseMetadata(reference);
 	highScore = verseMetadata["high_score"];
@@ -97,10 +100,15 @@ function calculateScore() {
  	var verse : String = verseManager.currentVerse();
  	var verseLength = verse.Length;
  	var diffMult = difficultyMultiplier(gameManager.difficulty);
- 	score = (verseLength*0.33*diffMult - totalElapsedTime)*diffMult;
+ 	maxTime = verseLength*0.33*diffMult;
+ 	score = (maxTime - totalElapsedTime)*diffMult;
  	for (var i=0;i<mistakes;i++) {
  		score = score * 0.8f;
  	}
+ 	var maxMoves = gameManager.words.length;
+ 	if (maxMoves == 0) maxMoves = 1;
+ 	
+ 	score = parseInt(score * ( 1.0f * moves / maxMoves));
  	return score;
 }
 
