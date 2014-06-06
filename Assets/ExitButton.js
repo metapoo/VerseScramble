@@ -7,6 +7,9 @@ function OnMouseDown() {
 	Application.LoadLevel("verselist");
 }
 
+function OnMouseUp() {
+}
+
 function Start () {
 
 }

@@ -1,18 +1,19 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/EndOfGameOptions.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TitleManager.js">
     <Files>
       <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
-      <File FileName="Assets/GameManager.js" Line="22" Column="32" />
-      <File FileName="Assets/ScoreManager.js" Line="100" Column="1" />
+      <File FileName="Assets/GameManager.js" Line="184" Column="26" />
+      <File FileName="Assets/ScoreManager.js" Line="84" Column="34" />
       <File FileName="../biblecannon/Assets/NewBehaviourScript.js" Line="1" Column="1" />
-      <File FileName="Assets/EndOfGameOptions.js" Line="23" Column="65" />
-      <File FileName="Assets/VerseManager.js" Line="58" Column="1" />
+      <File FileName="Assets/EndOfGameOptions.js" Line="76" Column="1" />
+      <File FileName="Assets/VerseManager.js" Line="122" Column="35" />
       <File FileName="Assets/WordLabel.js" Line="1" Column="1" />
       <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
       <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
       <File FileName="Assets/GUITouchScroll/GUITouchScroll.cs" Line="37" Column="22" />
       <File FileName="Assets/verses.txt" Line="101" Column="1" />
+      <File FileName="Assets/TitleManager.js" Line="16" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

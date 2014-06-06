@@ -10,7 +10,9 @@ function OnGUI() {
 	var style : GUIStyle = customSkin.button;
 	var enabled : boolean = true;
 	
-	Screen.SetResolution(1024, 768, false);
+	if (Screen.width > 1024) {
+		Screen.SetResolution(1024, 768, false);
+	}
 	
 	GUI.skin = customSkin;
 	var buttonSize = new Vector2(170,60);
