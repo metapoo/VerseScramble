@@ -19,14 +19,39 @@ function currentReference() {
 }
 
 function GotoNextVerse() {
+	var difficulty : Difficulty = GetCurrentDifficulty();
+	var masteredPct = GetMasteredVersesPercentage();
+	
 	var nextVerseIndex = Random.Range(0, verses.length);
 	
-	if (verseIndex == nextVerseIndex) {
-		GotoNextVerse();
-		return;
+	if (masteredPct < 100) {
+		nextVerseIndex = verseIndex;
+		
+		var mastered : boolean = false;
+		// find the next verse that's not mastered
+		do {
+			
+			nextVerseIndex = nextVerseIndex + 1;
+			if (nextVerseIndex >= verses.length) {
+				nextVerseIndex = 0;
+				break;
+			}
+			var verseMetadata = GetVerseMetadata(references[nextVerseIndex]);
+			var verseDifficulty : int = verseMetadata["difficulty"];
+			mastered = (verseDifficulty > parseInt(difficulty));
+			
+			//Debug.Log(nextVerseIndex + ". " + verseDifficulty + " vs " + parseInt(difficulty));
+		} while (mastered);
 	} else {
-		verseIndex = nextVerseIndex;
+		// don't repeat same verse on random
+		if (verseIndex == nextVerseIndex) {
+			GotoNextVerse();
+			return;
+		}
 	}
+	
+	verseIndex = nextVerseIndex;
+	
 	Debug.Log("going to verse " + verseIndex);
 	Save();
 }
