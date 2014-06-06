@@ -7,7 +7,6 @@ var references : Array = new Array();
 var verseIndex = 0;
 var verseText : TextAsset;
 var numVerses = 0;
-var gameManager : GameManager;
 var totalScore : int = -1;
 
 function currentVerse() {
@@ -87,7 +86,7 @@ function MasteredVersesKey(difficulty : Difficulty) {
 }
 
 function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
-	var difficulty : Difficulty = gameManager.GetDifficultyFromInt(verseMetadata["difficulty"]);
+	var difficulty : Difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	switch(difficulty) {
 		case(Difficulty.Easy):
 			difficulty = difficulty.Medium;
@@ -120,7 +119,7 @@ function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
 	PlayerPrefs.SetInt(diffkey, numVerses);
 }
 
-function DifficultyToString(difficulty : Difficulty) {
+static function DifficultyToString(difficulty : Difficulty) {
 	switch (difficulty) {
 		case Difficulty.Easy: return "easy";
 		case Difficulty.Medium: return "medium";
@@ -130,8 +129,34 @@ function DifficultyToString(difficulty : Difficulty) {
 }
 
 function GetCurrentDifficulty() {
+	var selectedDifficulty = GetSelectedDifficulty();
 	var maxDifficulty : Difficulty = GetCurrentDifficultyAllowed();
-	return maxDifficulty;
+	if (parseInt(maxDifficulty) < parseInt(selectedDifficulty)) {
+		return maxDifficulty;
+	} else {
+		return selectedDifficulty;
+	}
+}
+
+
+static function GetDifficultyFromInt(difficultyInt : int) {
+	switch(difficultyInt) {
+		case 0: return Difficulty.Easy;
+		case 1: return Difficulty.Medium;
+		case 2: return Difficulty.Hard;
+		case 3: return Difficulty.Impossible;
+		default:
+		return Difficulty.Easy;
+	}
+}
+
+function SetDifficulty(difficulty:Difficulty) {
+	PlayerPrefs.SetInt("selected_difficulty",parseInt(difficulty));
+}
+
+function GetSelectedDifficulty() {
+	var result : int = PlayerPrefs.GetInt("selected_difficulty",0);
+	return GetDifficultyFromInt(result);
 }
 
 function GetCurrentDifficultyAllowed() {

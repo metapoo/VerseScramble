@@ -102,7 +102,7 @@ function nextWord() {
 }
 
 function Start () {
-	Application.targetFrameRate = 60;
+	
 	difficulty = verseManager.GetCurrentDifficulty();
 	
 	SetupWalls();
@@ -155,17 +155,6 @@ function SplitVerse (verse : String) {
 		phraseArray.push(phrase);
 	}
 	return phraseArray;
-}
-
-function GetDifficultyFromInt(difficultyInt : int) {
-	switch(difficultyInt) {
-		case 0: return Difficulty.Easy;
-		case 1: return Difficulty.Medium;
-		case 2: return Difficulty.Hard;
-		case 3: return Difficulty.Impossible;
-		default:
-		return Difficulty.Easy;
-	}
 }
 
 function Cleanup () {
