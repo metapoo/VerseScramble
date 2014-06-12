@@ -6,6 +6,7 @@ public var customSkin : GUISkin; // this sets an optionSkin to load from skins
 
 public var rowSelectedStyle : GUIStyle; //this sets the row style within the script, you can add more styles and skins.
 public var windowStyle : GUIStyle;
+public var headerStyle : GUIStyle;
 
 // Internal variables for managing touches and drags
 private var selected : int = -1;
@@ -123,7 +124,7 @@ function OnGUI () //this deals with the display
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	var totalScore = verseManager.GetCachedTotalScore();
 	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
-	GUI.TextArea(headerRect, headerText);
+	GUI.TextArea(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
 }
