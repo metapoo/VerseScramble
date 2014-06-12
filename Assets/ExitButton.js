@@ -1,10 +1,13 @@
 ﻿#pragma strict
 
 var gameManager : GameManager;
+var level : String;
 
 function OnMouseDown() {
-	gameManager.Cleanup();
-	Application.LoadLevel("verselist");
+	if (gameManager != null) {
+		gameManager.Cleanup();
+	}
+	Application.LoadLevel(level);
 }
 
 function OnMouseUp() {
