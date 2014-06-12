@@ -21,8 +21,11 @@ function OnGUI() {
 	var maxDifficulty : Difficulty = verseManager.GetCurrentDifficultyAllowed();
 	
 	var selected:boolean = false;
+	var dH = h*0.7;
 	
-	if (GUI.Button(Rect(w*0.2-buttonSize.x*0.5,h*0.5,buttonSize.x,buttonSize.y),"Easy")) {
+	// difficulty buttons
+	
+	if (GUI.Button(Rect(w*0.2-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Easy")) {
 		selected = true;
 		selectedDifficulty = Difficulty.Easy;
 	}
@@ -33,7 +36,7 @@ function OnGUI() {
 		style = customSkin.button;
 	}
 	
-	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,h*0.5,buttonSize.x,buttonSize.y),"Medium", style)) {
+	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Medium", style)) {
 		selected = true;
 		selectedDifficulty = Difficulty.Medium;
 	}
@@ -44,7 +47,7 @@ function OnGUI() {
 		style = customSkin.button;
 	}
 
-	if (GUI.Button(Rect(w*0.8-buttonSize.x*0.5,h*0.5,buttonSize.x,buttonSize.y),"Hard", style)) {
+	if (GUI.Button(Rect(w*0.8-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Hard", style)) {
 		selected = true;
 		selectedDifficulty = Difficulty.Hard;
 	}
@@ -59,9 +62,42 @@ function OnGUI() {
 	}
 	
 	if (showError) {
-		GUI.Button(Rect(w*0.5-buttonSize.x,h*0.8,buttonSize.x*2,buttonSize.y),
+		GUI.Button(Rect(w*0.5-buttonSize.x,h*0.825,buttonSize.x*2,buttonSize.y),
 		"You need to master more verses for " + VerseManager.DifficultyToString(selectedDifficulty));
 	}
+	
+	if (verseManager.GetLanguage() == "en") {
+		style = customSkin.button;
+	} else {
+		style = disabledStyle;
+	}
+	
+	// language buttons
+	if (GUI.Button(Rect(w*0.2-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"English", style)) {
+		verseManager.SetLanguage("en");
+	}
+
+	if (verseManager.GetLanguage() == "zh") {
+		style = customSkin.button;
+	} else {
+		style = disabledStyle;
+	}
+
+
+	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"中文", style)) {
+		verseManager.SetLanguage("zh");
+	}
+
+	if (verseManager.GetLanguage() == "he") {
+		style = customSkin.button;
+	} else {
+		style = disabledStyle;
+	}
+
+	if (GUI.Button(Rect(w*0.8-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"עברית", style)) {
+		verseManager.SetLanguage("he");	
+	}
+
 }
 	
 

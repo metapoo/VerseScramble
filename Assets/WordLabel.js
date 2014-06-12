@@ -37,7 +37,7 @@ function setWord(w : String) {
 function Start () {
 
     var screenBounds = GameManager.screenBounds;
-	startPosition = new Vector3(screenBounds.x+screenBounds.width*.1,screenBounds.y-screenBounds.height*0.3);
+	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.3);
 	versePosition = startPosition;
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
@@ -73,10 +73,10 @@ function calculateVersePosition () {
 	
 	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y);
 	var screenBounds = GameManager.screenBounds;
-	var maxX = screenBounds.x + screenBounds.width*0.9;
+	var maxX = screenBounds.x + screenBounds.width*0.95;
 	var vSpacing = renderer.bounds.size.y;
 	
-	if (destination.x + wordWidth*0.5 + spacing*0.5f > maxX) {
+	if ((destination.x + wordWidth*0.5) > maxX) {
 		versePosition = new Vector3(startPosition.x,
 									versePosition.y-vSpacing,
 									0);

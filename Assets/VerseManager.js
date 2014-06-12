@@ -1,4 +1,4 @@
-﻿#pragma strict
+#pragma strict
 
 import JSONUtils;
 
@@ -6,6 +6,8 @@ var verses : Array = new Array();
 var references : Array = new Array();
 var verseIndex = 0;
 var verseText : TextAsset;
+var verseTextEN : TextAsset;
+var verseTextZH : TextAsset;
 var numVerses = 0;
 var totalScore : int = -1;
 
@@ -15,6 +17,14 @@ function currentVerse() {
 
 function currentReference() {
 	return references[verseIndex];
+}
+
+function GetLanguage() {
+	return PlayerPrefs.GetString("language", "en");
+}
+
+function SetLanguage(language : String) {
+	PlayerPrefs.SetString("language", language);
 }
 
 function GotoNextVerse() {
@@ -239,9 +249,19 @@ function GetVerseMetadata(reference : String) {
 function LoadVerses() {
 	verses.clear();
 	references.clear();
+	var language = GetLanguage();
+	
+	if (language == "en") {
+		verseText = verseTextEN;
+	} else if (language == "zh") {
+		verseText = verseTextZH;
+	} else if (language == "he") {
+	// todo hebrew
+	}
 	
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
+  	
   	for (line in lines) {
   		
   		var parts = line.Split([": "], System.StringSplitOptions.None);
@@ -249,7 +269,7 @@ function LoadVerses() {
   		
   		var verse = parts[1];
   		var badLetter : String;
-  		for (badLetter in new Array(":","“","”",";")) {
+  		for (badLetter in new Array("“","”")) {
 	  		verse = verse.Replace(badLetter,"");
 	  	}
 	  	for (badLetter in new Array("-","—","  ","\t")) {
@@ -259,10 +279,11 @@ function LoadVerses() {
   		var reference = parts[0];
   		verses.push(verse);
   		references.push(reference);
-  		
-  		//Debug.Log(line);
-  		//Debug.Log("parts[1] = " + parts[1]);
-  		//Debug.Log("reference = " + reference + " verse = " + verse);
+  		/*
+  		Debug.Log(line);
+  		Debug.Log("parts[1] = " + parts[1]);
+  		Debug.Log("reference = " + reference + " verse = " + verse);
+  		*/
   	}
   	Load();
 }
