@@ -8,6 +8,8 @@ var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
+var verseTextHE : TextAsset;
+
 var numVerses = 0;
 var totalScore : int = -1;
 
@@ -257,15 +259,16 @@ function LoadVerses() {
 	} else if (language == "zh") {
 		verseText = verseTextZH;
 	} else if (language == "he") {
-	// todo hebrew
+		verseText = verseTextHE;
 	}
 	
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
+  	var sep : String = "|";
   	
   	for (line in lines) {
   		
-  		var parts = line.Split([": "], System.StringSplitOptions.None);
+  		var parts = line.Split([sep], System.StringSplitOptions.None);
   		if (parts.Length != 2) continue;
   		
   		var verse = parts[1];

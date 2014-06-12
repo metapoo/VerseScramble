@@ -254,7 +254,7 @@ function StartAnotherVerse() {
 
 function HandleVerseFinished() {
 	finished = true;
-	yield WaitForSeconds(1);
+	yield WaitForSeconds(2);
 	Debug.Log("verse finished");
 	scoreManager.HandleFinished();
 	endOfGameOptionsClone = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	

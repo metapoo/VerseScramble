@@ -9,7 +9,6 @@ private var windowRect : Rect;
 
 // Make the contents of the window
 function DoMyWindow (windowID : int) {
-	GUILayout.Space(10);
 	var mistakes = scoreManager.mistakes;
 	var clicked = false;
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
@@ -49,13 +48,8 @@ function DoMyWindow (windowID : int) {
 		gameManager.SetupVerse();
 		clicked = true;
 	}
-	if (GUILayout.Button ("Try Another Verse")) {
+	if (GUILayout.Button ("Next Verse")) {
 		gameManager.StartAnotherVerse();
-		clicked = true;
-	}
-	if (GUILayout.Button ("Back to Menu")) {
-		gameManager.Cleanup();
-		Application.LoadLevel("verselist");
 		clicked = true;
 	}
 	
@@ -68,8 +62,8 @@ function DoMyWindow (windowID : int) {
 function showEndOfGameOptions() {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
-	windowRect = Rect(w*0.25,h*0.1,w*0.5,h*0.8);
-	GUILayout.Window (0, windowRect, DoMyWindow, "You did it!");
+	windowRect = Rect(w*0.3,h*0.4,w*0.4,h*0.55);
+	GUILayout.Window (0, windowRect, DoMyWindow, "");
 }
 
 function OnGUI() {

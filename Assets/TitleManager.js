@@ -73,7 +73,7 @@ function OnGUI() {
 	}
 	
 	// language buttons
-	if (GUI.Button(Rect(w*0.2-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"English", style)) {
+	if (GUI.Button(Rect(w*0.33-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"English", style)) {
 		verseManager.SetLanguage("en");
 	}
 
@@ -84,7 +84,7 @@ function OnGUI() {
 	}
 
 
-	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"中文", style)) {
+	if (GUI.Button(Rect(w*0.66-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"中文", style)) {
 		verseManager.SetLanguage("zh");
 	}
 
@@ -93,11 +93,11 @@ function OnGUI() {
 	} else {
 		style = disabledStyle;
 	}
-
+/*
 	if (GUI.Button(Rect(w*0.8-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"עברית", style)) {
 		verseManager.SetLanguage("he");	
 	}
-
+*/
 }
 	
 
