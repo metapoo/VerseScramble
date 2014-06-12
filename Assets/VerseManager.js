@@ -66,16 +66,17 @@ function GotoNextVerse() {
 }
 
 function Save() {
-	PlayerPrefs.SetInt("verseIndex", verseIndex);
-	PlayerPrefs.SetString("currentVerse", currentVerse());
-	PlayerPrefs.SetString("currentReference", currentReference());
+	var language = GetLanguage();
+	PlayerPrefs.SetInt("verseIndex_"+language, verseIndex);
+	PlayerPrefs.SetString("currentVerse_"+language, currentVerse());
+	PlayerPrefs.SetString("currentReference_"+language, currentReference());
 }
 
 function SaveVerseMetadata(metadata : Hashtable) {
 	var reference = currentReference();
 	var metadataJSON : String = JSONUtils.HashtableToJSON(metadata);
 	
-	PlayerPrefs.SetString("vm_"+reference, metadataJSON);
+	PlayerPrefs.SetString("vm_"+reference+"_"+GetLanguage(), metadataJSON);
 }
 
 function MasteredVersesKey(difficulty : Difficulty) {
@@ -91,7 +92,7 @@ function MasteredVersesKey(difficulty : Difficulty) {
 			diffkey = "hard";
 			break;
 	}
-	var key = diffkey + "_verses_mastered";
+	var key = diffkey + "_verses_mastered_"+GetLanguage();
 	return key;
 }
 
@@ -161,11 +162,11 @@ static function GetDifficultyFromInt(difficultyInt : int) {
 }
 
 function SetDifficulty(difficulty:Difficulty) {
-	PlayerPrefs.SetInt("selected_difficulty",parseInt(difficulty));
+	PlayerPrefs.SetInt("selected_difficulty_"+GetLanguage(),parseInt(difficulty));
 }
 
 function GetSelectedDifficulty() {
-	var result : int = PlayerPrefs.GetInt("selected_difficulty",0);
+	var result : int = PlayerPrefs.GetInt("selected_difficulty_"+GetLanguage(),0);
 	return GetDifficultyFromInt(result);
 }
 
@@ -226,7 +227,7 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 }
 
 function GetVerseMetadata(reference : String) {
-	var key = "vm_"+reference;
+	var key = "vm_"+reference+"_"+GetLanguage();
 	var metadataJSON : String = null;
 	
 	if (PlayerPrefs.HasKey(key)) {
@@ -276,6 +277,12 @@ function LoadVerses() {
 	  		verse = verse.Replace(badLetter," ");
 	  	}
 	  	
+	  	if (language == "zh") {
+	  		for (badLetter in new Array(" ")) {
+	  			verse = verse.Replace(badLetter,"");
+	  		}
+	  	}
+	  	
   		var reference = parts[0];
   		verses.push(verse);
   		references.push(reference);
@@ -290,7 +297,7 @@ function LoadVerses() {
 
 
 function Load () {
-	verseIndex = PlayerPrefs.GetInt("verseIndex", 0);
+	verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);
 }
 
 function Start () {

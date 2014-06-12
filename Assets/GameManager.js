@@ -137,25 +137,44 @@ function SetVerseReference (reference : String) {
 
 function SplitVerse (verse : String) {
 	var phraseLength = 5;
+	var language = verseManager.GetLanguage();
+
 	switch (difficulty) {
 		case Difficulty.Easy:
 			phraseLength = 20;
+			if (language == "zh") phraseLength = 6;
 			break;
 		case Difficulty.Medium:
 			phraseLength = 12;
+			if (language == "zh") phraseLength = 3;
 			break;
 		case Difficulty.Hard:
 			phraseLength = 6;
+			if (language == "zh") phraseLength = 2;
 			break;
 	}
 	Debug.Log("phrase length = " + phraseLength);
 	var wordsArray : Array;
 	var phraseArray : Array = new Array();
-	wordsArray = verse.Split(" "[0]);
+	
+	
+	if (language == "zh") {
+	wordsArray = new Array();
+		for (var s in verse) {
+			wordsArray.push(s);
+		}
+	} else {
+		wordsArray = verse.Split(" "[0]);
+	}
+	
 	var phrase : String = "";
 	var newPhrase : String = "";
 	for (word in wordsArray) {
-		newPhrase = phrase + word + " ";
+		if (language == "zh") {
+			newPhrase = phrase + word;
+		} else {
+			newPhrase = phrase + word + " ";
+		}	
 		if (newPhrase.Length > phraseLength) {
 		  var newPhraseDiff = Mathf.Abs(newPhrase.Length - phraseLength);
 		  var phraseDiff = Mathf.Abs(phrase.Length - phraseLength);
