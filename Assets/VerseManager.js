@@ -14,10 +14,25 @@ var numVerses = 0;
 var totalScore : int = -1;
 
 function currentVerse() {
+	if (verses.length == "") {
+		return "";
+	}
+	
+	if (verseIndex > verses.length) {
+		verseIndex = 0;
+	}
+
 	return verses[verseIndex];
 }
 
 function currentReference() {
+	if (references.length == "") {
+		return "";
+	}
+	
+	if (verseIndex > references.length) {
+		verseIndex = 0;
+	}
 	return references[verseIndex];
 }
 
@@ -45,7 +60,6 @@ function GotoNextVerse() {
 			nextVerseIndex = nextVerseIndex + 1;
 			if (nextVerseIndex >= verses.length) {
 				nextVerseIndex = 0;
-				break;
 			}
 			var verseMetadata = GetVerseMetadata(references[nextVerseIndex]);
 			var verseDifficulty : int = verseMetadata["difficulty"];
@@ -279,12 +293,12 @@ function LoadVerses() {
 	  	for (badLetter in new Array("-","—","  ","\t")) {
 	  		verse = verse.Replace(badLetter," ");
 	  	}
-	  	
+	  	/*
 	  	if (language == "zh") {
 	  		for (badLetter in new Array(" ")) {
 	  			verse = verse.Replace(badLetter,"");
 	  		}
-	  	}
+	  	}*/
 	  	
   		var reference = parts[0];
   		verses.push(verse);

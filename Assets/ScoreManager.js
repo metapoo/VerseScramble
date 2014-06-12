@@ -105,7 +105,7 @@ function calculateScore() {
  	var langMult = 1.0f;
  	var language = verseManager.GetLanguage();
  	if (language == "zh") {
- 		langMult = 4.0;
+ 		langMult = 2.5;
  	}
  	maxTime = verseLength*0.33*diffMult*langMult;
  	

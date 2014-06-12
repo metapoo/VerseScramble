@@ -135,38 +135,100 @@ function SetVerseReference (reference : String) {
 	verseReference.text = reference;
 }
 
+function SplitVerseZH(verse : String) {
+	var phraseLength = 5;
+	
+	switch (difficulty) {
+		case Difficulty.Easy:
+			phraseLength = 12;
+			break;
+		case Difficulty.Medium:
+			phraseLength = 7;
+			break;
+		case Difficulty.Hard:
+			phraseLength = 3;
+			break;
+	}
+	Debug.Log("phrase length = " + phraseLength);
+	var clauseArray : Array = new Array();
+	var phraseArray : Array = new Array();
+	var seps = ["、","，", "，","。","！","；","："];
+	var clause = "";
+	
+	for (var c in verse) {
+		clause = clause + c;
+		
+		for (var s in seps) {
+			if (s == c) {
+				if ((clause != "") && (clause != " ") && (clause != "  ")) {
+					clauseArray.push(clause);
+					Debug.Log("clause : " + clause);
+				}
+				clause = "";
+			}
+		}
+	}
+	
+	if ((clause != "") && (clause != " ") && (clause != "  ")) {
+		clauseArray.push(clause);
+		Debug.Log("clause : " + clause);
+	}
+	
+		
+	var phrase : String = "";
+	var newPhrase : String = "";
+	var phraseLengthForClause : int;
+	
+	for (clause in clauseArray) {
+		if (clause.Length > phraseLength*1.5) {
+			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
+			phraseLengthForClause = Mathf.RoundToInt(clause.Length/divisor);
+			var l : int = 0;
+			
+			while (l < clause.Length) {
+				if ((l + phraseLengthForClause) >= (clause.Length-3)) {
+					phraseLengthForClause = clause.Length - l;
+				}
+				
+				phrase = clause.Substring(l, phraseLengthForClause);
+				l = l + phraseLengthForClause;
+				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
+					phraseArray.push(phrase);
+				}
+			}	
+		} else {
+			phraseArray.push(clause);
+		}
+	}
+	return phraseArray;
+
+}
+
 function SplitVerse (verse : String) {
+
 	var phraseLength = 5;
 	var language = verseManager.GetLanguage();
 
+	if (language == "zh") {
+		return SplitVerseZH(verse);
+	}
+	
 	switch (difficulty) {
 		case Difficulty.Easy:
 			phraseLength = 20;
-			if (language == "zh") phraseLength = 12;
 			break;
 		case Difficulty.Medium:
 			phraseLength = 12;
-			if (language == "zh") phraseLength = 7;
 			break;
 		case Difficulty.Hard:
 			phraseLength = 6;
-			if (language == "zh") phraseLength = 4;
 			break;
 	}
 	Debug.Log("phrase length = " + phraseLength);
 	var wordsArray : Array;
 	var phraseArray : Array = new Array();
-	
-	
-	if (language == "zh") {
-	wordsArray = new Array();
-		for (var s in verse) {
-		Debug.Log(s);
-			wordsArray.push(s);
-		}
-	} else {
-		wordsArray = verse.Split(" "[0]);
-	}
+
+	wordsArray = verse.Split(" "[0]);
 	
 	var phrase : String = "";
 	var newPhrase : String = "";
