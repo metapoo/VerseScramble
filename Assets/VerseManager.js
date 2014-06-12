@@ -293,6 +293,7 @@ function LoadVerses() {
   		*/
   	}
   	Load();
+  	Debug.Log(references.join(";"));
 }
 
 

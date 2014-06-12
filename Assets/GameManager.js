@@ -142,15 +142,15 @@ function SplitVerse (verse : String) {
 	switch (difficulty) {
 		case Difficulty.Easy:
 			phraseLength = 20;
-			if (language == "zh") phraseLength = 6;
+			if (language == "zh") phraseLength = 12;
 			break;
 		case Difficulty.Medium:
 			phraseLength = 12;
-			if (language == "zh") phraseLength = 3;
+			if (language == "zh") phraseLength = 7;
 			break;
 		case Difficulty.Hard:
 			phraseLength = 6;
-			if (language == "zh") phraseLength = 2;
+			if (language == "zh") phraseLength = 4;
 			break;
 	}
 	Debug.Log("phrase length = " + phraseLength);
@@ -171,7 +171,7 @@ function SplitVerse (verse : String) {
 	var newPhrase : String = "";
 	for (word in wordsArray) {
 		if (language == "zh") {
-			newPhrase = phrase + word;
+			newPhrase = phrase + word + " ";
 		} else {
 			newPhrase = phrase + word + " ";
 		}	

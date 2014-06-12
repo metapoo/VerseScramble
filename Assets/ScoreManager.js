@@ -102,7 +102,13 @@ function calculateScore() {
  	var verse : String = verseManager.currentVerse();
  	var verseLength = verse.Length;
  	var diffMult = difficultyMultiplier(gameManager.difficulty);
- 	maxTime = verseLength*0.33*diffMult;
+ 	var langMult = 1.0f;
+ 	var language = verseManager.GetLanguage();
+ 	if (language == "zh") {
+ 		langMult = 4.0;
+ 	}
+ 	maxTime = verseLength*0.33*diffMult*langMult;
+ 	
  	score = (maxTime - totalElapsedTime)*diffMult;
  	for (var i=0;i<mistakes;i++) {
  		score = score * 0.8f;

@@ -33,9 +33,9 @@ John 3:16: For God so loved the world that he gave his one and only Son, that wh
 John 3:17: For God did not send his Son into the world to condemn the world, but to save the world through him.
 John 5:24: “I tell you the truth, whoever hears my word and believes him who sent me has eternal life and will not be condemned; he has crossed over from death to life.
 John 10:10: The thief comes only to steal and kill and destroy; I have come that they may have life, and have it to the full.
-John 14:6: Jesus answered, “I am the way and the truth and the life. No one comes to the Father except through me.
 John 11:25: Jesus said to her, “I am the resurrection and the life. He who believes in me will live, even though he dies;
 John 13:35: By this all men will know that you are my disciples, if you love one another.”
+John 14:6: Jesus answered, “I am the way and the truth and the life. No one comes to the Father except through me.
 John 14:27: Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.
 John 15:13: Greater love has no one than this, that he lay down his life for his friends.
 John 16:33: “I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.”
@@ -86,8 +86,8 @@ Hebrews 10:25: Let us not give up meeting together, as some are in the habit of 
 Hebrews 11:6: And without faith it is impossible to please God, because anyone who comes to him must believe that he exists and that he rewards those who earnestly seek him.
 Hebrews 11:1: Now faith is being sure of what we hope for and certain of what we do not see.
 Hebrew 12:1: Therefore, since we are surrounded by such a great cloud of witnesses, let us throw off everything that hinders and the sin that so easily entangles, and let us run with perseverance the race marked out for us.
-Hebrews 13:5: Keep your lives free from the love of money and be content with what you have, because God has said, “Never will I leave you; never will I forsake you.”
 Hebrews 12:2: Let us fix our eyes on Jesus, the author and perfecter of our faith, who for the joy set before him endured the cross, scorning its shame, and sat down at the right hand of the throne of God.
+Hebrews 13:5: Keep your lives free from the love of money and be content with what you have, because God has said, “Never will I leave you; never will I forsake you.”
 James 1:2: Consider it pure joy, my brothers, whenever you face trials of many kinds,
 James 1:3: because you know that the testing of your faith develops perseverance.
 James 1:12: Blessed is the man who perseveres under trial, because when he has stood the test, he will receive the crown of life that God has promised to those who love him.
