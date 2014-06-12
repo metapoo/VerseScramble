@@ -161,6 +161,7 @@ function SplitVerse (verse : String) {
 	if (language == "zh") {
 	wordsArray = new Array();
 		for (var s in verse) {
+		Debug.Log(s);
 			wordsArray.push(s);
 		}
 	} else {
@@ -170,11 +171,7 @@ function SplitVerse (verse : String) {
 	var phrase : String = "";
 	var newPhrase : String = "";
 	for (word in wordsArray) {
-		if (language == "zh") {
-			newPhrase = phrase + word + " ";
-		} else {
-			newPhrase = phrase + word + " ";
-		}	
+		newPhrase = phrase + word + " ";
 		if (newPhrase.Length > phraseLength) {
 		  var newPhraseDiff = Mathf.Abs(newPhrase.Length - phraseLength);
 		  var phraseDiff = Mathf.Abs(phrase.Length - phraseLength);
