@@ -1,4 +1,5 @@
 ﻿#pragma strict
+@script RequireComponent(AudioSource);
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
@@ -26,6 +27,9 @@ var bgSprite2 : Sprite;
 var bgSprite3 : Sprite;
 var bgSprite4 : Sprite;
 var bgSprite5 : Sprite;
+var sndSuccess1 : AudioClip;
+var sndSuccess2 : AudioClip;
+var sndFailure1 : AudioClip;
 
 private var wordHinted : boolean = false;
 
@@ -74,12 +78,19 @@ function SetupWalls () {
 
 function HandleWordWrong() {
 	scoreManager.HandleWordWrong();
+	audio.PlayOneShot(sndFailure1, 0.7);
 }
 
 function HandleWordCorrect() {
 	var elapsedTime : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
 	scoreManager.HandleWordCorrect(elapsedTime);
+	
+	var snd : AudioClip = sndSuccess1;
+	if (Random.RandomRange(0,10.0f) > 5.0f) {
+		snd = sndSuccess2;
+	}
+	audio.PlayOneShot(snd, 0.4);
 }
 
 function SetupUI() {

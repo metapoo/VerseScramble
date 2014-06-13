@@ -24,7 +24,7 @@ function setWord(w : String) {
 	var padding = spriteWidth*0.5;
 	var length = word.Length;
 	transform.localScale.x = (textWidth + padding) / spriteWidth;
-	var yAdjust = 0.7f;
+	var yAdjust = 0.6f;
 	transform.localScale.y = yAdjust*transform.localScale.y;
 	
 	var ratio = transform.localScale.x/transform.localScale.y*yAdjust;
@@ -37,7 +37,7 @@ function setWord(w : String) {
 function Start () {
 
     var screenBounds = GameManager.screenBounds;
-	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.3);
+	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.22);
 	versePosition = startPosition;
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
