@@ -2,8 +2,12 @@
 
 var gameManager : GameManager;
 var level : String;
+var sndSelect : AudioClip;
+
 
 function OnMouseDown() {
+	audio.PlayOneShot(sndSelect);
+	yield WaitForSeconds(0.25);
 	if (gameManager != null) {
 		gameManager.Cleanup();
 	}
