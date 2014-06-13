@@ -6,7 +6,7 @@ var sndSelect : AudioClip;
 
 
 function OnMouseDown() {
-	audio.PlayOneShot(sndSelect);
+	audio.PlayOneShot(sndSelect,0.5);
 	yield WaitForSeconds(0.25);
 	if (gameManager != null) {
 		gameManager.Cleanup();

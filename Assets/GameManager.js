@@ -90,7 +90,7 @@ function HandleWordCorrect() {
 	if (Random.RandomRange(0,10.0f) > 5.0f) {
 		snd = sndSuccess2;
 	}
-	audio.PlayOneShot(snd, 0.3);
+	audio.PlayOneShot(snd, 0.1);
 }
 
 function SetupUI() {
