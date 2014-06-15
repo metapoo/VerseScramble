@@ -116,7 +116,7 @@ function calculateScore() {
  	var maxMoves = gameManager.words.length;
  	if (maxMoves == 0) maxMoves = 1;
  	
- 	score = parseInt(score * ( 1.0f * moves / maxMoves));
+ 	score = parseInt(score * ( 1.0f * (moves - mistakes) / maxMoves));
  	if (score < 0) score = 0;
  	return score;
 }

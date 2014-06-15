@@ -78,7 +78,7 @@ function SetupWalls () {
 
 function HandleWordWrong() {
 	scoreManager.HandleWordWrong();
-	audio.PlayOneShot(sndFailure1, 1.0);
+	audio.PlayOneShot(sndFailure1, 2.0f);
 }
 
 function HandleWordCorrect() {
@@ -90,7 +90,7 @@ function HandleWordCorrect() {
 	if (Random.RandomRange(0,10.0f) > 5.0f) {
 		snd = sndSuccess2;
 	}
-	audio.PlayOneShot(snd, 0.1);
+	audio.PlayOneShot(snd, 1.0);
 }
 
 function SetupUI() {

@@ -41,6 +41,13 @@ function Start () {
 	versePosition = startPosition;
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
+	
+}
+
+function FixedUpdate() {
+	var m :float = 2.0f;
+	rigidbody2D.AddForce(new Vector3(Random.Range(-m,m),
+	Random.Range(-m,m),0.0f));
 }
 
 function Update () {
@@ -53,6 +60,15 @@ function Update () {
 			handleReturnedToVerse();
 		}
 	}
+	
+	var rotation = transform.eulerAngles.z;
+	
+	if (Mathf.Abs(rotation - 180.0f) < 60.0f) {
+		label.transform.eulerAngles.z = rotation - 180.0f;
+	} else {
+		label.transform.eulerAngles.z = rotation;
+	}
+	
 }
 
 function handleReturnedToVerse() {
