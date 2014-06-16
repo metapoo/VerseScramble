@@ -168,6 +168,12 @@ function SplitVerseZH(verse : String) {
 	var seps = ["、","，", "，","。","！","；","："];
 	var clause = "";
 	
+	var paransRe:Regex = new Regex("(.*)");
+	
+	// filter out paranthesis
+	verse = Regex.Replace(verse, "\\(.*\\)","");
+	verse = Regex.Replace(verse, "\\（.*\\）","");
+	
 	for (var c in verse) {
 		clause = clause + c;
 		
