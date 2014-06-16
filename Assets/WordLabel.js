@@ -45,7 +45,7 @@ function Start () {
 }
 
 function FixedUpdate() {
-	var m :float = 4.0f;
+	var m :float = 0.0f;
 	rigidbody2D.AddForce(new Vector3(Random.Range(-m,m),
 	Random.Range(-m,m),0.0f));
 }

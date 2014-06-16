@@ -65,7 +65,7 @@ function OnGUI() {
 	
 	if (showError) {
 		GUI.Button(Rect(w*0.5-buttonSize.x,h*0.825,buttonSize.x*2,buttonSize.y),
-		"You need to master more verses for " + VerseManager.DifficultyToString(selectedDifficulty));
+		"master more verses for " + VerseManager.DifficultyToString(selectedDifficulty));
 	}
 
 	// language buttons

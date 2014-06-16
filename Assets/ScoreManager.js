@@ -54,7 +54,7 @@ function calculatedTime() {
 
 function updateScoreLabel() {
 	calculateScore();
-	scoreLabel.text = "score: " + score;
+	scoreLabel.text = score.ToString("00000");
 	var timeLeft = (maxTime - totalElapsedTime);
 	if (timeLeft < 0) timeLeft = 0;
 	timeLabel.text = "" + timeLeft;

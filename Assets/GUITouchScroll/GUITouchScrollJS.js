@@ -123,10 +123,11 @@ function OnGUI () //this deals with the display
 
 	var headerRect = Rect(windowMargin.x, 0,
 						  Screen.width - (2*windowMargin.x), 55);
-	
-	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
+	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
+	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
-	var headerText = String.Format("Total Score: {0} Difficulty: {1} Mastered: {2}% ",totalScore,diffString, verseManager.GetMasteredVersesPercentage());
+	var headerText = String.Format("Total Score: {0} \t Difficulty: {1} \t Mastered: {2}/{3} ",totalScore,diffString, 
+	verseManager.GetMasteredVerses(difficulty), verseManager.verses.length);
 	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
