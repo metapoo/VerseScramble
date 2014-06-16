@@ -13,6 +13,7 @@ var startTime : float;
 var gameManager : GameManager;
 var scoreManager : ScoreManager;
 var hinting : boolean = false;
+var floatingPoints : FloatingPoints;
 
 function setWord(w : String) {
 	label.text = w;
@@ -35,7 +36,6 @@ function setWord(w : String) {
 }
 
 function Start () {
-
     var screenBounds = GameManager.screenBounds;
 	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.22);
 	versePosition = startPosition;
@@ -45,7 +45,7 @@ function Start () {
 }
 
 function FixedUpdate() {
-	var m :float = 2.0f;
+	var m :float = 3.0f;
 	rigidbody2D.AddForce(new Vector3(Random.Range(-m,m),
 	Random.Range(-m,m),0.0f));
 }
@@ -78,7 +78,6 @@ function handleReturnedToVerse() {
 }
 
 function handleTap () {
-	Debug.Log("Tap " + word);
 }
 
 function calculateVersePosition () {
@@ -128,16 +127,25 @@ function HintAt() {
 }
 
 function OnMouseDown() {  
+	var dScore = 0;
+	var right = false;
 	hinting = false;
 	if (word == GameManager.currentWord) {
 		GetComponent(SpriteRenderer).color = Color.white;
 		returnToVerse();
-		gameManager.HandleWordCorrect();
+		dScore = gameManager.HandleWordCorrect();
+		right = true;
 	} else {
 		var oldColor : Color = GetComponent(SpriteRenderer).color;
 		GetComponent(SpriteRenderer).color = Color(1.0,0.5,0.5,0.8);
 		yield WaitForSeconds(0.1);
 		GetComponent(SpriteRenderer).color = oldColor;
-		gameManager.HandleWordWrong();
+		dScore = gameManager.HandleWordWrong();
+	}
+	
+	if (true) {
+		var clone : FloatingPoints;
+		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
+		clone.SetPoints(dScore, right);
 	}
 }

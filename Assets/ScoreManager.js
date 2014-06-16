@@ -16,12 +16,17 @@ var totalElapsedTime : int = 0;
 var startTime : int;
 
 function HandleWordWrong() {
+	var oldScore = calculateScore();	
 	streak = 0;
 	moves = moves + 1;
 	mistakes = mistakes + 1;
+	var newScore = calculateScore();
+	var dScore = (newScore - oldScore);
+	return dScore;
 }
 
 function HandleWordCorrect(elapsedTime : float) {
+	var oldScore = calculateScore();	
 	var baseTime = 5;
 	if (moves == 0) {
 		baseTime = 10;
@@ -38,6 +43,9 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
+	var newScore = calculateScore();
+	var dScore =  (newScore - oldScore);
+	return dScore;
 }
 
 function calculatedTime() {

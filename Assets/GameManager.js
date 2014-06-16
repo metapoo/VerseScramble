@@ -77,20 +77,20 @@ function SetupWalls () {
 }
 
 function HandleWordWrong() {
-	scoreManager.HandleWordWrong();
 	audio.PlayOneShot(sndFailure1, 2.0f);
+	return scoreManager.HandleWordWrong();
 }
 
 function HandleWordCorrect() {
 	var elapsedTime : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
-	scoreManager.HandleWordCorrect(elapsedTime);
 	
 	var snd : AudioClip = sndSuccess1;
 	if (Random.RandomRange(0,10.0f) > 5.0f) {
 		snd = sndSuccess2;
 	}
 	audio.PlayOneShot(snd, 1.0);
+	return scoreManager.HandleWordCorrect(elapsedTime);
 }
 
 function SetupUI() {

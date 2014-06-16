@@ -124,7 +124,7 @@ function OnGUI () //this deals with the display
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	var totalScore = verseManager.GetCachedTotalScore();
 	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
-	GUI.TextArea(headerRect, headerText, headerStyle);
+	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
 }
