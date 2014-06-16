@@ -1,7 +1,9 @@
 ﻿#pragma strict
 
 var scoreLabel : GUIText;
+var scoreLabelShadow : GUIText;
 var timeLabel : GUIText;
+var timeLabelShadow : GUIText;
 var score = 0;
 var streak : int = 0;
 var moves : int = 0;
@@ -55,9 +57,11 @@ function calculatedTime() {
 function updateScoreLabel() {
 	calculateScore();
 	scoreLabel.text = score.ToString("00000");
+	scoreLabelShadow.text = score.ToString("00000");
 	var timeLeft = (maxTime - totalElapsedTime);
 	if (timeLeft < 0) timeLeft = 0;
-	timeLabel.text = "" + timeLeft;
+	timeLabel.text = timeLeft.ToString("00");
+	timeLabelShadow.text = timeLeft.ToString("00");
 }
 
 function resetStats() {

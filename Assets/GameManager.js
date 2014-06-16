@@ -12,6 +12,7 @@ var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
 var verseReference : GUIText;
+var verseReferenceShadow : GUIText;
 var feedbackLabel : GUIText;
 var finished : boolean = false;
 var references : Array = new Array();
@@ -144,6 +145,7 @@ function SetupBackground() {
 
 function SetVerseReference (reference : String) {
 	verseReference.text = reference;
+	verseReferenceShadow.text = reference;
 }
 
 function SplitVerseZH(verse : String) {
