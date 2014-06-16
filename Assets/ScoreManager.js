@@ -20,6 +20,7 @@ var timeBonusScore : int = 0;
 var startTime : int;
 var endOfGameOptions : EndOfGameOptions;
 var endOfGameOptionsClone : EndOfGameOptions;
+var sndSelect : AudioClip;
 
 function HandleWordWrong() {
 	var oldScore = calculateScore();	
@@ -86,9 +87,9 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		
 		timeBonusScore += 1;
 		timeLeft -= 1;
+		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
 	}
 	yield WaitForSeconds(0.5f);
