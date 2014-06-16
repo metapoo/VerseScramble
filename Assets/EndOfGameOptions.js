@@ -35,29 +35,30 @@ function DoMyWindow (windowID : int) {
 	}
 	
 	GUILayout.TextArea(text);
-	/*
-	if (mistakes == 0) {
-		if (GUILayout.Button ("Advance to Next Stage")) {
-			clicked = true;
-			gameManager.StartNextDifficulty();
-		}
-	}*/
 	
-	if (GUILayout.Button ("Try Again")) {
-		print ("Got a click");
-		gameManager.SetupVerse();
-		clicked = true;
-	}
+	var tryAgain = function() {
+		if (GUILayout.Button ("Try Again")) {
+			print ("Got a click");
+			gameManager.SetupVerse();
+			clicked = true;
+		}
+	};
+	
+	if (mistakes > 0) tryAgain();
+	
 	if (GUILayout.Button ("Next Verse")) {
 		gameManager.StartAnotherVerse();
 		clicked = true;
 	}
+	
+	if (mistakes == 0) tryAgain();
 	
 	if (clicked) {
 		Destroy(this);
 		return;
 	}
 }
+
 
 function showEndOfGameOptions() {
 	var w = mainCam.pixelWidth;
