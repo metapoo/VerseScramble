@@ -38,7 +38,6 @@ function DoMyWindow (windowID : int) {
 	
 	var tryAgain = function() {
 		if (GUILayout.Button ("Try Again")) {
-			print ("Got a click");
 			gameManager.SetupVerse();
 			clicked = true;
 		}

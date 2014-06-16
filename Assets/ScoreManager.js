@@ -15,7 +15,11 @@ var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var highScore : int;
 var totalElapsedTime : int = 0;
+var timeLeft : int = 0;
+var timeBonusScore : int = 0;
 var startTime : int;
+var endOfGameOptions : EndOfGameOptions;
+var endOfGameOptionsClone : EndOfGameOptions;
 
 function HandleWordWrong() {
 	var oldScore = calculateScore();	
@@ -58,7 +62,6 @@ function updateScoreLabel() {
 	calculateScore();
 	scoreLabel.text = score.ToString("00000");
 	scoreLabelShadow.text = score.ToString("00000");
-	var timeLeft = (maxTime - totalElapsedTime);
 	if (timeLeft < 0) timeLeft = 0;
 	timeLabel.text = timeLeft.ToString("00");
 	timeLabelShadow.text = timeLeft.ToString("00");
@@ -68,6 +71,8 @@ function resetStats() {
 	mistakes = 0;
 	moves = 0;
 	streak = 0;
+	timeBonusScore = 0;
+	score = 0;
 	updateScoreLabel();
 }
 
@@ -75,8 +80,26 @@ function SetupUI() {
 	updateScoreLabel();
 }
 
+function CountTimeLeft() {
+	yield WaitForSeconds(0.3f);
+	var dt = 2.0f/timeLeft;
+	if (dt > 0.1f) dt = 0.1f;
+	
+	while (timeLeft > 0) {
+		
+		timeBonusScore += 1;
+		timeLeft -= 1;
+		yield WaitForSeconds(dt);
+	}
+	yield WaitForSeconds(0.5f);
+	HandleCountTimeLeftFinished();
+}
+
 function HandleFinished() {
-	Debug.Log("score = " + score + " high = " + highScore + " verse difficulty = " + verseMetadata["difficulty"]);
+	CountTimeLeft();
+}
+
+function HandleCountTimeLeftFinished() {
 	if (score > highScore) {
 		highScore = score;
 		verseMetadata["high_score"] = highScore;
@@ -85,6 +108,9 @@ function HandleFinished() {
 	if ((mistakes == 0) && (score > 0)) {
 		verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
 	}
+	
+	endOfGameOptionsClone = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+
 }
 
 function resetTime() {
@@ -121,7 +147,7 @@ function calculateScore() {
  	}
  	maxTime = verseLength*0.33*diffMult*langMult;
  	
- 	score = (maxTime - totalElapsedTime)*diffMult;
+ 	score = (maxTime*0.5f + 0.5f*(maxTime - totalElapsedTime))*diffMult + timeBonusScore;
  	for (var i=0;i<mistakes;i++) {
  		score = score * 0.8f;
  	}
@@ -141,6 +167,7 @@ function Start() {
 function Update () {
 	if (!gameManager.finished) {
 		totalElapsedTime = Time.time - startTime;
-		updateScoreLabel();
+		timeLeft = maxTime - totalElapsedTime;
 	}
+	updateScoreLabel();
 }

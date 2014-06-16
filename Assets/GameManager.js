@@ -5,8 +5,6 @@ public enum Difficulty {Easy, Medium, Hard, Impossible};
 
 var mainCam : Camera;
 var wordLabel : WordLabel;
-var endOfGameOptions : EndOfGameOptions;
-var endOfGameOptionsClone : EndOfGameOptions;
 var topWall : BoxCollider2D;
 var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
@@ -287,7 +285,6 @@ function Cleanup () {
 function SetupVerse() {
 	scoreManager.reset();
 	finished = false;
-	endOfGameOptionsClone = null;
 	
 	Cleanup();
 	lastWordTime = Time.time;
@@ -332,10 +329,10 @@ function StartAnotherVerse() {
 
 function HandleVerseFinished() {
 	finished = true;
-	yield WaitForSeconds(2);
+	yield WaitForSeconds(1);
 	Debug.Log("verse finished");
 	scoreManager.HandleFinished();
-	endOfGameOptionsClone = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+
 }
 
 function Update () {
