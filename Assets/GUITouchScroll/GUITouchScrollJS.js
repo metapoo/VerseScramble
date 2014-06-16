@@ -4,7 +4,10 @@
 
 public var customSkin : GUISkin; // this sets an optionSkin to load from skins
 
-public var rowSelectedStyle : GUIStyle; //this sets the row style within the script, you can add more styles and skins.
+public var rowEasyStyle : GUIStyle; 
+public var rowMediumStyle : GUIStyle;
+public var rowHardStyle : GUIStyle; 
+
 public var windowStyle : GUIStyle;
 public var headerStyle : GUIStyle;
 
@@ -123,7 +126,7 @@ function OnGUI () //this deals with the display
 	
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	var totalScore = verseManager.GetCachedTotalScore();
-	var headerText = "Total Score: " + totalScore + "  Difficulty: " + diffString + "  Mastered: " + verseManager.GetMasteredVersesPercentage() + "%";
+	var headerText = String.Format("Total Score: {0} Difficulty: {1} Mastered: {2}% ",totalScore,diffString, verseManager.GetMasteredVersesPercentage());
 	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
@@ -161,7 +164,7 @@ function DoWindow (windowID : int) //here you build the table
 				// verse was mastered
 			} 
 			
-			var rowLabel : String = reference + "\t\t high score: " + metadata["high_score"]; //this is what will be written in the rows
+			var rowLabel : String = String.Format("{0} \t\t high score: {1}",reference,metadata["high_score"]); //this is what will be written in the rows
 		/*
 			if ( iRow == selected )
 			{
@@ -174,7 +177,13 @@ function DoWindow (windowID : int) //here you build the table
 			}
 		*/
 			if (mastered) {
-				fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
+				if (verseDifficulty == 1) {
+					fClicked = GUI.Button(rBtn, rowLabel, rowEasyStyle);
+				} else if (verseDifficulty == 2) {
+					fClicked = GUI.Button(rBtn, rowLabel, rowMediumStyle);
+				} else {
+					fClicked = GUI.Button(rBtn, rowLabel, rowHardStyle);
+				}
 			} else {
 				fClicked = GUI.Button(rBtn, rowLabel);
 			}

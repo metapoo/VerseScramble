@@ -12,7 +12,6 @@ function Start () {
 	startTime = Time.time;
 	startingScale = transform.localScale.x;
 	transform.localScale = new Vector3(0,0,1.0f);
-	Debug.Log("startingScale = " + startingScale);
 }
 
 function Update () {
@@ -32,8 +31,6 @@ function Update () {
 	} else if (alpha > 1) {
 		alpha = 1;
 	}
-	Debug.Log("alpha = " + alpha);
-	Debug.Log("time = " + timeElapsed + " ttl = " + ttl);
 	renderer.material.color.a = alpha;
 }
 
