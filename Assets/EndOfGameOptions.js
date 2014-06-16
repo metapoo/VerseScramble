@@ -19,7 +19,7 @@ function DoMyWindow (windowID : int) {
 	
 
 	if (scoreManager.highScore == scoreManager.score) {
-		text += " You got a high score of " + scoreManager.score + "! ";
+		text += String.Format("You got a high score of {0}! ", scoreManager.score);
 	}
 	
 	text += "You made " + mistakes + " mistakes";
