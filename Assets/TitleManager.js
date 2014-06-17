@@ -5,6 +5,9 @@ public var disabledStyle : GUIStyle;
 public var verseManager : VerseManager;
 public var showError : boolean = false;
 public var sndSelect : AudioClip;
+public var background : Transform;
+public var mainCam : Camera;
+
 private	var selectedDifficulty : Difficulty;
 
 function OnGUI() {
@@ -12,7 +15,7 @@ function OnGUI() {
 	var enabled : boolean = true;
 	
 	if (Screen.width > 1024) {
-		Screen.SetResolution(1024, 768, false);
+		Screen.SetResolution(Screen.width * 0.5f, Screen.height * 0.5f, false);
 	}
 	
 	GUI.skin = customSkin;
@@ -64,7 +67,8 @@ function OnGUI() {
 	}
 	
 	if (showError) {
-		GUI.Button(Rect(w*0.5-buttonSize.x,h*0.825,buttonSize.x*2,buttonSize.y),
+	
+		GUI.Button(Rect(w*0.5-buttonSize.x*1.25,h*0.85,buttonSize.x*2.5,buttonSize.y),
 		"master more verses for " + VerseManager.DifficultyToString(selectedDifficulty));
 	}
 
@@ -112,8 +116,20 @@ function OnGUI() {
 }
 	
 
+function resizeBackground() {
+	var w = background.renderer.bounds.size.x;
+	var h = background.renderer.bounds.size.y;
+	var camW = mainCam.pixelWidth;
+	var camH = mainCam.pixelHeight;
+	var camX = 2*mainCam.ScreenToWorldPoint(new Vector3(camW, 0f, 0f)).x;
+	var camY = 2*mainCam.ScreenToWorldPoint(new Vector3(0f, camH, 0f)).y;
+	background.transform.localScale.x = camX/w;
+	background.transform.localScale.y = camY/h;
+}
+
 function Start () {
 	Application.targetFrameRate = 60;
+	resizeBackground();
 }
 
 function Update () {
