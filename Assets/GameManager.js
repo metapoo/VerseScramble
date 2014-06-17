@@ -160,28 +160,23 @@ function SetVerseReference (reference : String) {
 	verseReferenceShadow.text = reference;
 }
 
-function SplitVerseZH(verse : String) {
-	var phraseLength = 5;
+function SplitVerse(verse : String) {
+	var langConfig : Hashtable = new Hashtable({'en':[22,12,6],
+								  				'zh':[14,8,4]});
+	var language : String = verseManager.GetLanguage();
+	var phraseLengths : Array = langConfig[language];
 	var clauseBreakMultiplier = 1.5f;
+	var difficultyInt = verseManager.GetDifficultyFromInt(difficulty);
+	var phraseLength : int = phraseLengths[difficultyInt];
 	
-	switch (difficulty) {
-		case Difficulty.Easy:
-			phraseLength = 14;
-			break;
-		case Difficulty.Medium:
-			phraseLength = 8;
-			clauseBreakMultiplier = 1.5f;
-			break;
-		case Difficulty.Hard:
-			phraseLength = 4;
-			clauseBreakMultiplier = 2.0f;
-			
-			break;
+	if (difficulty == Difficulty.Hard) {
+		clauseBreakMultiplier = 2.0f;
 	}
+	
 	Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
-	var seps = ["、","，", "，","。","！","；","："];
+	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？"];
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
@@ -230,22 +225,36 @@ function SplitVerseZH(verse : String) {
 			var l : int = 0;
 			
 			while (l < clause.Length) {
-				phraseLengthForClause = phraseLength;
-				if ((l + phraseLengthForClause*clauseBreakMultiplier) > clause.Length) {
+				if (difficulty == difficulty.Hard) {
+					phraseLengthForClause = phraseLength;
+				} else {
+					phraseLengthForClause = Mathf.RoundToInt(clause.Length/divisor);
+				}
+				if ((l + phraseLength*clauseBreakMultiplier) > clause.Length) {
 					phraseLengthForClause = clause.Length - l;
+				}
+				
+				if (language == "en") {
+					while (((l + phraseLengthForClause) < clause.Length) &&
+						   (clause[l+phraseLengthForClause] != " ") ) {
+						phraseLengthForClause += 1;
+					}
 				}
 				
 				phrase = clause.Substring(l, phraseLengthForClause);
 
-				if ((l + phraseLengthForClause + 2) < clause.Length) {
-					if (phraseHasPunctuation(phrase)) {
-						phraseLengthForClause += 2;
-						phrase = clause.Substring(l, phraseLengthForClause);
-					}
-				} else {
-					if (phraseHasPunctuation(phrase)) {
-						phraseArray[phraseArray.length-1] += phrase;
-						break;
+				if (language == "zh") {
+					// allowances if punctuation is in phrase
+					if ((l + phraseLengthForClause + 2) < clause.Length) {
+						if (phraseHasPunctuation(phrase)) {
+							phraseLengthForClause += 2;
+							phrase = clause.Substring(l, phraseLengthForClause);
+						}
+					} else {
+						if (phraseHasPunctuation(phrase)) {
+							phraseArray[phraseArray.length-1] += phrase;
+							break;
+						}
 					}
 				}
 				
@@ -263,14 +272,10 @@ function SplitVerseZH(verse : String) {
 
 }
 
-function SplitVerse (verse : String) {
+function SplitVerseWordByWord(verse : String) {
 
 	var phraseLength = 5;
 	var language = verseManager.GetLanguage();
-
-	if (language == "zh") {
-		return SplitVerseZH(verse);
-	}
 	
 	switch (difficulty) {
 		case Difficulty.Easy:

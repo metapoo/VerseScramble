@@ -1,15 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameManager.js">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/ScoreManager.js">
     <Files>
+      <File FileName="Assets/GameManager.js" Line="109" Column="31" />
       <File FileName="Assets/VerseListManager.js" Line="5" Column="35" />
-      <File FileName="Assets/GameManager.js" Line="124" Column="27" />
-      <File FileName="Assets/VerseManager.js" Line="34" Column="13" />
+      <File FileName="Assets/GameManager.js" Line="178" Column="1" />
+      <File FileName="Assets/VerseManager.js" Line="158" Column="34" />
       <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
-      <File FileName="Assets/ScoreManager.js" Line="1" Column="1" />
+      <File FileName="Assets/ScoreManager.js" Line="150" Column="3" />
       <File FileName="../biblecannon/Assets/NewBehaviourScript.js" Line="1" Column="1" />
       <File FileName="Assets/EndOfGameOptions.js" Line="1" Column="1" />
-      <File FileName="Assets/WordLabel.js" Line="1" Column="1" />
+      <File FileName="Assets/WordLabel.js" Line="142" Column="32" />
       <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
       <File FileName="Assets/GUITouchScroll/GUITouchScroll.cs" Line="1" Column="1" />
       <File FileName="Assets/verses.txt" Line="1" Column="1" />
