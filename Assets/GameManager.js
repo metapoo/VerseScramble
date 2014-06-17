@@ -162,16 +162,20 @@ function SetVerseReference (reference : String) {
 
 function SplitVerseZH(verse : String) {
 	var phraseLength = 5;
+	var clauseBreakMultiplier = 1.5f;
 	
 	switch (difficulty) {
 		case Difficulty.Easy:
-			phraseLength = 12;
+			phraseLength = 14;
 			break;
 		case Difficulty.Medium:
 			phraseLength = 8;
+			clauseBreakMultiplier = 1.5f;
 			break;
 		case Difficulty.Hard:
 			phraseLength = 4;
+			clauseBreakMultiplier = 2.0f;
+			
 			break;
 	}
 	Debug.Log("phrase length = " + phraseLength);
@@ -188,8 +192,8 @@ function SplitVerseZH(verse : String) {
 	
 	for (var c in verse) {
 		clause = clause + c;
-		
 		for (var s in seps) {
+		
 			if (s == c) {
 				if ((clause != "") && (clause != " ") && (clause != "  ")) {
 					clauseArray.push(clause);
@@ -210,19 +214,43 @@ function SplitVerseZH(verse : String) {
 	var newPhrase : String = "";
 	var phraseLengthForClause : int;
 	
+	
+	var phraseHasPunctuation = function(phrase : String) {
+		for (var sc in seps) {
+			if (phrase.Contains(sc)) {
+				return true;
+			}
+		}
+		return false;
+	};
+	
 	for (clause in clauseArray) {
-		if (clause.Length > phraseLength*1.5) {
+		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
-			phraseLengthForClause = Mathf.RoundToInt(clause.Length/divisor);
 			var l : int = 0;
 			
 			while (l < clause.Length) {
-				if ((l + phraseLengthForClause) >= (clause.Length-3)) {
+				phraseLengthForClause = phraseLength;
+				if ((l + phraseLengthForClause*clauseBreakMultiplier) > clause.Length) {
 					phraseLengthForClause = clause.Length - l;
 				}
 				
 				phrase = clause.Substring(l, phraseLengthForClause);
+
+				if ((l + phraseLengthForClause + 2) < clause.Length) {
+					if (phraseHasPunctuation(phrase)) {
+						phraseLengthForClause += 2;
+						phrase = clause.Substring(l, phraseLengthForClause);
+					}
+				} else {
+					if (phraseHasPunctuation(phrase)) {
+						phraseArray[phraseArray.length-1] += phrase;
+						break;
+					}
+				}
+				
 				l = l + phraseLengthForClause;
+				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
 					phraseArray.push(phrase);
 				}

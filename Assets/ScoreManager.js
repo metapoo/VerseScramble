@@ -132,7 +132,7 @@ function difficultyMultiplier(difficulty : Difficulty) {
 		case Difficulty.Medium:
 			return 2;
 		case Difficulty.Hard:
-			return 4;
+			return 3;
 	}
 	return 1;
 }
@@ -144,7 +144,7 @@ function calculateScore() {
  	var langMult = 1.0f;
  	var language = verseManager.GetLanguage();
  	if (language == "zh") {
- 		langMult = 2.5;
+ 		langMult = 1.0;
  	}
  	maxTime = verseLength*0.33*diffMult*langMult;
  	

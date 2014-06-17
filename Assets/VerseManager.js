@@ -156,7 +156,6 @@ static function DifficultyToString(difficulty : Difficulty) {
 }
 
 function GetCurrentDifficulty() {
-
 	var selectedDifficulty = GetSelectedDifficulty();
 	var maxDifficulty : Difficulty = GetCurrentDifficultyAllowed();
 	if (parseInt(maxDifficulty) < parseInt(selectedDifficulty)) {
