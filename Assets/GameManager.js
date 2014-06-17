@@ -119,8 +119,9 @@ function nextWord() {
 
 
 function resizeBackground() {
-	var w = background.renderer.bounds.size.x;
-	var h = background.renderer.bounds.size.y;
+
+	var w = background.sprite.bounds.size.x;
+	var h = background.sprite.bounds.size.y;
 	var camW = mainCam.pixelWidth;
 	var camH = mainCam.pixelHeight;
 	var camX = 2*mainCam.ScreenToWorldPoint(new Vector3(camW, 0f, 0f)).x;
@@ -167,10 +168,10 @@ function SplitVerseZH(verse : String) {
 			phraseLength = 12;
 			break;
 		case Difficulty.Medium:
-			phraseLength = 7;
+			phraseLength = 8;
 			break;
 		case Difficulty.Hard:
-			phraseLength = 3;
+			phraseLength = 4;
 			break;
 	}
 	Debug.Log("phrase length = " + phraseLength);
