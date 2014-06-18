@@ -162,7 +162,7 @@ function SetVerseReference (reference : String) {
 
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[22,12,6],
-								  				'zh':[14,8,4]});
+								  				'zh':[10,6,4]});
 	var language : String = verseManager.GetLanguage();
 	var phraseLengths : Array = langConfig[language];
 	var clauseBreakMultiplier = 1.5f;
@@ -188,7 +188,6 @@ function SplitVerse(verse : String) {
 	for (var c in verse) {
 		clause = clause + c;
 		for (var s in seps) {
-		
 			if (s == c) {
 				if ((clause != "") && (clause != " ") && (clause != "  ")) {
 					clauseArray.push(clause);
@@ -221,17 +220,22 @@ function SplitVerse(verse : String) {
 	
 	for (clause in clauseArray) {
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
+			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
 			var l : int = 0;
-			
+			Debug.Log("clause = " + clause + " divisor = " + divisor + " clause length = " + clause.Length + " l = " + l);
 			while (l < clause.Length) {
-				if (difficulty == difficulty.Hard) {
+				if (difficulty == Difficulty.Hard) {
 					phraseLengthForClause = phraseLength;
+					Debug.Log("pA = " + phraseLengthForClause);
 				} else {
 					phraseLengthForClause = Mathf.RoundToInt(clause.Length/divisor);
+					Debug.Log("pB = " + phraseLengthForClause);
 				}
-				if ((l + phraseLength*clauseBreakMultiplier) > clause.Length) {
+				
+				if ((l + phraseLengthForClause) > clause.Length) {
 					phraseLengthForClause = clause.Length - l;
+					Debug.Log("pC = " + phraseLengthForClause);			
 				}
 				
 				if (language == "en") {
@@ -245,14 +249,20 @@ function SplitVerse(verse : String) {
 
 				if (language == "zh") {
 					// allowances if punctuation is in phrase
-					if ((l + phraseLengthForClause + 2) < clause.Length) {
+					if ((l + phraseLengthForClause + 2) < clause.Length)
+					 {
 						if (phraseHasPunctuation(phrase)) {
 							phraseLengthForClause += 2;
 							phrase = clause.Substring(l, phraseLengthForClause);
+							Debug.Log("pD = " + phraseLengthForClause);			
 						}
-					} else {
+					// if punctuation makes up a big percentage then combine it with previous phrase
+					} else if (phraseLengthForClause <= 4) {
 						if (phraseHasPunctuation(phrase)) {
 							phraseArray[phraseArray.length-1] += phrase;
+							l = l + phraseLengthForClause;
+							Debug.Log("pE = " + phraseLengthForClause);		
+							Debug.Log("modify previous phrase to: " + phraseArray[phraseArray.length-1]);	
 							break;
 						}
 					}
@@ -262,10 +272,12 @@ function SplitVerse(verse : String) {
 				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
 					phraseArray.push(phrase);
+					Debug.Log("phrase = " + phrase);
 				}
 			}	
 		} else {
 			phraseArray.push(clause);
+			Debug.Log("phrase is whole clause = " + phrase);
 		}
 	}
 	return phraseArray;
