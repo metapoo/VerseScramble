@@ -19,7 +19,7 @@ private var previousDelta : float = 0f;
 
 public var scrollPosition : Vector2 ;
 public var mainCam : Camera;
-public var inertiaDuration : float = 0.75f;
+public var inertiaDuration : float = 2.75f;
 // size of the window and scrollable list
 public var numRows : int;
 public var rowSize : Vector2;
@@ -90,10 +90,10 @@ function Update() //check for touch
 			timeTouchPhaseEnded = Time.time;
 		}
 	}
-
 }
 
 function HandleRowSelected(selected : int) {
+	PlayerPrefs.SetInt("scrollPositionY",scrollPosition.y);
 	Debug.Log("selecting verse " + selected);
 	verseManager.verseIndex = selected;
 	verseManager.Save();
@@ -104,6 +104,8 @@ function Start ()
 {
 	verseManager.LoadVerses();
 	numRows = verseManager.verses.length;
+	var previousY = scrollPosition.y;
+	scrollPosition.y = PlayerPrefs.GetInt("scrollPositionY",previousY);
 }
 
 public static function AutoResize(screenWidth:int, screenHeight:int):void
