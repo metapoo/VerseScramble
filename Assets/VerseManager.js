@@ -155,9 +155,9 @@ static function DifficultyToString(difficulty : Difficulty) {
 	}		
 }
 
-function GetCurrentDifficulty() {
+function GetGlobalDifficulty__deprecated__() {
 	var selectedDifficulty = GetSelectedDifficulty();
-	var maxDifficulty : Difficulty = GetCurrentDifficultyAllowed();
+	var maxDifficulty : Difficulty = GetCurrentDifficultyAllowed__deprecated__();
 	if (parseInt(maxDifficulty) < parseInt(selectedDifficulty)) {
 		return maxDifficulty;
 	} else {
@@ -165,6 +165,25 @@ function GetCurrentDifficulty() {
 	}
 }
 
+function GetCurrentDifficulty() {
+	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
+	var reference = currentReference();
+	var verseMetadata =	GetVerseMetadata(reference);
+	var maxDifficultyInt : int = verseMetadata["difficulty"];
+	if (maxDifficultyInt < parseInt(selectedDifficulty)) {
+		var cappedDifficulty : Difficulty = GetDifficultyFromInt(maxDifficultyInt);
+		SetDifficulty(cappedDifficulty);
+		return cappedDifficulty;
+	} else {
+		return selectedDifficulty;
+	}
+}
+
+function GetCurrentDifficultyAllowed() {
+	var verseMetadata =	GetVerseMetadata(currentReference());
+	var maxDifficultyInt : int = verseMetadata["difficulty"];
+	return GetDifficultyFromInt(maxDifficultyInt);
+}
 
 static function GetDifficultyFromInt(difficultyInt : int) {
 	switch(difficultyInt) {
@@ -186,7 +205,7 @@ function GetSelectedDifficulty() {
 	return GetDifficultyFromInt(result);
 }
 
-function GetCurrentDifficultyAllowed() {
+function GetCurrentDifficultyAllowed__deprecated__() {
 	var numMastered = GetMasteredVerses(Difficulty.Easy);
 	if (numMastered < verses.length) return Difficulty.Easy;
 	numMastered = GetMasteredVerses(Difficulty.Medium);
@@ -209,7 +228,8 @@ function GetCachedTotalScore() {
 }
 
 function GetMasteredVersesPercentage() {
-	var numMastered : float = GetMasteredVerses(GetCurrentDifficulty());
+	//var numMastered : float = GetMasteredVerses(GetCurrentDifficulty());
+	var numMastered : float = GetMasteredVerses();
 	return parseInt(100 * numMastered / verses.length);
 }
 
@@ -218,11 +238,14 @@ function GetNextDifficulty() {
 	switch (difficulty) {
 		case Difficulty.Easy: return Difficulty.Medium;
 		case Difficulty.Medium: return Difficulty.Hard;
-		case difficulty.Hard: return Difficulty.Impossible;
+		case difficulty.Hard: return Difficulty.Hard;
 	}
 	return difficulty.Hard;
 }
 
+function GetMasteredVerses() {
+	return GetMasteredVerses(Difficulty.Hard);
+}
 
 function GetMasteredVerses(difficulty : Difficulty) {
 	var diffkey = MasteredVersesKey(difficulty);

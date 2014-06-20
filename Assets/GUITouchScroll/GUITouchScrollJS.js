@@ -19,7 +19,7 @@ private var previousDelta : float = 0f;
 
 public var scrollPosition : Vector2 ;
 public var mainCam : Camera;
-public var inertiaDuration : float = 2.75f;
+public var inertiaDuration : float = 1.5f;
 // size of the window and scrollable list
 public var numRows : int;
 public var rowSize : Vector2;
@@ -129,7 +129,7 @@ function OnGUI () //this deals with the display
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
 	var headerText = String.Format("Total Score: {0} \t Difficulty: {1} \t Mastered: {2}/{3} ",totalScore,diffString, 
-	verseManager.GetMasteredVerses(difficulty), verseManager.verses.length);
+	verseManager.GetMasteredVerses(), verseManager.verses.length);
 	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
@@ -179,18 +179,16 @@ function DoWindow (windowID : int) //here you build the table
 				fClicked = GUI.Button(rBtn, rowLabel);
 			}
 		*/
-			if (mastered) {
-				if (verseDifficulty == 1) {
-					fClicked = GUI.Button(rBtn, rowLabel, rowEasyStyle);
-				} else if (verseDifficulty == 2) {
-					fClicked = GUI.Button(rBtn, rowLabel, rowMediumStyle);
-				} else {
-					fClicked = GUI.Button(rBtn, rowLabel, rowHardStyle);
-				}
+			
+			if (verseDifficulty == 1) {
+				fClicked = GUI.Button(rBtn, rowLabel, rowEasyStyle);
+			} else if (verseDifficulty == 2) {
+				fClicked = GUI.Button(rBtn, rowLabel, rowMediumStyle);
+			} else if (verseDifficulty == 3) {
+				fClicked = GUI.Button(rBtn, rowLabel, rowHardStyle);
 			} else {
 				fClicked = GUI.Button(rBtn, rowLabel);
-			}
-			
+			}			
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked && Application.platform != RuntimePlatform.IPhonePlayer )
 			{

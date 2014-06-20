@@ -156,8 +156,10 @@ function SetupBackground() {
 }
 
 function SetVerseReference (reference : String) {
-	verseReference.text = reference;
-	verseReferenceShadow.text = reference;
+	verseReference.text = String.Format("{0}\n{1}",reference, 
+		verseManager.DifficultyToString(verseManager.GetCurrentDifficulty()));
+	verseReferenceShadow.text = verseReference.text;
+	
 }
 
 function SplitVerse(verse : String) {
@@ -176,7 +178,7 @@ function SplitVerse(verse : String) {
 	Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
-	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？"];
+	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？","."];
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
@@ -344,6 +346,7 @@ function Cleanup () {
 function SetupVerse() {
 	scoreManager.reset();
 	finished = false;
+	difficulty = verseManager.GetCurrentDifficulty();
 	
 	Cleanup();
 	lastWordTime = Time.time;

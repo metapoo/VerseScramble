@@ -30,7 +30,7 @@ function OnGUI() {
 	var dH = h*0.7;
 	
 	// difficulty buttons
-	
+	/*
 	if (GUI.Button(Rect(w*0.2-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Easy")) {
 		selected = true;
 		selectedDifficulty = Difficulty.Easy;
@@ -73,46 +73,25 @@ function OnGUI() {
 		GUI.Button(Rect(w*0.5-buttonSize.x*1.25,h*0.85,buttonSize.x*2.5,buttonSize.y),
 		"master more verses for " + VerseManager.DifficultyToString(selectedDifficulty));
 	}
-
+	*/
+	
 	// language buttons
 	selected = false;
+	style = customSkin.button;
 	
-	if (verseManager.GetLanguage() == "en") {
-		style = customSkin.button;
-	} else {
-		style = disabledStyle;
-	}
-	
-	if (GUI.Button(Rect(w*0.333-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"English", style)) {
+	if (GUI.Button(Rect(w*0.333-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"English", style)) {
 		verseManager.SetLanguage("en");
 		selected = true;
 	}
 
-	if (verseManager.GetLanguage() == "zh") {
-		style = customSkin.button;
-	} else {
-		style = disabledStyle;
-	}
-
-
-	if (GUI.Button(Rect(w*0.666-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"中文", style)) {
+	if (GUI.Button(Rect(w*0.666-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"中文", style)) {
 		verseManager.SetLanguage("zh");
 		selected = true;
 	}
-
-	if (verseManager.GetLanguage() == "he") {
-		style = customSkin.button;
-	} else {
-		style = disabledStyle;
-	}
-/*
-	if (GUI.Button(Rect(w*0.8-buttonSize.x*0.5,h*0.4,buttonSize.x,buttonSize.y),"עברית", style)) {
-		verseManager.SetLanguage("he");	
-		selected = true;
-	}
-*/	
+	
 	if (selected) {
 		audio.PlayOneShot(sndSelect);
+		Application.LoadLevel("verselist");
 	}
 	
 }

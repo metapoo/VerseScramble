@@ -15,42 +15,52 @@ function DoMyWindow (windowID : int) {
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
 	var diffString = verseManager.DifficultyToString(difficulty);
-	var text = "";
-	
-
-	if (scoreManager.highScore == scoreManager.score) {
-		text += String.Format("You got a high score of {0}! ", scoreManager.score);
+	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
+	var text = String.Format("You made {0} mistakes.", mistakes);
+	if (mistakes == 0) {
+		text = "Perfect!";
 	}
+	if ((scoreManager.highScore == scoreManager.score) && (mistakes == 0)) {
+		text = String.Format("New high score {0}! ", scoreManager.score);
+	}	
+    
+
 	
-	text += "You made " + mistakes + " mistakes";
 	
+	/*
 	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
-		text += ", make zero mistakes to master this verse.";
+		text += String.Format(", make zero mistakes to try the verse on {0}.", nextDifficultyString) ;
 	} else if (gameManager.difficulty != Difficulty.Hard) {
 	    text += " and mastered this verse! So far you have mastered " + masteredVerses + " in " + diffString + " difficulty";
 	    if (difficulty != Difficulty.Hard) {
 	    	text += ", master " + (verseManager.verses.length - masteredVerses) + " more verses to unlock " +
 	    	verseManager.DifficultyToString(nextDifficulty) + " difficulty.";
 	    }
-	}
+	}*/
 	
-	GUILayout.TextArea(text);
+	GUILayout.Box(text);
 	
 	var tryAgain = function() {
-		if (GUILayout.Button ("Try Again")) {
-			gameManager.SetupVerse();
-			clicked = true;
+		if ((mistakes > 0) || (difficulty == difficulty.Hard)) {
+			if (GUILayout.Button ("Try Again")) {
+				gameManager.SetupVerse();
+				clicked = true;
+			}
+		} else {
+			if (GUILayout.Button (String.Format("Try On {0}", nextDifficultyString))) {
+				verseManager.SetDifficulty(nextDifficulty);
+				gameManager.SetupVerse();
+				clicked = true;
+			}
 		}
 	};
 	
-	if (mistakes > 0) tryAgain();
+	tryAgain();
 	
 	if (GUILayout.Button ("Next Verse")) {
 		gameManager.StartAnotherVerse();
 		clicked = true;
 	}
-	
-	if (mistakes == 0) tryAgain();
 	
 	if (clicked) {
 		Destroy(this);
@@ -62,7 +72,7 @@ function DoMyWindow (windowID : int) {
 function showEndOfGameOptions() {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
-	windowRect = Rect(w*0.3,h*0.4,w*0.4,h*0.55);
+	windowRect = Rect(w*0.3,h*0.5,w*0.4,h*0.45);
 	GUILayout.Window (0, windowRect, DoMyWindow, "");
 }
 
