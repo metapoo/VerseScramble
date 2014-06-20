@@ -40,29 +40,38 @@ function DoMyWindow (windowID : int) {
 	
 	GUILayout.Box(text);
 	
+	var mastered = (mistakes == 0) && (difficulty == difficulty.Hard);
+	var reload = false;
+	
 	var tryAgain = function() {
 		if ((mistakes > 0) || (difficulty == difficulty.Hard)) {
 			if (GUILayout.Button ("Try Again")) {
-				gameManager.SetupVerse();
-				clicked = true;
+				reload = true;
 			}
 		} else {
 			if (GUILayout.Button (String.Format("Try On {0}", nextDifficultyString))) {
 				verseManager.SetDifficulty(nextDifficulty);
-				gameManager.SetupVerse();
-				clicked = true;
+				reload = true;
 			}
 		}
 	};
 	
-	tryAgain();
-	
-	if (GUILayout.Button ("Next Verse")) {
-		gameManager.StartAnotherVerse();
-		clicked = true;
+	if (!mastered) {
+		tryAgain();
 	}
 	
-	if (clicked) {
+	if (GUILayout.Button ("Next Verse")) {
+		verseManager.GotoNextVerse();
+		reload = true;
+	}
+	
+	if (mastered) {
+		tryAgain();
+	}
+	
+	if (reload) {
+		gameManager.Cleanup();
+		Application.LoadLevel("scramble");
 		Destroy(this);
 		return;
 	}

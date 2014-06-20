@@ -18,7 +18,7 @@ function Update () {
 	var timeElapsed = Time.time - startTime;
 	var scale = startingScale*timeElapsed / (ttl*0.15f);
 	if (scale > startingScale) scale = startingScale;
-	Debug.Log("scale = " + scale);
+	
 	transform.localScale = new Vector3(scale,scale,1.0f);
 	
 	var duration = 0.33f*ttl;

@@ -1,10 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameManager.js">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TitleManager.js">
     <Files>
-      <File FileName="Assets/GameManager.js" Line="179" Column="66" />
-      <File FileName="Assets/VerseManager.js" Line="1" Column="1" />
-      <File FileName="Assets/GameManager.js" Line="179" Column="66" />
+      <File FileName="Assets/GameManager.js" Line="350" Column="2" />
+      <File FileName="Assets/VerseManager.js" Line="176" Column="27" />
+      <File FileName="Assets/TitleManager.js" Line="94" Column="38" />
+      <File FileName="Assets/ScoreManager.js" Line="110" Column="28" />
+      <File FileName="Assets/VerseListManager.js" Line="26" Column="1" />
+      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="22" Column="40" />
+      <File FileName="Assets/EndOfGameOptions.js" Line="24" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

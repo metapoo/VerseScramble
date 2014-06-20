@@ -60,7 +60,7 @@ function SetupWalls () {
 	bottomWall.size = topWall.size;
 	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
 	
-	leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*2.0f, 0f)).y);
+	leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*100.0f, 0f)).y);
 	leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).x - 0.5f, 0f);	
 	
 	rightWall.size = leftWall.size;
@@ -340,7 +340,8 @@ function Cleanup () {
 	for (wObject in wordObjects) {
 		Destroy(wObject.gameObject);
 	}
-	wordObjects.clear();
+	wordObjects.Clear();
+	
 }
 
 function SetupVerse() {
@@ -366,6 +367,9 @@ function SetupVerse() {
 	wordIndex = 0;
 	currentWord = words[wordIndex];
 	
+	
+	var dy = screenBounds.y;
+	
 	for (word in words) {
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
 		clone.setWord(word);
@@ -373,9 +377,49 @@ function SetupVerse() {
 		var w = clone.renderer.bounds.size.x;
 		var h = clone.renderer.bounds.size.y;
 		var x = Random.Range(screenBounds.x+w*0.5,screenBounds.x+screenBounds.width-w*0.5);
-		var y = Random.Range(screenBounds.y-screenBounds.height+h*0.5,screenBounds.y-h*0.5);
+		var y = screenBounds.y+h*2;
 		clone.transform.position = new Vector3(x,y,0);
+		clone.rigidbody2D.isKinematic = true;
 	}
+
+	
+	var i = 0;	
+	while (i < wordObjects.length) {
+		i = releaseWords(i) + 1;
+		yield WaitForSeconds(1.5f);
+	}
+}
+
+ function releaseWords(index: int) {
+ 	Debug.Log("release words index = " + index);
+ 
+	var groupSize : int = 3;
+	
+	switch(difficulty) {
+		case Difficulty.Medium:
+			groupSize = 4;
+			break;
+		case Difficulty.Hard:
+			groupSize = 5;
+			break;
+		default:
+			break;
+	}
+
+	var c : int  = 0;
+	
+	for (var i : int=index;i<wordObjects.length;i++) {
+		var wordObject : WordLabel = wordObjects[i];
+		var h = wordObject.renderer.bounds.size.y;
+
+		wordObject.transform.position.y = screenBounds.y+h*2;
+		wordObject.rigidbody2D.isKinematic = false;
+		c += 1;	
+		if (c == groupSize) {
+			break;
+		}
+	}
+	return i;
 }
 
 function StartNextDifficulty() {
