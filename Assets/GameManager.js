@@ -30,6 +30,7 @@ var bgSprite5 : Sprite;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
+public var gameStarted : boolean = false;
 private var wordHinted : boolean = false;
 
 static var currentWord : String;
@@ -169,7 +170,7 @@ function ChangeFontOverTime (guiText : GUIText, startFont : float, endFont : flo
 
 
 function moveReferenceToTopLeft() {
-	var duration : float = 1;
+	var duration : float = 0.5;
 	var refRect : Rect = verseReference.GetScreenRect();
 	var rectSize : Vector2 = new Vector2(refRect.width / Screen.width, refRect.height / Screen.height);
 	var center : Vector3 = new Vector3(0.5,0.5,1);
@@ -188,7 +189,7 @@ function moveReferenceToTopLeft() {
 function AnimateIntro() {
 	var center : Vector3 = new Vector3(0.5,0.5,1);
 	var centerS : Vector3 = new Vector3(0.5,0.5,0);
-	var duration : float = 0.5f;
+	var duration : float = 0.25f;
 	verseReference.transform.position = center;
 	verseReferenceShadow.transform.position = centerS;
 	
@@ -196,6 +197,9 @@ function AnimateIntro() {
 	var endScale : Vector3 = new Vector3(0.5,0.5,1.0f);
 	var startFont : float = 50;
 	var endFont : float = 22;
+	
+	ChangeFontOverTime(verseReference, 1, startFont, duration);
+	ChangeFontOverTime(verseReferenceShadow, 1, startFont, duration);
 	
 	yield WaitForSeconds(2.0f);
 	
@@ -472,6 +476,8 @@ function SetupVerse() {
 
 	yield WaitForSeconds(1.5f);
 	
+	gameStarted = true;
+	
 	var i = 0;	
 	while (i < wordObjects.length) {
 		i = releaseWords(i) + 1;
@@ -524,10 +530,10 @@ function StartAnotherVerse() {
 
 function HandleVerseFinished() {
 	finished = true;
+	gameStarted = false;
 	yield WaitForSeconds(1);
 	Debug.Log("verse finished");
-	scoreManager.HandleFinished();
-
+	scoreManager.HandleFinished();	
 }
 
 function ShowHint() {

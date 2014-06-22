@@ -167,7 +167,11 @@ function Start() {
 
 function Update () {
 	if (!gameManager.finished) {
-		totalElapsedTime = Time.time - startTime;
+		if (gameManager.gameStarted) {
+			totalElapsedTime = Time.time - startTime;
+		} else {
+			totalElapsedTime = 0;
+		}
 		timeLeft = maxTime - totalElapsedTime;
 	}
 	updateScoreLabel();
