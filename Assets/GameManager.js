@@ -137,6 +137,81 @@ function resizeBackground() {
 	background.transform.localScale.y = camY/h;
 }
 
+function Translation (thisTransform : Transform, startPos : Vector3, endPos : Vector3, duration : float) {
+	var rate = 1.0/duration;
+	var t = 0.0;
+	while (t < 1.0) {
+		t += Time.deltaTime * rate;
+		thisTransform.position = Vector3.Lerp(startPos, endPos, t);
+		yield; 
+	}
+}
+
+function ScaleOverTime (thisTransform : Transform, startScale : Vector3, endScale : Vector3, duration : float) {
+	var rate = 1.0/duration;
+	var t = 0.0;
+	while (t < 1.0) {
+		t += Time.deltaTime * rate;
+		thisTransform.localScale = Vector3.Lerp(startScale, endScale, t);
+		yield;
+	}
+}
+
+function ChangeFontOverTime (guiText : GUIText, startFont : float, endFont : float, duration : float) {
+	var rate = 1.0/duration;
+	var t = 0.0;
+	while (t < 1.0) {
+		t += Time.deltaTime * rate;
+		guiText.fontSize = startFont + (endFont - startFont) *t;
+		yield;
+	}
+}
+
+
+function moveReferenceToTopLeft() {
+	var duration : float = 1;
+	var refRect : Rect = verseReference.GetScreenRect();
+	var rectSize : Vector2 = new Vector2(refRect.width / Screen.width, refRect.height / Screen.height);
+	var center : Vector3 = new Vector3(0.5,0.5,1);
+	var centerS : Vector3 = new Vector3(0.5,0.5,0);
+	var destination : Vector3 = new Vector3(0.05f+rectSize.x*0.5, 0.975-rectSize.y*0.5,1);
+	var destinationS : Vector3 = new Vector3(destination.x, destination.y, 0);
+	Debug.Log("width = " + rectSize.x + " height = " + rectSize.y);
+	
+	Translation(verseReference.transform, center, destination, duration);
+	Translation(verseReferenceShadow.transform, centerS, destinationS, duration);
+	
+	yield WaitForSeconds(duration);
+	SetVerseReference(verseManager.currentReference(), true);
+}
+
+function AnimateIntro() {
+	var center : Vector3 = new Vector3(0.5,0.5,1);
+	var centerS : Vector3 = new Vector3(0.5,0.5,0);
+	var duration : float = 0.5f;
+	verseReference.transform.position = center;
+	verseReferenceShadow.transform.position = centerS;
+	
+	var startScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
+	var endScale : Vector3 = new Vector3(0.5,0.5,1.0f);
+	var startFont : float = 50;
+	var endFont : float = 22;
+	
+	yield WaitForSeconds(2.0f);
+	
+	ChangeFontOverTime(verseReference, startFont, endFont, duration);
+	ChangeFontOverTime(verseReferenceShadow, startFont, endFont, duration);
+	
+	yield WaitForSeconds(duration);
+	
+	moveReferenceToTopLeft();	
+	
+	//ScaleOverTime(verseReference.transform, startScale, endScale, duration);
+	//ScaleOverTime(verseReferenceShadow.transform, startScale, endScale, duration);
+	
+	
+}
+
 function Start () {
 	
 	difficulty = verseManager.GetCurrentDifficulty();
@@ -145,6 +220,7 @@ function Start () {
 	SetupUI();
 	SetupVerse();
 	SetupBackground();
+	AnimateIntro();
 }
 
 function SetupBackground() {
@@ -162,11 +238,16 @@ function SetupBackground() {
 	resizeBackground();
 }
 
-function SetVerseReference (reference : String) {
-	verseReference.text = String.Format("{0}\n{1}",reference, 
-		verseManager.DifficultyToString(verseManager.GetCurrentDifficulty()));
-	verseReferenceShadow.text = verseReference.text;
+function SetVerseReference (reference : String, showDifficulty : boolean) {
+	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	
+	if (showDifficulty) {
+		verseReference.text = String.Format("{0}\n{1}",reference, diffString);
+	} else {
+		verseReference.text = reference + "\n";
+	}
+	
+	verseReferenceShadow.text = verseReference.text;
 }
 
 function SplitVerse(verse : String) {
@@ -362,7 +443,7 @@ function SetupVerse() {
 	var clone : WordLabel;
 	
 	var reference = verseManager.currentReference();
-	SetVerseReference(reference);
+	SetVerseReference(reference, false);
 	verseMetadata = verseManager.GetVerseMetadata(reference);
 	Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
 	if (verseMetadata["difficulty"] != null) {
@@ -389,6 +470,7 @@ function SetupVerse() {
 		clone.rigidbody2D.isKinematic = true;
 	}
 
+	yield WaitForSeconds(1.5f);
 	
 	var i = 0;	
 	while (i < wordObjects.length) {
