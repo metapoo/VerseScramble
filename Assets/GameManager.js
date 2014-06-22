@@ -20,6 +20,7 @@ var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var timeUntilHint : int ;
 var exitButton : BoxCollider2D;
+var hintButton : BoxCollider2D;
 var background : SpriteRenderer;
 var bgSprite1 : Sprite;
 var bgSprite2 : Sprite;
@@ -29,7 +30,6 @@ var bgSprite5 : Sprite;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
-
 private var wordHinted : boolean = false;
 
 static var currentWord : String;
@@ -47,6 +47,10 @@ private var windowRect : Rect;
 
 
 function OnGUI() {
+
+}
+
+function ShowSolution() {
 
 }
 
@@ -69,7 +73,10 @@ function SetupWalls () {
 	exitButton.transform.position = new Vector3(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x-0.75f,
 									  mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f,
 									  0);
-									
+	hintButton.transform.position = new Vector3(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x-2.0f,
+									  mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f,
+									  0);
+									  
 	screenBounds = Rect(leftWall.center.x,topWall.center.y,
 	rightWall.center.x-leftWall.center.x,
 	topWall.center.y-bottomWall.center.y);
@@ -441,19 +448,21 @@ function HandleVerseFinished() {
 
 }
 
+function ShowHint() {
+	wordHinted = true;	
+	var wObject : WordLabel;
+	for (wObject in wordObjects) {
+		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
+			wObject.HintAt();
+			break;
+		}
+	}
+}
+
 function Update () {
 	var elapsedTime : float = Time.time - lastWordTime;
 	
 	if (!wordHinted && !finished && (elapsedTime > timeUntilHint)) {
-		Debug.Log("timeUntilHint = " + timeUntilHint);
-		wordHinted = true;
-		
-		var wObject : WordLabel;
-		for (wObject in wordObjects) {
-			if (wObject.word == currentWord) {
-				wObject.HintAt();
-				break;
-			}
-		}
+		ShowHint();
 	}
 }
