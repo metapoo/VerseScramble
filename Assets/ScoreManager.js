@@ -4,36 +4,35 @@ var scoreLabel : GUIText;
 var scoreLabelShadow : GUIText;
 var timeLabel : GUIText;
 var timeLabelShadow : GUIText;
-var score = 0;
+var score : float = 0;
 var streak : int = 0;
 var moves : int = 0;
 var maxMoves : int = 1;
 var mistakes : int = 0;
 var maxTime : int = 0;
+var mainCamera : Camera;
 var gameManager : GameManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var highScore : int;
-var totalElapsedTime : int = 0;
+var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
-var timeBonusScore : int = 0;
 var startTime : int;
 var endOfGameOptions : EndOfGameOptions;
 var endOfGameOptionsClone : EndOfGameOptions;
 var sndSelect : AudioClip;
 
 function HandleWordWrong() {
-	var oldScore = calculateScore();	
 	streak = 0;
 	moves = moves + 1;
 	mistakes = mistakes + 1;
-	var newScore = calculateScore();
-	var dScore = (newScore - oldScore);
+	var dScore = -1*score*0.2f;
+	score += dScore;
 	return dScore;
 }
 
 function HandleWordCorrect(elapsedTime : float) {
-	var oldScore = calculateScore();	
+	
 	var baseTime = 5;
 	if (moves == 0) {
 		baseTime = 10;
@@ -50,8 +49,9 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
-	var newScore = calculateScore();
-	var dScore =  (newScore - oldScore);
+	var dScore = timeLeft;
+	score += dScore;
+	Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
 	return dScore;
 }
 
@@ -60,25 +60,37 @@ function calculatedTime() {
 }
 
 function updateScoreLabel() {
-	calculateScore();
+	
 	scoreLabel.text = score.ToString("00000");
 	scoreLabelShadow.text = score.ToString("00000");
 	if (timeLeft < 0) timeLeft = 0;
+	
 	timeLabel.text = timeLeft.ToString("00");
-	timeLabelShadow.text = timeLeft.ToString("00");
+	
+	/*
+	var hundredths : int = 100*(totalElapsedTime - parseInt(totalElapsedTime));
+	var timeStr = String.Format("{0}.{1}",parseInt(totalElapsedTime).ToString("00"),
+								hundredths.ToString("00"));
+							    
+	timeLabel.text = timeStr;
+	
+	*/
+	timeLabelShadow.text = timeLabel.text;
 }
 
 function resetStats() {
 	mistakes = 0;
 	moves = 0;
 	streak = 0;
-	timeBonusScore = 0;
 	score = 0;
+	maxTime = 60.0;
 	updateScoreLabel();
 }
 
 function SetupUI() {
 	updateScoreLabel();
+	timeLabel.transform.position.x -= timeLabel.GetScreenRect().width*0.5f/mainCamera.pixelWidth;
+	timeLabelShadow.transform.position.x = timeLabel.transform.position.x;
 }
 
 function CountTimeLeft() {
@@ -87,7 +99,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		timeBonusScore += 1;
+		score += 1;
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
@@ -135,29 +147,6 @@ function difficultyMultiplier(difficulty : Difficulty) {
 			return 3;
 	}
 	return 1;
-}
-
-function calculateScore() {
- 	var verse : String = verseManager.currentVerse();
- 	var verseLength = verse.Length;
- 	var diffMult = difficultyMultiplier(gameManager.difficulty);
- 	var langMult = 1.0f;
- 	var language = verseManager.GetLanguage();
- 	if (language == "zh") {
- 		langMult = 1.0;
- 	}
- 	maxTime = verseLength*0.33*diffMult*langMult;
- 	
- 	score = (maxTime*0.5f + 0.5f*(maxTime - totalElapsedTime))*diffMult + timeBonusScore;
- 	for (var i=0;i<mistakes;i++) {
- 		score = score * 0.8f;
- 	}
- 	var maxMoves = gameManager.words.length;
- 	if (maxMoves == 0) maxMoves = 1;
- 	
- 	score = parseInt(score * ( 1.0f * (moves - mistakes) / maxMoves));
- 	if (score < 0) score = 0;
- 	return score;
 }
 
 function Start() {

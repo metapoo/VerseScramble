@@ -474,9 +474,10 @@ function SetupVerse() {
 		clone.rigidbody2D.isKinematic = true;
 	}
 
-	yield WaitForSeconds(1.5f);
+	yield WaitForSeconds(2.5f);
 	
 	gameStarted = true;
+	scoreManager.resetTime();
 	
 	var i = 0;	
 	while (i < wordObjects.length) {
