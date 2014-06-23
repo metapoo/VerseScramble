@@ -483,7 +483,7 @@ function SetupVerse() {
 	words = SplitVerse(verse);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
-	
+	scoreManager.maxTime = words.length*5;
 	
 	var dy = screenBounds.y;
 	
@@ -498,7 +498,7 @@ function SetupVerse() {
 		clone.transform.position = new Vector3(x,y,0);
 		clone.rigidbody2D.isKinematic = true;
 	}
-
+	
 	yield WaitForSeconds(2.5f);
 	
 	
@@ -513,6 +513,8 @@ function SetupVerse() {
 		}
 	}
 	numWordsReleased = wordObjects.length;
+	
+	
 }
 
  function releaseWords(index: int) {
@@ -569,7 +571,7 @@ function HandleVerseFinished() {
 function ShowHint() {
 	wordHinted = true;	
 	var wObject : WordLabel;
-	var dScore = parseInt(Mathf.Min(-0.2*score,-60));
+	var dScore = -1*scoreManager.maxTime;
 	
 	for (wObject in wordObjects) {
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {

@@ -24,7 +24,7 @@ function HandleWordWrong() {
 	streak = 0;
 	moves = moves + 1;
 	mistakes = mistakes + 1;
-	var dScore = parseInt(Mathf.Min(-1*score*0.3f,-60));
+	var dScore = -1*maxTime;
 	score += dScore;
 	return dScore;
 }
@@ -81,7 +81,7 @@ function resetStats() {
 	moves = 0;
 	streak = 0;
 	score = 0;
-	maxTime = 60.0;
+	maxTime = 60;
 	updateScoreLabel();
 }
 
