@@ -18,8 +18,6 @@ var highScore : int;
 var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
-var endOfGameOptions : EndOfGameOptions;
-var endOfGameOptionsClone : EndOfGameOptions;
 var sndSelect : AudioClip;
 
 function HandleWordWrong() {
@@ -99,7 +97,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += 1;
+		score += 1*difficultyMultiplier(gameManager.difficulty);
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
@@ -122,8 +120,8 @@ function HandleCountTimeLeftFinished() {
 		verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
 	}
 	
-	endOfGameOptionsClone = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
-
+	gameManager.ShowEndOfGameOptions();
+	
 }
 
 function resetTime() {
@@ -142,9 +140,9 @@ function difficultyMultiplier(difficulty : Difficulty) {
 		case Difficulty.Easy:
 			return 1;
 		case Difficulty.Medium:
-			return 2;
+			return 5;
 		case Difficulty.Hard:
-			return 3;
+			return 15;
 	}
 	return 1;
 }
@@ -155,7 +153,7 @@ function Start() {
 }
 
 function Update () {
-	if (!gameManager.finished) {
+	if (!gameManager.finished && !gameManager.showingSolution) {
 		if (gameManager.gameStarted) {
 			totalElapsedTime = Time.time - startTime;
 		} else {

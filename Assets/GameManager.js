@@ -21,6 +21,7 @@ var verseMetadata : Hashtable;
 var timeUntilHint : int ;
 var exitButton : BoxCollider2D;
 var hintButton : BoxCollider2D;
+var refreshButton : BoxCollider2D;
 var background : SpriteRenderer;
 var bgSprite1 : Sprite;
 var bgSprite2 : Sprite;
@@ -30,7 +31,11 @@ var bgSprite5 : Sprite;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
+public var endOfGameOptions : EndOfGameOptions;
+public var numWordsReleased : int = 0;
 public var gameStarted : boolean = false;
+public var showingSolution : boolean = false;
+
 private var wordHinted : boolean = false;
 
 static var currentWord : String;
@@ -52,7 +57,13 @@ function OnGUI() {
 }
 
 function ShowSolution() {
-
+	if (numWordsReleased != wordObjects.length) return;
+	
+	showingSolution = true;
+	for (var i=wordIndex;i<wordObjects.length;i++) {
+		var wordObject : WordLabel = wordObjects[i];
+		wordObject.returnToVerse();
+	}
 }
 
 function SetupWalls () {
@@ -70,12 +81,17 @@ function SetupWalls () {
 	
 	rightWall.size = leftWall.size;
 	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f, 0f);
-
-	exitButton.transform.position = new Vector3(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x-0.75f,
-									  mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f,
+	
+	var y : float = mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f;
+	var baseX : float = mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x;
+	exitButton.transform.position = new Vector3(baseX - 0.75f,
+									  y,
 									  0);
-	hintButton.transform.position = new Vector3(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x-2.0f,
-									  mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f,
+	hintButton.transform.position = new Vector3(baseX-2.0f,
+									  y,
+									  0);
+	refreshButton.transform.position = new Vector3(baseX-3.25f,
+									  y,
 									  0);
 									  
 	screenBounds = Rect(leftWall.center.x,topWall.center.y,
@@ -110,6 +126,10 @@ function showFeedback(feedbackText : String, time : float) {
 	feedbackLabel.text = "";
 }
 
+function ShowEndOfGameOptions() {
+	Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+}
+
 function nextWord() {
 	if (wordIndex == -1) return null;
 	wordHinted = false;
@@ -117,8 +137,13 @@ function nextWord() {
 	if (wordIndex >= words.length) {
 		currentWord = null;
 		wordIndex = -1;
-		showFeedback("Awesome!",3);
-		HandleVerseFinished();
+		
+		if (!showingSolution) {
+			showFeedback("Awesome!",3);
+			HandleVerseFinished();
+		} else {
+			ShowEndOfGameOptions();
+		}
 		return null;
 	}
 	currentWord = words[wordIndex];
@@ -476,14 +501,18 @@ function SetupVerse() {
 
 	yield WaitForSeconds(2.5f);
 	
-	gameStarted = true;
-	scoreManager.resetTime();
 	
-	var i = 0;	
-	while (i < wordObjects.length) {
-		i = releaseWords(i) + 1;
+	numWordsReleased = 0;	
+	while (numWordsReleased < wordObjects.length) {
+		numWordsReleased = releaseWords(numWordsReleased) + 1;
 		yield WaitForSeconds(1.5f);
+		// start game on second round
+		if (!gameStarted) {
+			gameStarted = true;
+			scoreManager.resetTime();
+		}
 	}
+	numWordsReleased = wordObjects.length;
 }
 
  function releaseWords(index: int) {

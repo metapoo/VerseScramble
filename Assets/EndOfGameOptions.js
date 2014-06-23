@@ -8,7 +8,7 @@ public var customSkin : GUISkin;
 private var windowRect : Rect;
 
 // Make the contents of the window
-function DoMyWindow (windowID : int) {
+function EndGameWindow (windowID : int) {
 	var mistakes = scoreManager.mistakes;
 	var clicked = false;
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
@@ -70,24 +70,43 @@ function DoMyWindow (windowID : int) {
 	}
 	
 	if (reload) {
-		gameManager.Cleanup();
-		Application.LoadLevel("scramble");
-		Destroy(this);
-		return;
+		ReloadGame();
 	}
 }
 
+function ReloadGame() {
+	gameManager.Cleanup();
+	Application.LoadLevel("scramble");
+	Destroy(this);
+}
+
+function RestartVerseWindow (windowID : int) {
+	if (GUILayout.Button("Try Again")) {
+		ReloadGame();
+	}
+}
+
+function ShowRestartVerse() {
+	var w = mainCam.pixelWidth;
+	var h = mainCam.pixelHeight;
+	windowRect = Rect(w*0.3,h*0.7,w*0.4,h*0.2);
+	GUILayout.Window (0, windowRect, RestartVerseWindow, "");
+}
 
 function showEndOfGameOptions() {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
 	windowRect = Rect(w*0.3,h*0.5,w*0.4,h*0.45);
-	GUILayout.Window (0, windowRect, DoMyWindow, "");
+	GUILayout.Window (0, windowRect, EndGameWindow, "");
 }
 
 function OnGUI() {
 	GUI.skin = customSkin;
-	showEndOfGameOptions();
+	if (gameManager.showingSolution) {
+		ShowRestartVerse();
+	} else {
+		showEndOfGameOptions();
+	}
 }
 
 function Start () {
