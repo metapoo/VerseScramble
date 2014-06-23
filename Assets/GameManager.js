@@ -540,12 +540,15 @@ function HandleVerseFinished() {
 function ShowHint() {
 	wordHinted = true;	
 	var wObject : WordLabel;
+	var dScore = parseInt(Mathf.Min(-0.2*score,-60));
+	
 	for (wObject in wordObjects) {
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 			wObject.HintAt();
-			break;
+			return scoreManager.HandleWordWrong();
 		}
 	}
+	return 0;
 }
 
 function Update () {

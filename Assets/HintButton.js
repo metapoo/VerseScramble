@@ -3,11 +3,17 @@
 var gameManager : GameManager;
 var level : String;
 var sndSelect : AudioClip;
-
+var floatingPoints : FloatingPoints;
 
 function OnMouseDown() {
 	audio.PlayOneShot(sndSelect,1.0);
-	gameManager.ShowHint();
+	var dScore = gameManager.ShowHint();
+	
+	if (true) {
+		var clone : FloatingPoints;
+		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
+		clone.SetPoints(dScore, false);
+	}
 }
 
 function OnMouseUp() {

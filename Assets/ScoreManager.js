@@ -4,7 +4,7 @@ var scoreLabel : GUIText;
 var scoreLabelShadow : GUIText;
 var timeLabel : GUIText;
 var timeLabelShadow : GUIText;
-var score : float = 0;
+var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
 var maxMoves : int = 1;
@@ -26,7 +26,7 @@ function HandleWordWrong() {
 	streak = 0;
 	moves = moves + 1;
 	mistakes = mistakes + 1;
-	var dScore = -1*score*0.2f;
+	var dScore = parseInt(Mathf.Min(-1*score*0.3f,-60));
 	score += dScore;
 	return dScore;
 }
@@ -61,8 +61,8 @@ function calculatedTime() {
 
 function updateScoreLabel() {
 	
-	scoreLabel.text = score.ToString("00000");
-	scoreLabelShadow.text = score.ToString("00000");
+	scoreLabel.text = score.ToString();
+	scoreLabelShadow.text = score.ToString();
 	if (timeLeft < 0) timeLeft = 0;
 	
 	timeLabel.text = timeLeft.ToString("00");
