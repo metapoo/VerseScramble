@@ -241,7 +241,7 @@ function AnimateIntro() {
 	
 }
 
-function Start () {
+function Start() {
 	
 	difficulty = verseManager.GetCurrentDifficulty();
 	
@@ -462,6 +462,8 @@ function Cleanup () {
 }
 
 function SetupVerse() {
+	gameStarted = false;
+	showingSolution = false;
 	scoreManager.reset();
 	finished = false;
 	difficulty = verseManager.GetCurrentDifficulty();

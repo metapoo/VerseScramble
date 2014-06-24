@@ -87,7 +87,7 @@ function resetStats() {
 
 function SetupUI() {
 	updateScoreLabel();
-	timeLabel.transform.position.x -= timeLabel.GetScreenRect().width*0.5f/mainCamera.pixelWidth;
+	timeLabel.transform.position.x = 0.5f - timeLabel.GetScreenRect().width*0.5f/mainCamera.pixelWidth;
 	timeLabelShadow.transform.position.x = timeLabel.transform.position.x;
 }
 
@@ -148,6 +148,7 @@ function difficultyMultiplier(difficulty : Difficulty) {
 }
 
 function Start() {
+	resetStats();
 	reset();
 	SetupUI();
 }

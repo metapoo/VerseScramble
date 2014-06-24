@@ -3,17 +3,18 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameManager.js">
     <Files>
       <File FileName="Assets/ScoreManager.js" Line="1" Column="1" />
-      <File FileName="Assets/GameManager.js" Line="86" Column="7" />
+      <File FileName="Assets/GameManager.js" Line="574" Column="39" />
       <File FileName="Assets/ScoreManager.js" Line="1" Column="1" />
-      <File FileName="Assets/VerseManager.js" Line="17" Column="28" />
+      <File FileName="Assets/VerseManager.js" Line="150" Column="4" />
       <File FileName="Assets/TitleManager.js" Line="1" Column="1" />
       <File FileName="Assets/VerseListManager.js" Line="1" Column="1" />
       <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
-      <File FileName="Assets/EndOfGameOptions.js" Line="16" Column="39" />
-      <File FileName="Assets/WordLabel.js" Line="143" Column="1" />
+      <File FileName="Assets/EndOfGameOptions.js" Line="91" Column="15" />
+      <File FileName="Assets/WordLabel.js" Line="106" Column="32" />
       <File FileName="Assets/FloatingPoints.js" Line="17" Column="15" />
       <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
-      <File FileName="Assets/HintButton.js" Line="15" Column="32" />
+      <File FileName="Assets/HintButton.js" Line="23" Column="1" />
+      <File FileName="Assets/RefreshButton.js" Line="7" Column="8" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
