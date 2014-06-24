@@ -56,12 +56,15 @@ function OnGUI() {
 
 }
 
+function CanShowSolution() {
+	return (numWordsReleased == wordObjects.length) && (!showingSolution)
+	&& (wordIndex < wordObjects.length) && gameStarted;	
+}
+
 function ShowSolution() {
-	if (numWordsReleased != wordObjects.length) return;
-	if (showingSolution) return;
+	if (!CanShowSolution()) return;
 	
 	showingSolution = true;
-	if (wordIndex >= wordObjects.length) return;
 	
 	for (var i=wordIndex;i<wordObjects.length;i++) {
 		var wordObject : WordLabel = wordObjects[i];
@@ -488,7 +491,7 @@ function SetupVerse() {
 	words = SplitVerse(verse);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
-	scoreManager.maxTime = words.length*5;
+	scoreManager.maxTime = scoreManager.CalculateMaxTime();
 	
 	var dy = screenBounds.y;
 	

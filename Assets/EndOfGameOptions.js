@@ -77,8 +77,8 @@ function EndGameWindow (windowID : int) {
 function ReloadGame() {
 	gameManager.Cleanup();
 	Destroy(this);
-	gameManager.Start();
 	scoreManager.Start();
+	gameManager.Start();
 }
 
 function RestartVerseWindow (windowID : int) {

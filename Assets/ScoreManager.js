@@ -76,12 +76,16 @@ function updateScoreLabel() {
 	timeLabelShadow.text = timeLabel.text;
 }
 
+function CalculateMaxTime() {
+	return gameManager.words.length*5;
+}
+
 function resetStats() {
 	mistakes = 0;
 	moves = 0;
 	streak = 0;
 	score = 0;
-	maxTime = 60;
+	maxTime = CalculateMaxTime();
 	updateScoreLabel();
 }
 
