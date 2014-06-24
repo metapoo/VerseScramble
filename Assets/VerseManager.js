@@ -36,11 +36,26 @@ function currentReference() {
 	return references[verseIndex];
 }
 
-function GetLanguage() {
+static function SpeakUtterance(word : String) {
+	VoiceSynth.SpeakUtterance(word,GetVoiceLanguage());
+}
+
+static function GetVoiceLanguage() {
+	var language = GetLanguage();
+	if (language == "en") {
+		return "en-US";
+	} else if (language == "zh") {
+		return "zh-TW";
+	} else {
+		return "en-US";
+	}
+}
+
+static function GetLanguage() {
 	return PlayerPrefs.GetString("language", "en");
 }
 
-function SetLanguage(language : String) {
+static function SetLanguage(language : String) {
 	PlayerPrefs.SetString("language", language);
 }
 

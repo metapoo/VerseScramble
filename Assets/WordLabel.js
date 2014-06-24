@@ -126,6 +126,7 @@ function HintAt() {
 	}		
 }
 
+
 function OnMouseDown() {  
 	var dScore = 0;
 	var right = false;
@@ -135,6 +136,7 @@ function OnMouseDown() {
 		returnToVerse();
 		dScore = gameManager.HandleWordCorrect();
 		right = true;
+		VerseManager.SpeakUtterance(word);
 	} else {
 		var oldColor : Color = GetComponent(SpriteRenderer).color;
 		GetComponent(SpriteRenderer).color = Color(1.0,0.5,0.5,0.8);
