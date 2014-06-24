@@ -58,8 +58,11 @@ function OnGUI() {
 
 function ShowSolution() {
 	if (numWordsReleased != wordObjects.length) return;
+	if (showingSolution) return;
 	
 	showingSolution = true;
+	if (wordIndex >= wordObjects.length) return;
+	
 	for (var i=wordIndex;i<wordObjects.length;i++) {
 		var wordObject : WordLabel = wordObjects[i];
 		wordObject.returnToVerse();
