@@ -15,4 +15,4 @@ public class VoiceSynth {
 		if (Application.platform != RuntimePlatform.OSXEditor)
 		  _SpeakUtterance(text, language);
        }
-}
+} 

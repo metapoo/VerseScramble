@@ -1,21 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/VerseManager.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/plugins/VoiceSynth.cs">
     <Files>
-      <File FileName="Assets/GameManager.js" Line="25" Column="33" />
-      <File FileName="Assets/GameManager.js" Line="25" Column="33" />
-      <File FileName="Assets/ScoreManager.js" Line="88" Column="31" />
-      <File FileName="Assets/VerseManager.js" Line="58" Column="8" />
-      <File FileName="Assets/TitleManager.js" Line="1" Column="1" />
-      <File FileName="Assets/VerseListManager.js" Line="1" Column="1" />
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
-      <File FileName="Assets/EndOfGameOptions.js" Line="81" Column="1" />
-      <File FileName="Assets/WordLabel.js" Line="139" Column="4" />
-      <File FileName="Assets/FloatingPoints.js" Line="1" Column="1" />
-      <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
-      <File FileName="Assets/HintButton.js" Line="1" Column="1" />
-      <File FileName="Assets/RefreshButton.js" Line="7" Column="32" />
-      <File FileName="../../Downloads/iPhoneNativeCodeSample 2/Assets/Plugins/Bonjour.cs" Line="20" Column="2" />
+      <File FileName="Assets/GameManager.js" Line="235" Column="44" />
+      <File FileName="Assets/plugins/VoiceSynth.cs" Line="18" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

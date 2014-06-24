@@ -232,6 +232,8 @@ function AnimateIntro() {
 	ChangeFontOverTime(verseReference, 1, startFont, duration);
 	ChangeFontOverTime(verseReferenceShadow, 1, startFont, duration);
 	
+	verseManager.SpeakUtterance(verseManager.currentReference());
+	
 	yield WaitForSeconds(2.0f);
 	
 	ChangeFontOverTime(verseReference, startFont, endFont, duration);

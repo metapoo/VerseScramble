@@ -14,7 +14,7 @@
 @end
 
 static AVSpeechSynthesizer *_synthesizer = nil;
-
+static NSString *_language = nil;
 
 // Converts C style string to NSString
 NSString* CreateNSString (const char* string)
@@ -41,13 +41,24 @@ char* MakeStringCopy (const char* string)
 extern "C" {
 	void _SpeakUtterance (const char* text, const char* language)
 	{
+        NSString *languageString = CreateNSString(language);
+        
         if (_synthesizer == nil) {
             _synthesizer = [[AVSpeechSynthesizer alloc] init];
         }
 
+        
         AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:CreateNSString(text)];
-        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:CreateNSString(language)];
+
+        if (![_language isEqualToString:languageString]) {
+            utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
+        }
         [utterance setRate:0.2f];
         [_synthesizer speakUtterance:utterance];
+
+        [_language release];
+        _language = languageString;
+        [_language retain];
+
 	}
 }
