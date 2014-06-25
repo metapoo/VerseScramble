@@ -232,7 +232,11 @@ function AnimateIntro() {
 	ChangeFontOverTime(verseReference, 1, startFont, duration);
 	ChangeFontOverTime(verseReferenceShadow, 1, startFont, duration);
 	
-	verseManager.SpeakUtterance(verseManager.currentReference());
+	var reference : String = verseManager.currentReference();
+	var refParts = reference.Split(":"[0]);
+	for (var refPart in refParts) {
+		verseManager.SpeakUtterance(refPart);
+	}
 	
 	yield WaitForSeconds(2.0f);
 	

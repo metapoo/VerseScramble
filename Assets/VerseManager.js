@@ -38,6 +38,7 @@ function currentReference() {
 
 static function SpeakUtterance(word : String) {
 	VoiceSynth.SpeakUtterance(word,GetVoiceLanguage());
+	Debug.Log(String.Format("Speak utterance: {0}", word));
 }
 
 static function GetVoiceLanguage() {
