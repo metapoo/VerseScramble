@@ -288,7 +288,7 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 }
 
 function SplitVerse(verse : String) {
-	var langConfig : Hashtable = new Hashtable({'en':[22,12,6],
+	var langConfig : Hashtable = new Hashtable({'en':[20,10,4],
 								  				'zh':[10,6,4]});
 	var language : String = verseManager.GetLanguage();
 	var phraseLengths : Array = langConfig[language];
@@ -303,7 +303,7 @@ function SplitVerse(verse : String) {
 	Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
-	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？","."];
+	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”"];
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
@@ -346,23 +346,29 @@ function SplitVerse(verse : String) {
 	};
 	
 	for (clause in clauseArray) {
+		// check for special '\' marker which we cannot split on
+		var nobreakMarkers = new Array();
+		for (var i=0;i<clause.Length;i++) {
+			if (clause[i] == "／"[0]) {
+				nobreakMarkers.Add(i);
+			}
+		}
+		Debug.Log("nobreakMarkers = " + nobreakMarkers.ToString());
+
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
 			var l : int = 0;
-			Debug.Log("clause = " + clause + " divisor = " + divisor + " clause length = " + clause.Length + " l = " + l);
+			
 			while (l < clause.Length) {
 				if (difficulty == Difficulty.Hard) {
 					phraseLengthForClause = phraseLength;
-					Debug.Log("pA = " + phraseLengthForClause);
 				} else {
 					phraseLengthForClause = Mathf.RoundToInt(clause.Length/divisor);
-					Debug.Log("pB = " + phraseLengthForClause);
 				}
 				
 				if ((l + phraseLengthForClause) > clause.Length) {
-					phraseLengthForClause = clause.Length - l;
-					Debug.Log("pC = " + phraseLengthForClause);			
+					phraseLengthForClause = clause.Length - l;	
 				}
 				
 				if (language == "en") {
@@ -372,25 +378,46 @@ function SplitVerse(verse : String) {
 					}
 				}
 				
-				phrase = clause.Substring(l, phraseLengthForClause);
-
-				if (language == "zh") {
-					// allowances if punctuation is in phrase
-					if ((l + phraseLengthForClause + 2) < clause.Length)
-					 {
-						if (phraseHasPunctuation(phrase)) {
-							phraseLengthForClause += 2;
-							phrase = clause.Substring(l, phraseLengthForClause);
-							Debug.Log("pD = " + phraseLengthForClause);			
+				// find closest '/' to glob onto
+				if (nobreakMarkers.length > 0) {
+					var best = 100;
+					var bestIndex = -1;
+					for (var index : int in nobreakMarkers) {
+						var diff = Mathf.Abs(index - (phraseLengthForClause + l));
+						if ((diff < best) && (index >= l)) {
+							bestIndex = index;
+							best = diff;
 						}
-					// if punctuation makes up a big percentage then combine it with previous phrase
-					} else if (phraseLengthForClause <= 4) {
-						if (phraseHasPunctuation(phrase)) {
-							phraseArray[phraseArray.length-1] += phrase;
-							l = l + phraseLengthForClause;
-							Debug.Log("pE = " + phraseLengthForClause);		
-							Debug.Log("modify previous phrase to: " + phraseArray[phraseArray.length-1]);	
-							break;
+					}
+					if (bestIndex != -1) {
+						phraseLengthForClause = bestIndex+1-l;
+					}
+				}
+				
+				phrase = clause.Substring(l, phraseLengthForClause);
+				
+				Debug.Log("replacing ／ for clause: " + clause);
+				// filter out no break markers
+				phrase = phrase.Replace("／","");
+
+				
+				if (language == "zh") {
+					if (nobreakMarkers.length > 0) {
+					} else {
+						// allowances if punctuation is in phrase
+						if ((l + phraseLengthForClause + 2) < clause.Length)
+						{
+							if (phraseHasPunctuation(phrase)) {
+								phraseLengthForClause += 2;
+								phrase = clause.Substring(l, phraseLengthForClause);
+							}
+						// if punctuation makes up a big percentage then combine it with previous phrase
+						} else if (phraseLengthForClause <= 4) {
+							if (phraseHasPunctuation(phrase)) {
+								phraseArray[phraseArray.length-1] += phrase;
+								l = l + phraseLengthForClause;		
+								break;
+							}
 						}
 					}
 				}
@@ -399,12 +426,14 @@ function SplitVerse(verse : String) {
 				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
 					phraseArray.push(phrase);
-					Debug.Log("phrase = " + phrase);
+					
 				}
 			}	
 		} else {
+			// filter out no break markers
+			clause = clause.Replace("／","");
 			phraseArray.push(clause);
-			Debug.Log("phrase is whole clause = " + phrase);
+			
 		}
 	}
 	return phraseArray;
