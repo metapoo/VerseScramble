@@ -293,7 +293,7 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,4],
-								  				'zh':[10,6,4]});
+								  				'zh':[18,10,5]});
 	var language : String = verseManager.GetLanguage();
 	var phraseLengths : Array = langConfig[language];
 	var clauseBreakMultiplier = 1.5f;
@@ -353,11 +353,10 @@ function SplitVerse(verse : String) {
 		// check for special '\' marker which we cannot split on
 		var nobreakMarkers = new Array();
 		for (var i=0;i<clause.Length;i++) {
-			if (clause[i] == "／"[0]) {
+			if ((clause[i] == "／"[0]) || (clause[i] == "/"[0])) {
 				nobreakMarkers.Add(i);
 			}
 		}
-		Debug.Log("nobreakMarkers = " + nobreakMarkers.ToString());
 
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
@@ -400,14 +399,11 @@ function SplitVerse(verse : String) {
 				
 				phrase = clause.Substring(l, phraseLengthForClause);
 				
-				Debug.Log("replacing ／ for clause: " + clause);
 				// filter out no break markers
 				phrase = phrase.Replace("／","");
-
+				phrase = phrase.Replace("/","");
 				
 				if (language == "zh") {
-					if (nobreakMarkers.length > 0) {
-					} else {
 						// allowances if punctuation is in phrase
 						if ((l + phraseLengthForClause + 2) < clause.Length)
 						{
@@ -423,7 +419,6 @@ function SplitVerse(verse : String) {
 								break;
 							}
 						}
-					}
 				}
 				
 				l = l + phraseLengthForClause;
@@ -436,6 +431,7 @@ function SplitVerse(verse : String) {
 		} else {
 			// filter out no break markers
 			clause = clause.Replace("／","");
+			clause = clause.Replace("/","");
 			phraseArray.push(clause);
 			
 		}
