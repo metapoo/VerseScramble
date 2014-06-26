@@ -42,8 +42,8 @@ function SayVerseReference() {
 	var language = GetLanguage();
 	
 	if (language == "zh") {
-		refParts[0] += "節";
-		refParts[1] += "章";
+		refParts[0] += "章";
+		refParts[1] += "節";
 	}
 		
 	for (var refPart in refParts) {
