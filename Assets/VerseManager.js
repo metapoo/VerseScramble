@@ -45,7 +45,7 @@ function SayVerseReference() {
 		refParts[0] += "節";
 		refParts[1] += "章";
 	}
-	
+		
 	for (var refPart in refParts) {
 		SpeakUtterance(refPart);
 	}
