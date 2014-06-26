@@ -217,6 +217,14 @@ function moveReferenceToTopLeft() {
 	SetVerseReference(verseManager.currentReference(), true);
 }
 
+function SayVerseReference() {
+	var reference : String = verseManager.currentReference();
+	var refParts = reference.Split(":"[0]);
+	for (var refPart in refParts) {
+		verseManager.SpeakUtterance(refPart);
+	}
+}
+
 function AnimateIntro() {
 	var center : Vector3 = new Vector3(0.5,0.5,1);
 	var centerS : Vector3 = new Vector3(0.5,0.5,0);
@@ -231,13 +239,8 @@ function AnimateIntro() {
 	
 	ChangeFontOverTime(verseReference, 1, startFont, duration);
 	ChangeFontOverTime(verseReferenceShadow, 1, startFont, duration);
-	
-	var reference : String = verseManager.currentReference();
-	var refParts = reference.Split(":"[0]);
-	for (var refPart in refParts) {
-		verseManager.SpeakUtterance(refPart);
-	}
-	
+
+	SayVerseReference();	
 	yield WaitForSeconds(2.0f);
 	
 	ChangeFontOverTime(verseReference, startFont, endFont, duration);

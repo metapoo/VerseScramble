@@ -36,6 +36,21 @@ function currentReference() {
 	return references[verseIndex];
 }
 
+function SayVerseReference() {
+	var reference : String = currentReference();
+	var refParts = reference.Split(":"[0]);
+	var language = GetLanguage();
+	
+	if (language == "zh") {
+		refParts[0] += "節";
+		refParts[1] += "章";
+	}
+	
+	for (var refPart in refParts) {
+		SpeakUtterance(refPart);
+	}
+}
+
 static function SpeakUtterance(word : String) {
 	var language = GetVoiceLanguage();
 	VoiceSynth.SpeakUtterance(word,language);
