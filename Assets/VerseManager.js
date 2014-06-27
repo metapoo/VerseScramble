@@ -4,6 +4,11 @@ import JSONUtils;
 
 var verses : Array = new Array();
 var references : Array = new Array();
+
+var versesByReference : Hashtable = new Hashtable();
+var referencesByCategory : Hashtable = new Hashtable();
+var categories : Array = new Array();
+
 var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
@@ -13,27 +18,37 @@ var verseTextHE : TextAsset;
 var numVerses = 0;
 var totalScore : int = -1;
 
-function currentVerse() {
-	if (verses.length == "") {
-		return "";
-	}
-	
-	if (verseIndex > verses.length) {
-		verseIndex = 0;
-	}
+function GetCurrentCategory() {
+	return PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
+}
 
-	return verses[verseIndex];
+function SetCurrentCategory(category : String) {
+	PlayerPrefs.SetString(String.Format("category_{0}",GetLanguage()), category);
+}
+
+function GetCurrentReferences() {
+	var category : String = GetCurrentCategory();
+	var refs : Array = referencesByCategory[category];
+	return refs;
 }
 
 function currentReference() {
-	if (references.length == "") {
+	var refs = GetCurrentReferences();
+	
+	if (refs.length == "") {
 		return "";
 	}
 	
-	if (verseIndex > references.length) {
+	if (verseIndex > refs.length) {
 		verseIndex = 0;
 	}
-	return references[verseIndex];
+
+	return refs[verseIndex];
+}
+
+function currentVerse() {
+	var reference = currentReference();
+	return versesByReference[reference];
 }
 
 function SayVerseReference() {
@@ -318,6 +333,13 @@ function GetVerseMetadata(reference : String) {
 	return metadata;
 }
 
+function CreateCategory(category : String) {
+	if (referencesByCategory[category] == null) {
+	  	referencesByCategory.Add(category, new Array());
+	  	categories.push(category);
+	}
+}
+
 function LoadVerses() {
 	verses.clear();
 	references.clear();
@@ -334,9 +356,14 @@ function LoadVerses() {
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";
+  	var category : String;
   	
   	for (line in lines) {
-  		
+  		if ((line.Length > 0) && (line[0] == '|')) {
+  			category = line.Replace("|","");
+  			CreateCategory(category);
+  			continue;
+  		}
   		var parts = line.Split([sep], System.StringSplitOptions.None);
   		if (parts.Length != 2) continue;
   		
@@ -348,21 +375,18 @@ function LoadVerses() {
 	  	for (badLetter in new Array("-","—","  ","\t")) {
 	  		verse = verse.Replace(badLetter," ");
 	  	}
-	  	/*
-	  	if (language == "zh") {
-	  		for (badLetter in new Array(" ")) {
-	  			verse = verse.Replace(badLetter,"");
-	  		}
-	  	}*/
 	  	
   		var reference = parts[0];
   		verses.push(verse);
   		references.push(reference);
-  		/*
-  		Debug.Log(line);
-  		Debug.Log("parts[1] = " + parts[1]);
-  		Debug.Log("reference = " + reference + " verse = " + verse);
-  		*/
+  		
+  		var refs : Array = referencesByCategory[category];
+  		refs.push(reference);
+  		
+  		if (versesByReference[reference] == null) {
+  			versesByReference[reference] = verse;
+  		}
+  		
   	}
   	Load();
   	Debug.Log(references.join(";"));
