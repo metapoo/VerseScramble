@@ -19,7 +19,13 @@ var numVerses = 0;
 var totalScore : int = -1;
 
 function GetCurrentCategory() {
-	return PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
+	var category = PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
+	
+	for (var c in categories) {
+		if (c == category) return c;
+	}
+	
+	return categories[0];
 }
 
 function SetCurrentCategory(category : String) {
@@ -35,7 +41,7 @@ function GetCurrentReferences() {
 function currentReference() {
 	var refs = GetCurrentReferences();
 	
-	if (refs.length == "") {
+	if (refs.length == 0) {
 		return "";
 	}
 	

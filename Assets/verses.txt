@@ -1,4 +1,4 @@
-|General|
+|Top 100|
 Genesis 1:1| In the beginning God created the heavens and the earth.
 Genesis 1:26| Then God said, “Let us make man in our image, in our likeness, and let them rule over the fish of the sea and the birds of the air, over the livestock, over all the earth, and over all the creatures that move along the ground.”
 Genesis 1:27| So God created man in his own image, in the image of God he created him; male and female he created them.
@@ -98,3 +98,4 @@ James 5:16| Therefore confess your sins to each other and pray for each other so
 2 Peter 1:4| Through these he has given us his very great and precious promises, so that through them you may participate in the divine nature and escape the corruption in the world caused by evil desires.
 1 John 1:9| If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.
 1 John 3:16| This is how we know what love is: Jesus Christ laid down his life for us. And we ought to lay down our lives for our brothers.
+|Healing|

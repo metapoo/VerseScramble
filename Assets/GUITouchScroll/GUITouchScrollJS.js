@@ -150,12 +150,25 @@ function OnGUI () //this deals with the display
 	var catHeaderRect = Rect(padding,yOffset,headerRect.x-1.5*padding,50);
 	GUI.Label(catHeaderRect, "Categories", headerStyle);
 	
-	var categories = new Array("General","Healing");
+	var categories = verseManager.categories;
+	var currentCategory = verseManager.GetCurrentCategory();
 	
 	for (var i=0;i<categories.length;i++) {
 		var category : String = categories[i];
 		var catButtonRect : Rect = Rect(padding,yOffset+(catHeaderRect.height+5)*(i+1),catHeaderRect.width, catHeaderRect.height);
-		if (GUI.Button(catButtonRect, category)) {
+		var selected : boolean = false;
+		if (category == currentCategory) {
+			if (GUI.Button(catButtonRect, category, rowEasyStyle)) {
+				selected = true;
+			}
+		} else {
+			if (GUI.Button(catButtonRect, category)) {
+				selected = true;
+			}
+		}
+		
+		if (selected) {
+			verseManager.SetCurrentCategory(category);
 		}
 	}
 	
@@ -172,7 +185,8 @@ function DoWindow (windowID : int) //here you build the table
 	var rBtn :Rect = Rect(0, 0, rowSize.x, rowSize.y);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
-	
+	var references = verseManager.GetCurrentReferences();
+	var numRows = references.length;
 	
 	for (var iRow : int = 0; 
 		iRow < numRows;
@@ -183,7 +197,7 @@ function DoWindow (windowID : int) //here you build the table
              rBtn.yMin <= (scrollPosition.y + rScrollFrame.height) )
        	{
 			var fClicked : boolean = false;
-			var reference = verseManager.references[iRow];
+			var reference = references[iRow];
 			var metadata = verseManager.GetVerseMetadata(reference);
 			var verseDifficulty : int = metadata["difficulty"];
 			var mastered : boolean = false;
