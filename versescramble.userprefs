@@ -1,11 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/VerseManager.js">
     <Files>
-      <File FileName="Assets/GameManager.js" Line="238" Column="40" />
+      <File FileName="Assets/GameManager.js" Line="1" Column="1" />
+      <File FileName="Assets/GameManager.js" Line="1" Column="1" />
       <File FileName="Assets/plugins/VoiceSynth.cs" Line="1" Column="1" />
-      <File FileName="Assets/VerseManager.js" Line="42" Column="80" />
+      <File FileName="Assets/VerseManager.js" Line="46" Column="20" />
       <File FileName="Assets/RefreshButton.js" Line="1" Column="1" />
+      <File FileName="Assets/VerseListManager.js" Line="25" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

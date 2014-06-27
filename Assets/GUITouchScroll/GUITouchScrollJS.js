@@ -19,14 +19,14 @@ private var previousDelta : float = 0f;
 
 public var scrollPosition : Vector2 ;
 public var mainCam : Camera;
-public var inertiaDuration : float = 1.5f;
+public var inertiaDuration : float = 3.5f;
 // size of the window and scrollable list
 public var numRows : int;
 public var rowSize : Vector2;
 public var windowMargin : Vector2;
 public var listMargin : Vector2;
 public var verseManager : VerseManager;
-
+private var maxScrollVelocity : int = 2000;
 private var windowRect :Rect;   // calculated bounds of the window that holds the scrolling list
 private var listSize : Vector2; // calculated dimensions of the scrolling list placed inside the window
 
@@ -84,9 +84,15 @@ function Update() //check for touch
 		}
 		else
 		{
+			var dt = touch.deltaTime;
+			if (dt == 0) dt = 0.01;
+			
 			// impart momentum, using last delta as the starting velocity
 			// ignore delta = 10)
-			scrollVelocity = touch.deltaPosition.y / touch.deltaTime;
+			scrollVelocity = touch.deltaPosition.y / dt;
+			if (scrollVelocity > maxScrollVelocity) scrollVelocity = maxScrollVelocity;
+			if (scrollVelocity < -1*maxScrollVelocity) scrollVelocity = -1*maxScrollVelocity;
+			Debug.Log("scrollVelocity = " + scrollVelocity + " delta time = " + touch.deltaTime);
 			timeTouchPhaseEnded = Time.time;
 		}
 	}
@@ -102,6 +108,7 @@ function HandleRowSelected(selected : int) {
 
 function Start () 
 {
+	maxScrollVelocity = Screen.height*4;
 	verseManager.LoadVerses();
 	numRows = verseManager.verses.length;
 	var previousY = scrollPosition.y;
