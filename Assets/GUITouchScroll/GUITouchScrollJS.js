@@ -146,14 +146,19 @@ function OnGUI () //this deals with the display
 	
 	// draw categories
 	
-	var padding = 10;
-	var catHeaderRect = Rect(padding,yOffset,headerRect.x-padding,50);
+	var padding = 20;
+	var catHeaderRect = Rect(padding,yOffset,headerRect.x-1.5*padding,50);
 	GUI.Label(catHeaderRect, "Categories", headerStyle);
 	
-	var catButtonRect = Rect(padding,yOffset+catHeaderRect.height+5,catHeaderRect.width, catHeaderRect.height);
+	var categories = new Array("General","Healing");
 	
-	if (GUI.Button(catButtonRect, "Healing")) {
+	for (var i=0;i<categories.length;i++) {
+		var category : String = categories[i];
+		var catButtonRect : Rect = Rect(padding,yOffset+(catHeaderRect.height+5)*(i+1),catHeaderRect.width, catHeaderRect.height);
+		if (GUI.Button(catButtonRect, category)) {
+		}
 	}
+	
 }
 
 function DoWindow (windowID : int) //here you build the table
