@@ -17,6 +17,8 @@ private var scrollVelocity : float = 0f;
 private var timeTouchPhaseEnded = 0f;
 private var previousDelta : float = 0f;
 
+public var xOffset : float;
+public var yOffset : float;
 public var scrollPosition : Vector2 ;
 public var mainCam : Camera;
 public var inertiaDuration : float = 3.5f;
@@ -24,6 +26,7 @@ public var inertiaDuration : float = 3.5f;
 public var numRows : int;
 public var rowSize : Vector2;
 public var windowMargin : Vector2;
+
 public var listMargin : Vector2;
 public var verseManager : VerseManager;
 private var maxScrollVelocity : int = 2000;
@@ -125,17 +128,17 @@ function OnGUI () //this deals with the display
 {
 	GUI.skin = customSkin;
 	
-	windowRect = Rect(windowMargin.x, windowMargin.y+10,
-					  Screen.width - (2*windowMargin.x), Screen.height - windowMargin.y*2); //this draws the bg
+	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
+					  Screen.width - (2*windowMargin.x) + xOffset, Screen.height - windowMargin.y*2); //this draws the bg
 	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
 	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
 
-	var headerRect = Rect(windowMargin.x, 0,
-						  Screen.width - (2*windowMargin.x), 55);
+	var headerRect = Rect(windowMargin.x + xOffset + listMargin.x, yOffset,
+						  rowSize.x,50);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
-	var headerText = String.Format("Total Score: {0} \t Difficulty: {1} \t Mastered: {2}/{3} ",totalScore,diffString, 
+	var headerText = String.Format("Score: {0} \t Difficulty: {1} \t Mastered: {2}/{3} ",totalScore,diffString, 
 	verseManager.GetMasteredVerses(), verseManager.verses.length);
 	GUI.Label(headerRect, headerText, headerStyle);
 	
