@@ -143,6 +143,17 @@ function OnGUI () //this deals with the display
 	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
+	
+	// draw categories
+	
+	var padding = 10;
+	var catHeaderRect = Rect(padding,yOffset,headerRect.x-padding,50);
+	GUI.Label(catHeaderRect, "Categories", headerStyle);
+	
+	var catButtonRect = Rect(padding,yOffset+catHeaderRect.height+5,catHeaderRect.width, catHeaderRect.height);
+	
+	if (GUI.Button(catButtonRect, "Healing")) {
+	}
 }
 
 function DoWindow (windowID : int) //here you build the table
