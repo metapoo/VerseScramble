@@ -113,7 +113,6 @@ function Start ()
 {
 	maxScrollVelocity = Screen.height*4;
 	verseManager.LoadVerses();
-	numRows = verseManager.verses.length;
 	var previousY = scrollPosition.y;
 	scrollPosition.y = PlayerPrefs.GetInt("scrollPositionY",previousY);
 }
@@ -127,14 +126,14 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 function OnGUI () //this deals with the display
 {
 	GUI.skin = customSkin;
-	
+	var rowHeight = 40;
 	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
 					  Screen.width - (2*windowMargin.x) + xOffset, Screen.height - windowMargin.y*2); //this draws the bg
 	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
-	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, Screen.height*0.1);
+	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, rowHeight);
 
 	var headerRect = Rect(windowMargin.x + xOffset + listMargin.x, yOffset,
-						  rowSize.x,50);
+						  rowSize.x,rowHeight);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
@@ -147,7 +146,8 @@ function OnGUI () //this deals with the display
 	// draw categories
 	
 	var padding = 20;
-	var catHeaderRect = Rect(padding,yOffset,headerRect.x-1.5*padding,50);
+	var extraTopPadding = 5;
+	var catHeaderRect = Rect(padding,yOffset,headerRect.x-1.5*padding,rowHeight);
 	GUI.Label(catHeaderRect, "Categories", headerStyle);
 	
 	var categories = verseManager.categories;
@@ -155,7 +155,8 @@ function OnGUI () //this deals with the display
 	
 	for (var i=0;i<categories.length;i++) {
 		var category : String = categories[i];
-		var catButtonRect : Rect = Rect(padding,yOffset+(catHeaderRect.height+5)*(i+1),catHeaderRect.width, catHeaderRect.height);
+		var catButtonRect : Rect = Rect(padding,extraTopPadding+yOffset+(catHeaderRect.height+5)*(i+1),
+		catHeaderRect.width, catHeaderRect.height);
 		var selected : boolean = false;
 		if (category == currentCategory) {
 			if (GUI.Button(catButtonRect, category, rowEasyStyle)) {
@@ -176,17 +177,18 @@ function OnGUI () //this deals with the display
 
 function DoWindow (windowID : int) //here you build the table
 {
-
+	var refs = verseManager.GetCurrentReferences();
+	var numRows = refs.length;
 	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
 	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowSize.y);
+	
+	Debug.Log("numRows = " + numRows);
 	
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	
 	var rBtn :Rect = Rect(0, 0, rowSize.x, rowSize.y);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
-	var references = verseManager.GetCurrentReferences();
-	var numRows = references.length;
 	
 	for (var iRow : int = 0; 
 		iRow < numRows;
@@ -197,7 +199,7 @@ function DoWindow (windowID : int) //here you build the table
              rBtn.yMin <= (scrollPosition.y + rScrollFrame.height) )
        	{
 			var fClicked : boolean = false;
-			var reference = references[iRow];
+			var reference = refs[iRow];
 			var metadata = verseManager.GetVerseMetadata(reference);
 			var verseDifficulty : int = metadata["difficulty"];
 			var mastered : boolean = false;

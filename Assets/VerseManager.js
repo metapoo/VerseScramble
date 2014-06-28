@@ -14,11 +14,12 @@ var verseText : TextAsset;
 var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
-
 var numVerses = 0;
 var totalScore : int = -1;
 
 function GetCurrentCategory() {
+	if (categories.length == 0) return "";
+	
 	var category = PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
 	
 	for (var c in categories) {
@@ -347,8 +348,13 @@ function CreateCategory(category : String) {
 }
 
 function LoadVerses() {
+	
 	verses.clear();
 	references.clear();
+	categories.clear();
+	versesByReference.Clear();
+	referencesByCategory.Clear();
+	
 	var language = GetLanguage();
 	
 	if (language == "en") {
@@ -395,6 +401,7 @@ function LoadVerses() {
   		
   	}
   	Load();
+	
   	Debug.Log(references.join(";"));
 }
 
