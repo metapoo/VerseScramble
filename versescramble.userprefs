@@ -1,14 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GUITouchScroll/GUITouchScrollJS.js">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/VerseManager.js">
     <Files>
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="111" Column="38" />
+      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="159" Column="3" />
       <File FileName="Assets/GameManager.js" Line="1" Column="1" />
       <File FileName="Assets/plugins/VoiceSynth.cs" Line="1" Column="1" />
-      <File FileName="Assets/VerseManager.js" Line="1" Column="1" />
+      <File FileName="Assets/VerseManager.js" Line="357" Column="2" />
       <File FileName="Assets/RefreshButton.js" Line="1" Column="1" />
-      <File FileName="Assets/VerseListManager.js" Line="1" Column="1" />
+      <File FileName="Assets/VerseListManager.js" Line="16" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

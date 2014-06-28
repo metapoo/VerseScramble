@@ -101,8 +101,8 @@ static function SetLanguage(language : String) {
 function GotoNextVerse() {
 	var difficulty : Difficulty = GetCurrentDifficulty();
 	var masteredPct = GetMasteredVersesPercentage();
-	
-	var nextVerseIndex = Random.Range(0, verses.length);
+	var refs = GetCurrentReferences();
+	var nextVerseIndex = Random.Range(0, refs.length);
 	
 	if (masteredPct < 100) {
 		nextVerseIndex = verseIndex;
@@ -112,10 +112,10 @@ function GotoNextVerse() {
 		do {
 			
 			nextVerseIndex = nextVerseIndex + 1;
-			if (nextVerseIndex >= verses.length) {
+			if (nextVerseIndex >= refs.length) {
 				nextVerseIndex = 0;
 			}
-			var verseMetadata = GetVerseMetadata(references[nextVerseIndex]);
+			var verseMetadata = GetVerseMetadata(refs[nextVerseIndex]);
 			var verseDifficulty : int = verseMetadata["difficulty"];
 			mastered = (verseDifficulty > parseInt(difficulty));
 			
