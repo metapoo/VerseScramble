@@ -126,10 +126,10 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 function OnGUI () //this deals with the display
 {
 	GUI.skin = customSkin;
-	var rowHeight = 40;
+	var rowHeight = 50;
 	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
 					  Screen.width - (2*windowMargin.x) + xOffset, Screen.height - windowMargin.y*2); //this draws the bg
-	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y);
+	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y-10);
 	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, rowHeight);
 
 	var headerRect = Rect(windowMargin.x + xOffset + listMargin.x, yOffset,
