@@ -12,7 +12,10 @@ public class VoiceSynth {
        public static void SpeakUtterance(string text, string language)
        {
 		// Call plugin only when running on real device
-		if (Application.platform != RuntimePlatform.OSXEditor)
+		if ((Application.platform != RuntimePlatform.OSXEditor) &&
+                    (Application.platform != RuntimePlatform.OSXWebPlayer) &&
+                    (Application.platform != RuntimePlatform.WindowsWebPlayer)) {
 		  _SpeakUtterance(text, language);
+                }
        }
 } 
