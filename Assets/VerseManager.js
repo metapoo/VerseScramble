@@ -102,35 +102,11 @@ function GotoNextVerse() {
 	var difficulty : Difficulty = GetCurrentDifficulty();
 	var masteredPct = GetMasteredVersesPercentage();
 	var refs = GetCurrentReferences();
-	var nextVerseIndex = Random.Range(0, refs.length);
-	
-	if (masteredPct < 100) {
-		nextVerseIndex = verseIndex;
-		
-		var mastered : boolean = false;
-		// find the next verse that's not mastered
-		do {
-			
-			nextVerseIndex = nextVerseIndex + 1;
-			if (nextVerseIndex >= refs.length) {
-				nextVerseIndex = 0;
-			}
-			var verseMetadata = GetVerseMetadata(refs[nextVerseIndex]);
-			var verseDifficulty : int = verseMetadata["difficulty"];
-			mastered = (verseDifficulty > parseInt(difficulty));
-			
-			//Debug.Log(nextVerseIndex + ". " + verseDifficulty + " vs " + parseInt(difficulty));
-		} while (mastered);
-	} else {
-		// don't repeat same verse on random
-		if (verseIndex == nextVerseIndex) {
-			GotoNextVerse();
-			return;
-		}
-	}
-	
-	verseIndex = nextVerseIndex;
-	
+	verseIndex = verseIndex + 1;
+
+	if (verseIndex >= refs.length) {
+		verseIndex = 0;
+	}	
 	Debug.Log("going to verse " + verseIndex);
 	Save();
 }
