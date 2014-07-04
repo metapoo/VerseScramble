@@ -8,7 +8,7 @@ var references : Array = new Array();
 var versesByReference : Hashtable = new Hashtable();
 var referencesByCategory : Hashtable = new Hashtable();
 var categories : Array = new Array();
-var currentCategory : String = null;
+var currentCategory : String = "";
 var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
@@ -18,16 +18,17 @@ var numVerses = 0;
 var totalScore : int = -1;
 
 function GetCurrentCategory() {
-	if (currentCategory != null) return currentCategory;
-	
+
+	if (currentCategory != "") return currentCategory;
+
 	if (categories.length == 0) return "";
-	
+
 	currentCategory = PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
 	
 	for (var c in categories) {
 		if (c == currentCategory) return c;
 	}
-	
+	Debug.Log("4");
 	currentCategory = categories[0];
 	return currentCategory;
 }
