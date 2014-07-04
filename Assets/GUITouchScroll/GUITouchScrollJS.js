@@ -169,6 +169,8 @@ function OnGUI () //this deals with the display
 		}
 		
 		if (selected) {
+			Debug.Log("Set category = " + category);
+			verseManager.verseIndex = 0;
 			verseManager.SetCurrentCategory(category);
 		}
 	}
@@ -181,8 +183,6 @@ function DoWindow (windowID : int) //here you build the table
 	var numRows = refs.length;
 	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
 	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowSize.y);
-	
-	Debug.Log("numRows = " + numRows);
 	
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	

@@ -9,11 +9,9 @@ function OnMouseDown() {
 	audio.PlayOneShot(sndSelect,1.0);
 	var dScore = gameManager.ShowHint();
 	
-	if (true) {
-		var clone : FloatingPoints;
-		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
-		clone.SetPoints(dScore, false);
-	}
+	var clone : FloatingPoints;
+	clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
+	clone.SetPoints(dScore, false);
 }
 
 function OnMouseUp() {

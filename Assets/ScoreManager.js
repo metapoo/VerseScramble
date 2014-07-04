@@ -147,8 +147,9 @@ function difficultyMultiplier(difficulty : Difficulty) {
 			return 5;
 		case Difficulty.Hard:
 			return 15;
+		default:
+			return 1;
 	}
-	return 1;
 }
 
 function Start() {

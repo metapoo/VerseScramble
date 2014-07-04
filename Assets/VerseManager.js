@@ -8,7 +8,7 @@ var references : Array = new Array();
 var versesByReference : Hashtable = new Hashtable();
 var referencesByCategory : Hashtable = new Hashtable();
 var categories : Array = new Array();
-
+var currentCategory : String = null;
 var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
@@ -18,23 +18,28 @@ var numVerses = 0;
 var totalScore : int = -1;
 
 function GetCurrentCategory() {
+	if (currentCategory != null) return currentCategory;
+	
 	if (categories.length == 0) return "";
 	
-	var category = PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
+	currentCategory = PlayerPrefs.GetString(String.Format("category_{0}",GetLanguage()), categories[0]);
 	
 	for (var c in categories) {
-		if (c == category) return c;
+		if (c == currentCategory) return c;
 	}
 	
-	return categories[0];
+	currentCategory = categories[0];
+	return currentCategory;
 }
 
 function SetCurrentCategory(category : String) {
+	currentCategory = category;
 	PlayerPrefs.SetString(String.Format("category_{0}",GetLanguage()), category);
 }
 
 function GetCurrentReferences() {
 	var category : String = GetCurrentCategory();
+	Debug.Log("get current references for category: " + category);
 	var refs : Array = referencesByCategory[category];
 	return refs;
 }
@@ -46,10 +51,11 @@ function currentReference() {
 		return "";
 	}
 	
-	if (verseIndex > refs.length) {
+	if (verseIndex >= refs.length) {
 		verseIndex = 0;
 	}
 
+	Debug.Log("refs length = " + refs.length + " verse index = " + verseIndex);
 	return refs[verseIndex];
 }
 
@@ -182,6 +188,7 @@ static function DifficultyToString(difficulty : Difficulty) {
 		case Difficulty.Medium: return "medium";
 		case Difficulty.Hard: return "hard";
 		case difficulty.Impossible: return "impossible";
+		default: return "easy";
 	}		
 }
 
@@ -269,8 +276,8 @@ function GetNextDifficulty() {
 		case Difficulty.Easy: return Difficulty.Medium;
 		case Difficulty.Medium: return Difficulty.Hard;
 		case difficulty.Hard: return Difficulty.Hard;
+		default: return Difficulty.Hard;
 	}
-	return difficulty.Hard;
 }
 
 function GetMasteredVerses() {
@@ -320,6 +327,7 @@ function CreateCategory(category : String) {
 	if (referencesByCategory[category] == null) {
 	  	referencesByCategory.Add(category, new Array());
 	  	categories.push(category);
+	  	Debug.Log("Creating category " + category);
 	}
 }
 

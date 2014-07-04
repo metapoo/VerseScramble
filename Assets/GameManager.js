@@ -208,7 +208,6 @@ function moveReferenceToTopLeft() {
 	var centerS : Vector3 = new Vector3(0.5,0.5,0);
 	var destination : Vector3 = new Vector3(0.05f+rectSize.x*0.5, 0.975-rectSize.y*0.5,1);
 	var destinationS : Vector3 = new Vector3(destination.x, destination.y, 0);
-	Debug.Log("width = " + rectSize.x + " height = " + rectSize.y);
 	
 	Translation(verseReference.transform, center, destination, duration);
 	Translation(verseReferenceShadow.transform, centerS, destinationS, duration);
