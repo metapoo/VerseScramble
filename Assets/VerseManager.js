@@ -4,11 +4,9 @@ import JSONUtils;
 
 var verses : Array = new Array();
 var references : Array = new Array();
-
 var versesByReference : Hashtable = new Hashtable();
 var referencesByCategory : Hashtable = new Hashtable();
 var categories : Array = new Array();
-var currentCategory : String = "";
 var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
@@ -16,6 +14,7 @@ var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
 var numVerses = 0;
 var totalScore : int = -1;
+private var currentCategory : String = "";
 
 function GetCurrentCategory() {
 
@@ -28,7 +27,7 @@ function GetCurrentCategory() {
 	for (var c in categories) {
 		if (c == currentCategory) return c;
 	}
-	Debug.Log("4");
+	
 	currentCategory = categories[0];
 	return currentCategory;
 }

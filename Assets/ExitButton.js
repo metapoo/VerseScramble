@@ -12,6 +12,7 @@ function OnMouseDown() {
 		gameManager.Cleanup();
 	}
 	Application.LoadLevel(level);
+	Debug.Log("load level " + level);
 }
 
 function OnMouseUp() {
