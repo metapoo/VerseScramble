@@ -133,7 +133,7 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 
 function OnGUI () //this deals with the display
 {
-	GUI.skin = customSkin;
+	//GUI.skin = customSkin;
 	
 	var rowHeight = 50;
 	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
@@ -172,7 +172,7 @@ function OnGUI () //this deals with the display
 				selected = true;
 			}
 		} else {
-			if (GUI.Button(catButtonRect, category)) {
+			if (GUI.Button(catButtonRect, category, customSkin.button)) {
 				selected = true;
 			}
 		}
@@ -191,7 +191,6 @@ function DoWindow (windowID : int) //here you build the table
 	var numRows = refs.length;
 	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
 	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowSize.y);
-	
 	
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	
@@ -227,7 +226,7 @@ function DoWindow (windowID : int) //here you build the table
 			} else if (verseDifficulty == 3) {
 				fClicked = GUI.Button(rBtn, rowLabel, rowHardStyle);
 			} else {
-				fClicked = GUI.Button(rBtn, rowLabel);
+				fClicked = GUI.Button(rBtn, rowLabel, customSkin.button);
 			}			
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked ) //&& Application.platform != RuntimePlatform.IPhonePlayer )
