@@ -40,7 +40,7 @@ function updateScrollVelocity(touch : Touch) {
 
 	// impart momentum, using last delta as the starting velocity
 	// ignore delta = 10)
-	scrollVelocity = touch.deltaPosition.y / dt + scrollVelocity*0.25f;
+	scrollVelocity = 0.25f*touch.deltaPosition.y / dt + scrollVelocity*0.75f;
 	if (scrollVelocity > maxScrollVelocity) scrollVelocity = maxScrollVelocity;
 	if (scrollVelocity < -1*maxScrollVelocity) scrollVelocity = -1*maxScrollVelocity;
 	Debug.Log("scrollVelocity = " + scrollVelocity + " delta time = " + touch.deltaTime);
@@ -134,6 +134,7 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 function OnGUI () //this deals with the display
 {
 	GUI.skin = customSkin;
+	
 	var rowHeight = 50;
 	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
 					  Screen.width - (2*windowMargin.x) + xOffset, Screen.height - windowMargin.y*2); //this draws the bg
@@ -190,6 +191,7 @@ function DoWindow (windowID : int) //here you build the table
 	var numRows = refs.length;
 	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
 	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowSize.y);
+	
 	
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	
