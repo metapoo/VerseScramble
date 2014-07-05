@@ -1,0 +1,6 @@
+msgid "Hallelujah!"
+msgstr "Hallelujah!"
+msgid "Nice Streak!"
+msgstr "Nice Streak!"
+msgid "You're doing great!"
+msgstr "You're doing great!"
