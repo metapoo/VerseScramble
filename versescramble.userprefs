@@ -1,10 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/VerseManager.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/ExitButton.js">
     <Files>
-      <File FileName="Assets/VerseManager.js" Line="59" Column="1" />
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="182" Column="46" />
-      <File FileName="Assets/GameManager.js" Line="237" Column="2" />
+      <File FileName="Assets/VerseManager.js" Line="31" Column="3" />
+      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="137" Column="58" />
+      <File FileName="Assets/GameManager.js" Line="222" Column="30" />
       <File FileName="Assets/plugins/VoiceSynth.cs" Line="1" Column="1" />
       <File FileName="Assets/RefreshButton.js" Line="1" Column="1" />
       <File FileName="Assets/VerseListManager.js" Line="28" Column="1" />
@@ -12,13 +12,12 @@
       <File FileName="Assets/FloatingPoints.js" Line="1" Column="1" />
       <File FileName="Assets/HintButton.js" Line="14" Column="2" />
       <File FileName="Assets/EndOfGameOptions.js" Line="64" Column="29" />
-      <File FileName="Assets/ExitButton.js" Line="26" Column="2" />
+      <File FileName="Assets/ExitButton.js" Line="16" Column="27" />
+      <File FileName="Assets/TitleManager.js" Line="27" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/hsiung/unity/versescramble/Assets/VerseManager.js" line="59" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

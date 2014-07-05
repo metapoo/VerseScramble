@@ -24,7 +24,7 @@ function OnGUI() {
 	var buttonSize = new Vector2(170,60);
 	var h = Screen.height;
 	var w = Screen.width;
-	var maxDifficulty : Difficulty = verseManager.GetCurrentDifficultyAllowed();
+//	var maxDifficulty : Difficulty = verseManager.GetCurrentDifficultyAllowed();
 	
 	var selected:boolean = false;
 	var dH = h*0.7;

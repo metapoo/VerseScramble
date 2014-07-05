@@ -39,7 +39,6 @@ function SetCurrentCategory(category : String) {
 
 function GetCurrentReferences() {
 	var category : String = GetCurrentCategory();
-	Debug.Log("get current references for category: " + category);
 	var refs : Array = referencesByCategory[category];
 	return refs;
 }
@@ -55,7 +54,6 @@ function currentReference() {
 		verseIndex = 0;
 	}
 
-	Debug.Log("refs length = " + refs.length + " verse index = " + verseIndex);
 	return refs[verseIndex];
 }
 

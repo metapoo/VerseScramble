@@ -169,7 +169,6 @@ function OnGUI () //this deals with the display
 		}
 		
 		if (selected) {
-			Debug.Log("Set category = " + category);
 			verseManager.verseIndex = 0;
 			verseManager.SetCurrentCategory(category);
 		}
