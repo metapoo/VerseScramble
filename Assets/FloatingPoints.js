@@ -24,7 +24,7 @@ function Update () {
 	var duration = 0.33f*ttl;
 	
 	var alpha = (ttl - timeElapsed) / (duration);
-	Debug.Log("alpha = " + alpha);
+	
 	if (alpha <= 0) {
 		Destroy(this.gameObject);
 		return;

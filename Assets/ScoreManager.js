@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import TextManager;
+
 var scoreLabel : GUIText;
 var scoreLabelShadow : GUIText;
 var timeLabel : GUIText;
@@ -153,6 +155,7 @@ function difficultyMultiplier(difficulty : Difficulty) {
 }
 
 function Start() {
+	TextManager.LoadLanguage("en");
 	resetStats();
 	reset();
 	SetupUI();

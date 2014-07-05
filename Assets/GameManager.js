@@ -484,7 +484,6 @@ function SplitVerseWordByWord(verse : String) {
 }
 
 function Cleanup () {
-	StopAllCoroutines();
 	scoreManager.resetStats();
 	var wObject : WordLabel;
 	for (wObject in wordObjects) {

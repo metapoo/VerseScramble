@@ -21,7 +21,7 @@ public var xOffset : float;
 public var yOffset : float;
 public var scrollPosition : Vector2 ;
 public var mainCam : Camera;
-public var inertiaDuration : float = 3.5f;
+public var inertiaDuration : float = 5.0f;
 // size of the window and scrollable list
 public var numRows : int;
 public var rowSize : Vector2;
@@ -33,6 +33,19 @@ private var maxScrollVelocity : int = 2000;
 private var windowRect :Rect;   // calculated bounds of the window that holds the scrolling list
 private var listSize : Vector2; // calculated dimensions of the scrolling list placed inside the window
 
+
+function updateScrollVelocity(touch : Touch) {
+	var dt = touch.deltaTime;
+	if (dt == 0) dt = 0.01;
+
+	// impart momentum, using last delta as the starting velocity
+	// ignore delta = 10)
+	scrollVelocity = touch.deltaPosition.y / dt + scrollVelocity*0.25f;
+	if (scrollVelocity > maxScrollVelocity) scrollVelocity = maxScrollVelocity;
+	if (scrollVelocity < -1*maxScrollVelocity) scrollVelocity = -1*maxScrollVelocity;
+	Debug.Log("scrollVelocity = " + scrollVelocity + " delta time = " + touch.deltaTime);
+}
+	
 function Update() //check for touch
 {
 	if (Input.touchCount != 1) //if this is a short touch
@@ -58,6 +71,7 @@ function Update() //check for touch
 	var touch : Touch = Input.touches[0];
 	var	fInsideList = IsTouchInsideList(touch.position);
 
+	
 	if (touch.phase == TouchPhase.Began && fInsideList)
 	{
 		selected = TouchToRowIndex(touch.position);
@@ -75,30 +89,24 @@ function Update() //check for touch
 		selected = -1;
 		previousDelta = touch.deltaPosition.y;
 		scrollPosition.y += touch.deltaPosition.y;
-
+		updateScrollVelocity(touch);
 	}
 	else if (touch.phase == TouchPhase.Ended && fInsideList)
 	{
+		updateScrollVelocity(touch);
+/*
 		// Was it a tap, or a drag-release?
 		if ( selected > -1 )
 		{
-			Debug.Log("Player selected row " + selected);
+			Debug.Log("Player iphone selected row " + selected);
 			HandleRowSelected(selected);
 		}
 		else
 		{
-			var dt = touch.deltaTime;
-			if (dt == 0) dt = 0.01;
-			
-			// impart momentum, using last delta as the starting velocity
-			// ignore delta = 10)
-			scrollVelocity = touch.deltaPosition.y / dt;
-			if (scrollVelocity > maxScrollVelocity) scrollVelocity = maxScrollVelocity;
-			if (scrollVelocity < -1*maxScrollVelocity) scrollVelocity = -1*maxScrollVelocity;
-			Debug.Log("scrollVelocity = " + scrollVelocity + " delta time = " + touch.deltaTime);
-			timeTouchPhaseEnded = Time.time;
-		}
+*/
+		timeTouchPhaseEnded = Time.time;
 	}
+//	}
 }
 
 function HandleRowSelected(selected : int) {
@@ -209,18 +217,7 @@ function DoWindow (windowID : int) //here you build the table
 			} 
 			
 			var rowLabel : String = String.Format("{0} \t\t high score: {1}",reference,metadata["high_score"]); //this is what will be written in the rows
-		/*
-			if ( iRow == selected )
-			{
-				fClicked = GUI.Button(rBtn, rowLabel, rowSelectedStyle);
-				//fClicked = GUI.Button(rBtn, rowLabel);
-			}
-			else
-			{
-				fClicked = GUI.Button(rBtn, rowLabel);
-			}
-		*/
-			
+	
 			if (verseDifficulty == 1) {
 				fClicked = GUI.Button(rBtn, rowLabel, rowEasyStyle);
 			} else if (verseDifficulty == 2) {
@@ -231,7 +228,7 @@ function DoWindow (windowID : int) //here you build the table
 				fClicked = GUI.Button(rBtn, rowLabel);
 			}			
 			// Allow mouse selection, if not running on iPhone.
-			if ( fClicked && Application.platform != RuntimePlatform.IPhonePlayer )
+			if ( fClicked ) //&& Application.platform != RuntimePlatform.IPhonePlayer )
 			{
 				HandleRowSelected(iRow);
 				Debug.Log("Player mouse-clicked on row " + iRow);
