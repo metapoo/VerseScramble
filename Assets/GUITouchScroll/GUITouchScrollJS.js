@@ -226,7 +226,9 @@ function DoWindow (windowID : int) //here you build the table
 				// verse was mastered
 			} 
 			
-			var rowLabel : String = String.Format("{0} \t\t high score: {1}",reference,metadata["high_score"]); //this is what will be written in the rows
+			var rowLabel : String = String.Format("{0} \t\t {1}: {2}",reference,
+			TextManager.GetText("high score"),
+			metadata["high_score"]); //this is what will be written in the rows
 	
 			if (verseDifficulty == 1) {
 				fClicked = GUI.Button(rBtn, rowLabel, rowEasyStyle);
