@@ -181,11 +181,12 @@ function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
 }
 
 static function DifficultyToString(difficulty : Difficulty) {
+	var gt = TextManager.GetText;
 	switch (difficulty) {
-		case Difficulty.Easy: return "easy";
-		case Difficulty.Medium: return "medium";
-		case Difficulty.Hard: return "hard";
-		case difficulty.Impossible: return "impossible";
+		case Difficulty.Easy: return gt("easy");
+		case Difficulty.Medium: return gt("medium");
+		case Difficulty.Hard: return gt("hard");
+		case difficulty.Impossible: return gt("impossible");
 		default: return "easy";
 	}		
 }

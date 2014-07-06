@@ -1,5 +1,7 @@
 @script ExecuteInEditMode()
 
+import TextManager;
+
 //Original Script in C from http://www.mindthecube.com/blog/2010/09/adding-iphone-touches-to-unitygui-scrollview/comment-page-1#comment-2935
 
 public var customSkin : GUISkin; // this sets an optionSkin to load from skins
@@ -119,6 +121,7 @@ function HandleRowSelected(selected : int) {
 
 function Start () 
 {
+	TextManager.LoadLanguage(verseManager.GetLanguage());
 	maxScrollVelocity = Screen.height*4;
 	verseManager.LoadVerses();
 	var previousY = scrollPosition.y;
@@ -146,7 +149,13 @@ function OnGUI () //this deals with the display
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
-	var headerText = String.Format("Score: {0} \t Difficulty: {1} \t Mastered: {2}/{3} ",totalScore,diffString, 
+	var gt = TextManager.GetText;
+	var headerText = String.Format("{0}: {1} \t {2}: {3} \t {4}: {5}/{6} ",
+	gt("Score"),
+	totalScore,
+	gt("Difficulty"),
+	diffString, 
+	gt("Mastered"),
 	verseManager.GetMasteredVerses(), verseManager.verses.length);
 	GUI.Label(headerRect, headerText, headerStyle);
 	
@@ -157,7 +166,7 @@ function OnGUI () //this deals with the display
 	var padding = 20;
 	var extraTopPadding = 5;
 	var catHeaderRect = Rect(padding,yOffset,headerRect.x-1.5*padding,rowHeight);
-	GUI.Label(catHeaderRect, "Categories", headerStyle);
+	GUI.Label(catHeaderRect, TextManager.GetText("Categories"), headerStyle);
 	
 	var categories = verseManager.categories;
 	var currentCategory = verseManager.GetCurrentCategory();

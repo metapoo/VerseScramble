@@ -37,15 +37,16 @@ function HandleWordCorrect(elapsedTime : float) {
 	if (moves == 0) {
 		baseTime = 10;
 	}
+	var gt = TextManager.GetText;
 	
 	if (elapsedTime < 3) {
 		streak += 1;
 		if (streak == 5) {
-			gameManager.showFeedback("Nice Streak!", 1);
+			gameManager.showFeedback(gt("Nice Streak!"), 1);
 		} else if (streak == 10) {
-			gameManager.showFeedback("You're doing great!", 1);
+			gameManager.showFeedback(gt("You're doing great!"), 1);
 		} else if (streak == 15) {
-			gameManager.showFeedback("Hallelujah!", 1);
+			gameManager.showFeedback(gt("Hallelujah!"), 1);
 		}
 	}
 	moves = moves + 1;
@@ -155,7 +156,7 @@ function difficultyMultiplier(difficulty : Difficulty) {
 }
 
 function Start() {
-	TextManager.LoadLanguage("en");
+	TextManager.LoadLanguage(verseManager.GetLanguage());
 	resetStats();
 	reset();
 	SetupUI();

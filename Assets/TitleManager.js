@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import TextManager;
+
 public var customSkin : GUISkin;
 public var disabledStyle : GUIStyle;
 public var verseManager : VerseManager;
@@ -7,6 +9,10 @@ public var showError : boolean = false;
 public var sndSelect : AudioClip;
 public var background : Transform;
 public var mainCam : Camera;
+public var titleLabel : GUIText;
+public var titleLabelShadow : GUIText;
+public var selectLanguageLabel : GUIText;
+public var selectLanguageLabelShadow : GUIText;
 
 private	var selectedDifficulty : Difficulty;
 
@@ -111,6 +117,12 @@ function resizeBackground() {
 function Start () {
 	Application.targetFrameRate = 60;
 	resizeBackground();
+	TextManager.LoadLanguage(verseManager.GetLanguage());
+	var gt = TextManager.GetText;
+	titleLabel.guiText.text = gt("Bible Verse Scramble");
+	titleLabelShadow.guiText.text = titleLabel.guiText.text;
+	selectLanguageLabel.guiText.text = gt("Select Language");
+	selectLanguageLabelShadow.guiText.text = selectLanguageLabel.guiText.text;
 }
 
 function Update () {

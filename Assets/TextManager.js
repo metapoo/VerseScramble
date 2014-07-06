@@ -26,7 +26,7 @@ class TextManager extends MonoBehaviour {
  
     static var instance:TextManager ;
     static var textTable:Hashtable ;
- 
+ 	static var currentFilename : String = "";
  
     static function Instance() 
     {
@@ -50,6 +50,10 @@ class TextManager extends MonoBehaviour {
  
     public static function LoadLanguage (filename:String)
     {
+    	if (filename == currentFilename) return;
+    	
+    	currentFilename = filename;
+    	
         GetInstance();
  
         if (filename == null)

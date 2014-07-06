@@ -145,7 +145,7 @@ function nextWord() {
 		wordIndex = -1;
 		
 		if (!showingSolution) {
-			showFeedback("Awesome!",3);
+			showFeedback(TextManager.GetText("Awesome!"),3);
 			HandleVerseFinished();
 		} else {
 			ShowEndOfGameOptions();
@@ -249,7 +249,7 @@ function AnimateIntro() {
 }
 
 function Start() {
-	
+	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
 	
 	SetupWalls();
@@ -302,7 +302,7 @@ function SplitVerse(verse : String) {
 	Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
-	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”"];
+	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
