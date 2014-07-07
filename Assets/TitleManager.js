@@ -123,6 +123,7 @@ function Start () {
 	titleLabelShadow.guiText.text = titleLabel.guiText.text;
 	selectLanguageLabel.guiText.text = gt("Select Language");
 	selectLanguageLabelShadow.guiText.text = selectLanguageLabel.guiText.text;
+	
 }
 
 function Update () {

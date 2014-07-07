@@ -158,7 +158,7 @@ function OnGUI () //this deals with the display
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
 	var gt = TextManager.GetText;
-	var headerText = String.Format("{0}: {1} \t {2}: {3} \t {4}: {5}/{6} ",
+	var headerText = String.Format("{0}:{1} {2}:{3} {4}:{5}/{6} ",
 	gt("Score"),
 	totalScore,
 	gt("Difficulty"),
