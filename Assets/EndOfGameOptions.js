@@ -1,4 +1,5 @@
 ﻿#pragma strict
+import TextManager;
 
 public var scoreManager : ScoreManager;
 public var gameManager : GameManager;
@@ -6,6 +7,8 @@ public var verseManager : VerseManager;
 public var mainCam : Camera;
 public var customSkin : GUISkin;
 private var windowRect : Rect;
+
+private var gt = TextManager.GetText;
 
 // Make the contents of the window
 function EndGameWindow (windowID : int) {
@@ -16,16 +19,13 @@ function EndGameWindow (windowID : int) {
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
-	var text = String.Format("You made {0} mistakes.", mistakes);
+	var text = String.Format(gt("You made {0} mistakes"), mistakes);
 	if (mistakes == 0) {
-		text = "Perfect!";
+		text = gt("Perfect!");
 	}
 	if ((scoreManager.highScore == scoreManager.score) && (mistakes == 0)) {
-		text = String.Format("New high score {0}! ", scoreManager.score);
+		text = String.Format(gt("New high score {0}!"), scoreManager.score);
 	}	
-    
-
-	
 	
 	/*
 	if ((mistakes > 0) && (gameManager.difficulty != Difficulty.Hard)) {
@@ -45,11 +45,11 @@ function EndGameWindow (windowID : int) {
 	
 	var tryAgain = function() {
 		if ((mistakes > 0) || (difficulty == difficulty.Hard)) {
-			if (GUILayout.Button ("Try Again")) {
+			if (GUILayout.Button (gt("Try again"))) {
 				reload = true;
 			}
 		} else {
-			if (GUILayout.Button (String.Format("Try On {0}", nextDifficultyString))) {
+			if (GUILayout.Button (String.Format(gt("Next level"), nextDifficultyString))) {
 				verseManager.SetDifficulty(nextDifficulty);
 				reload = true;
 			}
@@ -60,7 +60,7 @@ function EndGameWindow (windowID : int) {
 		tryAgain();
 	}
 	
-	if (GUILayout.Button ("Next Verse")) {
+	if (GUILayout.Button (gt("Next verse"))) {
 		verseManager.GotoNextVerse();
 		reload = true;
 	}
@@ -82,7 +82,7 @@ function ReloadGame() {
 }
 
 function RestartVerseWindow (windowID : int) {
-	if (GUILayout.Button("Try Again")) {
+	if (GUILayout.Button(gt("Try again"))) {
 		ReloadGame();
 	}
 }
