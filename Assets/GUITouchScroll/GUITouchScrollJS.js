@@ -29,6 +29,8 @@ public var numRows : int;
 public var rowSize : Vector2;
 public var windowMargin : Vector2;
 
+public var customFont : Font;
+
 public var listMargin : Vector2;
 public var verseManager : VerseManager;
 private var maxScrollVelocity : int = 2000;
@@ -137,6 +139,12 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 function OnGUI () //this deals with the display
 {
 	//GUI.skin = customSkin;
+	rowEasyStyle.font = customFont;
+	rowMediumStyle.font = customFont;
+	rowHardStyle.font = customFont;
+	windowStyle.font = customFont;
+	headerStyle.font = customFont;
+	customSkin.button.font = customFont;
 	
 	var rowHeight = 50;
 	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,

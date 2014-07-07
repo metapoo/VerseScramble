@@ -12,10 +12,23 @@ var returnedToVerse : boolean = false;
 var startTime : float;
 var gameManager : GameManager;
 var scoreManager : ScoreManager;
+var verseManager : VerseManager;
 var hinting : boolean = false;
 var floatingPoints : FloatingPoints;
+var enFont : Font;
+var zhFont : Font;
 
 function setWord(w : String) {
+	var language = verseManager.GetLanguage();
+
+	if (language == "zh") {
+		label.font = zhFont;
+		label.renderer.material = zhFont.material;
+	} else {
+		label.font = enFont;
+		label.renderer.material = enFont.material;
+	}
+	
 	label.text = w;
 	word = w;
 	var textWidth = label.renderer.bounds.size.x;
@@ -41,7 +54,7 @@ function Start () {
 	versePosition = startPosition;
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
-	
+	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
 }
 
 function FixedUpdate() {
