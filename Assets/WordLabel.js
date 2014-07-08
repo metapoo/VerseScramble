@@ -32,19 +32,28 @@ function setWord(w : String) {
 	label.text = w;
 	word = w;
 	var textWidth = label.renderer.bounds.size.x;
+	var textHeight = label.renderer.bounds.size.y;
 	var sr : SpriteRenderer = GetComponent("SpriteRenderer");
 	var spriteWidth = sr.sprite.bounds.size.x;
+	var spriteHeight = sr.sprite.bounds.size.y;
 	
-	var padding = spriteWidth*0.5;
+	var xPadding = spriteWidth*0.5;
+	var yPadding = spriteHeight*0.5;
+	
 	var length = word.Length;
-	transform.localScale.x = (textWidth + padding) / spriteWidth;
-	var yAdjust = 0.6f;
-	transform.localScale.y = yAdjust*transform.localScale.y;
+	var newScale : Vector3 = Vector3(
+	(textWidth + xPadding) / spriteWidth,
+	(textHeight + yPadding)/spriteHeight, 1);
+	transform.localScale = newScale;
 	
-	var ratio = transform.localScale.x/transform.localScale.y*yAdjust;
+	Debug.Log("lossyScale: " + transform.lossyScale);
+	Debug.Log("localScale: " + transform.localScale);
+	Debug.Log("textWidth = " + textWidth + " spriteWidth = " + spriteWidth);
+	Debug.Log("textHeight = " + textHeight + " spriteHeight = " + spriteHeight);
+	var ratio = transform.localScale.x/transform.localScale.y;
 	
-	label.transform.localScale.x = label.transform.localScale.y/ratio;
-	label.transform.localScale.y = label.transform.localScale.y*(1/yAdjust);
+	label.transform.localScale.x = label.transform.localScale.x/ratio;
+	label.transform.localScale.y = label.transform.localScale.y;
 	
 }
 
