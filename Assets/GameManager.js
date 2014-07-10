@@ -31,6 +31,7 @@ var bgSprite5 : Sprite;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
+public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
 public var endOfGameOptions : EndOfGameOptions;
 public var numWordsReleased : int = 0;
@@ -270,8 +271,16 @@ function Start() {
 	SetupUI();
 	SetupBackground();
 	SetVerseReference("",false);
-	ShowDifficultyOptions();
-//	BeginGame();
+	
+	if (needToSelectDifficulty && 
+	    (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
+		ShowDifficultyOptions();
+	} else {
+		BeginGame();
+	}
+	
+	needToSelectDifficulty = true;
+	
 }
 
 function SetupBackground() {

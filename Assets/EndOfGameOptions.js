@@ -20,6 +20,8 @@ function EndGameWindow (windowID : int) {
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
 	var text = String.Format(gt("You made {0} mistakes"), mistakes);
+	var needToSelectDifficulty : boolean = true;
+	
 	if (mistakes == 0) {
 		text = gt("Perfect!");
 	}
@@ -47,11 +49,13 @@ function EndGameWindow (windowID : int) {
 		if ((mistakes > 0) || (difficulty == difficulty.Hard)) {
 			if (GUILayout.Button (gt("Try again"))) {
 				reload = true;
+				needToSelectDifficulty = false;
 			}
 		} else {
 			if (GUILayout.Button (String.Format(gt("Next level"), nextDifficultyString))) {
 				verseManager.SetDifficulty(nextDifficulty);
 				reload = true;
+				needToSelectDifficulty = false;
 			}
 		}
 	};
@@ -70,20 +74,22 @@ function EndGameWindow (windowID : int) {
 	}
 	
 	if (reload) {
-		ReloadGame();
+		ReloadGame(needToSelectDifficulty);
 	}
 }
 
-function ReloadGame() {
+function ReloadGame(needToSelectDifficulty:boolean) {
 	gameManager.Cleanup();
 	Destroy(this.gameObject);
 	scoreManager.Start();
+	
+	gameManager.needToSelectDifficulty = needToSelectDifficulty;
 	gameManager.Start();
 }
 
 function RestartVerseWindow (windowID : int) {
 	if (GUILayout.Button(gt("Try again"))) {
-		ReloadGame();
+		ReloadGame(false);
 	}
 }
 
