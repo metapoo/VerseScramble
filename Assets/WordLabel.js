@@ -136,23 +136,33 @@ function returnToVerse () {
 }
 
 function HintAt() {
-	var oldColor : Color = GetComponent(SpriteRenderer).color;
-	var blinkColor : Color = Color(0.2,0.8,0.2,1.0);
 	hinting = true;
 	
 	while (hinting) {
-		GetComponent(SpriteRenderer).color = blinkColor;
-		yield WaitForSeconds(0.2);
-		GetComponent(SpriteRenderer).color = oldColor;
-		yield WaitForSeconds(0.2);
+		Blink();
 	}		
 }
 
+function Blink() {
+	var oldColor : Color = GetComponent(SpriteRenderer).color;
+	var blinkColor : Color = Color(0.2,0.8,0.2,1.0);
+	GetComponent(SpriteRenderer).color = blinkColor;
+	yield WaitForSeconds(0.2);
+	GetComponent(SpriteRenderer).color = oldColor;
+	yield WaitForSeconds(0.2);
+}
 
 function OnMouseDown() {  
 	var dScore = 0;
 	var right = false;
 	hinting = false;
+	
+	if (returnedToVerse) {
+		Blink();
+		VerseManager.SpeakUtterance(word);
+		return;
+	}
+	
 	if (word == GameManager.currentWord) {
 		GetComponent(SpriteRenderer).color = Color.white;
 		returnToVerse();
@@ -167,7 +177,7 @@ function OnMouseDown() {
 		dScore = gameManager.HandleWordWrong();
 	}
 	
-	if (true) {
+	if (dScore != 0) {
 		var clone : FloatingPoints;
 		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
 		clone.SetPoints(dScore, right);

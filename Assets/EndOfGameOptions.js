@@ -97,7 +97,7 @@ function ShowRestartVerse() {
 function showEndOfGameOptions() {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
-	windowRect = Rect(w*0.3,h*0.5,w*0.4,h*0.45);
+	windowRect = Rect(w*0.3,h*0.6,w*0.4,h*0.35);
 	GUILayout.Window (0, windowRect, EndGameWindow, "");
 }
 

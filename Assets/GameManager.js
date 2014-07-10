@@ -41,7 +41,7 @@ private var wordHinted : boolean = false;
 
 static var currentWord : String;
 static var words : Array = new Array();
-static var wordObjects : Array = new Array();
+static var wordLabels : Array = new Array();
 static var wordIndex : int;
 static var score = 0;
 static var highScore = 0;
@@ -58,8 +58,8 @@ function OnGUI() {
 }
 
 function CanShowSolution() {
-	return (numWordsReleased == wordObjects.length) && (!showingSolution)
-	&& (wordIndex < wordObjects.length) && gameStarted;	
+	return (numWordsReleased == wordLabels.length) && (!showingSolution)
+	&& (wordIndex < wordLabels.length) && gameStarted;	
 }
 
 function ShowSolution() {
@@ -67,8 +67,8 @@ function ShowSolution() {
 	
 	showingSolution = true;
 	
-	for (var i=wordIndex;i<wordObjects.length;i++) {
-		var wordObject : WordLabel = wordObjects[i];
+	for (var i=wordIndex;i<wordLabels.length;i++) {
+		var wordObject : WordLabel = wordLabels[i];
 		wordObject.returnToVerse();
 	}
 }
@@ -141,6 +141,14 @@ function ShowDifficultyOptions() {
 	Instantiate(difficultyOptions, new Vector3(0,0,0), Quaternion.identity);
 }
 
+function EnableWordColliders() {
+	var wordLabel : WordLabel;
+
+	for (wordLabel in wordLabels) {
+		wordLabel.collider2D.enabled = true;
+	}
+}
+
 function nextWord() {
 	if (wordIndex == -1) return null;
 	wordHinted = false;
@@ -149,6 +157,7 @@ function nextWord() {
 		currentWord = null;
 		wordIndex = -1;
 		
+		EnableWordColliders();
 		if (!showingSolution) {
 			showFeedback(TextManager.GetText("Awesome!"),3);
 			HandleVerseFinished();
@@ -492,10 +501,10 @@ function SplitVerseWordByWord(verse : String) {
 function Cleanup () {
 	scoreManager.resetStats();
 	var wObject : WordLabel;
-	for (wObject in wordObjects) {
+	for (wObject in wordLabels) {
 		Destroy(wObject.gameObject);
 	}
-	wordObjects.Clear();
+	wordLabels.Clear();
 	
 }
 
@@ -535,7 +544,7 @@ function SetupVerse() {
 	for (word in words) {
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
 		clone.setWord(word);
-		wordObjects.push(clone);
+		wordLabels.push(clone);
 		var w = clone.renderer.bounds.size.x;
 		var h = clone.renderer.bounds.size.y;
 		var x = Random.Range(screenBounds.x+w*0.5,screenBounds.x+screenBounds.width-w*0.5);
@@ -548,7 +557,7 @@ function SetupVerse() {
 	
 	
 	numWordsReleased = 0;	
-	while (numWordsReleased < wordObjects.length) {
+	while (numWordsReleased < wordLabels.length) {
 		numWordsReleased = releaseWords(numWordsReleased) + 1;
 		yield WaitForSeconds(1.5f);
 		// start game on second round
@@ -557,7 +566,7 @@ function SetupVerse() {
 			scoreManager.resetTime();
 		}
 	}
-	numWordsReleased = wordObjects.length;
+	numWordsReleased = wordLabels.length;
 	
 	
 }
@@ -580,8 +589,8 @@ function SetupVerse() {
 
 	var c : int  = 0;
 	
-	for (var i : int=index;i<wordObjects.length;i++) {
-		var wordObject : WordLabel = wordObjects[i];
+	for (var i : int=index;i<wordLabels.length;i++) {
+		var wordObject : WordLabel = wordLabels[i];
 		var h = wordObject.renderer.bounds.size.y;
 
 		wordObject.transform.position.y = screenBounds.y+h*2;
@@ -618,7 +627,7 @@ function ShowHint() {
 	var wObject : WordLabel;
 	var dScore = -1*scoreManager.maxTime;
 	
-	for (wObject in wordObjects) {
+	for (wObject in wordLabels) {
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 			wObject.HintAt();
 			return scoreManager.HandleWordWrong();
