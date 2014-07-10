@@ -140,6 +140,7 @@ function HintAt() {
 	
 	while (hinting) {
 		Blink();
+		yield WaitForSeconds(0.4);
 	}		
 }
 
