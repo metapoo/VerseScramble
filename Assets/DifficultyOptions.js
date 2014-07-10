@@ -9,23 +9,45 @@ public var customSkin : GUISkin;
 private var windowRect : Rect;
 
 private var gt = TextManager.GetText;
+private var windowText : String;
 
 // Make the contents of the window
 function DifficultyWindow (windowID : int) {
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
+	var selected : boolean = false;
 	
-	GUILayout.Box(gt("Choose difficulty"));
 	
-	if (GUILayout.Button (gt("Easy"))) {
-		
+	GUILayout.Box(windowText);
+	
+	if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Easy))) {
+		difficulty = difficulty.Easy;
+		selected = true;
 	}
 
-	if (GUILayout.Button (gt("Medium"))) {
-		
+	if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Medium))) {
+		if (verseManager.IsDifficultyAllowed(difficulty.Medium)) {
+			difficulty = difficulty.Medium;
+			selected = true;
+		} else {
+			windowText = String.Format(gt("You must master {0} first"),
+			VerseManager.DifficultyToString(Difficulty.Easy));
+		}
 	}	
 	
-	if (GUILayout.Button (gt("Hard"))) {
-		
+	if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Hard))) {
+		if (verseManager.IsDifficultyAllowed(difficulty.Hard)) {
+			difficulty = difficulty.Hard;
+			selected = true;
+		} else {
+			windowText = String.Format(gt("You must master {0} first"),
+			VerseManager.DifficultyToString(Difficulty.Medium));
+		}
+	}
+	
+	if (selected) {
+		verseManager.SetDifficulty(difficulty);
+		gameManager.BeginGame();
+		Destroy(this.gameObject);
 	}
 }
 
@@ -34,13 +56,14 @@ function Start () {
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
 	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
+	windowText = gt("Choose difficulty");
 }
 
 
 function ShowWindow() {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
-	windowRect = Rect(w*0.3,h*0.2,w*0.4,h*0.6);
+	windowRect = Rect(w*0.25,h*0.2,w*0.5,h*0.6);
 	GUILayout.Window (0, windowRect, DifficultyWindow, "");
 }
 

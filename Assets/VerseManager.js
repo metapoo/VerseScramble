@@ -215,6 +215,10 @@ function GetCurrentDifficulty() {
 	}
 }
 
+function IsDifficultyAllowed(difficulty : Difficulty) {
+	return parseInt(difficulty) <= parseInt(GetCurrentDifficultyAllowed());
+}
+
 function GetCurrentDifficultyAllowed() {
 	var verseMetadata =	GetVerseMetadata(currentReference());
 	var maxDifficultyInt : int = verseMetadata["difficulty"];

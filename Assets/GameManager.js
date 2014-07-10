@@ -254,9 +254,9 @@ function Start() {
 	
 	SetupWalls();
 	SetupUI();
-	SetupVerse();
 	SetupBackground();
-	AnimateIntro();
+	SetVerseReference("",false);
+//	BeginGame();
 }
 
 function SetupBackground() {
@@ -491,6 +491,11 @@ function Cleanup () {
 	}
 	wordObjects.Clear();
 	
+}
+
+function BeginGame() {
+	SetupVerse();
+	AnimateIntro();
 }
 
 function SetupVerse() {
