@@ -31,6 +31,7 @@ var bgSprite5 : Sprite;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
+public var difficultyOptions : DifficultyOptions;
 public var endOfGameOptions : EndOfGameOptions;
 public var numWordsReleased : int = 0;
 public var gameStarted : boolean = false;
@@ -134,6 +135,10 @@ function showFeedback(feedbackText : String, time : float) {
 
 function ShowEndOfGameOptions() {
 	Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+}
+
+function ShowDifficultyOptions() {
+	Instantiate(difficultyOptions, new Vector3(0,0,0), Quaternion.identity);
 }
 
 function nextWord() {
@@ -256,6 +261,7 @@ function Start() {
 	SetupUI();
 	SetupBackground();
 	SetVerseReference("",false);
+	ShowDifficultyOptions();
 //	BeginGame();
 }
 
@@ -590,13 +596,13 @@ function SetupVerse() {
 
 function StartNextDifficulty() {
 	verseManager.upgradeDifficultyForVerse(verseMetadata);
-	SetupVerse();
+	BeginGame();
 }
 
 function StartAnotherVerse() {
 	verseManager.GotoNextVerse();
-	SetupVerse();
 	SetupBackground();
+	BeginGame();
 }
 
 function HandleVerseFinished() {
