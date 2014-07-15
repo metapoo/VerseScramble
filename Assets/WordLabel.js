@@ -45,11 +45,12 @@ function setWord(w : String) {
 	(textWidth + xPadding) / spriteWidth,
 	(textHeight + yPadding)/spriteHeight, 1);
 	transform.localScale = newScale;
-	
+/*	
 	Debug.Log("lossyScale: " + transform.lossyScale);
 	Debug.Log("localScale: " + transform.localScale);
 	Debug.Log("textWidth = " + textWidth + " spriteWidth = " + spriteWidth);
 	Debug.Log("textHeight = " + textHeight + " spriteHeight = " + spriteHeight);
+*/
 	var ratio = transform.localScale.x/transform.localScale.y;
 	
 	label.transform.localScale.x = label.transform.localScale.x/ratio;
@@ -150,17 +151,26 @@ function Blink() {
 	GetComponent(SpriteRenderer).color = blinkColor;
 	yield WaitForSeconds(0.2);
 	GetComponent(SpriteRenderer).color = oldColor;
-	yield WaitForSeconds(0.2);
 }
 
-function OnMouseDown() {  
+function OnMouseDown() { 
+    var ray : Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    var hit : RaycastHit2D = Physics2D.GetRayIntersection(ray,Mathf.Infinity);
+    var wasReallyHit : boolean = false;  
+    if ((hit.collider != null) && (hit.collider.transform == transform))
+    {
+    	wasReallyHit = true;
+    }
+    // fix bug where onmousedown is triggered when it shouldn't be
+	if (!wasReallyHit) return;
+	 
 	var dScore = 0;
 	var right = false;
 	hinting = false;
 	
 	if (returnedToVerse) {
-		Blink();
 		VerseManager.SpeakUtterance(word);
+		Blink();
 		return;
 	}
 	

@@ -79,6 +79,7 @@ function EndGameWindow (windowID : int) {
 }
 
 function ReloadGame(needToSelectDifficulty:boolean) {
+	Debug.Log("Reloading game");
 	gameManager.Cleanup();
 	Destroy(this.gameObject);
 	scoreManager.Start();
