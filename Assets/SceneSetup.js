@@ -2,6 +2,7 @@
 
 public var zhFont : Font;
 public var enFont : Font;
+static var hiRes : boolean;
 
 function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
 	if (background.sprite == null) return;
@@ -37,13 +38,13 @@ function ApplyCurrentFont() {
 }
 
 function OnGUI() {
-/*
 	if (Screen.width > 1500) {
-		Screen.SetResolution(Screen.width * 0.5f, Screen.height * 0.5f, false);
+		hiRes = true;
+		//Screen.SetResolution(Screen.width * 0.5f, Screen.height * 0.5f, false);
 	} else if (Screen.width < 700) {
-		Screen.SetResolution(Screen.width * 1.5f, Screen.height * 1.5f, false);
+		hiRes = false;
+		//Screen.SetResolution(Screen.width * 1.5f, Screen.height * 1.5f, false);
 	}
-*/	
 }
 
 function Start () {

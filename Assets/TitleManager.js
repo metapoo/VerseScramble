@@ -20,14 +20,14 @@ private	var selectedDifficulty : Difficulty;
 function OnGUI() {
 	var style : GUIStyle = customSkin.button;
 	var enabled : boolean = true;
-	
-	style.font = sceneSetup.GetCurrentFont();
-	
-	GUI.skin = customSkin;
-	var buttonSize = new Vector2(170,60);
 	var h = Screen.height;
 	var w = Screen.width;
-//	var maxDifficulty : Difficulty = verseManager.GetCurrentDifficultyAllowed();
+	
+	style.font = sceneSetup.GetCurrentFont();
+	style.fontSize = 0.02*w;
+	
+	GUI.skin = customSkin;
+	var buttonSize = new Vector2(0.1601*w,0.078125*h);
 	
 	var selected:boolean = false;
 	var dH = h*0.7;
@@ -51,16 +51,25 @@ function OnGUI() {
 		Application.LoadLevel("verselist");
 	}
 	
+		
+	titleLabel.fontSize = 0.04882*w;
+	titleLabelShadow.fontSize = titleLabel.fontSize;
+	selectLanguageLabel.fontSize = 0.0292*w;
+	selectLanguageLabelShadow.fontSize = selectLanguageLabel.fontSize;
+
 }
 
 function Start () {
 	Application.targetFrameRate = 60;
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	var gt = TextManager.GetText;
+	
 	titleLabel.guiText.text = gt("Bible Verse Scramble");
 	titleLabelShadow.guiText.text = titleLabel.guiText.text;
+	
 	selectLanguageLabel.guiText.text = gt("Select Language");
 	selectLanguageLabelShadow.guiText.text = selectLanguageLabel.guiText.text;
+	
 	
 }
 
