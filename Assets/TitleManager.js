@@ -20,12 +20,6 @@ function OnGUI() {
 	var style : GUIStyle = customSkin.button;
 	var enabled : boolean = true;
 	
-	if (Screen.width > 1500) {
-		Screen.SetResolution(Screen.width * 0.5f, Screen.height * 0.5f, false);
-	} else if (Screen.width < 700) {
-		Screen.SetResolution(Screen.width * 1.5f, Screen.height * 1.5f, false);
-	}
-	
 	GUI.skin = customSkin;
 	var buttonSize = new Vector2(170,60);
 	var h = Screen.height;
