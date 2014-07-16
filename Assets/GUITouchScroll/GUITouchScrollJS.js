@@ -29,10 +29,9 @@ public var numRows : int;
 public var rowSize : Vector2;
 public var windowMargin : Vector2;
 
-public var customFont : Font;
-
 public var listMargin : Vector2;
 public var verseManager : VerseManager;
+public var sceneSetup : SceneSetup;
 private var maxScrollVelocity : int = 2000;
 private var windowRect :Rect;   // calculated bounds of the window that holds the scrolling list
 private var listSize : Vector2; // calculated dimensions of the scrolling list placed inside the window
@@ -138,6 +137,7 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 
 function OnGUI () //this deals with the display
 {
+	var customFont = sceneSetup.GetCurrentFont();
 	//GUI.skin = customSkin;
 	rowEasyStyle.font = customFont;
 	rowMediumStyle.font = customFont;

@@ -1,22 +1,23 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GameManager.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/SceneSetup.js">
     <Files>
-      <File FileName="Assets/VerseManager.js" Line="25" Column="51" />
-      <File FileName="Assets/GameManager.js" Line="168" Column="1" />
-      <File FileName="Assets/TitleManager.js" Line="1" Column="1" />
+      <File FileName="Assets/VerseManager.js" Line="102" Column="17" />
+      <File FileName="Assets/GameManager.js" Line="487" Column="5" />
+      <File FileName="Assets/TitleManager.js" Line="23" Column="1" />
       <File FileName="Assets/VerseManager.js" Line="1" Column="1" />
       <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="1" Column="1" />
-      <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
+      <File FileName="Assets/ExitButton.js" Line="33" Column="45" />
       <File FileName="Assets/ScoreManager.js" Line="1" Column="1" />
       <File FileName="Assets/TextManager.js" Line="1" Column="1" />
       <File FileName="Assets/WordLabel.js" Line="1" Column="1" />
       <File FileName="Assets/FloatingPoints.js" Line="1" Column="1" />
-      <File FileName="Assets/VerseListManager.js" Line="21" Column="25" />
+      <File FileName="Assets/VerseListManager.js" Line="5" Column="35" />
       <File FileName="Assets/EndOfGameOptions.js" Line="91" Column="13" />
       <File FileName="Assets/DifficultyOptions.js" Line="1" Column="1" />
       <File FileName="Assets/HintButton.js" Line="1" Column="1" />
       <File FileName="Assets/references.txt" Line="1" Column="1" />
+      <File FileName="Assets/SceneSetup.js" Line="20" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

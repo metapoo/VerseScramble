@@ -15,16 +15,20 @@ function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
 	background.transform.localScale.y = camY/h;
 }
 
-function SetFontsAccordingToLanguage() {
-	var guitexts : GUIText[] = FindObjectsOfType(GUIText) as GUIText[];
-	var font : Font = enFont;
+function GetCurrentFont() {
 	var language = VerseManager.GetLanguage();
-	
+	var font : Font = enFont;
 	if (language == 'en') {
 		font = enFont;
 	} else {
 		font = zhFont;
 	}
+	return font;
+}
+
+function ApplyCurrentFont() {
+	var guitexts : GUIText[] = FindObjectsOfType(GUIText) as GUIText[];
+	var font : Font = GetCurrentFont();
 	
 	for (var guitext : GUIText in guitexts) {
 		Debug.Log(guitext);
@@ -48,7 +52,7 @@ function Start () {
 	if ((background != null) && (mainCam != null)) {
 		resizeBackground(mainCam.camera, background.GetComponent("SpriteRenderer"));
 	}
-	SetFontsAccordingToLanguage();
+	ApplyCurrentFont();
 }
 
 function Update () {

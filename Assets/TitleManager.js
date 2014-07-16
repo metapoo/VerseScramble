@@ -13,12 +13,15 @@ public var titleLabel : GUIText;
 public var titleLabelShadow : GUIText;
 public var selectLanguageLabel : GUIText;
 public var selectLanguageLabelShadow : GUIText;
+public var sceneSetup : SceneSetup;
 
 private	var selectedDifficulty : Difficulty;
 
 function OnGUI() {
 	var style : GUIStyle = customSkin.button;
 	var enabled : boolean = true;
+	
+	style.font = sceneSetup.GetCurrentFont();
 	
 	GUI.skin = customSkin;
 	var buttonSize = new Vector2(170,60);
@@ -28,52 +31,6 @@ function OnGUI() {
 	
 	var selected:boolean = false;
 	var dH = h*0.7;
-	
-	// difficulty buttons
-	/*
-	if (GUI.Button(Rect(w*0.2-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Easy")) {
-		selected = true;
-		selectedDifficulty = Difficulty.Easy;
-	}
-
-	if (parseInt(maxDifficulty) < VerseManager.GetDifficultyFromInt(Difficulty.Medium)) {
-		style = disabledStyle;
-	} else {
-		style = customSkin.button;
-	}
-	
-	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Medium", style)) {
-		selected = true;
-		selectedDifficulty = Difficulty.Medium;
-	}
-
-	if (parseInt(maxDifficulty) < VerseManager.GetDifficultyFromInt(Difficulty.Hard)) {
-		style = disabledStyle;
-	} else {
-		style = customSkin.button;
-	}
-
-	if (GUI.Button(Rect(w*0.8-buttonSize.x*0.5,dH,buttonSize.x,buttonSize.y),"Hard", style)) {
-		selected = true;
-		selectedDifficulty = Difficulty.Hard;
-	}
-	
-	if (selected) {
-		if (parseInt(maxDifficulty) < VerseManager.GetDifficultyFromInt(selectedDifficulty)) {
-			showError = true;
-		} else {
-			audio.PlayOneShot(sndSelect);
-			verseManager.SetDifficulty(selectedDifficulty);
-			Application.LoadLevel("verselist");
-		}
-	}
-	
-	if (showError) {
-	
-		GUI.Button(Rect(w*0.5-buttonSize.x*1.25,h*0.85,buttonSize.x*2.5,buttonSize.y),
-		"master more verses for " + VerseManager.DifficultyToString(selectedDifficulty));
-	}
-	*/
 	
 	// language buttons
 	selected = false;
