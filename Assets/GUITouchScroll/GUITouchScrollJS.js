@@ -137,6 +137,9 @@ public static function AutoResize(screenWidth:int, screenHeight:int):void
 
 function OnGUI () //this deals with the display
 {
+	var h = Screen.height;
+	var w = Screen.width;
+	
 	var customFont = sceneSetup.GetCurrentFont();
 	//GUI.skin = customSkin;
 	rowEasyStyle.font = customFont;
@@ -146,11 +149,17 @@ function OnGUI () //this deals with the display
 	headerStyle.font = customFont;
 	customSkin.button.font = customFont;
 	
-	var rowHeight = 50;
+	windowStyle.fontSize = customSkin.button.fontSize;
+	headerStyle.fontSize = customSkin.button.fontSize;
+	rowEasyStyle.fontSize = customSkin.button.fontSize;
+	rowMediumStyle.fontSize = customSkin.button.fontSize;
+	rowHardStyle.fontSize = customSkin.button.fontSize;
+	
+	var rowHeight = 0.05*h;
 	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
 					  Screen.width - (2*windowMargin.x) + xOffset, Screen.height - windowMargin.y*2); //this draws the bg
-	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y-10);
-	rowSize = new Vector2(windowRect.width - 2*listMargin.x - 30, rowHeight);
+	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y - 10);
+	rowSize = new Vector2(windowRect.width - 2*listMargin.x-30, rowHeight);
 
 	var headerRect = Rect(windowMargin.x + xOffset + listMargin.x, yOffset,
 						  rowSize.x,rowHeight);
