@@ -166,20 +166,6 @@ function nextWord() {
 	return currentWord;
 }
 
-
-function resizeBackground() {
-/*
-	var w = background.sprite.bounds.size.x;
-	var h = background.sprite.bounds.size.y;
-	var camW = mainCam.pixelWidth;
-	var camH = mainCam.pixelHeight;
-	var camX = 2*mainCam.ScreenToWorldPoint(new Vector3(camW, 0f, 0f)).x;
-	var camY = 2*mainCam.ScreenToWorldPoint(new Vector3(0f, camH, 0f)).y;
-	background.transform.localScale.x = camX/w;
-	background.transform.localScale.y = camY/h;
-	*/
-}
-
 function Translation (thisTransform : Transform, startPos : Vector3, endPos : Vector3, duration : float) {
 	var rate = 1.0/duration;
 	var t = 0.0;
@@ -265,7 +251,6 @@ function Start() {
 	
 	SetupWalls();
 	SetupUI();
-	SetupBackground();
 	SetVerseReference("",false);
 	
 	if (needToSelectDifficulty && 
@@ -277,10 +262,6 @@ function Start() {
 	
 	needToSelectDifficulty = true;
 	
-}
-
-function SetupBackground() {
-	resizeBackground();
 }
 
 function SetVerseReference (reference : String, showDifficulty : boolean) {
@@ -604,7 +585,6 @@ function StartNextDifficulty() {
 
 function StartAnotherVerse() {
 	verseManager.GotoNextVerse();
-	SetupBackground();
 	BeginGame();
 }
 

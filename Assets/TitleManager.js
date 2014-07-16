@@ -101,24 +101,9 @@ function OnGUI() {
 	}
 	
 }
-	
-
-function resizeBackground() {
-/*
-	var w = background.renderer.bounds.size.x;
-	var h = background.renderer.bounds.size.y;
-	var camW = mainCam.pixelWidth;
-	var camH = mainCam.pixelHeight;
-	var camX = 2*mainCam.ScreenToWorldPoint(new Vector3(camW, 0f, 0f)).x;
-	var camY = 2*mainCam.ScreenToWorldPoint(new Vector3(0f, camH, 0f)).y;
-	background.transform.localScale.x = camX/w;
-	background.transform.localScale.y = camY/h;
-	*/
-}
 
 function Start () {
 	Application.targetFrameRate = 60;
-	resizeBackground();
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	var gt = TextManager.GetText;
 	titleLabel.guiText.text = gt("Bible Verse Scramble");

@@ -1,5 +1,8 @@
 ﻿#pragma strict
 
+public var zhFont : Font;
+public var enFont : Font;
+
 function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
 	if (background.sprite == null) return;
 	var w = background.sprite.bounds.size.x;
@@ -12,12 +15,30 @@ function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
 	background.transform.localScale.y = camY/h;
 }
 
+function SetFontsAccordingToLanguage() {
+	var guitexts : GUIText[] = FindObjectsOfType(GUIText) as GUIText[];
+	var font : Font;
+	var language = VerseManager.GetLanguage();
+	
+	if (language == 'en') {
+		font = enFont;
+	} else {
+		font = zhFont;
+	}
+	
+	for (var guitext : GUIText in guitexts) {
+		Debug.Log(guitext);
+		guitext.font = font;
+	}
+}
+
 function Start () {
 	var background : GameObject = GameObject.Find("BG");
 	var mainCam : GameObject = GameObject.Find("Main Camera");
 	if ((background != null) && (mainCam != null)) {
 		resizeBackground(mainCam.camera, background.GetComponent("SpriteRenderer"));
 	}
+	SetFontsAccordingToLanguage();
 }
 
 function Update () {
