@@ -5,6 +5,7 @@ public var mainCam : Camera;
 public var background : Transform;
 
 function resizeBackground() {
+/*
 	var w = background.renderer.bounds.size.x;
 	var h = background.renderer.bounds.size.y;
 	var camW = mainCam.pixelWidth;
@@ -13,6 +14,7 @@ function resizeBackground() {
 	var camY = 2*mainCam.ScreenToWorldPoint(new Vector3(0f, camH, 0f)).y;
 	background.transform.localScale.x = camX/w;
 	background.transform.localScale.y = camY/h;
+	*/
 }
 
 function Start () {

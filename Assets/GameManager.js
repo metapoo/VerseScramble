@@ -23,11 +23,6 @@ var exitButton : BoxCollider2D;
 var hintButton : BoxCollider2D;
 var refreshButton : BoxCollider2D;
 var background : SpriteRenderer;
-var bgSprite1 : Sprite;
-var bgSprite2 : Sprite;
-var bgSprite3 : Sprite;
-var bgSprite4 : Sprite;
-var bgSprite5 : Sprite;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
@@ -173,7 +168,7 @@ function nextWord() {
 
 
 function resizeBackground() {
-
+/*
 	var w = background.sprite.bounds.size.x;
 	var h = background.sprite.bounds.size.y;
 	var camW = mainCam.pixelWidth;
@@ -182,6 +177,7 @@ function resizeBackground() {
 	var camY = 2*mainCam.ScreenToWorldPoint(new Vector3(0f, camH, 0f)).y;
 	background.transform.localScale.x = camX/w;
 	background.transform.localScale.y = camY/h;
+	*/
 }
 
 function Translation (thisTransform : Transform, startPos : Vector3, endPos : Vector3, duration : float) {
@@ -284,17 +280,6 @@ function Start() {
 }
 
 function SetupBackground() {
-	var index : int = Random.Range(0,5);
-	var sprite : Sprite = bgSprite1;
-	
-	switch (index) {
-		case 0: sprite = bgSprite1; break;
-		case 1: sprite = bgSprite2; break;
-		case 2: sprite = bgSprite3; break;
-		case 3: sprite = bgSprite4; break;
-		case 4: sprite = bgSprite5; break;
-	}
-	background.sprite = sprite;
 	resizeBackground();
 }
 
