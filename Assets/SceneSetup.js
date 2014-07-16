@@ -17,7 +17,7 @@ function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
 
 function SetFontsAccordingToLanguage() {
 	var guitexts : GUIText[] = FindObjectsOfType(GUIText) as GUIText[];
-	var font : Font;
+	var font : Font = enFont;
 	var language = VerseManager.GetLanguage();
 	
 	if (language == 'en') {
