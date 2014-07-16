@@ -27,9 +27,15 @@ public var inertiaDuration : float = 5.0f;
 // size of the window and scrollable list
 public var numRows : int;
 public var rowSize : Vector2;
-public var windowMargin : Vector2;
+public var padding : float;
+public var rowHeight : float;
+public var catWidth : float;
+public var leftMargin : float;
+public var topMargin : float;
+public var bottomMargin : float;
+public var rightMargin : float;
+public var scrollBarWidth : float;
 
-public var listMargin : Vector2;
 public var verseManager : VerseManager;
 public var sceneSetup : SceneSetup;
 private var maxScrollVelocity : int = 2000;
@@ -77,19 +83,16 @@ function Update() //check for touch
 	
 	if (touch.phase == TouchPhase.Began && fInsideList)
 	{
-		selected = TouchToRowIndex(touch.position);
 		previousDelta = 0.0f;
 		scrollVelocity = 0.0f;
 	}
 	else if (touch.phase == TouchPhase.Canceled || !fInsideList)
 	{
-		selected = -1;
 		previousDelta = 0f;
 	}
 	else if (touch.phase == TouchPhase.Moved && fInsideList)
 	{
 		// dragging
-		selected = -1;
 		previousDelta = touch.deltaPosition.y;
 		scrollPosition.y += touch.deltaPosition.y;
 		updateScrollVelocity(touch);
@@ -97,19 +100,8 @@ function Update() //check for touch
 	else if (touch.phase == TouchPhase.Ended && fInsideList)
 	{
 		updateScrollVelocity(touch);
-/*
-		// Was it a tap, or a drag-release?
-		if ( selected > -1 )
-		{
-			Debug.Log("Player iphone selected row " + selected);
-			HandleRowSelected(selected);
-		}
-		else
-		{
-*/
 		timeTouchPhaseEnded = Time.time;
 	}
-//	}
 }
 
 function HandleRowSelected(selected : int) {
@@ -139,6 +131,11 @@ function OnGUI () //this deals with the display
 {
 	var h = Screen.height;
 	var w = Screen.width;
+	padding = 0.009*h;
+	rowHeight = 0.065*h;
+	catWidth = 0.2*w;
+	scrollBarWidth = 0.03*Screen.width;
+	bottomMargin = 0.1*h;
 	
 	var customFont = sceneSetup.GetCurrentFont();
 	//GUI.skin = customSkin;
@@ -155,14 +152,17 @@ function OnGUI () //this deals with the display
 	rowMediumStyle.fontSize = customSkin.button.fontSize;
 	rowHardStyle.fontSize = customSkin.button.fontSize;
 	
-	var rowHeight = 0.05*h;
-	windowRect = Rect(windowMargin.x + xOffset, windowMargin.y	+yOffset,
-					  Screen.width - (2*windowMargin.x) + xOffset, Screen.height - windowMargin.y*2); //this draws the bg
-	listSize = new Vector2(windowRect.width - 2*listMargin.x, windowRect.height - 2*listMargin.y - 10);
-	rowSize = new Vector2(windowRect.width - 2*listMargin.x-30, rowHeight);
+	windowRect = Rect(2*padding+catWidth,
+					  2*padding+rowHeight,
+					  Screen.width - (3*padding+catWidth), 
+					  Screen.height - (3*padding+rowHeight)); //this draws the bg
+	listSize = new Vector2(windowRect.width, windowRect.height-bottomMargin);
+	rowSize = new Vector2(windowRect.width-scrollBarWidth, rowHeight-bottomMargin);
 
-	var headerRect = Rect(windowMargin.x + xOffset + listMargin.x, yOffset,
-						  rowSize.x,rowHeight);
+	var headerRect = Rect(2*padding+catWidth, 
+						  padding,
+						  rowSize.x,
+						  rowHeight);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
@@ -180,9 +180,7 @@ function OnGUI () //this deals with the display
 	
 	// draw categories
 	
-	var padding = 20;
-	var extraTopPadding = 5;
-	var catHeaderRect = Rect(padding,yOffset,headerRect.x-1.5*padding,rowHeight);
+	var catHeaderRect = Rect(padding,padding,catWidth,rowHeight);
 	GUI.Label(catHeaderRect, TextManager.GetText("Categories"), headerStyle);
 	
 	var categories = verseManager.categories;
@@ -190,7 +188,7 @@ function OnGUI () //this deals with the display
 	
 	for (var i=0;i<categories.length;i++) {
 		var category : String = categories[i];
-		var catButtonRect : Rect = Rect(padding,extraTopPadding+yOffset+(catHeaderRect.height+5)*(i+1),
+		var catButtonRect : Rect = Rect(padding,padding+(catHeaderRect.height+padding)*(i+1),
 		catHeaderRect.width, catHeaderRect.height);
 		var selected : boolean = false;
 		if (category == currentCategory) {
@@ -215,12 +213,12 @@ function DoWindow (windowID : int) //here you build the table
 {
 	var refs = verseManager.GetCurrentReferences();
 	var numRows = refs.length;
-	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
-	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowSize.y);
+	var rScrollFrame :Rect = Rect(0, 0, listSize.x, listSize.y);
+	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowHeight);
 	
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	
-	var rBtn :Rect = Rect(0, 0, rowSize.x, rowSize.y);
+	var rBtn :Rect = Rect(0, 0, rowSize.x, rowHeight);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	
@@ -255,7 +253,8 @@ function DoWindow (windowID : int) //here you build the table
 				fClicked = GUI.Button(rBtn, rowLabel, rowHardStyle);
 			} else {
 				fClicked = GUI.Button(rBtn, rowLabel, customSkin.button);
-			}			
+			}
+			
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked ) //&& Application.platform != RuntimePlatform.IPhonePlayer )
 			{
@@ -264,36 +263,15 @@ function DoWindow (windowID : int) //here you build the table
 			}
 		}
 	
-		rBtn.y += rowSize.y;
+		rBtn.y += rowHeight + padding;
 	}
 	GUI.EndScrollView();
-}
-
-
-function TouchToRowIndex(touchPos : Vector2) : int //this checks which row was touched
-{
-	var irow: int = -1;
-	
-	// clip touchPos to visible part of the list
-	var listSize : Vector2 = Vector2(windowRect.width - 2*listMargin.x,
-									 windowRect.height - 2*listMargin.y);
-	var rScrollFrame :Rect = Rect(listMargin.x, listMargin.y, listSize.x, listSize.y);
-	
-	var yy :float = Screen.height - touchPos.y; // invert y coordinate
-	yy += scrollPosition.y; // adjust for scroll position
-	yy -= windowMargin.y;   // adjust for window y offset
-	yy -= listMargin.y;     // adjust for scrolling list offset within the window
-	irow = yy / rowSize.y;
-
-	irow = Mathf.Min(irow, numRows); // they might have touched beyond last row
-
-	return irow;
 }
 
 function IsTouchInsideList(touchPos : Vector2) : boolean
 {
 	var screenPos : Vector2 = new Vector2(touchPos.x, Screen.height - touchPos.y);  // invert y coordinate
-	var rAdjustedBounds : Rect = new Rect(listMargin.x + windowRect.x, listMargin.y + windowRect.y, listSize.x, listSize.y);
+	var rAdjustedBounds : Rect = new Rect(windowRect.x, windowRect.y, listSize.x, listSize.y);
 	
 	return rAdjustedBounds.Contains(screenPos);
 }
