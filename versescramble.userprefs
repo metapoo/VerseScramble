@@ -1,11 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/VerseManager.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GUITouchScroll/GUITouchScrollJS.js">
     <Files>
       <File FileName="Assets/VerseManager.js" Line="49" Column="1" />
       <File FileName="Assets/GameManager.js" Line="1" Column="1" />
-      <File FileName="Assets/TitleManager.js" Line="17" Column="1" />
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="140" Column="47" />
+      <File FileName="Assets/TitleManager.js" Line="23" Column="2" />
+      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="199" Column="54" />
       <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
       <File FileName="Assets/ScoreManager.js" Line="1" Column="1" />
       <File FileName="Assets/TextManager.js" Line="1" Column="1" />
@@ -16,7 +16,7 @@
       <File FileName="Assets/DifficultyOptions.js" Line="1" Column="1" />
       <File FileName="Assets/HintButton.js" Line="1" Column="1" />
       <File FileName="Assets/references.txt" Line="1" Column="1" />
-      <File FileName="Assets/SceneSetup.js" Line="30" Column="17" />
+      <File FileName="Assets/SceneSetup.js" Line="5" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
