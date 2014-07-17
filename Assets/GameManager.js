@@ -107,7 +107,7 @@ function SetupWalls () {
 }
 
 function HandleWordWrong() {
-	audio.PlayOneShot(sndFailure1, 2.0f);
+	audio.PlayOneShot(sndFailure1, 1.0f);
 	return scoreManager.HandleWordWrong();
 }
 
@@ -535,7 +535,7 @@ function SetupVerse() {
 		var w = clone.renderer.bounds.size.x;
 		var h = clone.renderer.bounds.size.y;
 		var x = Random.Range(screenBounds.x+w*0.5,screenBounds.x+screenBounds.width-w*0.5);
-		var y = screenBounds.y+h*2;
+		var y = screenBounds.y+screenBounds.height+h*2;
 		clone.transform.position = new Vector3(x,y,0);
 		clone.rigidbody2D.isKinematic = true;
 	}
