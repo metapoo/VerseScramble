@@ -55,9 +55,9 @@ function OnGUI() {
 	}
 	
 		
-	titleLabel.fontSize = 0.04882*w;
+	titleLabel.fontSize = 0.07*w;
 	titleLabelShadow.fontSize = titleLabel.fontSize;
-	selectLanguageLabel.fontSize = 0.0292*w;
+	selectLanguageLabel.fontSize = 0.035*w;
 	selectLanguageLabelShadow.fontSize = selectLanguageLabel.fontSize;
 
 }
