@@ -26,8 +26,28 @@ function GetColor() {
 	return renderer.material.color;
 }
 
-function setWord(w : String) {
+function SetMeshLength(l : float) {
+	var mesh = GetComponent(MeshFilter).mesh;
+	var vertices : Vector3[] = mesh.vertices;
+	vertices[0] = Vector3(-0.5*l,-0.5,0);
+	vertices[1] = Vector3(0.5*l,0.5,0);
+	vertices[2] = Vector3(0.5*l,-0.5,0);
+	vertices[3] = Vector3(-0.5*l,0.5,0);
+	mesh.vertices = vertices;
+	mesh.RecalculateBounds();
+	
+	var boxCollider2D : BoxCollider2D = GetComponent(BoxCollider2D);
+	boxCollider2D.size = Vector2(l,1.0);
 
+}
+
+function setWord(w : String) {
+	var mesh = GetComponent(MeshFilter).mesh;
+	
+	for (var i=0;i<mesh.vertices.length;i++) {
+		Debug.Log("vertex " + i + " = " + mesh.vertices[i]);
+	}
+	
 	var language = verseManager.GetLanguage();
 
 	if (language == "zh") {
@@ -45,25 +65,9 @@ function setWord(w : String) {
 	
 	var spriteWidth = renderer.bounds.size.x;
 	var spriteHeight = renderer.bounds.size.y;
+	var padding = 0.2;
 	
-	var xPadding = spriteWidth*0.5;
-	var yPadding = spriteHeight*0.5;
-	
-	var length = word.Length;
-	var newScale : Vector3 = Vector3(
-	(textWidth + xPadding) / spriteWidth,
-	(textHeight + yPadding)/spriteHeight, 1);
-	transform.localScale = newScale;
-/*	
-	Debug.Log("lossyScale: " + transform.lossyScale);
-	Debug.Log("localScale: " + transform.localScale);
-	Debug.Log("textWidth = " + textWidth + " spriteWidth = " + spriteWidth);
-	Debug.Log("textHeight = " + textHeight + " spriteHeight = " + spriteHeight);
-*/
-	var ratio = transform.localScale.x/transform.localScale.y;
-	
-	label.transform.localScale.x = label.transform.localScale.x/ratio;
-	label.transform.localScale.y = label.transform.localScale.y;
+	SetMeshLength(textWidth + padding);
 	
 }
 
