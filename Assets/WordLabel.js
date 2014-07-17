@@ -17,6 +17,7 @@ var hinting : boolean = false;
 var floatingPoints : FloatingPoints;
 var enFont : Font;
 var zhFont : Font;
+var oldRotation : Quaternion;
 
 function SetColor(color : Color) {
 	renderer.material.color = color;
@@ -99,6 +100,9 @@ function Update () {
 		if (distance < 0.001) {
 			handleReturnedToVerse();
 		}
+		transform.rotation = Quaternion.Lerp(oldRotation,new Quaternion.Euler(0,0,0),
+		elapsedTime*2);
+		
 	}
 	
 	var rotation = transform.eulerAngles.z;
@@ -121,7 +125,10 @@ function handleTap () {
 }
 
 function calculateVersePosition () {
+	oldRotation = transform.rotation;
+	transform.rotation = new Quaternion.Euler(0,0,0);
 	var spacing = 0.0f;
+	
 	var wordWidth = renderer.bounds.size.x;
 	
 	versePosition.x += wordWidth + spacing;
@@ -130,6 +137,8 @@ function calculateVersePosition () {
 	var screenBounds = GameManager.screenBounds;
 	var maxX = screenBounds.x + screenBounds.width*0.95;
 	var vSpacing = renderer.bounds.size.y;
+	
+	transform.rotation = oldRotation;
 	
 	if ((destination.x + wordWidth*0.5) > maxX) {
 		versePosition = new Vector3(startPosition.x,
@@ -145,7 +154,8 @@ function returnToVerse () {
 	rigidbody2D.gravityScale = 0;
 	rigidbody2D.isKinematic = true;
 	rigidbody2D.velocity = new Vector3(0,0,0);
-	transform.rotation = new Quaternion.Euler(0,0,0);
+	oldRotation = transform.rotation;
+	//transform.rotation = new Quaternion.Euler(0,0,0);
 	calculateVersePosition();
 	gotoVerse = true;
 	
