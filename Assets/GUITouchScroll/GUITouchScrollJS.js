@@ -134,7 +134,7 @@ function OnGUI () //this deals with the display
 	padding = 0.009*h;
 	rowHeight = 0.065*h;
 	catWidth = 0.2*w;
-	scrollBarWidth = 19;
+	scrollBarWidth = 25;
 	bottomMargin = 0.1*h;
 	
 	var customFont = sceneSetup.GetCurrentFont();

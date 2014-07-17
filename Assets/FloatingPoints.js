@@ -12,6 +12,9 @@ function Start () {
 	startTime = Time.time;
 	startingScale = transform.localScale.x;
 	transform.localScale = new Vector3(0,0,1.0f);
+	
+	var textMesh : TextMesh = GetComponent(TextMesh);
+	textMesh.fontSize = 0.07*Screen.width;
 }
 
 function Update () {
@@ -37,7 +40,7 @@ function Update () {
 function SetPoints(dScore : float, right : boolean) {
 		
 	var plusminus = "+";
-	var textMesh = GetComponent(TextMesh);
+	var textMesh : TextMesh = GetComponent(TextMesh);
 	
 	textMesh.color = new Color(0.2,1.0,0.2,1.0);
 	if (!right) {

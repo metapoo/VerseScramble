@@ -11,7 +11,6 @@ var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
 var verseReference : GUIText;
 var verseReferenceShadow : GUIText;
-var feedbackLabel : GUIText;
 var finished : boolean = false;
 var references : Array = new Array();
 var difficulty : Difficulty = Difficulty.Easy;
@@ -26,6 +25,11 @@ var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
+var feedbackLabel : GUIText;
+var timeLabel : GUIText;
+var scoreLabel : GUIText;
+var referenceLabel : GUIText;
+
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
 public var endOfGameOptions : EndOfGameOptions;
@@ -121,6 +125,14 @@ function HandleWordCorrect() {
 
 function SetupUI() {
 	feedbackLabel.text = "";
+	
+	var w = Screen.width;
+	var h = Screen.height;
+	
+	feedbackLabel.fontSize = 0.08*w;
+	scoreLabel.fontSize = 0.06*w;
+	timeLabel.fontSize = 0.06*w;
+	referenceLabel.fontSize = 0.08*w;
 }
 
 function showFeedback(feedbackText : String, time : float) {

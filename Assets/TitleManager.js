@@ -26,6 +26,9 @@ function OnGUI() {
 	style.font = sceneSetup.GetCurrentFont();
 	style.fontSize = 0.02*w;
 	
+	customSkin.box.font = style.font;
+	customSkin.box.fontSize = style.fontSize;
+	
 	GUI.skin = customSkin;
 	var buttonSize = new Vector2(0.1601*w,0.078125*h);
 	
