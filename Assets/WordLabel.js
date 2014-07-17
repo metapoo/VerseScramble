@@ -18,7 +18,16 @@ var floatingPoints : FloatingPoints;
 var enFont : Font;
 var zhFont : Font;
 
+function SetColor(color : Color) {
+	renderer.material.color = color;
+}
+
+function GetColor() {
+	return renderer.material.color;
+}
+
 function setWord(w : String) {
+
 	var language = verseManager.GetLanguage();
 
 	if (language == "zh") {
@@ -33,9 +42,9 @@ function setWord(w : String) {
 	word = w;
 	var textWidth = label.renderer.bounds.size.x;
 	var textHeight = label.renderer.bounds.size.y;
-	var sr : SpriteRenderer = GetComponent("SpriteRenderer");
-	var spriteWidth = sr.sprite.bounds.size.x;
-	var spriteHeight = sr.sprite.bounds.size.y;
+	
+	var spriteWidth = renderer.bounds.size.x;
+	var spriteHeight = renderer.bounds.size.y;
 	
 	var xPadding = spriteWidth*0.5;
 	var yPadding = spriteHeight*0.5;
@@ -146,14 +155,14 @@ function HintAt() {
 }
 
 function Blink() {
-	var oldColor : Color = GetComponent(SpriteRenderer).color;
-	var blinkColor : Color = Color(0.2,0.8,0.2,1.0);
-	GetComponent(SpriteRenderer).color = blinkColor;
+	var blinkColor : Color = Color(0.3,0.8,0.3,1.0);
+	SetColor(blinkColor);
 	yield WaitForSeconds(0.2);
-	GetComponent(SpriteRenderer).color = oldColor;
+	SetColor(Color.white);
 }
 
 function OnMouseDown() { 
+
     var ray : Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     var hit : RaycastHit2D = Physics2D.GetRayIntersection(ray,Mathf.Infinity);
     var wasReallyHit : boolean = false;  
@@ -175,17 +184,16 @@ function OnMouseDown() {
 	}
 	
 	if (word == GameManager.currentWord) {
-		GetComponent(SpriteRenderer).color = Color.white;
+		SetColor(Color.white);
 		returnToVerse();
 		dScore = gameManager.HandleWordCorrect();
 		right = true;
 		VerseManager.SpeakUtterance(word);
 	} else {
-		var oldColor : Color = GetComponent(SpriteRenderer).color;
-		GetComponent(SpriteRenderer).color = Color(1.0,0.5,0.5,0.8);
-		yield WaitForSeconds(0.1);
-		GetComponent(SpriteRenderer).color = oldColor;
 		dScore = gameManager.HandleWordWrong();
+		SetColor(Color(0.8,0.3,0.3,1.0));
+		yield WaitForSeconds(0.1);
+		SetColor(Color.white);
 	}
 	
 	if (dScore != 0) {

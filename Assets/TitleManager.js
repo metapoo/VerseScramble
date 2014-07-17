@@ -67,7 +67,7 @@ function Start () {
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	var gt = TextManager.GetText;
 	
-	titleLabel.guiText.text = gt("Bible Verse Scramble");
+	titleLabel.guiText.text = gt("Bible Verse Rain");
 	titleLabelShadow.guiText.text = titleLabel.guiText.text;
 	
 	selectLanguageLabel.guiText.text = gt("Select Language");
