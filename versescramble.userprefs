@@ -1,22 +1,24 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GUITouchScroll/GUITouchScrollJS.js">
+﻿<Properties GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/verses_zh.txt">
     <Files>
+      <File FileName="Assets/GameManager.js" Line="631" Column="2" />
+      <File FileName="Assets/TitleManager.js" Line="81" Column="2" />
       <File FileName="Assets/VerseManager.js" Line="49" Column="1" />
-      <File FileName="Assets/GameManager.js" Line="1" Column="1" />
-      <File FileName="Assets/TitleManager.js" Line="23" Column="2" />
-      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="199" Column="54" />
-      <File FileName="Assets/ExitButton.js" Line="1" Column="1" />
+      <File FileName="Assets/GUITouchScroll/GUITouchScrollJS.js" Line="278" Column="1" />
+      <File FileName="Assets/ExitButton.js" Line="56" Column="2" />
       <File FileName="Assets/ScoreManager.js" Line="1" Column="1" />
       <File FileName="Assets/TextManager.js" Line="1" Column="1" />
-      <File FileName="Assets/WordLabel.js" Line="1" Column="1" />
-      <File FileName="Assets/FloatingPoints.js" Line="1" Column="1" />
+      <File FileName="Assets/WordLabel.js" Line="197" Column="1" />
+      <File FileName="Assets/FloatingPoints.js" Line="51" Column="2" />
       <File FileName="Assets/VerseListManager.js" Line="17" Column="2" />
-      <File FileName="Assets/EndOfGameOptions.js" Line="1" Column="1" />
+      <File FileName="Assets/EndOfGameOptions.js" Line="129" Column="2" />
       <File FileName="Assets/DifficultyOptions.js" Line="1" Column="1" />
       <File FileName="Assets/HintButton.js" Line="1" Column="1" />
       <File FileName="Assets/references.txt" Line="1" Column="1" />
-      <File FileName="Assets/SceneSetup.js" Line="5" Column="1" />
+      <File FileName="Assets/RefreshButton.js" Line="1" Column="1" />
+      <File FileName="Assets/RefreshButton.js.meta" Line="1" Column="1" />
+      <File FileName="Assets/verses_zh.txt" Line="123" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
