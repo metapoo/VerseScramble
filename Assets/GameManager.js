@@ -235,8 +235,8 @@ function AnimateIntro() {
 	
 	var startScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
 	var endScale : Vector3 = new Vector3(0.5,0.5,1.0f);
-	var startFont : float = 70;
-	var endFont : float = 35;
+	var startFont : float = 70.0/1024*Screen.width;
+	var endFont : float = 35.0/1024*Screen.width;
 	
 	ChangeFontOverTime(verseReference, 1, startFont, duration);
 	ChangeFontOverTime(verseReferenceShadow, 1, startFont, duration);

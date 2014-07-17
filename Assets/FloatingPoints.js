@@ -13,8 +13,6 @@ function Start () {
 	startingScale = transform.localScale.x;
 	transform.localScale = new Vector3(0,0,1.0f);
 	
-	var textMesh : TextMesh = GetComponent(TextMesh);
-	textMesh.fontSize = 0.07*Screen.width;
 }
 
 function Update () {
