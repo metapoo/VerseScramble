@@ -128,9 +128,9 @@ function SetupUI() {
 	var h = Screen.height;
 	
 	feedbackLabel.fontSize = 0.08*w;
-	scoreLabel.fontSize = 0.09*w;
-	timeLabel.fontSize = 0.12*w;
-	referenceLabel.fontSize = 0.1*w;
+	scoreLabel.transform.localScale = Vector3(0.09, 0.09,1);
+	timeLabel.transform.localScale = Vector3(0.12, 0.12,1);
+	
 	
 	scoreLabel.transform.position = new Vector3(screenBounds.x+screenBounds.width*0.95,
 												screenBounds.y-screenBounds.height*0.05,1);
@@ -234,9 +234,9 @@ function AnimateIntro() {
 	
 	var duration : float = 0.25f;
 	referenceLabel.transform.position = center;
-	
-	var startScale : Vector3 = new Vector3(0.15f,0.15f,1.0f);
-	var endScale : Vector3 = new Vector3(0.1f,0.1f,1.0f);
+	var w = Screen.width;
+	var startScale : Vector3 = new Vector3(0.12f,0.12f,1.0f);
+	var endScale : Vector3 = new Vector3(0.06f,0.06f,1.0f);
 	
 	ScaleOverTime(referenceLabel.transform, Vector3(0,0,0), startScale, duration);
 	
