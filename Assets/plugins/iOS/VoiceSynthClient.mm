@@ -13,8 +13,6 @@
 
 @end
 
-static AVSpeechSynthesizer *_synthesizer = nil;
-
 // Converts C style string to NSString
 NSString* CreateNSString (const char* string)
 {
@@ -41,18 +39,13 @@ extern "C" {
 	void _SpeakUtterance (const char* text, const char* language)
 	{
         NSString *languageString = CreateNSString(language);
-        
-        if (_synthesizer == nil) {
-            _synthesizer = [[AVSpeechSynthesizer alloc] init];
-        }
-
+        AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
         
         AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:CreateNSString(text)];
 
         utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
         [utterance setRate:0.2f];
-        [_synthesizer speakUtterance:utterance];
-
-
+        [synthesizer speakUtterance:utterance];
+        [synthesizer release];
 	}
 }
