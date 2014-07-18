@@ -19,7 +19,7 @@ var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
-var mistakeTimePenalty : float = 3;
+private var mistakeTimePenalty : float = 5;
 
 function HandleWordWrong() {
 	streak = 0;
@@ -78,9 +78,9 @@ function CalculateMaxTime() {
 	var n = gameManager.words.length;
 	
 	if (GameManager.GetChallengeModeEnabled()) {
-		return 5+n*3;
+		return 2+n*2;
 	} else {
-		return 5+n*5;
+		return 2+n*4;
 	}
 }
 
@@ -97,6 +97,15 @@ function resetStats() {
 
 function SetupUI() {
 	updateScoreLabel();
+}
+
+function CountTimeUpTo(newTime : int) {
+	var dt = 0.1f;
+	while (newTime > maxTime) {
+		maxTime += 1;
+		audio.PlayOneShot(sndSelect, 1.0f);
+		yield WaitForSeconds(dt);
+	}
 }
 
 function CountTimeLeft() {

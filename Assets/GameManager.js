@@ -521,8 +521,11 @@ function SetupVerse() {
 	currentWord = words[wordIndex];
 	
 	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
-		scoreManager.maxTime = scoreManager.CalculateMaxTime() + oldTime;
+		var maxTime = scoreManager.CalculateMaxTime() + oldTime;
+		scoreManager.CountTimeUpTo(maxTime);
 		scoreManager.score = oldScore;
+		scoreManager.maxTime = oldTime;
+		yield WaitForSeconds(0.1*(maxTime-oldTime));
 	} else {
 		scoreManager.maxTime = scoreManager.CalculateMaxTime();
 	}
