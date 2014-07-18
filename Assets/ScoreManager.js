@@ -3,7 +3,7 @@
 import TextManager;
 
 var scoreLabel : TextMesh;
-var timeLabel : GUIText;
+var timeLabel : TextMesh;
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
@@ -90,7 +90,6 @@ function resetStats() {
 
 function SetupUI() {
 	updateScoreLabel();
-	timeLabel.transform.position.x = 0.5f - timeLabel.GetScreenRect().width*0.5f/mainCamera.pixelWidth;
 }
 
 function CountTimeLeft() {

@@ -24,7 +24,7 @@ var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
 var feedbackLabel : GUIText;
-var timeLabel : GUIText;
+var timeLabel : TextMesh;
 var scoreLabel : TextMesh;
 var referenceLabel : TextMesh;
 
@@ -128,12 +128,15 @@ function SetupUI() {
 	var h = Screen.height;
 	
 	feedbackLabel.fontSize = 0.08*w;
-	scoreLabel.fontSize = 0.1*w;
-	timeLabel.fontSize = 0.06*w;
+	scoreLabel.fontSize = 0.09*w;
+	timeLabel.fontSize = 0.12*w;
 	referenceLabel.fontSize = 0.1*w;
 	
 	scoreLabel.transform.position = new Vector3(screenBounds.x+screenBounds.width*0.95,
 												screenBounds.y-screenBounds.height*0.05,1);
+												
+	timeLabel.transform.position = new Vector3(screenBounds.x+screenBounds.width*0.5,
+											   screenBounds.y-screenBounds.height*0.05,1);
 }
 
 function showFeedback(feedbackText : String, time : float) {
