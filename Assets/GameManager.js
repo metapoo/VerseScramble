@@ -23,7 +23,7 @@ var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
-var feedbackLabel : GUIText;
+var feedbackLabel : TextMesh;
 var timeLabel : TextMesh;
 var scoreLabel : TextMesh;
 var referenceLabel : TextMesh;
@@ -99,9 +99,9 @@ function SetupWalls () {
 									  y,
 									  0);
 									  
-	screenBounds = Rect(leftWall.center.x,topWall.center.y,
-	rightWall.center.x-leftWall.center.x,
-	topWall.center.y-bottomWall.center.y);
+	screenBounds = Rect(leftWall.center.x+0.5,topWall.center.y-0.5,
+	rightWall.center.x-leftWall.center.x-1.0,
+	topWall.center.y-bottomWall.center.y-1.0);
 }
 
 function HandleWordWrong() {
@@ -124,19 +124,16 @@ function HandleWordCorrect() {
 function SetupUI() {
 	feedbackLabel.text = "";
 	
-	var w = Screen.width;
-	var h = Screen.height;
+	var w = screenBounds.width;
+	var h = screenBounds.height;
 	
-	feedbackLabel.fontSize = 0.08*w;
-	scoreLabel.transform.localScale = Vector3(0.09, 0.09,1);
-	timeLabel.transform.localScale = Vector3(0.12, 0.12,1);
-	
-	
-	scoreLabel.transform.position = new Vector3(screenBounds.x+screenBounds.width*0.95,
-												screenBounds.y-screenBounds.height*0.05,1);
+	feedbackLabel.transform.position =	new Vector3(screenBounds.x+w*0.5,
+												screenBounds.y-h*0.7,1);
+	scoreLabel.transform.position = new Vector3(screenBounds.x+w*0.98,
+												screenBounds.y-h*0.02,1);
 												
-	timeLabel.transform.position = new Vector3(screenBounds.x+screenBounds.width*0.5,
-											   screenBounds.y-screenBounds.height*0.05,1);
+	timeLabel.transform.position = new Vector3(screenBounds.x+w*0.5,
+											   screenBounds.y-h*0.02,1);
 }
 
 function showFeedback(feedbackText : String, time : float) {
@@ -217,8 +214,8 @@ function moveReferenceToTopLeft() {
 	var duration : float = 0.5;
 	var start : Vector3 = referenceLabel.transform.position;
 	var refSize = referenceLabel.renderer.bounds.size;
-	var destination : Vector3 = new Vector3(screenBounds.x+refSize.x*0.5+screenBounds.width*0.05, 
-	screenBounds.y-refSize.y*0.5-screenBounds.width*0.035, 1);
+	var destination : Vector3 = new Vector3(screenBounds.x+refSize.x*0.5+screenBounds.width*0.02, 
+	screenBounds.y-refSize.y*0.5-screenBounds.width*0.02, 1);
 	
 	
 	Translation(referenceLabel.transform, start, destination, duration);
