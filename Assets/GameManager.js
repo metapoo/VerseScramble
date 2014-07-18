@@ -25,7 +25,7 @@ var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
 var feedbackLabel : GUIText;
 var timeLabel : GUIText;
-var scoreLabel : GUIText;
+var scoreLabel : TextMesh;
 var referenceLabel : TextMesh;
 
 public var needToSelectDifficulty : boolean = true;
@@ -128,9 +128,12 @@ function SetupUI() {
 	var h = Screen.height;
 	
 	feedbackLabel.fontSize = 0.08*w;
-	scoreLabel.fontSize = 0.06*w;
+	scoreLabel.fontSize = 0.1*w;
 	timeLabel.fontSize = 0.06*w;
 	referenceLabel.fontSize = 0.1*w;
+	
+	scoreLabel.transform.position = new Vector3(screenBounds.x+screenBounds.width*0.95,
+												screenBounds.y-screenBounds.height*0.05,1);
 }
 
 function showFeedback(feedbackText : String, time : float) {

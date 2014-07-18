@@ -2,7 +2,7 @@
 
 import TextManager;
 
-var scoreLabel : GUIText;
+var scoreLabel : TextMesh;
 var timeLabel : GUIText;
 var score : int = 0;
 var streak : int = 0;
