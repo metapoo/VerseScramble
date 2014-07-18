@@ -47,17 +47,23 @@ static var screenBounds : Rect;
 static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
+static var challengeModeState : int = -1;
 
 private var windowRect : Rect;
 
 static function SetChallengeModeEnabled(enabled : boolean) {
 	var enabledInt = 0;
 	if (enabled) enabledInt = 1;
+	challengeModeState = enabledInt;
 	PlayerPrefs.SetInt("challenge_mode", enabledInt);
 }
 
 static function GetChallengeModeEnabled() {
-	return PlayerPrefs.GetInt("challenge_mode") == 1;
+	if (challengeModeState == -1) {
+		return PlayerPrefs.GetInt("challenge_mode") == 1;
+	} else {
+		return challengeModeState == 1;
+	}
 }
 
 
@@ -287,7 +293,7 @@ function SplitVerse(verse : String) {
 		clauseBreakMultiplier = 2.0f;
 	}
 	
-	Debug.Log("phrase length = " + phraseLength);
+	//Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
 	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
@@ -305,7 +311,7 @@ function SplitVerse(verse : String) {
 			if (s == c) {
 				if ((clause != "") && (clause != " ") && (clause != "  ")) {
 					clauseArray.push(clause);
-					Debug.Log("clause : " + clause);
+					//Debug.Log("clause : " + clause);
 				}
 				clause = "";
 			}
@@ -314,7 +320,7 @@ function SplitVerse(verse : String) {
 	
 	if ((clause != "") && (clause != " ") && (clause != "  ")) {
 		clauseArray.push(clause);
-		Debug.Log("clause : " + clause);
+		//Debug.Log("clause : " + clause);
 	}
 	
 		
@@ -439,7 +445,7 @@ function SplitVerseWordByWord(verse : String) {
 			phraseLength = 6;
 			break;
 	}
-	Debug.Log("phrase length = " + phraseLength);
+	//Debug.Log("phrase length = " + phraseLength);
 	var wordsArray : Array;
 	var phraseArray : Array = new Array();
 
@@ -487,6 +493,9 @@ function BeginGame() {
 }
 
 function SetupVerse() {
+	var oldScore = scoreManager.score;
+	var oldTime = scoreManager.timeLeft;
+	
 	gameStarted = false;
 	showingSolution = false;
 	scoreManager.reset();
@@ -510,7 +519,13 @@ function SetupVerse() {
 	words = SplitVerse(verse);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
-	scoreManager.maxTime = scoreManager.CalculateMaxTime();
+	
+	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
+		scoreManager.maxTime = scoreManager.CalculateMaxTime() + oldTime;
+		scoreManager.score = oldScore;
+	} else {
+		scoreManager.maxTime = scoreManager.CalculateMaxTime();
+	}
 	
 	var dy = screenBounds.y;
 	
@@ -541,11 +556,10 @@ function SetupVerse() {
 	}
 	numWordsReleased = wordLabels.length;
 	
-	
 }
 
  function releaseWords(index: int) {
- 	Debug.Log("release words index = " + index);
+ 	//Debug.Log("release words index = " + index);
  
 	var groupSize : int = 3;
 	
@@ -587,11 +601,20 @@ function StartAnotherVerse() {
 }
 
 function HandleVerseFinished() {
-	finished = true;
-	gameStarted = false;
-	yield WaitForSeconds(1);
-	Debug.Log("verse finished");
-	scoreManager.HandleFinished();	
+	if (GetChallengeModeEnabled()) {
+		if (verseManager.verseIndex < (verseManager.references.length-1)) {
+			finished = true;
+			yield WaitForSeconds(2);
+			StartAnotherVerse();
+		} else {
+		}
+	} else {
+		finished = true;
+		gameStarted = false;
+		yield WaitForSeconds(1);
+		//Debug.Log("verse finished");
+		scoreManager.HandleFinished();
+	}
 }
 
 function ShowHint() {

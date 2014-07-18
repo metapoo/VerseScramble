@@ -49,7 +49,7 @@ function HandleWordCorrect(elapsedTime : float) {
 	moves = moves + 1;
 	var dScore = timeLeft;
 	score += dScore;
-	Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
+	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
 	return dScore;
 }
 
@@ -78,9 +78,9 @@ function CalculateMaxTime() {
 	var n = gameManager.words.length;
 	
 	if (GameManager.GetChallengeModeEnabled()) {
-		return n*3;
+		return 5+n*3;
 	} else {
-		return n*5;
+		return 5+n*5;
 	}
 }
 
@@ -91,6 +91,8 @@ function resetStats() {
 	score = 0;
 	maxTime = CalculateMaxTime();
 	updateScoreLabel();
+	
+	var theTrace = new System.Diagnostics.StackTrace();
 }
 
 function SetupUI() {
@@ -113,7 +115,9 @@ function CountTimeLeft() {
 }
 
 function HandleFinished() {
-	CountTimeLeft();
+	if (!GameManager.GetChallengeModeEnabled()) {
+		CountTimeLeft();
+	}
 }
 
 function HandleCountTimeLeftFinished() {
