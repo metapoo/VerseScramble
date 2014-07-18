@@ -24,23 +24,18 @@ function DifficultyWindow (windowID : int) {
 		selected = true;
 	}
 
-	if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Medium))) {
-		if (verseManager.IsDifficultyAllowed(difficulty.Medium)) {
+	if (verseManager.IsDifficultyAllowed(difficulty.Medium)) {
+		if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Medium))) {
 			difficulty = difficulty.Medium;
 			selected = true;
-		} else {
-			windowText = String.Format(gt("You must master {0} first"),
-			VerseManager.DifficultyToString(Difficulty.Easy));
 		}
 	}	
 	
-	if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Hard))) {
-		if (verseManager.IsDifficultyAllowed(difficulty.Hard)) {
+	if (verseManager.IsDifficultyAllowed(difficulty.Hard)) {
+		if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Hard))) {
+		
 			difficulty = difficulty.Hard;
 			selected = true;
-		} else {
-			windowText = String.Format(gt("You must master {0} first"),
-			VerseManager.DifficultyToString(Difficulty.Medium));
 		}
 	}
 	
