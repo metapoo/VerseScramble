@@ -24,14 +24,16 @@ function DifficultyWindow (windowID : int) {
 		selected = true;
 	}
 
-	if (verseManager.IsDifficultyAllowed(difficulty.Medium)) {
+	if (verseManager.IsDifficultyAllowed(difficulty.Medium) || 
+	    GameManager.GetChallengeModeEnabled()) {
 		if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Medium))) {
 			difficulty = difficulty.Medium;
 			selected = true;
 		}
 	}	
 	
-	if (verseManager.IsDifficultyAllowed(difficulty.Hard)) {
+	if (verseManager.IsDifficultyAllowed(difficulty.Hard) ||
+		GameManager.GetChallengeModeEnabled()) {
 		if (GUILayout.Button (VerseManager.DifficultyToString(Difficulty.Hard))) {
 		
 			difficulty = difficulty.Hard;

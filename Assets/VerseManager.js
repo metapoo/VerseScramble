@@ -201,12 +201,17 @@ function GetGlobalDifficulty__deprecated__() {
 	}
 }
 
+static function GetChallengeModeEnabled() {
+	return PlayerPrefs.GetInt("challenge_mode") == 1;
+}
+
 function GetCurrentDifficulty() {
 	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
 	var reference = currentReference();
 	var verseMetadata =	GetVerseMetadata(reference);
 	var maxDifficultyInt : int = verseMetadata["difficulty"];
-	if (maxDifficultyInt < parseInt(selectedDifficulty)) {
+	if ((maxDifficultyInt < parseInt(selectedDifficulty)) &&
+	    !GetChallengeModeEnabled()) {
 		var cappedDifficulty : Difficulty = GetDifficultyFromInt(maxDifficultyInt);
 		SetDifficulty(cappedDifficulty);
 		return cappedDifficulty;

@@ -50,6 +50,16 @@ static var lastWordTime : float;
 
 private var windowRect : Rect;
 
+static function SetChallengeModeEnabled(enabled : boolean) {
+	var enabledInt = 0;
+	if (enabled) enabledInt = 1;
+	PlayerPrefs.SetInt("challenge_mode", enabledInt);
+}
+
+static function GetChallengeModeEnabled() {
+	return PlayerPrefs.GetInt("challenge_mode") == 1;
+}
+
 
 function OnGUI() {
 
@@ -106,7 +116,7 @@ function SetupWalls () {
 
 function HandleWordWrong() {
 	audio.PlayOneShot(sndFailure1, 1.0f);
-	return scoreManager.HandleWordWrong();
+	return scoreManager.HandleWordWrong()+"s";
 }
 
 function HandleWordCorrect() {
@@ -235,15 +245,22 @@ function Start() {
 	SetupUI();
 	SetVerseReference("",false);
 	
-	if (needToSelectDifficulty && 
-	    (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
-		ShowDifficultyOptions();
+	if (GetChallengeModeEnabled()) {
+		if (verseManager.verseIndex == 0) {
+			ShowDifficultyOptions();
+		} else {
+			BeginGame();
+		}
 	} else {
-		BeginGame();
+		if (needToSelectDifficulty && 
+		    (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
+			ShowDifficultyOptions();
+		} else {
+			BeginGame();
+		}
+	
+		needToSelectDifficulty = true;
 	}
-	
-	needToSelectDifficulty = true;
-	
 }
 
 function SetVerseReference (reference : String, showDifficulty : boolean) {
@@ -580,12 +597,11 @@ function HandleVerseFinished() {
 function ShowHint() {
 	wordHinted = true;	
 	var wObject : WordLabel;
-	var dScore = -1*scoreManager.maxTime;
 	
 	for (wObject in wordLabels) {
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 			wObject.HintAt();
-			return scoreManager.HandleWordWrong();
+			return 2*scoreManager.HandleWordWrong();
 		}
 	}
 	return 0;

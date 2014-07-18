@@ -109,8 +109,17 @@ function HandleRowSelected(selected : int) {
 	Debug.Log("selecting verse " + selected);
 	verseManager.verseIndex = selected;
 	verseManager.Save();
+	GameManager.SetChallengeModeEnabled(false);
 	Application.LoadLevel("scramble");
 }
+
+function StartChallenge() {
+	verseManager.verseIndex = 0;
+	verseManager.Save();
+	GameManager.SetChallengeModeEnabled(true);
+	Application.LoadLevel("scramble");
+}
+
 
 function Start () 
 {
@@ -167,11 +176,9 @@ function OnGUI () //this deals with the display
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
 	var gt = TextManager.GetText;
-	var headerText = String.Format("{0}:{1} {2}:{3} {4}:{5}/{6} ",
+	var headerText = String.Format("{0}:{1} {2}:{3}/{4} ",
 	gt("Score"),
 	totalScore,
-	gt("Difficulty"),
-	diffString, 
 	gt("Mastered"),
 	verseManager.GetMasteredVerses(), verseManager.verses.length);
 	GUI.Label(headerRect, headerText, headerStyle);
@@ -221,6 +228,12 @@ function DoWindow (windowID : int) //here you build the table
 	var rBtn :Rect = Rect(0, 0, rowSize.x, rowHeight);
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
+	
+	if (GUI.Button(rBtn, TextManager.GetText("Play Challenge (All Verses)"), rowHardStyle)) {
+		StartChallenge();
+		return;
+	}
+	rBtn.y += rowHeight + padding;
 	
 	for (var iRow : int = 0; 
 		iRow < numRows;

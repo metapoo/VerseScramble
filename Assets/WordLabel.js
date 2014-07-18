@@ -184,6 +184,7 @@ function OnMouseDown() {
 	if (!wasReallyHit) return;
 	 
 	var dScore = 0;
+	var str = "";
 	var right = false;
 	hinting = false;
 	
@@ -200,15 +201,23 @@ function OnMouseDown() {
 		right = true;
 		VerseManager.SpeakUtterance(word);
 	} else {
-		dScore = gameManager.HandleWordWrong();
+		str = gameManager.HandleWordWrong();
 		SetColor(Color(0.8,0.3,0.3,1.0));
 		yield WaitForSeconds(0.1);
+		right = false;
 		SetColor(Color.white);
 	}
 	
-	if (dScore != 0) {
+	if ((dScore != 0) || (str != "")) {
 		var clone : FloatingPoints;
 		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
+	}
+	
+	if (dScore != 0) {
 		clone.SetPoints(dScore, right);
+	}
+	
+	if (str != "") {
+		clone.SetString(str, right);
 	}
 }

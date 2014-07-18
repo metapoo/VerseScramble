@@ -19,14 +19,13 @@ var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
+var mistakeTimePenalty : float = 3;
 
 function HandleWordWrong() {
 	streak = 0;
 	moves = moves + 1;
 	mistakes = mistakes + 1;
-	var dScore = -1*maxTime;
-	score += dScore;
-	return dScore;
+	return -1*mistakeTimePenalty;
 }
 
 function HandleWordCorrect(elapsedTime : float) {
@@ -76,7 +75,13 @@ function updateScoreLabel() {
 }
 
 function CalculateMaxTime() {
-	return gameManager.words.length*5;
+	var n = gameManager.words.length;
+	
+	if (GameManager.GetChallengeModeEnabled()) {
+		return n*3;
+	} else {
+		return n*5;
+	}
 }
 
 function resetStats() {
@@ -163,7 +168,7 @@ function Update () {
 		} else {
 			totalElapsedTime = 0;
 		}
-		timeLeft = maxTime - totalElapsedTime;
+		timeLeft = maxTime - totalElapsedTime - mistakes*mistakeTimePenalty;
 	}
 	updateScoreLabel();
 }

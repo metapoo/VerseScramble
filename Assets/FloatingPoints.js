@@ -49,3 +49,13 @@ function SetPoints(dScore : float, right : boolean) {
 	Debug.Log(String.Format("SetPoints = {0}{1}",plusminus,dScore));
 	textMesh.text = String.Format("{0}{1}",plusminus,dScore);
 }
+
+function SetString(str : String, right : boolean) {
+	var textMesh : TextMesh = GetComponent(TextMesh);
+	textMesh.color = new Color(0.2,1.0,0.2,1.0);
+	if (!right) {
+		textMesh.color = new Color(1.0,0.1,0.1,1.0);
+	}
+	textMesh.text = str;
+}
+

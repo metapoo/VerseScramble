@@ -7,11 +7,11 @@ var floatingPoints : FloatingPoints;
 
 function OnMouseDown() {
 	audio.PlayOneShot(sndSelect,1.0);
-	var dScore = gameManager.ShowHint();
-	
+	var dTime = gameManager.ShowHint();
+	var str = dTime + "s";
 	var clone : FloatingPoints;
 	clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
-	clone.SetPoints(dScore, false);
+	clone.SetString(str, false);
 }
 
 function OnMouseUp() {
