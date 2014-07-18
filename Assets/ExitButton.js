@@ -30,7 +30,7 @@ function OnMouseUp() {
 
 function Start () {
 	var sr : SpriteRenderer = GetComponent("SpriteRenderer");
-	sr.color = new Color(0.5f, 155.0/255.0, 1.0f, 1f);
+	sr.color = new Color(80.0/255.0, 89.0/255.0, 184.0/255.0, 1f);
 }
 
 function Update () {
