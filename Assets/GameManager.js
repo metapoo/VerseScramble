@@ -9,7 +9,6 @@ var topWall : BoxCollider2D;
 var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
-var verseReference : GUIText;
 var finished : boolean = false;
 var references : Array = new Array();
 var difficulty : Difficulty = Difficulty.Easy;
@@ -27,7 +26,7 @@ var sndFailure1 : AudioClip;
 var feedbackLabel : GUIText;
 var timeLabel : GUIText;
 var scoreLabel : GUIText;
-var referenceLabel : GUIText;
+var referenceLabel : TextMesh;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -131,7 +130,7 @@ function SetupUI() {
 	feedbackLabel.fontSize = 0.08*w;
 	scoreLabel.fontSize = 0.06*w;
 	timeLabel.fontSize = 0.06*w;
-	referenceLabel.fontSize = 0.08*w;
+	referenceLabel.fontSize = 0.1*w;
 }
 
 function showFeedback(feedbackText : String, time : float) {
@@ -210,43 +209,40 @@ function ChangeFontOverTime (guiText : GUIText, startFont : float, endFont : flo
 
 function moveReferenceToTopLeft() {
 	var duration : float = 0.5;
-	var refRect : Rect = verseReference.GetScreenRect();
-	var rectSize : Vector2 = new Vector2(refRect.width / Screen.width, refRect.height / Screen.height);
-	var center : Vector3 = new Vector3(0.5,0.5,1);
-	var centerS : Vector3 = new Vector3(0.5,0.5,0);
-	var destination : Vector3 = new Vector3(0.05f+rectSize.x*0.5, 0.975-rectSize.y*0.5,1);
-	var destinationS : Vector3 = new Vector3(destination.x, destination.y, 0);
+	var start : Vector3 = referenceLabel.transform.position;
+	var refSize = referenceLabel.renderer.bounds.size;
+	var destination : Vector3 = new Vector3(screenBounds.x+refSize.x*0.5+screenBounds.width*0.05, 
+	screenBounds.y-refSize.y*0.5-screenBounds.width*0.035, 1);
 	
-	Translation(verseReference.transform, center, destination, duration);
+	
+	Translation(referenceLabel.transform, start, destination, duration);
 	
 	yield WaitForSeconds(duration);
+	
 	SetVerseReference(verseManager.currentReference(), true);
 }
 
 
 function AnimateIntro() {
-	var center : Vector3 = new Vector3(0.5,0.5,1);
-	var centerS : Vector3 = new Vector3(0.5,0.5,0);
+	var center : Vector3 = new Vector3(0.0,0.0,1);
+	
 	var duration : float = 0.25f;
-	verseReference.transform.position = center;
+	referenceLabel.transform.position = center;
 	
-	var startScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
-	var endScale : Vector3 = new Vector3(0.5,0.5,1.0f);
-	var startFont : float = 70.0/1024*Screen.width;
-	var endFont : float = 35.0/1024*Screen.width;
+	var startScale : Vector3 = new Vector3(0.15f,0.15f,1.0f);
+	var endScale : Vector3 = new Vector3(0.1f,0.1f,1.0f);
 	
-	ChangeFontOverTime(verseReference, 1, startFont, duration);
-
+	ScaleOverTime(referenceLabel.transform, Vector3(0,0,0), startScale, duration);
+	
 	verseManager.SayVerseReference();	
+
 	yield WaitForSeconds(2.0f);
 	
-	ChangeFontOverTime(verseReference, startFont, endFont, duration);
+	ScaleOverTime(referenceLabel.transform, startScale, endScale, duration);
 	
 	yield WaitForSeconds(duration);
 	
 	moveReferenceToTopLeft();	
-	
-	//ScaleOverTime(verseReference.transform, startScale, endScale, duration);
 	
 	
 }
@@ -274,9 +270,9 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	
 	if (showDifficulty) {
-		verseReference.text = String.Format("{0}\n{1}",reference, diffString);
+		referenceLabel.text = String.Format("{0}\n{1}",reference, diffString);
 	} else {
-		verseReference.text = reference + "\n";
+		referenceLabel.text = reference + "\n";
 	}
 	
 }

@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: e6316cd5694324dddaf5d5cac4e711b6
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: RefreshButton
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
