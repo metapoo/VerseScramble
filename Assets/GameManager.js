@@ -138,14 +138,14 @@ function SetupUI() {
 
 function showFeedback(feedbackText : String, time : float) {
 	feedbackLabel.renderer.enabled = true;
-	SetTextMeshAlpha(feedbackLabel, 1.0);
+	AnimationManager.SetTextMeshAlpha(feedbackLabel, 1.0);
 	var animDuration = 0.25f;
-	ScaleOverTime(feedbackLabel.transform, Vector3(0,0,1), Vector3(0.1,0.1,1), animDuration);
+	AnimationManager.ScaleOverTime(feedbackLabel.transform, Vector3(0,0,1), Vector3(0.1,0.1,1), animDuration);
 	feedbackLabel.text = feedbackText;
 	yield WaitForSeconds(time+animDuration);
 	// there could be another feedback animation running, in which case we want to let that one take over
 	if (feedbackText == feedbackLabel.text) {
-		FadeOverTime(feedbackLabel,1.0,0.0,animDuration);
+		AnimationManager.FadeOverTime(feedbackLabel,1.0,0.0,animDuration);
 	}
 }
 
@@ -186,52 +186,6 @@ function nextWord() {
 	return currentWord;
 }
 
-function Translation (thisTransform : Transform, startPos : Vector3, endPos : Vector3, duration : float) {
-	var rate = 1.0/duration;
-	var t = 0.0;
-	while (t < 1.0) {
-		t += Time.deltaTime * rate;
-		thisTransform.position = Vector3.Lerp(startPos, endPos, t);
-		yield; 
-	}
-}
-
-function SetTextMeshAlpha (textMesh : TextMesh, alpha : float) {
-	var c : Color = textMesh.color;
-	textMesh.color = Color(c[0],c[1],c[2],alpha);
-}
-
-function FadeOverTime(textMesh : TextMesh, startAlpha : float, endAlpha : float, duration : float) {
-	var rate = 1.0/duration;
-	var t = 0.0f;
-	while (t < 1.0) {
-		t += Time.deltaTime * rate;
-		SetTextMeshAlpha(textMesh, startAlpha + (endAlpha-startAlpha)*t);
-		yield;
-	}
-}
-
-function ScaleOverTime (thisTransform : Transform, startScale : Vector3, endScale : Vector3, duration : float) {
-	var rate = 1.0/duration;
-	var t = 0.0;
-	while (t < 1.0) {
-		t += Time.deltaTime * rate;
-		thisTransform.localScale = Vector3.Lerp(startScale, endScale, t);
-		yield;
-	}
-}
-
-
-function ChangeFontOverTime (guiText : GUIText, startFont : float, endFont : float, duration : float) {
-	var rate = 1.0/duration;
-	var t = 0.0;
-	while (t < 1.0) {
-		t += Time.deltaTime * rate;
-		guiText.fontSize = startFont + (endFont - startFont) *t;
-		yield;
-	}
-}
-
 
 function moveReferenceToTopLeft() {
 	var duration : float = 0.5;
@@ -241,7 +195,7 @@ function moveReferenceToTopLeft() {
 	screenBounds.y-refSize.y*0.5-screenBounds.width*0.02, 1);
 	
 	
-	Translation(referenceLabel.transform, start, destination, duration);
+	AnimationManager.Translation(referenceLabel.transform, start, destination, duration);
 	
 	yield WaitForSeconds(duration);
 	
@@ -258,13 +212,13 @@ function AnimateIntro() {
 	var startScale : Vector3 = new Vector3(0.12f,0.12f,1.0f);
 	var endScale : Vector3 = new Vector3(0.06f,0.06f,1.0f);
 	
-	ScaleOverTime(referenceLabel.transform, Vector3(0,0,0), startScale, duration);
+	AnimationManager.ScaleOverTime(referenceLabel.transform, Vector3(0,0,0), startScale, duration);
 	
 	verseManager.SayVerseReference();	
 
 	yield WaitForSeconds(2.0f);
 	
-	ScaleOverTime(referenceLabel.transform, startScale, endScale, duration);
+	AnimationManager.ScaleOverTime(referenceLabel.transform, startScale, endScale, duration);
 	
 	yield WaitForSeconds(duration);
 	
