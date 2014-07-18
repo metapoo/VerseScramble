@@ -3,9 +3,7 @@
 import TextManager;
 
 var scoreLabel : GUIText;
-var scoreLabelShadow : GUIText;
 var timeLabel : GUIText;
-var timeLabelShadow : GUIText;
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
@@ -63,7 +61,6 @@ function calculatedTime() {
 function updateScoreLabel() {
 	
 	scoreLabel.text = score.ToString();
-	scoreLabelShadow.text = score.ToString();
 	if (timeLeft < 0) timeLeft = 0;
 	
 	timeLabel.text = timeLeft.ToString("00");
@@ -76,7 +73,6 @@ function updateScoreLabel() {
 	timeLabel.text = timeStr;
 	
 	*/
-	timeLabelShadow.text = timeLabel.text;
 }
 
 function CalculateMaxTime() {
@@ -95,7 +91,6 @@ function resetStats() {
 function SetupUI() {
 	updateScoreLabel();
 	timeLabel.transform.position.x = 0.5f - timeLabel.GetScreenRect().width*0.5f/mainCamera.pixelWidth;
-	timeLabelShadow.transform.position.x = timeLabel.transform.position.x;
 }
 
 function CountTimeLeft() {

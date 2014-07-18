@@ -48,10 +48,6 @@ function SetMeshLength(l : float) {
 function setWord(w : String) {
 	var mesh = GetComponent(MeshFilter).mesh;
 	
-	for (var i=0;i<mesh.vertices.length;i++) {
-		Debug.Log("vertex " + i + " = " + mesh.vertices[i]);
-	}
-	
 	var language = verseManager.GetLanguage();
 
 	if (language == "zh") {
@@ -64,13 +60,9 @@ function setWord(w : String) {
 	
 	label.text = w;
 	word = w;
+	
 	var textWidth = label.renderer.bounds.size.x;
-	var textHeight = label.renderer.bounds.size.y;
-	
-	var spriteWidth = renderer.bounds.size.x;
-	var spriteHeight = renderer.bounds.size.y;
-	var padding = 0.2;
-	
+	var padding = 0.5;
 	SetMeshLength(textWidth + padding);
 	
 }
@@ -154,6 +146,7 @@ function returnToVerse () {
 	rigidbody2D.isKinematic = true;
 	rigidbody2D.velocity = new Vector3(0,0,0);
 	oldRotation = transform.rotation;
+
 	//transform.rotation = new Quaternion.Euler(0,0,0);
 	calculateVersePosition();
 	gotoVerse = true;

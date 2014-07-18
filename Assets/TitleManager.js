@@ -10,9 +10,7 @@ public var sndSelect : AudioClip;
 public var background : Transform;
 public var mainCam : Camera;
 public var titleLabel : GUIText;
-public var titleLabelShadow : GUIText;
 public var selectLanguageLabel : GUIText;
-public var selectLanguageLabelShadow : GUIText;
 public var sceneSetup : SceneSetup;
 
 private	var selectedDifficulty : Difficulty;
@@ -56,9 +54,7 @@ function OnGUI() {
 	
 		
 	titleLabel.fontSize = 0.07*w;
-	titleLabelShadow.fontSize = titleLabel.fontSize;
 	selectLanguageLabel.fontSize = 0.035*w;
-	selectLanguageLabelShadow.fontSize = selectLanguageLabel.fontSize;
 
 }
 
@@ -68,10 +64,8 @@ function Start () {
 	var gt = TextManager.GetText;
 	
 	titleLabel.guiText.text = gt("Bible Verse Rain");
-	titleLabelShadow.guiText.text = titleLabel.guiText.text;
 	
 	selectLanguageLabel.guiText.text = gt("Select Language");
-	selectLanguageLabelShadow.guiText.text = selectLanguageLabel.guiText.text;
 	
 	
 }

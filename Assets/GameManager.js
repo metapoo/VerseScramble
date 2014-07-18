@@ -10,7 +10,6 @@ var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
 var verseReference : GUIText;
-var verseReferenceShadow : GUIText;
 var finished : boolean = false;
 var references : Array = new Array();
 var difficulty : Difficulty = Difficulty.Easy;
@@ -219,7 +218,6 @@ function moveReferenceToTopLeft() {
 	var destinationS : Vector3 = new Vector3(destination.x, destination.y, 0);
 	
 	Translation(verseReference.transform, center, destination, duration);
-	Translation(verseReferenceShadow.transform, centerS, destinationS, duration);
 	
 	yield WaitForSeconds(duration);
 	SetVerseReference(verseManager.currentReference(), true);
@@ -231,7 +229,6 @@ function AnimateIntro() {
 	var centerS : Vector3 = new Vector3(0.5,0.5,0);
 	var duration : float = 0.25f;
 	verseReference.transform.position = center;
-	verseReferenceShadow.transform.position = centerS;
 	
 	var startScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
 	var endScale : Vector3 = new Vector3(0.5,0.5,1.0f);
@@ -239,20 +236,17 @@ function AnimateIntro() {
 	var endFont : float = 35.0/1024*Screen.width;
 	
 	ChangeFontOverTime(verseReference, 1, startFont, duration);
-	ChangeFontOverTime(verseReferenceShadow, 1, startFont, duration);
 
 	verseManager.SayVerseReference();	
 	yield WaitForSeconds(2.0f);
 	
 	ChangeFontOverTime(verseReference, startFont, endFont, duration);
-	ChangeFontOverTime(verseReferenceShadow, startFont, endFont, duration);
 	
 	yield WaitForSeconds(duration);
 	
 	moveReferenceToTopLeft();	
 	
 	//ScaleOverTime(verseReference.transform, startScale, endScale, duration);
-	//ScaleOverTime(verseReferenceShadow.transform, startScale, endScale, duration);
 	
 	
 }
@@ -285,7 +279,6 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 		verseReference.text = reference + "\n";
 	}
 	
-	verseReferenceShadow.text = verseReference.text;
 }
 
 function SplitVerse(verse : String) {
