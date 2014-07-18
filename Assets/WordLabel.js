@@ -39,11 +39,10 @@ function SetMeshLength(l : float) {
 	
 	var boxCollider2D : BoxCollider2D = GetComponent(BoxCollider2D);
 	boxCollider2D.size = Vector2(l,1.0);
-	var s = 0.25;
+	var s = 1.0;
 	renderer.material.mainTextureScale = Vector2(l*s,1.0*s);
 	var ts : Vector2 = renderer.material.mainTextureScale;
-	renderer.material.mainTextureOffset = Vector2(Random.RandomRange(0,ts[0]),
-	Random.RandomRange(0,ts[1]));
+	//renderer.material.mainTextureOffset = Vector2(Random.RandomRange(0,ts[0]),Random.RandomRange(0,ts[1]));
 }
 
 function setWord(w : String) {
