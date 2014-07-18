@@ -122,7 +122,7 @@ function HandleWordCorrect() {
 }
 
 function SetupUI() {
-	feedbackLabel.text = "";
+	feedbackLabel.renderer.enabled = false;
 	
 	var w = screenBounds.width;
 	var h = screenBounds.height;
@@ -137,9 +137,16 @@ function SetupUI() {
 }
 
 function showFeedback(feedbackText : String, time : float) {
+	feedbackLabel.renderer.enabled = true;
+	SetTextMeshAlpha(feedbackLabel, 1.0);
+	var animDuration = 0.25f;
+	ScaleOverTime(feedbackLabel.transform, Vector3(0,0,1), Vector3(0.1,0.1,1), animDuration);
 	feedbackLabel.text = feedbackText;
-	yield WaitForSeconds(time);
-	feedbackLabel.text = "";
+	yield WaitForSeconds(time+animDuration);
+	// there could be another feedback animation running, in which case we want to let that one take over
+	if (feedbackText == feedbackLabel.text) {
+		FadeOverTime(feedbackLabel,1.0,0.0,animDuration);
+	}
 }
 
 function ShowEndOfGameOptions() {
@@ -189,6 +196,21 @@ function Translation (thisTransform : Transform, startPos : Vector3, endPos : Ve
 	}
 }
 
+function SetTextMeshAlpha (textMesh : TextMesh, alpha : float) {
+	var c : Color = textMesh.color;
+	textMesh.color = Color(c[0],c[1],c[2],alpha);
+}
+
+function FadeOverTime(textMesh : TextMesh, startAlpha : float, endAlpha : float, duration : float) {
+	var rate = 1.0/duration;
+	var t = 0.0f;
+	while (t < 1.0) {
+		t += Time.deltaTime * rate;
+		SetTextMeshAlpha(textMesh, startAlpha + (endAlpha-startAlpha)*t);
+		yield;
+	}
+}
+
 function ScaleOverTime (thisTransform : Transform, startScale : Vector3, endScale : Vector3, duration : float) {
 	var rate = 1.0/duration;
 	var t = 0.0;
@@ -198,6 +220,7 @@ function ScaleOverTime (thisTransform : Transform, startScale : Vector3, endScal
 		yield;
 	}
 }
+
 
 function ChangeFontOverTime (guiText : GUIText, startFont : float, endFont : float, duration : float) {
 	var rate = 1.0/duration;
