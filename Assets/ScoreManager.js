@@ -8,8 +8,6 @@ var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
 var maxMoves : int = 1;
-var mistakes : int = 0;
-var totalMistakes : int = 0;
 var maxTime : int = 0;
 var mainCamera : Camera;
 var gameManager : GameManager;
@@ -21,14 +19,6 @@ var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
-public static var mistakeTimePenalty : float = 5;
-
-function HandleWordWrong() {
-	streak = 0;
-	moves = moves + 1;
-	mistakes = mistakes + 1;
-	return -1*mistakeTimePenalty;
-}
 
 function HandleWordCorrect(elapsedTime : float) {
 	
@@ -56,7 +46,7 @@ function HandleWordCorrect(elapsedTime : float) {
 }
 
 function calculatedTime() {
- 	return totalElapsedTime + mistakes*5;
+ 	return totalElapsedTime;
 }
 
 function updateScoreLabel() {
@@ -78,25 +68,10 @@ function updateScoreLabel() {
 
 function CalculateMaxTime() {
 	var n = gameManager.words.length;
-	
-	if (GameManager.GetChallengeModeEnabled()) {
-		return 2+n*2;
-	} else {
-		return 2+n*4;
-	}
-}
-
-function GetTotalMistakes() {
-	return totalMistakes + mistakes;
+	return 2+n*2;
 }
 
 function resetStats() {
-	if (verseManager.verseIndex == 0) {
-		totalMistakes = 0;
-	} else {
-		totalMistakes += mistakes;
-	}
-	mistakes = 0;
 	moves = 0;
 	streak = 0;
 	score = 0;
@@ -148,9 +123,7 @@ function HandleCountTimeLeftFinished() {
 			categoryMetadata["high_score"] = highScore;
 			verseManager.SaveCategoryMetadata(categoryMetadata);
 		}
-		if ((mistakes == 0) && (score > 0)) {
-			verseManager.HandleCategoryMastered(gameManager.difficulty, categoryMetadata);
-		}
+		verseManager.HandleCategoryMastered(gameManager.difficulty, categoryMetadata);
 	} else {
 		if (score > highScore) {
 			highScore = score;
@@ -158,9 +131,7 @@ function HandleCountTimeLeftFinished() {
 			verseManager.SaveVerseMetadata(verseMetadata);
 		}
 		
-		if ((mistakes == 0) && (score > 0)) {
-			verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
-		}
+		verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
 	}
 	
 	gameManager.ShowEndOfGameOptions();
@@ -211,7 +182,7 @@ function Update () {
 		} else {
 			totalElapsedTime = 0;
 		}
-		timeLeft = maxTime - totalElapsedTime - mistakes*mistakeTimePenalty;
+		timeLeft = maxTime - totalElapsedTime;
 	}
 	updateScoreLabel();
 }

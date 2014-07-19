@@ -123,7 +123,15 @@ function SetupWalls () {
 
 function HandleWordWrong() {
 	audio.PlayOneShot(sndFailure1, 1.0f);
-	return scoreManager.HandleWordWrong()+"s";
+	
+	for (var wordLabel :WordLabel in wordLabels) {
+		wordLabel.Explode();
+	}
+	
+	wordIndex = 0;
+	currentWord = words[wordIndex];
+
+	return "";
 }
 
 function HandleWordCorrect() {
@@ -628,10 +636,8 @@ function ShowHint() {
 	for (wObject in wordLabels) {
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 			wObject.HintAt();
-			return 2*scoreManager.HandleWordWrong();
 		}
 	}
-	return 0;
 }
 
 function Update () {

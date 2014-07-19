@@ -18,6 +18,32 @@ var floatingPoints : FloatingPoints;
 var enFont : Font;
 var zhFont : Font;
 var oldRotation : Quaternion;
+var scoreCredited : float;
+
+function Explode() {
+	if (scoreCredited > 0) {
+		var clone : FloatingPoints;
+		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
+		clone.SetPoints(-1*scoreCredited, false);
+		scoreManager.score -= scoreCredited;
+		scoreCredited = 0;
+	}
+	
+	versePosition = startPosition;
+	hinting = false;
+	collider2D.enabled = true;
+	rigidbody2D.fixedAngle = false;
+	rigidbody2D.isKinematic = false;
+	gotoVerse = false;
+	returnedToVerse = false;
+	rigidbody2D.AddForce (new Vector3(Random.Range(-100,100), Random.Range(500,700), 0));
+	rigidbody2D.gravityScale = 1.0;
+	rigidbody2D.AddTorque(Random.Range(-100,100));
+	
+}
+
+function FixedUpdate() {
+}
 
 function SetColor(color : Color) {
 	renderer.material.color = color;
@@ -76,12 +102,6 @@ function Start () {
 	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
 }
 
-function FixedUpdate() {
-	var m :float = 0.0f;
-	rigidbody2D.AddForce(new Vector3(Random.Range(-m,m),
-	Random.Range(-m,m),0.0f));
-}
-
 function Update () {
 	if (gotoVerse) {
 		var distance = Vector3.Distance(transform.position, destination);
@@ -112,8 +132,6 @@ function handleReturnedToVerse() {
 	gotoVerse = false;
 }
 
-function handleTap () {
-}
 
 function calculateVersePosition () {
 	oldRotation = transform.rotation;
@@ -200,6 +218,7 @@ function OnMouseDown() {
 		dScore = gameManager.HandleWordCorrect();
 		right = true;
 		VerseManager.SpeakUtterance(word);
+		scoreCredited = dScore;
 	} else {
 		str = gameManager.HandleWordWrong();
 		SetColor(Color(0.8,0.3,0.3,1.0));
