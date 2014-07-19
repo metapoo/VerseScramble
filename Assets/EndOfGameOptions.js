@@ -12,17 +12,45 @@ private var gt = TextManager.GetText;
 
 function EndGameWindowForChallenge (windowId : int) {
 	var mistakes = scoreManager.totalMistakes;
+	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
+	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
+	var diffString = verseManager.DifficultyToString(difficulty);
+	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
 	var text = String.Format(gt("You made {0} mistakes"), mistakes);
+	var needToSelectDifficulty : boolean = true;
+
 	if (mistakes == 0) {
 		text = gt("Perfect!");
 	}
+	if ((scoreManager.highScore == scoreManager.score) && (mistakes == 0)) {
+		text = String.Format(gt("New high score {0}!"), scoreManager.score);
+	}	
+	GUILayout.Box(text);
+	
+	var mastered = (mistakes == 0) && (difficulty == difficulty.Hard);
+	var reload = false;
+	
+	if (GUILayout.Button (gt("Try again"))) {
+		reload = true;
+		needToSelectDifficulty = false;
+	}
 
+	if (GUILayout.Button (gt("Back to menu"))) {
+		
+		gameManager.Cleanup();
+		Application.LoadLevel("verselist");
+		return;
+	}
+
+	if (reload) {
+		verseManager.verseIndex = 0;
+		ReloadGame(needToSelectDifficulty);
+	}
 }
 
 // Make the contents of the window
 function EndGameWindow (windowID : int) {
 	var mistakes = scoreManager.mistakes;
-	var clicked = false;
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);

@@ -176,8 +176,7 @@ function MasteredVersesKey(difficulty : Difficulty) {
 	return key;
 }
 
-function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
-	var difficulty : Difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
+static function GetNextDifficulty(difficulty : Difficulty) {
 	switch(difficulty) {
 		case(Difficulty.Easy):
 			difficulty = difficulty.Medium;
@@ -189,15 +188,40 @@ function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
 			difficulty = difficulty.Impossible;
 			break;
 	}
+	return difficulty;
+}
+
+function upgradeDifficultyForCategory(categoryMetadata : Hashtable) {
+	var difficulty : Difficulty = GetDifficultyFromInt(categoryMetadata["difficulty"]);
+	difficulty = GetNextDifficulty(difficulty);
+	categoryMetadata["difficulty"] = parseInt(difficulty);
+	SaveCategoryMetadata(categoryMetadata);
+}
+
+
+function upgradeDifficultyForVerse(verseMetadata : Hashtable) {
+	var difficulty : Difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
+	difficulty = GetNextDifficulty(difficulty);
 	verseMetadata["difficulty"] = parseInt(difficulty);
 	SaveVerseMetadata(verseMetadata);
+}
+
+function HandleCategoryMastered(difficulty : Difficulty, categoryMetadata : Hashtable) {
+	Debug.Log("cat = " + categoryMetadata);
+
+	var categoryDifficultyInt : int = categoryMetadata["difficulty"];
+	var difficultyInt : int = parseInt(difficulty);
+	
+	if (difficultyInt >= categoryDifficultyInt) {
+		upgradeDifficultyForCategory(categoryMetadata);
+	}	
 }
 
 
 function HandleVerseMastered(difficulty : Difficulty, verseMetadata : Hashtable) {
 	var verseDifficultyInt : int = verseMetadata["difficulty"];
 	var difficultyInt : int = parseInt(difficulty);
-	Debug.Log ( verseDifficultyInt + " vs " + difficultyInt);
+	//Debug.Log ( verseDifficultyInt + " vs " + difficultyInt);
 	
 	if (difficultyInt >= verseDifficultyInt) {
 		upgradeDifficultyForVerse(verseMetadata);
@@ -310,12 +334,7 @@ function GetMasteredVersesPercentage() {
 
 function GetNextDifficulty() {
 	var difficulty = GetCurrentDifficulty();
-	switch (difficulty) {
-		case Difficulty.Easy: return Difficulty.Medium;
-		case Difficulty.Medium: return Difficulty.Hard;
-		case difficulty.Hard: return Difficulty.Hard;
-		default: return Difficulty.Hard;
-	}
+	return GetNextDifficulty(difficulty);
 }
 
 function GetMasteredVerses() {

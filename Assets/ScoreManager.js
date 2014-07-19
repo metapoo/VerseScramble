@@ -87,7 +87,11 @@ function CalculateMaxTime() {
 }
 
 function resetStats() {
-	totalMistakes += mistakes;
+	if (verseManager.verseIndex == 0) {
+		totalMistakes = 0;
+	} else {
+		totalMistakes += mistakes;
+	}
 	mistakes = 0;
 	moves = 0;
 	streak = 0;
@@ -135,6 +139,14 @@ function HandleFinished() {
 
 function HandleCountTimeLeftFinished() {
 	if (gameManager.GetChallengeModeEnabled()) {
+		if (score > highScore) {
+			highScore = score;
+			categoryMetadata["high_score"] = highScore;
+			verseManager.SaveCategoryMetadata(categoryMetadata);
+		}
+		if ((mistakes == 0) && (score > 0)) {
+			verseManager.HandleCategoryMastered(gameManager.difficulty, categoryMetadata);
+		}
 	} else {
 		if (score > highScore) {
 			highScore = score;
@@ -156,7 +168,7 @@ function resetTime() {
 }
 
 function reset() {
-	if (gameManager.GetChallengeModeEnabled()) {
+	if (!gameManager.GetChallengeModeEnabled()) {
 		var reference = verseManager.currentReference();
 		verseMetadata = verseManager.GetVerseMetadata(reference);
 		highScore = verseMetadata["high_score"];
