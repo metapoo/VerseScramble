@@ -86,6 +86,10 @@ function CalculateMaxTime() {
 	}
 }
 
+function GetTotalMistakes() {
+	return totalMistakes + mistakes;
+}
+
 function resetStats() {
 	if (verseManager.verseIndex == 0) {
 		totalMistakes = 0;

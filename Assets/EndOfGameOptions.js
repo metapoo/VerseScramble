@@ -11,7 +11,7 @@ private var windowRect : Rect;
 private var gt = TextManager.GetText;
 
 function EndGameWindowForChallenge (windowId : int) {
-	var mistakes = scoreManager.totalMistakes;
+	var mistakes = scoreManager.GetTotalMistakes();
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
@@ -38,6 +38,7 @@ function EndGameWindowForChallenge (windowId : int) {
 	if (GUILayout.Button (gt("Back to menu"))) {
 		
 		gameManager.Cleanup();
+		Destroy(this.gameObject);
 		Application.LoadLevel("verselist");
 		return;
 	}
