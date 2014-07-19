@@ -540,7 +540,10 @@ function SetupVerse() {
 		scoreManager.maxTime = oldTime;
 		scoreManager.CountTimeUpTo(maxTime);
 		
-		yield WaitForSeconds(0.1*(maxTime-oldTime));
+		var duration = 0.1f*(maxTime-oldTime);
+		if ((duration) > 2.0f) duration = 2.0f;
+		
+		yield WaitForSeconds(duration);
 		scoreManager.resetTime();
 	} else {
 		scoreManager.maxTime = scoreManager.CalculateMaxTime();

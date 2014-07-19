@@ -87,6 +87,10 @@ function SetupUI() {
 
 function CountTimeUpTo(newTime : int) {
 	var dt = 0.1f;
+	var diff = newTime-maxTime;
+	if (diff > 20) {
+		dt = 2.0f/diff;
+	}
 	while (newTime > maxTime) {
 		maxTime += 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
