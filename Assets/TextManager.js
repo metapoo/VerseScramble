@@ -33,11 +33,14 @@ class TextManager extends MonoBehaviour {
  
             if (instance == null) 
             {
+            	var notificationObject:GameObject = GameObject.Find("Default TextManager");
+            	
                 // Because the TextManager is a component, we have to create a GameObject to attach it to.
-                var notificationObject:GameObject  = new GameObject("Default TextManager");
- 
-                // Add the DynamicObjectManager component, and set it as the defaultCenter
-          	instance = notificationObject.AddComponent(typeof(TextManager));
+                if (notificationObject == null) {
+	                notificationObject = new GameObject("Default TextManager");
+	                // Add the DynamicObjectManager component, and set it as the defaultCenter
+    		      	instance = notificationObject.AddComponent(typeof(TextManager));
+ 				}
             }
             return instance;
  
