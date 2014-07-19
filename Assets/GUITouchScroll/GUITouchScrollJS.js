@@ -35,6 +35,7 @@ public var topMargin : float;
 public var bottomMargin : float;
 public var rightMargin : float;
 public var scrollBarWidth : float;
+public var currentCategory : String;
 
 public var verseManager : VerseManager;
 public var sceneSetup : SceneSetup;
@@ -177,7 +178,7 @@ function OnGUI () //this deals with the display
 	var totalScore = verseManager.GetCachedTotalScore();
 	var gt = TextManager.GetText;
 	var headerText = String.Format("{0}:{1} {2}:{3}/{4} ",
-	gt("Score"),
+	gt("Total Score"),
 	totalScore,
 	gt("Mastered"),
 	verseManager.GetMasteredVerses(), verseManager.verses.length);
@@ -191,7 +192,7 @@ function OnGUI () //this deals with the display
 	GUI.Label(catHeaderRect, TextManager.GetText("Categories"), headerStyle);
 	
 	var categories = verseManager.categories;
-	var currentCategory = verseManager.GetCurrentCategory();
+	currentCategory = verseManager.GetCurrentCategory();
 	
 	for (var i=0;i<categories.length;i++) {
 		var category : String = categories[i];
@@ -216,6 +217,19 @@ function OnGUI () //this deals with the display
 	
 }
 
+function GetStyleForDifficulty(difficultyInt : int) {
+	switch(difficultyInt) {
+		case 1:
+			return rowEasyStyle;
+		case 2:
+			return rowMediumStyle;
+		case 3:
+			return rowHardStyle;
+		default:
+			return customSkin.button;	
+	}
+}
+
 function DoWindow (windowID : int) //here you build the table
 {
 	var refs = verseManager.GetCurrentReferences();
@@ -229,7 +243,17 @@ function DoWindow (windowID : int) //here you build the table
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	
-	if (GUI.Button(rBtn, TextManager.GetText("Play Challenge (All Verses)"), rowHardStyle)) {
+	var categoryMetadata = verseManager.GetCategoryMetadata(currentCategory);
+	var categoryDifficulty = categoryMetadata["difficulty"];
+	
+	var rowLabel : String = String.Format("{0} \t\t {1}: {2}",
+			TextManager.GetText("Play Challenge (All Verses)"),
+			TextManager.GetText("high score"),
+			categoryMetadata["high_score"]); //this is what will be written in the rows
+	var rowStyle : GUIStyle;
+	rowStyle = GetStyleForDifficulty(categoryDifficulty);
+	
+	if (GUI.Button(rBtn, rowLabel, rowStyle)) {
 		StartChallenge();
 		return;
 	}
@@ -254,19 +278,11 @@ function DoWindow (windowID : int) //here you build the table
 				// verse was mastered
 			} 
 			
-			var rowLabel : String = String.Format("{0} \t\t {1}: {2}",reference,
+			rowLabel = String.Format("{0} \t\t {1}: {2}",reference,
 			TextManager.GetText("high score"),
 			metadata["high_score"]); //this is what will be written in the rows
-	
-			if (verseDifficulty == 1) {
-				fClicked = GUI.Button(rBtn, rowLabel, rowEasyStyle);
-			} else if (verseDifficulty == 2) {
-				fClicked = GUI.Button(rBtn, rowLabel, rowMediumStyle);
-			} else if (verseDifficulty == 3) {
-				fClicked = GUI.Button(rBtn, rowLabel, rowHardStyle);
-			} else {
-				fClicked = GUI.Button(rBtn, rowLabel, customSkin.button);
-			}
+			rowStyle = GetStyleForDifficulty(verseDifficulty);
+			fClicked = GUI.Button(rBtn, rowLabel, rowStyle);
 			
 			// Allow mouse selection, if not running on iPhone.
 			if ( fClicked ) //&& Application.platform != RuntimePlatform.IPhonePlayer )
