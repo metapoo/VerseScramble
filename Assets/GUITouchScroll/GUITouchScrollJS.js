@@ -235,7 +235,7 @@ function DoWindow (windowID : int) //here you build the table
 	var refs = verseManager.GetCurrentReferences();
 	var numRows = refs.length;
 	var rScrollFrame :Rect = Rect(0, 0, listSize.x, listSize.y);
-	var rList :Rect = Rect(0, 0, rowSize.x, numRows*rowHeight);
+	var rList :Rect = Rect(0, 0, rowSize.x, (1+numRows)*(rowHeight+padding));
 	
 	scrollPosition = GUI.BeginScrollView (rScrollFrame, scrollPosition, rList, false, false);
 	
