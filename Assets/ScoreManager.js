@@ -110,13 +110,20 @@ function CountTimeLeft() {
 }
 
 function HandleFinished() {
+	if (gameManager.DidRanOutOfTime) {
+		gameManager.ShowEndOfGameOptions();
+		return;
+	}
+	
 	if (!GameManager.GetChallengeModeEnabled() || 
 	   (verseManager.IsAtFinalVerseOfChallenge())) {
 		CountTimeLeft();
-	} 
+	}
 }
 
 function HandleCountTimeLeftFinished() {
+	
+
 	if (gameManager.GetChallengeModeEnabled()) {
 		if (score > highScore) {
 			highScore = score;
@@ -179,6 +186,9 @@ function Update () {
 	if (!gameManager.finished && !gameManager.showingSolution) {
 		if (gameManager.gameStarted) {
 			totalElapsedTime = Time.time - startTime;
+			if (!gameManager.DidRanOutOfTime && (timeLeft <= 0)) {
+				gameManager.HandleRanOutOfTime();
+			}
 		} else {
 			totalElapsedTime = 0;
 		}

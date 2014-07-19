@@ -15,15 +15,17 @@ function EndGameWindowForChallenge (windowId : int) {
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
-	var text = "";
 	var needToSelectDifficulty : boolean = true;
-
-	if (scoreManager.highScore == scoreManager.score) {
+	var text = String.Format(gt("You scored {0}"), scoreManager.score);
+	
+	if (gameManager.DidRanOutOfTime) {
+		text = gt("You ran out of time.");
+	} else if (scoreManager.highScore == scoreManager.score) {
 		text = String.Format(gt("New high score {0}!"), scoreManager.score);
 	}	
 	GUILayout.Box(text);
 	
-	var mastered = (difficulty == difficulty.Hard);
+	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
 	var reload = false;
 	
 	if (GUILayout.Button (gt("Try again"))) {
@@ -52,20 +54,22 @@ function EndGameWindow (windowID : int) {
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
-	var text = "";
 	var needToSelectDifficulty : boolean = true;
+	var text = String.Format(gt("You scored {0}"), scoreManager.score);
 	
-	if (scoreManager.highScore == scoreManager.score) {
+	if (gameManager.DidRanOutOfTime) {
+		text = gt("You ran out of time.");
+	} else if (scoreManager.highScore == scoreManager.score) {
 		text = String.Format(gt("New high score {0}!"), scoreManager.score);
-	}	
+	} 
 		
 	GUILayout.Box(text);
 	
-	var mastered = (difficulty == difficulty.Hard);
+	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
 	var reload = false;
 	
 	var tryAgain = function() {
-		if (difficulty == difficulty.Hard) {
+		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime)) {
 			if (GUILayout.Button (gt("Try again"))) {
 				reload = true;
 				needToSelectDifficulty = false;

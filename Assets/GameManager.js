@@ -34,6 +34,7 @@ public var endOfGameOptions : EndOfGameOptions;
 public var numWordsReleased : int = 0;
 public var gameStarted : boolean = false;
 public var showingSolution : boolean = false;
+public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
@@ -253,12 +254,15 @@ function AnimateIntro() {
 }
 
 function Start() {
+
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
 	
 	SetupWalls();
 	SetupUI();
 	SetVerseReference("",false);
+	
+	DidRanOutOfTime = false;
 	
 	if (GetChallengeModeEnabled()) {
 		if (verseManager.verseIndex == 0) {
@@ -537,6 +541,7 @@ function SetupVerse() {
 		scoreManager.CountTimeUpTo(maxTime);
 		
 		yield WaitForSeconds(0.1*(maxTime-oldTime));
+		scoreManager.resetTime();
 	} else {
 		scoreManager.maxTime = scoreManager.CalculateMaxTime();
 	}
@@ -614,11 +619,24 @@ function StartAnotherVerse() {
 	BeginGame();
 }
 
+function HandleRanOutOfTime() {
+	Debug.Log("RAN OUT OF TIME");
+	DidRanOutOfTime = true;
+	
+	for (var wordLabel : WordLabel in wordLabels) {
+		wordLabel.collider2D.enabled = false;
+	}
+	
+	HandleVerseFinished();
+
+}
+
 function HandleVerseFinished() {
 	if (GetChallengeModeEnabled() &&
-		!verseManager.IsAtFinalVerseOfChallenge()) {
+		!verseManager.IsAtFinalVerseOfChallenge() &&
+		!DidRanOutOfTime) {
 		finished = true;
-		yield WaitForSeconds(2);
+		yield WaitForSeconds(4);
 		StartAnotherVerse();
 	} else {
 		finished = true;

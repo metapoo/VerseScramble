@@ -39,7 +39,8 @@ function Explode() {
 	rigidbody2D.AddForce (new Vector3(Random.Range(-100,100), Random.Range(500,700), 0));
 	rigidbody2D.gravityScale = 1.0;
 	rigidbody2D.AddTorque(Random.Range(-100,100));
-	
+	yield WaitForSeconds(3);
+	rigidbody2D.gravityScale = 0.2;
 }
 
 function FixedUpdate() {
