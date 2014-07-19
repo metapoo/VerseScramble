@@ -9,17 +9,19 @@ var streak : int = 0;
 var moves : int = 0;
 var maxMoves : int = 1;
 var mistakes : int = 0;
+var totalMistakes : int = 0;
 var maxTime : int = 0;
 var mainCamera : Camera;
 var gameManager : GameManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
+var categoryMetadata : Hashtable;
 var highScore : int;
 var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
-private var mistakeTimePenalty : float = 5;
+public static var mistakeTimePenalty : float = 5;
 
 function HandleWordWrong() {
 	streak = 0;
@@ -85,6 +87,7 @@ function CalculateMaxTime() {
 }
 
 function resetStats() {
+	totalMistakes += mistakes;
 	mistakes = 0;
 	moves = 0;
 	streak = 0;
@@ -124,19 +127,24 @@ function CountTimeLeft() {
 }
 
 function HandleFinished() {
-	if (!GameManager.GetChallengeModeEnabled()) {
+	if (!GameManager.GetChallengeModeEnabled() || 
+	   (verseManager.IsAtFinalVerseOfChallenge())) {
 		CountTimeLeft();
-	}
+	} 
 }
 
 function HandleCountTimeLeftFinished() {
-	if (score > highScore) {
-		highScore = score;
-		verseMetadata["high_score"] = highScore;
-		verseManager.SaveVerseMetadata(verseMetadata);
-	}
-	if ((mistakes == 0) && (score > 0)) {
-		verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
+	if (gameManager.GetChallengeModeEnabled()) {
+	} else {
+		if (score > highScore) {
+			highScore = score;
+			verseMetadata["high_score"] = highScore;
+			verseManager.SaveVerseMetadata(verseMetadata);
+		}
+		
+		if ((mistakes == 0) && (score > 0)) {
+			verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
+		}
 	}
 	
 	gameManager.ShowEndOfGameOptions();
@@ -148,9 +156,15 @@ function resetTime() {
 }
 
 function reset() {
-	var reference = verseManager.currentReference();
-	verseMetadata = verseManager.GetVerseMetadata(reference);
-	highScore = verseMetadata["high_score"];
+	if (gameManager.GetChallengeModeEnabled()) {
+		var reference = verseManager.currentReference();
+		verseMetadata = verseManager.GetVerseMetadata(reference);
+		highScore = verseMetadata["high_score"];
+	} else {
+		var category = verseManager.GetCurrentCategory();
+		categoryMetadata = verseManager.GetCategoryMetadata(category);
+		highScore = categoryMetadata["high_score"];
+	}
 	resetTime();	
 }
 

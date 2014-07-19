@@ -102,6 +102,11 @@ static function SetLanguage(language : String) {
 	PlayerPrefs.SetString("language", language);
 }
 
+function IsAtFinalVerseOfChallenge() {
+	var refs = GetCurrentReferences();
+	return (GetChallengeModeEnabled()) && (verseIndex >= (refs.length-1));
+}
+
 function GotoNextVerse() {
 	var difficulty : Difficulty = GetCurrentDifficulty();
 	var masteredPct = GetMasteredVersesPercentage();
@@ -120,6 +125,31 @@ function Save() {
 	PlayerPrefs.SetInt("verseIndex_"+language, verseIndex);
 	PlayerPrefs.SetString("currentVerse_"+language, currentVerse());
 	PlayerPrefs.SetString("currentReference_"+language, currentReference());
+}
+
+function GetCategoryMetadata(category : String) {
+	var key = "cm_"+category+"_"+GetLanguage();
+	var metadataJSON : String = null;
+	
+	if (PlayerPrefs.HasKey(key)) {
+		metadataJSON = PlayerPrefs.GetString(key);
+	}
+	
+	if (metadataJSON != null) {
+		var h : Hashtable = JSONUtils.ParseJSON(metadataJSON);
+		return h;		
+	}
+	
+	var metadata : Hashtable = new Hashtable();
+	metadata["high_score"] = 0;
+	metadata["difficulty"] = parseInt(Difficulty.Easy);
+	return metadata;
+}
+
+function SaveCategoryMetadata(metadata : Hashtable) {
+	var category = GetCurrentCategory();
+	var metadataJSON : String = JSONUtils.HashtableToJSON(metadata);
+	PlayerPrefs.SetString("cm_"+category+"_"+GetLanguage(), metadataJSON);
 }
 
 function SaveVerseMetadata(metadata : Hashtable) {

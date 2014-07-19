@@ -10,6 +10,15 @@ private var windowRect : Rect;
 
 private var gt = TextManager.GetText;
 
+function EndGameWindowForChallenge (windowId : int) {
+	var mistakes = scoreManager.totalMistakes;
+	var text = String.Format(gt("You made {0} mistakes"), mistakes);
+	if (mistakes == 0) {
+		text = gt("Perfect!");
+	}
+
+}
+
 // Make the contents of the window
 function EndGameWindow (windowID : int) {
 	var mistakes = scoreManager.mistakes;
@@ -105,7 +114,11 @@ function showEndOfGameOptions() {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
 	windowRect = Rect(w*0.3,h*0.6,w*0.4,h*0.35);
-	GUILayout.Window (0, windowRect, EndGameWindow, "");
+	if (gameManager.GetChallengeModeEnabled()) {
+		GUILayout.Window (0, windowRect, EndGameWindowForChallenge, "");
+	} else {
+		GUILayout.Window (0, windowRect, EndGameWindow, "");
+	}
 }
 
 function OnGUI() {

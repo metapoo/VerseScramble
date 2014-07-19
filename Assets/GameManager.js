@@ -73,7 +73,8 @@ function OnGUI() {
 
 function CanShowSolution() {
 	return (numWordsReleased == wordLabels.length) && (!showingSolution)
-	&& (wordIndex < wordLabels.length) && gameStarted;	
+	&& (wordIndex < wordLabels.length) && gameStarted && 
+	(!GetChallengeModeEnabled());	
 }
 
 function ShowSolution() {
@@ -522,9 +523,11 @@ function SetupVerse() {
 	
 	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
 		var maxTime = scoreManager.CalculateMaxTime() + oldTime;
-		scoreManager.CountTimeUpTo(maxTime);
+		
 		scoreManager.score = oldScore;
 		scoreManager.maxTime = oldTime;
+		scoreManager.CountTimeUpTo(maxTime);
+		
 		yield WaitForSeconds(0.1*(maxTime-oldTime));
 	} else {
 		scoreManager.maxTime = scoreManager.CalculateMaxTime();
@@ -604,13 +607,11 @@ function StartAnotherVerse() {
 }
 
 function HandleVerseFinished() {
-	if (GetChallengeModeEnabled()) {
-		if (verseManager.verseIndex < (verseManager.references.length-1)) {
-			finished = true;
-			yield WaitForSeconds(2);
-			StartAnotherVerse();
-		} else {
-		}
+	if (GetChallengeModeEnabled() &&
+		!verseManager.IsAtFinalVerseOfChallenge()) {
+		finished = true;
+		yield WaitForSeconds(2);
+		StartAnotherVerse();
 	} else {
 		finished = true;
 		gameStarted = false;
