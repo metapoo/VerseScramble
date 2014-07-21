@@ -246,18 +246,8 @@ function DoWindow (windowID : int) //here you build the table
 	var categoryMetadata = verseManager.GetCategoryMetadata(currentCategory);
 	var categoryDifficulty = categoryMetadata["difficulty"];
 	
-	var rowLabel : String = String.Format("{0} \t\t {1}: {2}",
-			TextManager.GetText("Play Challenge (All Verses)"),
-			TextManager.GetText("high score"),
-			categoryMetadata["high_score"]); //this is what will be written in the rows
 	var rowStyle : GUIStyle;
-	rowStyle = GetStyleForDifficulty(categoryDifficulty);
-	
-	if (GUI.Button(rBtn, rowLabel, rowStyle)) {
-		StartChallenge();
-		return;
-	}
-	rBtn.y += rowHeight + padding;
+	var rowLabel : String;
 	
 	for (var iRow : int = 0; 
 		iRow < numRows;
@@ -294,6 +284,20 @@ function DoWindow (windowID : int) //here you build the table
 	
 		rBtn.y += rowHeight + padding;
 	}
+	
+	rowLabel = String.Format("{0} \t\t {1}: {2}",
+			TextManager.GetText("Play Challenge (All Verses)"),
+			TextManager.GetText("high score"),
+			categoryMetadata["high_score"]); //this is what will be written in the rows
+	
+	rowStyle = GetStyleForDifficulty(categoryDifficulty);
+	
+	if (GUI.Button(rBtn, rowLabel, rowStyle)) {
+		StartChallenge();
+		return;
+	}
+	rBtn.y += rowHeight + padding;
+
 	GUI.EndScrollView();
 }
 
