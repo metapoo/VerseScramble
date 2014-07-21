@@ -125,14 +125,17 @@ function SetupWalls () {
 function HandleWordWrong() {
 	audio.PlayOneShot(sndFailure1, 1.0f);
 	
+	if (!GetChallengeModeEnabled()) {
+		ShowHint();
+		yield WaitForSeconds(2);
+	}
+	
 	for (var wordLabel :WordLabel in wordLabels) {
 		wordLabel.Explode();
 	}
 	
 	wordIndex = 0;
 	currentWord = words[wordIndex];
-
-	return "";
 }
 
 function HandleWordCorrect() {
@@ -623,14 +626,15 @@ function StartAnotherVerse() {
 }
 
 function HandleRanOutOfTime() {
-	Debug.Log("RAN OUT OF TIME");
 	DidRanOutOfTime = true;
+
+	if (GetChallengeModeEnabled()) {
+		for (var wordLabel : WordLabel in wordLabels) {
+			wordLabel.collider2D.enabled = false;
+		}
 	
-	for (var wordLabel : WordLabel in wordLabels) {
-		wordLabel.collider2D.enabled = false;
+		HandleVerseFinished();
 	}
-	
-	HandleVerseFinished();
 
 }
 
