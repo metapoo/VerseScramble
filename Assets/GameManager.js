@@ -134,6 +134,10 @@ function HandleWordWrong() {
 		wordLabel.Explode();
 	}
 	
+	if (!GetChallengeModeEnabled()) {
+		scoreManager.maxTime += wordIndex;
+	}
+	
 	wordIndex = 0;
 	currentWord = words[wordIndex];
 }
