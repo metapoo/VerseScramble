@@ -226,6 +226,15 @@ function OnMouseDown() {
 		yield WaitForSeconds(0.1);
 		right = false;
 		SetColor(Color.white);
+		
+		if (!GameManager.GetChallengeModeEnabled()) {
+			dScore = scoreManager.score*-.5;
+			if (dScore > -1*scoreManager.maxTime) {
+				dScore = -1*scoreManager.maxTime;
+			}
+			
+			scoreManager.score += dScore;
+		}
 	}
 	
 	if ((dScore != 0) || (str != "")) {

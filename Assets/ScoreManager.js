@@ -68,7 +68,14 @@ function updateScoreLabel() {
 
 function CalculateMaxTime() {
 	var n = gameManager.words.length;
-	return 2+n*2;
+	if (n == 0) return 0;
+	
+	if (GameManager.GetChallengeModeEnabled()) {
+		return 2+n*2;
+	} else {
+		return 2+n*4;
+	}
+	
 }
 
 function resetStats() {

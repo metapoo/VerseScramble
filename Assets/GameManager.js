@@ -128,8 +128,10 @@ function HandleWordWrong() {
 
 	if (!GetChallengeModeEnabled()) {
 		ShowHint();
-		yield WaitForSeconds(2);
+		return;
 	}
+	
+	yield WaitForSeconds(2);
 	
 	if (finished) return;
 	
