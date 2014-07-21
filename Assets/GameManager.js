@@ -124,11 +124,14 @@ function SetupWalls () {
 
 function HandleWordWrong() {
 	audio.PlayOneShot(sndFailure1, 1.0f);
-	
+	scoreManager.streak = 0;
+
 	if (!GetChallengeModeEnabled()) {
 		ShowHint();
 		yield WaitForSeconds(2);
 	}
+	
+	if (finished) return;
 	
 	for (var wordLabel :WordLabel in wordLabels) {
 		wordLabel.Explode();
