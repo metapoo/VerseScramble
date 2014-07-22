@@ -7,7 +7,6 @@ var timeLabel : TextMesh;
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
-var maxMoves : int = 1;
 var maxTime : int = 0;
 var mistakes : int = 0;
 var mainCamera : Camera;
@@ -21,6 +20,8 @@ var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
 var highScoreLabel : TextMesh;
+var healthBar : HealthBar;
+var healthBarUnits : float = 0;
 
 function HandleWordCorrect(elapsedTime : float) {
 	
@@ -43,8 +44,16 @@ function HandleWordCorrect(elapsedTime : float) {
 	moves = moves + 1;
 	var dScore = timeLeft;
 	score += dScore;
+	
+	UpdateHealthBar(healthBarUnits + 0.05f);
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
 	return dScore;
+}
+
+function UpdateHealthBar(newHealth : float) {
+	if (newHealth < 0) newHealth = 0;
+	healthBarUnits = newHealth;
+	healthBar.SetPercentage(healthBarUnits);
 }
 
 function HandleWordWrong() {
@@ -58,7 +67,7 @@ function HandleWordWrong() {
 	score += dScore;
 	
 	mistakes += 1;
-	
+	UpdateHealthBar(healthBarUnits - 0.05f);
 	return dScore;
 }
 
@@ -107,9 +116,11 @@ function resetStatsForChallenge() {
 	moves = 0;
 	streak = 0;
 	updateScoreLabel();
+	UpdateHealthBar(healthBarUnits);
 }
 
 function resetStats() {
+	UpdateHealthBar(0);
 	moves = 0;
 	streak = 0;
 	score = 0;

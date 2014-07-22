@@ -246,7 +246,7 @@ function moveReferenceToTopLeft() {
 	
 	yield WaitForSeconds(duration);
 	
-	SetVerseReference(verseManager.currentReference(), true);
+	SetVerseReference(verseManager.currentReference(), false);
 }
 
 
@@ -512,7 +512,6 @@ function SplitVerseWordByWord(verse : String) {
 }
 
 function Cleanup () {
-	scoreManager.resetStats();
 	var wObject : WordLabel;
 	for (wObject in wordLabels) {
 		Destroy(wObject.gameObject);
