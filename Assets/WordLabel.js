@@ -21,6 +21,8 @@ var oldRotation : Quaternion;
 var scoreCredited : float;
 
 function Explode() {
+	var wasReturnedToVerse = returnedToVerse;
+	
 	if (scoreCredited > 0) {
 		var clone : FloatingPoints;
 		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
@@ -36,7 +38,7 @@ function Explode() {
 	rigidbody2D.isKinematic = false;
 	gotoVerse = false;
 	returnedToVerse = false;
-	rigidbody2D.AddForce (new Vector3(Random.Range(-100,100), Random.Range(500,700), 0));
+	rigidbody2D.AddForce (new Vector3(Random.Range(-100,100), Random.Range(300,400), 0));
 	rigidbody2D.gravityScale = 1.0;
 	rigidbody2D.AddTorque(Random.Range(-100,100));
 	yield WaitForSeconds(3);

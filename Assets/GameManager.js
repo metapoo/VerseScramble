@@ -23,6 +23,7 @@ var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
+var sndExplode1 : AudioClip;
 var feedbackLabel : TextMesh;
 var timeLabel : TextMesh;
 var scoreLabel : TextMesh;
@@ -124,21 +125,24 @@ function SetupWalls () {
 }
 
 function HandleWordWrong() {
-	audio.PlayOneShot(sndFailure1, 1.0f);
+	
 	scoreManager.streak = 0;
 
 	if (!GetChallengeModeEnabled()) {
 		ShowHint();
+		audio.PlayOneShot(sndFailure1, 0.5f);
 		return;
 	}
 	
-	yield WaitForSeconds(2);
-	
 	if (finished) return;
+	
+	audio.PlayOneShot(sndExplode1, 1.0f);
 	
 	for (var wordLabel :WordLabel in wordLabels) {
 		wordLabel.Explode();
 	}
+	
+	
 	
 	if (!GetChallengeModeEnabled()) {
 		scoreManager.maxTime += wordIndex;
@@ -156,7 +160,7 @@ function HandleWordCorrect() {
 	if (Random.RandomRange(0,10.0f) > 5.0f) {
 		snd = sndSuccess2;
 	}
-	audio.PlayOneShot(snd, 1.0);
+	audio.PlayOneShot(snd, 0.2);
 	return scoreManager.HandleWordCorrect(elapsedTime);
 }
 
