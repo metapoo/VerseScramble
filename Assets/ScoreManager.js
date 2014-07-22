@@ -9,6 +9,7 @@ var streak : int = 0;
 var moves : int = 0;
 var maxMoves : int = 1;
 var maxTime : int = 0;
+var mistakes : int = 0;
 var mainCamera : Camera;
 var gameManager : GameManager;
 var verseManager : VerseManager;
@@ -44,6 +45,21 @@ function HandleWordCorrect(elapsedTime : float) {
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
 	return dScore;
 }
+
+function HandleWordWrong() {
+	var dScore = score*-.5;
+	
+	if (dScore > -1*maxTime) {
+		dScore = -1*maxTime;
+	}
+			
+	score += dScore;
+	
+	mistakes += 1;
+	
+	return dScore;
+}
+
 
 function calculatedTime() {
  	return totalElapsedTime;
@@ -82,6 +98,7 @@ function resetStats() {
 	moves = 0;
 	streak = 0;
 	score = 0;
+	mistakes = 0;
 	maxTime = CalculateMaxTime();
 	updateScoreLabel();
 	
@@ -149,7 +166,9 @@ function HandleCountTimeLeftFinished() {
 			verseManager.SaveVerseMetadata(verseMetadata);
 		}
 		
-		verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
+		if (mistakes == 0) {
+			verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
+		}
 	}
 	
 	gameManager.ShowEndOfGameOptions();

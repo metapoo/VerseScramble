@@ -228,12 +228,7 @@ function OnMouseDown() {
 		SetColor(Color.white);
 		
 		if (!GameManager.GetChallengeModeEnabled()) {
-			dScore = scoreManager.score*-.5;
-			if (dScore > -1*scoreManager.maxTime) {
-				dScore = -1*scoreManager.maxTime;
-			}
-			
-			scoreManager.score += dScore;
+			dScore = scoreManager.HandleWordWrong();
 		}
 	}
 	
