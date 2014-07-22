@@ -48,6 +48,7 @@ function HandleWordCorrect(elapsedTime : float) {
 }
 
 function HandleWordWrong() {
+	streak = 0;
 	var dScore = score*-.5;
 	
 	if (dScore > -1*maxTime) {
@@ -102,6 +103,12 @@ function CalculateMaxTime() {
 	
 }
 
+function resetStatsForChallenge() {
+	moves = 0;
+	streak = 0;
+	updateScoreLabel();
+}
+
 function resetStats() {
 	moves = 0;
 	streak = 0;
@@ -110,7 +117,6 @@ function resetStats() {
 	maxTime = CalculateMaxTime();
 	updateScoreLabel();
 	
-	var theTrace = new System.Diagnostics.StackTrace();
 }
 
 function SetupUI() {
@@ -157,6 +163,10 @@ function HandleFinished() {
 	}
 }
 
+function WasVerseMastered() {
+	return (mistakes < 3);
+}
+
 function HandleCountTimeLeftFinished() {
 	
 
@@ -174,7 +184,7 @@ function HandleCountTimeLeftFinished() {
 			verseManager.SaveVerseMetadata(verseMetadata);
 		}
 		
-		if (mistakes == 0) {
+		if (WasVerseMastered()) {
 			verseManager.HandleVerseMastered(gameManager.difficulty, verseMetadata);
 		}
 	}

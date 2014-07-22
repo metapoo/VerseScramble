@@ -126,12 +126,13 @@ function SetupWalls () {
 
 function HandleWordWrong() {
 	
-	scoreManager.streak = 0;
-
 	if (!GetChallengeModeEnabled()) {
 		ShowHint();
 		audio.PlayOneShot(sndFailure1, 0.5f);
-		return;
+		
+		if ((scoreManager.mistakes % 3) != 0) {
+			return;
+		}
 	}
 	
 	if (finished) return;
@@ -141,7 +142,6 @@ function HandleWordWrong() {
 	for (var wordLabel :WordLabel in wordLabels) {
 		wordLabel.Explode();
 	}
-	
 	
 	
 	if (!GetChallengeModeEnabled()) {
@@ -527,12 +527,14 @@ function BeginGame() {
 }
 
 function SetupVerse() {
-	var oldScore = scoreManager.score;
-	var oldTime = scoreManager.timeLeft;
-	
 	gameStarted = false;
 	showingSolution = false;
-	scoreManager.reset();
+	
+	if (GetChallengeModeEnabled()) {
+		scoreManager.resetStatsForChallenge();
+	} else {
+		scoreManager.reset();
+	}
 	finished = false;
 	difficulty = verseManager.GetCurrentDifficulty();
 	
@@ -555,13 +557,10 @@ function SetupVerse() {
 	currentWord = words[wordIndex];
 	
 	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
-		var maxTime = scoreManager.CalculateMaxTime() + oldTime;
-		
-		scoreManager.score = oldScore;
-		scoreManager.maxTime = oldTime;
+		var maxTime = scoreManager.CalculateMaxTime() + scoreManager.maxTime;		
 		scoreManager.CountTimeUpTo(maxTime);
 		
-		var duration = 0.1f*(maxTime-oldTime);
+		var duration = 0.1f*(maxTime-scoreManager.maxTime);
 		if ((duration) > 2.0f) duration = 2.0f;
 		
 		yield WaitForSeconds(duration);

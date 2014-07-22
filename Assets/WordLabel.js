@@ -223,15 +223,15 @@ function OnMouseDown() {
 		VerseManager.SpeakUtterance(word);
 		scoreCredited = dScore;
 	} else {
+		if (!GameManager.GetChallengeModeEnabled()) {
+			dScore = scoreManager.HandleWordWrong();
+		}
 		gameManager.HandleWordWrong();
 		SetColor(Color(0.8,0.3,0.3,1.0));
 		yield WaitForSeconds(0.1);
 		right = false;
 		SetColor(Color.white);
 		
-		if (!GameManager.GetChallengeModeEnabled()) {
-			dScore = scoreManager.HandleWordWrong();
-		}
 	}
 	
 	if ((dScore != 0) || (str != "")) {

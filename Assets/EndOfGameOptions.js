@@ -59,7 +59,7 @@ function EndGameWindow (windowID : int) {
 	
 	if (gameManager.DidRanOutOfTime) {
 		text = gt("You ran out of time.");
-	} else if (scoreManager.mistakes > 0) {
+	} else if (!scoreManager.WasVerseMastered()) {
 		text = String.Format(gt("You made {0} mistakes"), scoreManager.mistakes);
 	} else if (scoreManager.highScore == scoreManager.score) {
 		text = String.Format(gt("New high score {0}!"), scoreManager.score);
@@ -68,11 +68,11 @@ function EndGameWindow (windowID : int) {
 	GUILayout.Box(text);
 	
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime) && 
-	(scoreManager.mistakes == 0);
+	(scoreManager.WasVerseMastered());
 	var reload = false;
 	
 	var tryAgain = function() {
-		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || (scoreManager.mistakes > 0)) {
+		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
 			if (GUILayout.Button (gt("Try again"))) {
 				reload = true;
 				needToSelectDifficulty = false;
