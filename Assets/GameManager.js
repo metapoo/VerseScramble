@@ -26,6 +26,7 @@ var sndFailure1 : AudioClip;
 var feedbackLabel : TextMesh;
 var timeLabel : TextMesh;
 var scoreLabel : TextMesh;
+var highScoreLabel : TextMesh;
 var referenceLabel : TextMesh;
 
 public var needToSelectDifficulty : boolean = true;
@@ -169,7 +170,11 @@ function SetupUI() {
 												screenBounds.y-h*0.7,1);
 	scoreLabel.transform.position = new Vector3(screenBounds.x+w*0.98,
 												screenBounds.y-h*0.02,1);
-												
+	var p = scoreLabel.transform.position;
+	var s = scoreLabel.renderer.bounds.size;
+	
+	highScoreLabel.transform.position = new Vector3(screenBounds.x+w*0.98,
+													p.y-s.y*1.1f,1);							
 	timeLabel.transform.position = new Vector3(screenBounds.x+w*0.5,
 											   screenBounds.y-h*0.02,1);
 }

@@ -20,6 +20,7 @@ var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
+var highScoreLabel : TextMesh;
 
 function HandleWordCorrect(elapsedTime : float) {
 	
@@ -65,9 +66,16 @@ function calculatedTime() {
  	return totalElapsedTime;
 }
 
-function updateScoreLabel() {
+function updateHighScoreLabel() {
+	var gt = TextManager.GetText;
 	
-	scoreLabel.text = score.ToString();
+	highScoreLabel.text = String.Format("{0}: {1}",gt("High Score"), highScore.ToString());
+}
+
+function updateScoreLabel() {
+	var gt = TextManager.GetText;
+	
+	scoreLabel.text = String.Format("{0}: {1}",gt("Score"), score.ToString());
 	if (timeLeft < 0) timeLeft = 0;
 	
 	timeLabel.text = timeLeft.ToString("00");
@@ -171,6 +179,7 @@ function HandleCountTimeLeftFinished() {
 		}
 	}
 	
+	updateHighScoreLabel();
 	gameManager.ShowEndOfGameOptions();
 	
 }
@@ -189,6 +198,7 @@ function reset() {
 		categoryMetadata = verseManager.GetCategoryMetadata(category);
 		highScore = categoryMetadata["high_score"];
 	}
+	updateHighScoreLabel();
 	resetTime();	
 }
 
