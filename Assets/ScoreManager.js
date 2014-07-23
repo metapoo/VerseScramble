@@ -21,7 +21,7 @@ var startTime : int;
 var sndSelect : AudioClip;
 var highScoreLabel : TextMesh;
 var healthBar : HealthBar;
-var healthBarUnits : float = 0;
+var healthBarUnits : float = 0.5f;
 
 function HandleWordCorrect(elapsedTime : float) {
 	
@@ -58,16 +58,20 @@ function UpdateHealthBar(newHealth : float) {
 
 function HandleWordWrong() {
 	streak = 0;
-	var dScore = score*-.5;
+	var dScore = 0;
 	
-	if (dScore > -1*maxTime) {
-		dScore = -1*maxTime;
-	}
+	if (!GameManager.GetChallengeModeEnabled()) {
+	 	dScore = score*-.5;
+	
+		if (dScore > -1*maxTime) {
+			dScore = -1*maxTime;
+		}
 			
-	score += dScore;
+		score += dScore;
+	}
 	
 	mistakes += 1;
-	UpdateHealthBar(healthBarUnits - 0.05f);
+	UpdateHealthBar(healthBarUnits - 0.33f);
 	return dScore;
 }
 
@@ -120,7 +124,7 @@ function resetStatsForChallenge() {
 }
 
 function resetStats() {
-	UpdateHealthBar(0);
+	UpdateHealthBar(0.5);
 	moves = 0;
 	streak = 0;
 	score = 0;

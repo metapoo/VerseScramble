@@ -223,9 +223,7 @@ function OnMouseDown() {
 		VerseManager.SpeakUtterance(word);
 		scoreCredited = dScore;
 	} else {
-		if (!GameManager.GetChallengeModeEnabled()) {
-			dScore = scoreManager.HandleWordWrong();
-		}
+		dScore = scoreManager.HandleWordWrong();
 		gameManager.HandleWordWrong();
 		SetColor(Color(0.8,0.3,0.3,1.0));
 		yield WaitForSeconds(0.1);

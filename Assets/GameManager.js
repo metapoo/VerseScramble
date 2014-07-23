@@ -47,6 +47,7 @@ static var wordIndex : int;
 static var score = 0;
 static var highScore = 0;
 static var screenBounds : Rect;
+static var screenBoundsComputed : boolean = false;
 static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
@@ -122,6 +123,8 @@ function SetupWalls () {
 	screenBounds = Rect(leftWall.center.x+0.5,topWall.center.y-0.5,
 	rightWall.center.x-leftWall.center.x-1.0,
 	topWall.center.y-bottomWall.center.y-1.0);
+	
+	screenBoundsComputed = true;
 }
 
 function HandleWordWrong() {
