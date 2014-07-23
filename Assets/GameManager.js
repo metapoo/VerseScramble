@@ -134,9 +134,10 @@ function HandleWordWrong() {
 		ShowHint();
 		audio.PlayOneShot(sndFailure1, 0.5f);
 		
-		if (!healthBar.IsEmpty()) {
-			return;
-		}
+	}
+	
+	if (!healthBar.IsEmpty()) {
+		return;
 	}
 	
 	if (finished) return;

@@ -22,7 +22,7 @@ var scoreCredited : float;
 var exploding : boolean = false;
 
 function Explode() {
-	if (exploding) return;
+	if (exploding && !returnedToVerse) return;
 	exploding = true;
 	var wasReturnedToVerse = returnedToVerse;
 	

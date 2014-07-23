@@ -59,8 +59,9 @@ function UpdateHealthBar(newHealth : float) {
 function HandleWordWrong() {
 	streak = 0;
 	var dScore = 0;
-	
+	var dHealth = -1.0f;
 	if (!GameManager.GetChallengeModeEnabled()) {
+		dHealth = -0.33f;
 	 	dScore = score*-.5;
 	
 		if (dScore > -1*maxTime) {
@@ -71,7 +72,7 @@ function HandleWordWrong() {
 	}
 	
 	mistakes += 1;
-	UpdateHealthBar(healthBarUnits - 0.33f);
+	UpdateHealthBar(healthBarUnits + dHealth);
 	return dScore;
 }
 
@@ -179,7 +180,7 @@ function HandleFinished() {
 }
 
 function WasVerseMastered() {
-	return (mistakes < 3);
+	return (healthBar.IsGreen());
 }
 
 function HandleCountTimeLeftFinished() {
