@@ -21,7 +21,7 @@ var startTime : int;
 var sndSelect : AudioClip;
 var highScoreLabel : TextMesh;
 var healthBar : HealthBar;
-var healthBarUnits : float = 0.5f;
+var healthBarUnits : float = 0.67f;
 
 function HandleWordCorrect(elapsedTime : float) {
 	
@@ -124,7 +124,7 @@ function resetStatsForChallenge() {
 }
 
 function resetStats() {
-	UpdateHealthBar(0.5);
+	UpdateHealthBar(0.67);
 	moves = 0;
 	streak = 0;
 	score = 0;

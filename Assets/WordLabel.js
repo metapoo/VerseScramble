@@ -19,8 +19,11 @@ var enFont : Font;
 var zhFont : Font;
 var oldRotation : Quaternion;
 var scoreCredited : float;
+var exploding : boolean = false;
 
 function Explode() {
+	if (exploding) return;
+	exploding = true;
 	var wasReturnedToVerse = returnedToVerse;
 	
 	if (scoreCredited > 0) {
@@ -42,6 +45,7 @@ function Explode() {
 	rigidbody2D.gravityScale = 1.0;
 	rigidbody2D.AddTorque(Random.Range(-100,100));
 	yield WaitForSeconds(3);
+	exploding = false;
 	rigidbody2D.gravityScale = 0.2;
 }
 
@@ -98,7 +102,7 @@ function setWord(w : String) {
 
 function Start () {
     var screenBounds = GameManager.screenBounds;
-	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.22);
+	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.25);
 	versePosition = startPosition;
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");

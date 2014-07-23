@@ -29,6 +29,7 @@ var timeLabel : TextMesh;
 var scoreLabel : TextMesh;
 var highScoreLabel : TextMesh;
 var referenceLabel : TextMesh;
+var healthBar : HealthBar;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -133,7 +134,7 @@ function HandleWordWrong() {
 		ShowHint();
 		audio.PlayOneShot(sndFailure1, 0.5f);
 		
-		if ((scoreManager.mistakes % 3) != 0) {
+		if (!healthBar.IsEmpty()) {
 			return;
 		}
 	}
