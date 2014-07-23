@@ -186,6 +186,14 @@ function SetupUI() {
 													p.y-s.y*1.1f,1);							
 	timeLabel.transform.position = new Vector3(screenBounds.x+w*0.5,
 											   screenBounds.y-h*0.02,1);
+
+	healthBar.maxLength = w*0.4;										   
+	healthBar.SetPercentage(healthBar.targetPercentage);
+	
+	var v = referenceLabel.renderer.bounds.size;
+	healthBar.transform.position = Vector3(screenBounds.x+screenBounds.width*0.02, 
+	screenBounds.y-screenBounds.height*0.04-v.y*0.5);
+
 }
 
 function showFeedback(feedbackText : String, time : float) {
