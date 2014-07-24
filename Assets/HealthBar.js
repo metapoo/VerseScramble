@@ -28,7 +28,7 @@ function GetHeight() {
 }
 
 function IsEmpty() {
-	return currentPercentage == 0;
+	return targetPercentage == 0;
 }
 
 function IsRed() {

@@ -252,7 +252,7 @@ function moveReferenceToTopLeft() {
 	var start : Vector3 = referenceLabel.transform.position;
 	var refSize = referenceLabel.renderer.bounds.size;
 	var destination : Vector3 = new Vector3(screenBounds.x+refSize.x*0.5+screenBounds.width*0.02, 
-	screenBounds.y-refSize.y*0.5-screenBounds.width*0.02, 1);
+	screenBounds.y-refSize.y*0.5-screenBounds.height*0.02, 1);
 	
 	
 	AnimationManager.Translation(referenceLabel.transform, start, destination, duration);
