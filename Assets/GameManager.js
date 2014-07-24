@@ -439,6 +439,14 @@ function SplitVerse(verse : String) {
 				phrase = phrase.Replace("／","");
 				phrase = phrase.Replace("/","");
 				
+				// filter out leading or trailing spaces
+				if (phrase[0] == " ") {
+					phrase = phrase.Substring(1,phrase.Length-1);
+				}
+				if (phrase[phrase.Length-1] == " ") {
+					phrase = phrase.Substring(0,phrase.Length-1);
+				}
+				
 				if (language == "zh") {
 						// allowances if punctuation is in phrase
 						if ((l + phraseLengthForClause + 2) < clause.Length)
