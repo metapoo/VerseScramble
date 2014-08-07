@@ -1,0 +1,5 @@
+MONGODB_HOST = "localhost"
+MONGODB_PORT = 27017
+MONGODB_USERNAME = "admin"
+MONGODB_PASSWORD = "teaegg123"
+MONGODB_DATABASE = "verserain"
