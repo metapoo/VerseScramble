@@ -74,6 +74,7 @@ function SayVerseReference() {
 		
 	for (var refPart in refParts) {
 		SpeakUtterance(refPart);
+		yield WaitForSeconds(1);
 	}
 }
 
