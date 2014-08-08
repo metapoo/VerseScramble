@@ -1,4 +1,5 @@
 from verserain.user.models import User
+from bson.objectid import ObjectId
 
 def get_session_key(user_id):
     import hashlib
@@ -13,6 +14,7 @@ def authenticate_session_key(session_key):
     except:
         return None
 
+    user_id = ObjectId(user_id)
     correct_session_key = get_session_key(user_id)
 
     if (correct_session_key != session_key):
@@ -20,7 +22,7 @@ def authenticate_session_key(session_key):
 
     return user_id
 
-def create_new_user(fb_uid=None, username=None, email=None, password=None, user_obj=None, name=None, username=None, device_id=None):
+def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=None, username=None, device_id=None):
     if user_obj is None:
         u = User()
     else:
@@ -52,11 +54,9 @@ def create_new_user(fb_uid=None, username=None, email=None, password=None, user_
     return u
 
 def authenticate_login(fb_uid=None, email=None, password=None, username=None):
-
     user = None
-
     if email:
-        # find a registered user based on email                                                                                                                      
+        # find a registered user based on email                                                                                                                     
         user = User.collection.find_one(email=email)
         if user is None:
             return None
@@ -79,3 +79,20 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None):
         return user
     else:
         return None
+
+def require_login(method):
+    """Decorate methods with this to require that the user be logged in                                                                                             
+    and a superuser."""
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        user = self.current_user
+        if (not user):
+            if self.request.method == "GET":
+                url = self.get_login_url()
+                if "?" not in url:
+                    url += "?%s" % urllib.urlencode(dict(next=self.request.uri))
+                self.redirect(url)
+            return
+            raise tornado.web.HTTPError(403)
+        return method(self, *args, **kwargs)
+    return wrapper

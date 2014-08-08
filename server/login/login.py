@@ -1,17 +1,18 @@
 from verserain.base.handler import BaseHandler
+from verserain.login.auth import *
 from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 
 def get_handlers():
     return ((r"/login/fb", FacebookGraphLoginHandler),
-            
+            (r"/login", FacebookGraphLoginHandler),
             )
 
 class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
     @coroutine
     def get(self):
-        redirect_url = "%s/login/fb" % self.settings["site_url"]
+        redirect_url = "%s/login" % self.settings["site_url"]
 
         if self.get_argument("code", False):
             fb_user = yield self.get_authenticated_user(
