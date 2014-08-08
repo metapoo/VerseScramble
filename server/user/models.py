@@ -13,6 +13,6 @@ class User(BaseModel, PasswordMixin):
 
     def session_key(self):
         from verserain.login.auth import get_session_key
-        session_key = get_session_key(self.key.key)
+        session_key = get_session_key(self._id)
         return session_key
 

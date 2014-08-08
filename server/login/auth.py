@@ -1,5 +1,6 @@
 from verserain.user.models import User
 from bson.objectid import ObjectId
+from verserain import settings
 
 def get_session_key(user_id):
     import hashlib

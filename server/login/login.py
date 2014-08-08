@@ -21,6 +21,16 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 client_secret=self.settings["facebook_secret"],
                 code=self.get_argument("code"))
             # Save the user with e.g. set_secure_cookie
+
+            fb_uid = fb_user["id"]
+            name = fb_user["name"]
+            user = authenticate_login(fb_uid=fb_uid, 
+                                      )
+            if user is None:
+                user = create_new_user(fb_uid=fb_uid, name=name)
+
+            session_key = user.session_key()
+            self.set_secure_cookie("session_key", session_key)
             
         else:
             yield self.authorize_redirect(
