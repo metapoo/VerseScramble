@@ -41,7 +41,7 @@ def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=
     if email:
         u["email"] = email
 
-        if User.collection.find_one(email=email):
+        if User.collection.find_one({'email':email}):
             raise Exception("A user already exists with the given email.")
 
     if device_id:
@@ -58,20 +58,20 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None):
     user = None
     if email:
         # find a registered user based on email                                                                                                                     
-        user = User.collection.find_one(email=email)
+        user = User.collection.find_one({'email':email})
         if user is None:
             return None
     elif username:
-        user = User.collection.find_one(lower_username=username.lower())
+        user = User.collection.find_one({'lower_username':username.lower()})
         if user and user.has_key('password'):
             if not user.check_password(password):
                 return None
         return user
     elif fb_uid:
-        user = User.collection.find_one(fb_uid=fb_uid)
+        user = User.collection.find_one({'fb_uid':fb_uid})
         return user
     elif device_id:
-        user = User.collection.find_one(device_id=device_id)
+        user = User.collection.find_one({'device_id':device_id})
         return user
     else:
         pass

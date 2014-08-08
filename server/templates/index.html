@@ -1,4 +1,15 @@
 {% extends "base.html" %}
 {% block page_content %}
-<a href="/login/fb">click here to login</a>
+
+{% if not user %}
+<div><a href="/login/fb">login</a></div>
+{% else %}
+<div>
+<a href="/login/logout">logout</a>
+</div>
+<br/>
+Welcome to verserain {{user.display_name()}}!<br/>
+{% end %}
+
+
 {% end %}

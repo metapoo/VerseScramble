@@ -28,15 +28,15 @@ class BaseHandler(tornado.web.RequestHandler):
         if (not cookieless_okay) and self.cookieless_okay:
             cookieless_okay = True
 
-        user_key = self.authenticate_session_key(session_key)
+        user_id = self.authenticate_session_key(session_key)
 
-        if not user_key:
+        if not user_id:
             if cookieless_okay:
                 return self.get_current_user_cookieless()
             else:
                 return None
 
-        user = User.collection.find_one(key=user_key)
+        user = User.collection.find_one({'_id':user_id})
 
         if not user:
             if cookieless_okay:

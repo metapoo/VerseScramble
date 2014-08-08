@@ -6,4 +6,4 @@ def get_handlers():
 
 class FrontPageHandler(BaseHandler):
     def get(self, path=None):
-        return self.render("index.html")
+        return self.render("index.html", user=self.current_user)
