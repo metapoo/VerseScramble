@@ -20,7 +20,7 @@ def authenticate_session_key(session_key):
 
     return user_id
 
-def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=None, username=None, device_id=None):
+def create_new_user(fb_uid=None, username=None, email=None, password=None, user_obj=None, name=None, username=None, device_id=None):
     if user_obj is None:
         u = User()
     else:
@@ -28,6 +28,9 @@ def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=
 
     if fb_uid:
         u["fb_uid"] = fb_uid
+
+    if username:
+        u["username"] = username
 
     if name:
         u["name"] = name
@@ -47,3 +50,32 @@ def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=
     u.save()
 
     return u
+
+def authenticate_login(fb_uid=None, email=None, password=None, username=None):
+
+    user = None
+
+    if email:
+        # find a registered user based on email                                                                                                                      
+        user = User.collection.find_one(email=email)
+        if user is None:
+            return None
+    elif username:
+        user = User.collection.find_one(lower_username=username.lower())
+        if user and user.has_key('password'):
+            if not user.check_password(password):
+                return None
+        return user
+    elif fb_uid:
+        user = User.collection.find_one(fb_uid=fb_uid)
+        return user
+    elif device_id:
+        user = User.collection.find_one(device_id=device_id)
+        return user
+    else:
+        pass
+
+    if user.check_password(password):
+        return user
+    else:
+        return None
