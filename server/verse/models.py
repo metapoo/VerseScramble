@@ -10,7 +10,7 @@ class Version(BaseModel):
             Index("name",unique=False),
             Index("language",unique=False)
         )
-
+        
 class VerseSet(BaseModel):
     class Meta:
         collection = "verseset"
@@ -21,7 +21,13 @@ class VerseSet(BaseModel):
             Index("user_id",unique=False)
         )
 
-    
+    def __new__(cls, *args, **kwargs):
+        new_instance = BaseModel.__new__(cls, *args, **kwargs)
+        cls.register_foreign_key(User)
+        cls.register_foreign_key(Verse,one_to_many=True)
+        return new_instance
+
+
 class Verse(BaseModel):
     class Meta:
         collection = "verse"
@@ -33,5 +39,11 @@ class Verse(BaseModel):
             Index("verseset_id",unique=False),
             Index("user_id",unique=False)
         )
-
+    
+    def __new__(cls, *args, **kwargs):
+        new_instance = BaseModel.__new__(cls, *args, **kwargs)
+        cls.register_foreign_key(VerseSet)
+        cls.register_foreign_key(User)
+        cls.register_foreign_key(Version)
+        return new_instance
 
