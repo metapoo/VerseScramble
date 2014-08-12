@@ -328,8 +328,8 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 }
 
 function SplitVerse(verse : String) {
-	var langConfig : Hashtable = new Hashtable({'en':[12,8,4],
-								  				'zh':[12,8,4]});
+	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
+								  				'zh':[20,10,5]});
 	var language : String = verseManager.GetLanguage();
 	var phraseLengths : Array = langConfig[language];
 	var clauseBreakMultiplier = 1.0f;
@@ -353,7 +353,7 @@ function SplitVerse(verse : String) {
 	// filter out paranthesis
 	verse = Regex.Replace(verse, "\\(.*\\)","");
 	verse = Regex.Replace(verse, "\\（.*\\）","");
-	
+
 	for (var c in verse) {
 		clause = clause + c;
 		for (var s in seps) {
@@ -366,6 +366,7 @@ function SplitVerse(verse : String) {
 			}
 		}
 	}
+	
 	
 	if ((clause != "") && (clause != " ") && (clause != "  ")) {
 		clauseArray.push(clause);
@@ -391,7 +392,7 @@ function SplitVerse(verse : String) {
 		// check for special '\' marker which we cannot split on
 		var nobreakMarkers = new Array();
 		for (var i=0;i<clause.Length;i++) {
-			if ((clause[i] == "／"[0]) || (clause[i] == "/"[0])) {
+			if ((clause[i] == "／"[0]) || (clause[i] == "/"[0]) || (clause[i] == " "[0])) {
 				nobreakMarkers.Add(i);
 			}
 		}
@@ -441,19 +442,21 @@ function SplitVerse(verse : String) {
 				// filter out no break markers
 				phrase = phrase.Replace("／","");
 				phrase = phrase.Replace("/","");
+				phrase = phrase.Replace(" ","");
 				
 				// filter out leading or trailing spaces
 				if (phrase[0] == " ") {
 					phrase = phrase.Substring(1,phrase.Length-1);
 				}
-				//if (phrase[phrase.Length-1] == " ") {
-				//	phrase = phrase.Substring(0,phrase.Length-1);
-				//}
-			
+				if (phrase[phrase.Length-1] == " ") {
+					phrase = phrase.Substring(0,phrase.Length-1);
+				}
+
 				
 				l = l + phraseLengthForClause;
 				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
+					phrase = phrase.Replace(" ","");	
 					phraseArray.push(phrase);
 					
 				}
@@ -462,6 +465,7 @@ function SplitVerse(verse : String) {
 			// filter out no break markers
 			clause = clause.Replace("／","");
 			clause = clause.Replace("/","");
+			clause = clause.Replace(" ","");
 			phraseArray.push(clause);
 			
 		}
