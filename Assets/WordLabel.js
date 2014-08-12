@@ -46,7 +46,7 @@ function Explode() {
 	rigidbody2D.AddTorque(Random.Range(-100,100));
 	yield WaitForSeconds(3);
 	exploding = false;
-	rigidbody2D.gravityScale = 0.2;
+	rigidbody2D.gravityScale = 0.1;
 }
 
 function FixedUpdate() {
@@ -86,6 +86,8 @@ function setWord(w : String) {
 	if (language == "zh") {
 		label.font = zhFont;
 		label.renderer.material = zhFont.material;
+		label.fontSize = 75;
+		label.fontStyle = FontStyle.Normal;
 	} else {
 		label.font = enFont;
 		label.renderer.material = enFont.material;

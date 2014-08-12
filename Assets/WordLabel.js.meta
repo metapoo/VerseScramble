@@ -2,7 +2,14 @@ fileFormatVersion: 2
 guid: 068e3d3428d394906a942d9e2a5437c3
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - label: {instanceID: 0}
+  - gameManager: {instanceID: 0}
+  - scoreManager: {instanceID: 0}
+  - verseManager: {instanceID: 0}
+  - floatingPoints: {instanceID: 0}
+  - enFont: {fileID: 12800000, guid: ec52f9ae89e8b4e38b2e1cb82d2a6e26, type: 3}
+  - zhFont: {fileID: 12800000, guid: 5886c23cc5d124c2a802e92864a37094, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
