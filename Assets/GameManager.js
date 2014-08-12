@@ -442,7 +442,8 @@ function SplitVerse(verse : String) {
 				// filter out no break markers
 				phrase = phrase.Replace("／","");
 				phrase = phrase.Replace("/","");
-				phrase = phrase.Replace(" ","");
+				
+				if (language == "zh") { phrase = phrase.Replace(" ",""); }
 				
 				// filter out leading or trailing spaces
 				if (phrase[0] == " ") {
@@ -456,7 +457,7 @@ function SplitVerse(verse : String) {
 				l = l + phraseLengthForClause;
 				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
-					phrase = phrase.Replace(" ","");	
+					if (language == "zh") {phrase = phrase.Replace(" ","");}
 					phraseArray.push(phrase);
 					
 				}
@@ -465,7 +466,7 @@ function SplitVerse(verse : String) {
 			// filter out no break markers
 			clause = clause.Replace("／","");
 			clause = clause.Replace("/","");
-			clause = clause.Replace(" ","");
+			if (language == "zh") {clause = clause.Replace(" ","");}
 			phraseArray.push(clause);
 			
 		}
