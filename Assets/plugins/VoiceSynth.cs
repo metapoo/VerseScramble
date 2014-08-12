@@ -2,20 +2,20 @@ using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-public class VoiceSynth {
-       /* Interface to native implementation */
-       
-       [DllImport ("__Internal")]
-       private static extern void _SpeakUtterance (string text, string language);
+public class VoiceSynth{
+/*Interfacetonativeimplementation*/
 
-       // Starts lookup for some bonjour registered service inside specified domain
-       public static void SpeakUtterance(string text, string language)
-       {
-		// Call plugin only when running on real device
-		if ((Application.platform != RuntimePlatform.OSXEditor) &&
-                    (Application.platform != RuntimePlatform.OSXWebPlayer) &&
-                    (Application.platform != RuntimePlatform.WindowsWebPlayer)) {
-		  _SpeakUtterance(text, language);
-                }
-       }
-} 
+[DllImport("__Internal")]
+private static extern void _SpeakUtterance(string text,string language);
+
+//Startslookupforsomebonjourregisteredserviceinsidespecifieddomain
+public static void SpeakUtterance(string text,string language)
+{
+		//Callpluginonlywhenrunningonrealdevice
+		if((Application.platform!=RuntimePlatform.OSXEditor)&&
+(Application.platform!=RuntimePlatform.OSXWebPlayer)&&
+(Application.platform!=RuntimePlatform.WindowsWebPlayer)){
+		_SpeakUtterance(text,language);
+}
+}
+}

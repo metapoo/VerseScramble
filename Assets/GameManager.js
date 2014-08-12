@@ -328,17 +328,19 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 }
 
 function SplitVerse(verse : String) {
-	var langConfig : Hashtable = new Hashtable({'en':[20,10,4],
-								  				'zh':[18,10,5]});
+	var langConfig : Hashtable = new Hashtable({'en':[12,8,4],
+								  				'zh':[12,8,4]});
 	var language : String = verseManager.GetLanguage();
 	var phraseLengths : Array = langConfig[language];
-	var clauseBreakMultiplier = 1.5f;
+	var clauseBreakMultiplier = 1.0f;
 	var difficultyInt = verseManager.GetDifficultyFromInt(difficulty);
 	var phraseLength : int = phraseLengths[difficultyInt];
 	
 	if (difficulty == Difficulty.Hard) {
-		clauseBreakMultiplier = 2.0f;
+		clauseBreakMultiplier = 2f;
 	}
+	
+	//Debug.Log("SplitVerse = " + verse );
 	
 	//Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
@@ -394,6 +396,7 @@ function SplitVerse(verse : String) {
 			}
 		}
 
+		//Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " " + phraseLength + " "+ clauseBreakMultiplier);
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
@@ -410,12 +413,12 @@ function SplitVerse(verse : String) {
 					phraseLengthForClause = clause.Length - l;	
 				}
 				
-				if (language == "en") {
-					while (((l + phraseLengthForClause) < clause.Length) &&
-						   (clause[l+phraseLengthForClause] != " ") ) {
-						phraseLengthForClause += 1;
-					}
+
+				while (((l + phraseLengthForClause) < clause.Length) &&
+							 (clause[l+phraseLengthForClause] != " ") ) {
+							phraseLengthForClause += 1;
 				}
+
 				
 				// find closest '/' to glob onto
 				if (nobreakMarkers.length > 0) {
@@ -443,27 +446,10 @@ function SplitVerse(verse : String) {
 				if (phrase[0] == " ") {
 					phrase = phrase.Substring(1,phrase.Length-1);
 				}
-				if (phrase[phrase.Length-1] == " ") {
-					phrase = phrase.Substring(0,phrase.Length-1);
-				}
-				
-				if (language == "zh") {
-						// allowances if punctuation is in phrase
-						if ((l + phraseLengthForClause + 2) < clause.Length)
-						{
-							if (phraseHasPunctuation(phrase)) {
-								phraseLengthForClause += 2;
-								phrase = clause.Substring(l, phraseLengthForClause);
-							}
-						// if punctuation makes up a big percentage then combine it with previous phrase
-						} else if (phraseLengthForClause <= 4) {
-							if (phraseHasPunctuation(phrase)) {
-								phraseArray[phraseArray.length-1] += phrase;
-								l = l + phraseLengthForClause;		
-								break;
-							}
-						}
-				}
+				//if (phrase[phrase.Length-1] == " ") {
+				//	phrase = phrase.Substring(0,phrase.Length-1);
+				//}
+			
 				
 				l = l + phraseLengthForClause;
 				
@@ -484,6 +470,7 @@ function SplitVerse(verse : String) {
 
 }
 
+
 function SplitVerseWordByWord(verse : String) {
 
 	var phraseLength = 5;
@@ -494,13 +481,14 @@ function SplitVerseWordByWord(verse : String) {
 			phraseLength = 20;
 			break;
 		case Difficulty.Medium:
-			phraseLength = 12;
+			phraseLength = 15;
 			break;
 		case Difficulty.Hard:
-			phraseLength = 6;
+			phraseLength = 10;
 			break;
 	}
 	//Debug.Log("phrase length = " + phraseLength);
+
 	var wordsArray : Array;
 	var phraseArray : Array = new Array();
 
@@ -527,6 +515,7 @@ function SplitVerseWordByWord(verse : String) {
 		
 	}
 	if (phrase != "") {
+		//Debug.Log("Phrase = "+ phrase);
 		phraseArray.push(phrase);
 	}
 	return phraseArray;
@@ -566,7 +555,7 @@ function SetupVerse() {
 	var reference = verseManager.currentReference();
 	SetVerseReference(reference, false);
 	verseMetadata = verseManager.GetVerseMetadata(reference);
-	Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
+	//Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
 	if (verseMetadata["difficulty"] != null) {
 		//difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	}
