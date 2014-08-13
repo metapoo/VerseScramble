@@ -2,10 +2,21 @@ from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.verse.language import LANGUAGES as languages
 from verserain.verse.models import *
+from bson.objectid import ObjectId
 
 def get_handlers():
     return ((r"/verseset/create", CreateVerseSetHandler),
+            (r"/verseset/show/([^/]+)", ShowVerseSetHandler),
             )
+
+class ShowVerseSetHandler(BaseHandler):
+    def get(self, verseset_id):
+        verseset_id = ObjectId(verseset_id)
+        user = self.current_user
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        return self.render("verseset/show.html", verseset=verseset,
+                           user=user)
+
 
 class CreateVerseSetHandler(BaseHandler):
 

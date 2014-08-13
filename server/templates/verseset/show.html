@@ -1,0 +1,10 @@
+{% extends "../base.html" %}
+
+{% block page_content %}
+<div><b>{{verseset.get('name')}}</b> ({{verseset.verse_count()}} verses)</div>
+
+<p>
+<a href="/verse/create">add a verse</a>
+</p>
+
+{% end %}
