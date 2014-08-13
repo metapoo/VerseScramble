@@ -1,0 +1,17 @@
+{% extends "../base.html" %}
+
+{% block page_content %}
+
+
+{% if error_message %}
+<br/><div class="error_message">{{error_message}}</div>
+{% end %}
+
+<form action="/login" method="POST" class="login">
+<p>email:<br/><input type="text" name="email" /></p>
+<p>password:<br/><input type="password" name="password" /></p>
+<input type="submit" value="login" />
+
+</form>
+
+{% end %}

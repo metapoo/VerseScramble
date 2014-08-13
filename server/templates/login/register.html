@@ -1,0 +1,11 @@
+{% extends "../base.html" %}
+
+{% block page_content %}
+
+<form action="/login/login" method="POST" class="login">
+<p>email:<br/><input type="text" name="email" /></p>
+<p>username:<br/><input type="text" name="username" /></p>
+<p>password:<br/><input type="password" name="password" /></p>
+<input type="submit" value="register" />
+</form>
+{% end %}
