@@ -31,7 +31,7 @@
 <body>
 
 {% if not user %}
-<div><a href="/login/fb">login</a></div>
+<div><a href="/login">login</a> | <a href="/login/register">register</a></div>
 {% else %}
 <div>
 logged in as {{user.display_name()}}
