@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block page_content %}
 
-<a href="/verseset/create">Create Verse Set</a>
+{% if user %}
+
+<div>
+Verse Sets:
+{% for verseset in versesets %}
+<p><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a> ({{verseset.verse_count()}} verses)</p>
+
+{% end %}
+</div>
+
+<a href="/verseset/create">create a verse set</a>
+
+{% end %}
+
 {% end %}

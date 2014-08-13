@@ -82,39 +82,3 @@ class BaseModel(Model):
 
         return None
 
-    @classmethod
-    def parent_counts(cls):
-        return cls.metadata('parent_counts')
-
-    @classmethod
-    def count_for_parent(cls, parent_model, parent_key_name, count_key_name):
-        if not cls.parent_counts().has_key(parent_key_name):
-            cls.parent_counts()[parent_key_name] = (parent_model, count_key_name)
-
-    def increment_parent_counts(self):
-        for key in self.parent_counts().keys():
-            parent_key_name = key
-            parent_model, count_key_name = self.parent_counts()[key]
-
-            if not self.has_key(parent_key_name):
-                continue
-
-            parent = parent_model.collection.find_one({'_id':self.get(parent_key_name)})
-            if parent:
-                c = int(parent.get(count_key_name, 0))
-                parent[count_key_name] = c + 1
-                parent.save()
-
-    def decrement_parent_counts(self):
-        for key in self.parent_counts().keys():
-            parent_key_name = key
-            parent_model, count_key_name = self.parent_counts()[key]
-
-            if not self.has_key(parent_key_name):
-                continue
-
-            parent = parent_model.collection.find_one({'_id':self.get(parent_key_name)})
-            if parent:
-                c = int(parent.get(count_key_name, 0))
-                parent[count_key_name] = c - 1
-                parent.save()

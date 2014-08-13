@@ -18,7 +18,7 @@ class CreateVerseSetHandler(BaseHandler):
                        'language':language,
                        'user_id':user._id})
         vs.save()
-        self.redirect("/verseset/list")
+        self.redirect("/")
 
     @require_login
     def get(self):

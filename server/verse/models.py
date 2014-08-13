@@ -27,6 +27,12 @@ class VerseSet(BaseModel):
         cls.register_foreign_key(Verse,one_to_many=True)
         return new_instance
 
+    def update_verse_count(self):
+        self["verse_count"] = len(self.verses())
+        self.save()
+
+    def verse_count(self):
+        return self.get("verse_count",0)
 
 class Verse(BaseModel):
     class Meta:

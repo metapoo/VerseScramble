@@ -21,3 +21,10 @@ class User(BaseModel, PasswordMixin):
         session_key = get_session_key(self._id)
         return session_key
 
+    def __new__(cls, *args, **kwargs):
+        from verserain.verse.models import VerseSet, Verse
+        new_instance = BaseModel.__new__(cls, *args, **kwargs)
+        cls.register_foreign_key(Verse,one_to_many=True)
+        cls.register_foreign_key(VerseSet,one_to_many=True)
+        return new_instance
+

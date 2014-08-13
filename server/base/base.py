@@ -6,4 +6,11 @@ def get_handlers():
 
 class FrontPageHandler(BaseHandler):
     def get(self, path=None):
-        return self.render("index.html", user=self.current_user)
+        user = self.current_user
+        if user is None:
+            return self.render("index.html", user=user)
+        
+        versesets = list(user.versesets())
+
+        return self.render("index.html", user=user, versesets=versesets)
+        
