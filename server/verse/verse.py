@@ -48,9 +48,13 @@ class CreateVerseSetHandler(BaseHandler):
         user = self.current_user
         name = self.get_argument("name",None)
         language = self.get_argument("language",None)
+        version = self.get_argument("version",None)
         vs = VerseSet({'name':name,
                        'language':language,
                        'user_id':user._id})
+        if version:
+            vs["version"] = version
+
         vs.save()
         self.redirect("/")
 

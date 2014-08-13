@@ -6,13 +6,15 @@ Create a Verse Set
 
 <form method="post" action="/verseset/create">
 
-<p>Name<br/><input type="text" name="name" /></p>
+<p>Name (Ex: Healing, Salvation, etc)<br/><input type="text" name="name" /></p>
 <p>Language<br/><select name="language">
 {% for lang in languages %}
 <option value="{{ lang[0] }}">{{ lang[1] }}</option>
 {% end %}
 </select>
 </p>
+<p>Version (Ex: NIV, ESV, KJV)<br/>
+<input type="text" name="version" /></p>
 
 <input type="submit" value="create" />
 <input type="button" value="cancel" onclick="location.href='/'; return false;" />
