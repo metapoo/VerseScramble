@@ -7,8 +7,31 @@ from tornado.gen import coroutine
 def get_handlers():
     return ((r"/login/fb", FacebookGraphLoginHandler),
             (r"/login/logout", LogoutHandler),
-            (r"/login", FacebookGraphLoginHandler),
-            )
+            (r"/login/fb", FacebookGraphLoginHandler),
+            (r"/login", LoginHandler),
+)
+
+class LoginHandler(BaseHandler):
+    def get(self):
+        user = self.current_user
+        error_message = None
+        self.render("login/login.html",user=user,error_message=None)
+
+    def post(self):
+        password = self.get_argument("password")
+        email = self.get_argument("email")
+        user = authenticate_login(email=email, password=password)
+        error_message = None
+
+        if user is None:
+            error_message = "Invalid email or password"        
+            self.render("login/login.html",user=user,error_message=error_message)
+            return
+
+        session_key = user.session_key()
+        self.set_secure_cookie("session_key",session_key)
+        self.set_secure_cookie("email",email)
+        self.redirect("/")
 
 class LogoutHandler(BaseHandler):
     def get(self):
