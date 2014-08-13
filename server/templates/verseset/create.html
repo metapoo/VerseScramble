@@ -1,0 +1,19 @@
+{% extends "../base.html" %}
+
+{% block page_content %}
+
+Create a Verse Set
+
+<form method="post" action="/verseset/create">
+
+<p>Name: <input type="text" name="name" /></p>
+<p>Language: <select name="language">
+{% for lang in languages %}
+<option value="{{ lang[0] }}">{{ lang[1] }}</option>
+{% end %}
+</select>
+</p>
+
+<input type="submit" value="create" />
+</form>
+{% end %}
