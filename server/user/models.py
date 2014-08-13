@@ -8,12 +8,14 @@ class User(BaseModel, PasswordMixin):
         
         indices = (
             Index("email",unique=True),
-            Index("fb_uid",unique=True),
+            Index("fb_uid",unique=True,sparse=True),
         )
 
     def display_name(self):
         if self.has_key("name"):
             return self["name"]
+        if self.has_key("username"):
+            return self["username"]
         return "anonymous"
 
     def session_key(self):
