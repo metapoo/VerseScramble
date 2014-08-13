@@ -34,9 +34,11 @@ class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verses = list(verseset.verses())
+        verseset.update_verse_count(len(verses))
         user = self.current_user
         return self.render("verseset/show.html", verseset=verseset,
-                           user=user)
+                           user=user, verses=verses)
 
 
 class CreateVerseSetHandler(BaseHandler):

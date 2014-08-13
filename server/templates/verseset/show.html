@@ -3,6 +3,20 @@
 {% block page_content %}
 <div><b>{{verseset.get('name')}}</b> ({{verseset.verse_count()}} verses)</div>
 
+<div>
+{% for verse in verses %}
+<p><b>{{verse['reference'] }}
+
+{% if verse.has_key('version') %}
+({{verse['version']}})
+{% end %}
+
+</b><br/>
+{{verse['text']}}
+</p>
+{% end %}
+</div>
+
 <p>
 <p>Add a verse to this set:</p>
 
