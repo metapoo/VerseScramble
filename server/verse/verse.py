@@ -7,13 +7,34 @@ from bson.objectid import ObjectId
 def get_handlers():
     return ((r"/verseset/create", CreateVerseSetHandler),
             (r"/verseset/show/([^/]+)", ShowVerseSetHandler),
+            (r"/verse/create",CreateVerseHandler),
             )
 
+class CreateVerseHandler(BaseHandler):
+    def post(self):
+        user = self.current_user
+        reference = self.get_argument("reference")
+        version = self.get_argument("version")
+        text = self.get_argument("text")
+        verseset_id = self.get_argument("verseset_id")
+        verseset_id = ObjectId(verseset_id)
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        if verseset is None:
+            return self.write("Invalid verse set: %s" % verseset_id)
+        verse = Verse({'reference':reference,
+                       'version':version,
+                       'text':text,
+                       'verseset_id':verseset_id,
+                   })
+        verse.save()
+        verseset.update_verse_count()
+        self.redirect("/verseset/show/%s" % str(verseset_id))
+        
 class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
-        user = self.current_user
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        user = self.current_user
         return self.render("verseset/show.html", verseset=verseset,
                            user=user)
 

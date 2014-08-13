@@ -4,7 +4,18 @@
 <div><b>{{verseset.get('name')}}</b> ({{verseset.verse_count()}} verses)</div>
 
 <p>
-<a href="/verse/create">add a verse</a>
+<p>Add a verse to this set:</p>
+
+<form action="/verse/create" method="POST">
+
+<p>Reference (Ex: John 3:16)<br/><input name="reference" /> </p>
+<p>Version (Ex: NIV, ESV, KJV)<br/> <input name="version" /> </p>
+<p>Verse Text<br/><textarea name="text" style="width:400px;height:100px;"></textarea></p>
+<input type="hidden" name="verseset_id" value="{{verseset._id}}" />
+<input type="submit" value="add verse" />
+
+</form>
+
 </p>
 
 {% end %}

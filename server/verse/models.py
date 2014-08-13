@@ -28,7 +28,7 @@ class VerseSet(BaseModel):
         return new_instance
 
     def update_verse_count(self):
-        self["verse_count"] = len(self.verses())
+        self["verse_count"] = len(list(self.verses()))
         self.save()
 
     def verse_count(self):
