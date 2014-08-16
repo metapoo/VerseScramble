@@ -11,7 +11,24 @@ def get_handlers():
             (r"/verseset/remove/([^/]+)", RemoveVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
+            (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
             )
+
+class RemoveVerseHandler(BaseHandler):
+    def get(self, verse_id):
+        verse_id = ObjectId(verse_id)
+        user = self.current_user
+        verse = Verse.collection.find_one({'_id':verse_id})
+        if verse is None:
+            self.write("verse not found: %s" % verse_id)
+            return
+        verseset = verse.verseset()
+        if verseset['user_id'] != user._id:
+            self.write("not authorized")
+            return
+        verseset_id = verse['verseset_id']
+        verse.remove()
+        self.redirect("/verseset/show/%s" % verseset_id)
 
 class CreateVerseHandler(BaseHandler):
     def post(self):
@@ -28,6 +45,7 @@ class CreateVerseHandler(BaseHandler):
                        'version':version,
                        'text':text,
                        'verseset_id':verseset_id,
+                       'user_id':user._id,
                    })
         verse.save()
         verseset.update_verse_count()
@@ -81,7 +99,7 @@ class RemoveVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
         verseset.remove()
         self.redirect("/")
 

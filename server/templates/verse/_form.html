@@ -1,7 +1,10 @@
 <form action="/verse/create" method="POST">
 
 <p>Reference (Ex: John 3:16)<br/><input name="reference" /> </p>
-<p>Version (Ex: NIV, ESV, KJV)<br/> <input name="version" value="{{verseset.get('version','')}}" /> </p>
+<p>Version<br/> 
+{% include "../version_select.html" %}
+
+</p>
 <p>Verse Text<br/><textarea name="text" style="width:400px;height:100px;"></textarea></p>
 <input type="hidden" name="verseset_id" value="{{verseset._id}}" />
 <input type="submit" value="add verse" />

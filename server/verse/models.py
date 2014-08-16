@@ -58,7 +58,7 @@ class Verse(BaseModel):
         )
 
     def remove(self, *args, **kwargs):
-        super(VerseSet, self).remove(*args, **kwargs)
+        super(Verse, self).remove(*args, **kwargs)
 
     def __new__(cls, *args, **kwargs):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)

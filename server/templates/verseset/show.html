@@ -1,7 +1,7 @@
 {% extends "../base.html" %}
 
 {% block script_content %}
-document.getElementById("version_select").value = "{{verseset.get('version')}}";
+document.getElementById("version_select").value = "{{verseset.get('version','NIV')}}";
 {% end %}
 
 {% block page_content %}
@@ -13,15 +13,17 @@ document.getElementById("version_select").value = "{{verseset.get('version')}}";
 
 <div>
 {% for verse in verses %}
-<p><b>{{verse['reference'] }}
+<p><div>{{verse['reference'] }}
 
 {% if verse.has_key('version') %}
 ({{verse['version']}})
 {% end %}
+</div>
 
-</b><br/>
-{{verse['text']}}
-</p>
+<div>{{verse['text']}}</div>
+<div><a href="verse/edit/{{verse._id}}">edit</a> | <a href="/verse/remove/{{verse._id}}">remove</a></div>
+</div>
+
 {% end %}
 </div>
 
