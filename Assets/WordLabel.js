@@ -91,6 +91,8 @@ function setWord(w : String) {
 	} else {
 		label.font = enFont;
 		label.renderer.material = enFont.material;
+		label.fontSize = 80;
+		label.fontStyle = FontStyle.Normal;
 	}
 	
 	label.text = w;

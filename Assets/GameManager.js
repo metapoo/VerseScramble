@@ -449,7 +449,8 @@ function SplitVerse(verse : String) {
 				if (phrase[0] == " ") {
 					phrase = phrase.Substring(1,phrase.Length-1);
 				}
-				if (phrase[phrase.Length-1] == " ") {
+				//Debug.Log("phrase.Length = " + phrase.Length);
+				if ((phrase.Length > 0) && (phrase[phrase.Length-1] == " ")) {
 					phrase = phrase.Substring(0,phrase.Length-1);
 				}
 
