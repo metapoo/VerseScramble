@@ -6,11 +6,13 @@ from bson.objectid import ObjectId
 
 def get_handlers():
     return ((r"/verseset/create", CreateVerseSetHandler),
-            (r"/verseset/show/([^/]+)", ShowVerseSetHandler),
-            (r"/verseset/edit/([^/]+)", UpdateVerseSetHandler),
-            (r"/verseset/remove/([^/]+)", RemoveVerseSetHandler),
+            (r"/verseset/show/([^/]+)/?", ShowVerseSetHandler),
+            (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
+            (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
+            (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
+            (r"/verse/update", UpdateVerseHandler),
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
             )
 
@@ -29,6 +31,43 @@ class RemoveVerseHandler(BaseHandler):
         verseset_id = verse['verseset_id']
         verse.remove()
         self.redirect("/verseset/show/%s" % verseset_id)
+
+class UpdateVerseHandler(BaseHandler):
+    def get(self, verse_id):
+        verse_id = ObjectId(verse_id)
+        user = self.current_user
+        verse = Verse.collection.find_one({'_id':verse_id})
+        if verse is None:
+            self.write("verse not found: %s" % verse_id)
+            return
+        verseset = verse.verseset()
+        if verseset['user_id'] != user._id:
+            self.write("not authorized")
+            return
+        verseset_id = verse['verseset_id']
+        self.render("verse/edit.html", verse=verse, verseset=verseset,
+                    user=user)
+    def post(self):
+        verse_id = self.get_argument("verse_id")
+        verse_id = ObjectId(verse_id)
+        user = self.current_user
+        verse = Verse.collection.find_one({'_id':verse_id})
+        if verse is None:
+            self.write("verse not found: %s" % verse_id)
+            return
+        verseset = verse.verseset()
+        if verseset['user_id'] != user._id:
+            self.write("not authorized")
+            return
+        reference = self.get_argument("reference")
+        version = self.get_argument("version")
+        text = self.get_argument("text")
+        verse.update({"version":version,
+                      "text":text,
+                      "reference":reference})
+        verse.save()
+        
+        self.redirect("/verseset/show/%s" % str(verseset._id))
 
 class CreateVerseHandler(BaseHandler):
     def post(self):
@@ -60,7 +99,7 @@ class ShowVerseSetHandler(BaseHandler):
         verseset.update_verse_count(len(verses))
         user = self.current_user
         return self.render("verseset/show.html", verseset=verseset,
-                           user=user, verses=verses, version=version)
+                           user=user, verses=verses, version=version, verse=None)
 
 
 class UpdateVerseSetHandler(BaseHandler):

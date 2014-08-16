@@ -12,16 +12,16 @@ document.getElementById("version_select").value = "{{verseset.get('version','NIV
 </div>
 
 <div>
-{% for verse in verses %}
-<p><div>{{verse['reference'] }}
+{% for v in verses %}
+<p><div>{{v['reference'] }}
 
-{% if verse.has_key('version') %}
-({{verse['version']}})
+{% if v.has_key('version') %}
+({{v['version']}})
 {% end %}
 </div>
 
-<div>{{verse['text']}}</div>
-<div><a href="verse/edit/{{verse._id}}">edit</a> | <a href="/verse/remove/{{verse._id}}">remove</a></div>
+<div>{{v['text']}}</div>
+<div><a href="/verse/edit/{{v._id}}">edit</a> | <a href="/verse/remove/{{v._id}}">remove</a></div>
 </div>
 
 {% end %}

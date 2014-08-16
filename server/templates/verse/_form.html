@@ -1,12 +1,14 @@
-<form action="/verse/create" method="POST">
+<form action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
 
-<p>Reference (Ex: John 3:16)<br/><input name="reference" /> </p>
+<p>Reference (Ex: John 3:16)<br/><input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %}/> </p>
 <p>Version<br/> 
 {% include "../version_select.html" %}
 
 </p>
-<p>Verse Text<br/><textarea name="text" style="width:400px;height:100px;"></textarea></p>
+<p>Verse Text<br/><textarea name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea></p>
+
+{% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
 <input type="hidden" name="verseset_id" value="{{verseset._id}}" />
-<input type="submit" value="add verse" />
+<input type="submit" value="{% if verse %}save {% else %}add verse{% end %}" />
 
 </form>
