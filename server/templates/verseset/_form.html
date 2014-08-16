@@ -1,0 +1,21 @@
+<form action="/verseset/{% if verseset %}update{% else %}create{% end %}" method="POST">
+<p>Name (Ex: Healing, Salvation, etc)<br/><input type="text" name="name"
+{% if verseset %}value="{{verseset.get('name')}}"{% end %}
+ /></p>
+<p>Language<br/><select name="language">
+{% for lang in languages %}
+<option value="{{ lang[0] }}"
+{% if verseset and verseset['language'] == lang[0] %}
+selected="selected"
+{% end %}
+>{{ lang[1] }}</option>
+{% end %}
+</select>
+</p>
+<p>Version<br/>
+{% include "../version_select.html" %}
+</p>
+{% if verseset %}<input type="hidden" name="verseset_id" value="{{verseset._id}}" />{% end %}
+<input type="submit" value="{% if verseset %}update{% else %}create{% end %}" />
+<input type="button" value="cancel" onclick="location.href='/'; return false;" />
+</form>

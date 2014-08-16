@@ -1,7 +1,15 @@
 {% extends "../base.html" %}
 
+{% block script_content %}
+document.getElementById("version_select").value = "{{verseset.get('version')}}";
+{% end %}
+
 {% block page_content %}
-<div><b>{{verseset.get('name')}}</b> ({{verseset.verse_count()}} verses)</div>
+<div><b>{{verseset.get('name')}}</b></br>
+<span>{{verseset.verse_count()}} verses | <a href="/verseset/edit/{{verseset._id}}">edit</a> |
+<a href="/verseset/remove/{{verseset._id}}">remove</a>
+</span>
+</div>
 
 <div>
 {% for verse in verses %}
@@ -20,15 +28,7 @@
 <p>
 <p>Add a verse to this set:</p>
 
-<form action="/verse/create" method="POST">
-
-<p>Reference (Ex: John 3:16)<br/><input name="reference" /> </p>
-<p>Version (Ex: NIV, ESV, KJV)<br/> <input name="version" value="{{verseset.get('version','')}}" /> </p>
-<p>Verse Text<br/><textarea name="text" style="width:400px;height:100px;"></textarea></p>
-<input type="hidden" name="verseset_id" value="{{verseset._id}}" />
-<input type="submit" value="add verse" />
-
-</form>
+{% include "../verse/_form.html" %}
 
 </p>
 

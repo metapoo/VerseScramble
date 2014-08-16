@@ -7,6 +7,9 @@ from bson.objectid import ObjectId
 def get_handlers():
     return ((r"/verseset/create", CreateVerseSetHandler),
             (r"/verseset/show/([^/]+)", ShowVerseSetHandler),
+            (r"/verseset/edit/([^/]+)", UpdateVerseSetHandler),
+            (r"/verseset/remove/([^/]+)", RemoveVerseSetHandler),
+            (r"/verseset/update", UpdateVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             )
 
@@ -34,12 +37,53 @@ class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        version = verseset.get("version","")
         verses = list(verseset.verses())
         verseset.update_verse_count(len(verses))
         user = self.current_user
         return self.render("verseset/show.html", verseset=verseset,
-                           user=user, verses=verses)
+                           user=user, verses=verses, version=version)
 
+
+class UpdateVerseSetHandler(BaseHandler):
+    @require_login
+    def get(self, verseset_id):
+        verseset_id = ObjectId(verseset_id)
+        user = self.current_user
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        if verseset is None:
+            self.write("verse set not found")
+            return
+        version = verseset.get("version")
+
+        return self.render("verseset/edit.html",
+                           user=user, languages=languages,verseset=verseset,
+                           version=version)
+
+    @require_login
+    def post(self):
+        user = self.current_user
+        verseset_id = self.get_argument("verseset_id")
+        verseset_id = ObjectId(verseset_id)
+        user = self.current_user
+        verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
+        name = self.get_argument("name")
+        language = self.get_argument("language")
+        version = self.get_argument("version")
+        verseset.update({"name":name,
+                         "language":language,
+                         "version":version})
+        verseset.save()
+        self.redirect("/")
+
+class RemoveVerseSetHandler(BaseHandler):
+    @require_login
+    def get(self, verseset_id):
+        verseset_id = ObjectId(verseset_id)
+        user = self.current_user
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset.remove()
+        self.redirect("/")
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -61,7 +105,8 @@ class CreateVerseSetHandler(BaseHandler):
     @require_login
     def get(self):
         user = self.current_user
+        version = "NIV"
         return self.render("verseset/create.html", user=user,
-                           languages=languages)
+                           languages=languages, version=version,verseset=None)
 
 

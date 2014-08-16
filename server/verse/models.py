@@ -39,6 +39,12 @@ class VerseSet(BaseModel):
     def verse_count(self):
         return self.get("verse_count",0)
 
+    def remove(self, *args, **kwargs):
+        for verse in self.verses():
+            verse.remove()
+
+        super(VerseSet, self).remove(*args, **kwargs)
+
 class Verse(BaseModel):
     class Meta:
         collection = "verse"
@@ -50,7 +56,10 @@ class Verse(BaseModel):
             Index("verseset_id",unique=False),
             Index("user_id",unique=False)
         )
-    
+
+    def remove(self, *args, **kwargs):
+        super(VerseSet, self).remove(*args, **kwargs)
+
     def __new__(cls, *args, **kwargs):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(VerseSet)

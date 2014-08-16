@@ -23,7 +23,7 @@
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
        }(document, 'script', 'facebook-jssdk'));
-    
+
     </script>
 
 </head>
@@ -44,4 +44,8 @@ logged in as {{user.display_name()}}
 {% end %}
 
 
+<script>
+{% block script_content %}
+{% end %}    
+</script>
 </body>

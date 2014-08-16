@@ -6,7 +6,9 @@
 <div>
 Verse Sets:
 {% for verseset in versesets %}
-<p><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a> ({{verseset.verse_count()}} verses)</p>
+<p><div><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a></div>
+<span>{{verseset.verse_count()}} verses | <a href="/verseset/edit/{{verseset._id}}">edit</a> |
+<a href="/verseset/remove/{{verseset._id}}">remove</a> </span></p>
 
 {% end %}
 </div>
