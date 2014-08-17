@@ -3,12 +3,12 @@
 {% if verseset %}value="{{verseset.get('name')}}"{% end %}
  /></p>
 <p>Language<br/><select name="language">
-{% for lang in languages %}
-<option value="{{ lang[0] }}"
-{% if verseset and verseset['language'] == lang[0] %}
+{% for lang_code in language_codes %}
+<option value="{{ lang_code }}"
+{% if verseset and verseset['language'] == lang_code %}
 selected="selected"
 {% end %}
->{{ lang[1] }}</option>
+>{{ language_by_code[lang_code] }}</option>
 {% end %}
 </select>
 </p>

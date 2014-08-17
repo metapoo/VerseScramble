@@ -1,6 +1,6 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
-from verserain.verse.language import LANGUAGES as languages
+from verserain.verse.language import *
 from verserain.verse.models import *
 from bson.objectid import ObjectId
 
@@ -114,7 +114,8 @@ class UpdateVerseSetHandler(BaseHandler):
         version = verseset.get("version")
 
         return self.render("verseset/edit.html",
-                           user=user, languages=languages,verseset=verseset,
+                           user=user, language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
+                           verseset=verseset,
                            version=version)
 
     @require_login
@@ -164,6 +165,7 @@ class CreateVerseSetHandler(BaseHandler):
         user = self.current_user
         version = "NIV"
         return self.render("verseset/create.html", user=user,
-                           languages=languages, version=version,verseset=None)
+                           language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
+                           version=version,verseset=None)
 
 
