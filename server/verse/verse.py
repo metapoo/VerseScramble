@@ -45,8 +45,11 @@ class UpdateVerseHandler(BaseHandler):
             self.write("not authorized")
             return
         verseset_id = verse['verseset_id']
+        language = verseset['language']
+        versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
+
         self.render("verse/edit.html", verse=verse, verseset=verseset,
-                    user=user)
+                    user=user, versions=versions)
     def post(self):
         verse_id = self.get_argument("verse_id")
         verse_id = ObjectId(verse_id)
@@ -94,12 +97,15 @@ class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        language = verseset['language']
+        versions = VERSION_BY_LANGUAGE_CODE.get(language,[])
         version = verseset.get("version","")
         verses = list(verseset.verses())
         verseset.update_verse_count(len(verses))
         user = self.current_user
         return self.render("verseset/show.html", verseset=verseset,
-                           user=user, verses=verses, version=version, verse=None)
+                           user=user, verses=verses, version=version, verse=None,
+                           versions=versions)
 
 
 class UpdateVerseSetHandler(BaseHandler):
@@ -112,10 +118,11 @@ class UpdateVerseSetHandler(BaseHandler):
             self.write("verse set not found")
             return
         version = verseset.get("version")
-
+        language = verseset['language']
+        versions = VERSION_BY_LANGUAGE_CODE[language]
         return self.render("verseset/edit.html",
                            user=user, language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
-                           verseset=verseset,
+                           verseset=verseset,versions=versions, language=language,
                            version=version)
 
     @require_login
@@ -164,8 +171,10 @@ class CreateVerseSetHandler(BaseHandler):
     def get(self):
         user = self.current_user
         version = "NIV"
+        language = 'en'
+        versions = VERSION_BY_LANGUAGE_CODE[language]
         return self.render("verseset/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
-                           version=version,verseset=None)
+                           version=version,verseset=None,language=language,versions=versions)
 
 
