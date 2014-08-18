@@ -1,7 +1,7 @@
 <form action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
 
 <p>Reference (Ex: John 3:16)<br/><input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %}/> </p>
-<p>Version<br/> 
+<p>
 {% include "../version_select.html" %}
 
 </p>
