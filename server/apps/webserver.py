@@ -23,6 +23,7 @@ import tornado.options
 import tornado.web
 import os.path
 import uuid
+from verserain import settings
 
 from tornado.options import define, options
 from verserain.base import uimodules
@@ -46,7 +47,7 @@ class Application(tornado.web.Application):
             static_path=os.path.join(os.path.dirname(__file__), "../static"),
             xsrf_cookies=False,
             debug=True,
-            facebook_api_key="1439577092991935",
+            facebook_api_key=settings.FACEBOOK_API_KEY,
             facebook_secret="30934f472bc7108037ccc7e31f480366",
             site_url="http://verserain.eternityinourheart.com",
         )

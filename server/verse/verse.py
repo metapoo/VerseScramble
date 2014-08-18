@@ -14,7 +14,19 @@ def get_handlers():
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
+            (r"/version/update_selector/?",UpdateVersionSelectorHandler),
             )
+
+class UpdateVersionSelectorHandler(BaseHandler):
+    def get(self):
+        version = self.get_argument("version")
+        language = self.get_argument("language")
+        versions = VERSION_BY_LANGUAGE_CODE[language]
+
+        self.render("version_select.html",version=version,language=language,versions=versions)
+
+    def post(self):
+        return self.get()
 
 class RemoveVerseHandler(BaseHandler):
     def get(self, verse_id):
