@@ -1,7 +1,9 @@
 ﻿#pragma strict
 
 var label : TextMesh;
-var bgSprite : SpriteRenderer;
+var bgMiddle : SpriteRenderer;
+var bgLeft : SpriteRenderer;
+var bgRight : SpriteRenderer;
 var word : String;
 var lineNumber : int;
 var charPosition : int;
@@ -54,27 +56,14 @@ function FixedUpdate() {
 }
 
 function SetColor(color : Color) {
-	bgSprite.renderer.material.color = color;
+	bgMiddle.renderer.material.color = color;
+	bgLeft.renderer.material.color = color;
+	bgRight.renderer.material.color = color;
+	
 }
 
 function GetColor() {
-	return bgSprite.renderer.material.color;
-}
-
-function SetMeshLength(l : float) {
-	var mesh = GetComponent(MeshFilter).mesh;
-	var vertices : Vector3[] = mesh.vertices;
-	vertices[0] = Vector3(-0.5*l,-0.5,0);
-	vertices[1] = Vector3(0.5*l,0.5,0);
-	vertices[2] = Vector3(0.5*l,-0.5,0);
-	vertices[3] = Vector3(-0.5*l,0.5,0);
-	mesh.vertices = vertices;
-	mesh.RecalculateBounds();
-	
-	var s = 1.0;
-	renderer.material.mainTextureScale = Vector2(l*s,1.0*s);
-	var ts : Vector2 = renderer.material.mainTextureScale;
-	//renderer.material.mainTextureOffset = Vector2(Random.RandomRange(0,ts[0]),Random.RandomRange(0,ts[1]));
+	return bgMiddle.renderer.material.color;
 }
 
 function boxCollider2D() {
@@ -83,13 +72,19 @@ function boxCollider2D() {
 }
 
 function SetBlockLength(l : float, h : float) {
+	var padding = bgLeft.bounds.size.x + bgRight.bounds.size.y;
+	l -= padding;
 	boxCollider2D().size = Vector2(l,h);
-	var size : Vector3 = bgSprite.renderer.bounds.size;
+	var size : Vector3 = bgMiddle.renderer.bounds.size;
 	
-	var xScale = l / size.x;
 	var yScale = h / size.y;
+	var xScale = l / size.x;
+	bgMiddle.transform.localScale = new Vector3(xScale, yScale, 1.0f);
 	
-	bgSprite.transform.localScale = new Vector3(xScale, yScale, 1.0f);
+	bgLeft.transform.localScale = new Vector3(yScale, yScale, 1.0f);
+	bgLeft.transform.position = new Vector3(-l*0.5f,0,1.0f);
+	bgRight.transform.localScale = new Vector3(yScale, yScale, 1.0f);
+	bgRight.transform.position = new Vector3(l*0.5f,0,1.0f);
 }
 
 function setWord(w : String) {
