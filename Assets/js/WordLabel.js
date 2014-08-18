@@ -166,15 +166,15 @@ function calculateVersePosition () {
 	oldRotation = transform.rotation;
 	transform.rotation = new Quaternion.Euler(0,0,0);
 	var spacing = 0.0f;
-	
-	var wordWidth = boxCollider2D().size.x;
+	var size = boxCollider2D().size;
+	var wordWidth = size.x;
 	
 	versePosition.x += wordWidth + spacing;
 	
 	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y);
 	var screenBounds = GameManager.screenBounds;
 	var maxX = screenBounds.x + screenBounds.width*0.95;
-	var vSpacing = renderer.bounds.size.y;
+	var vSpacing = size.y;
 	
 	transform.rotation = oldRotation;
 	
