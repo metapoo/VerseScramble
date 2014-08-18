@@ -23,6 +23,7 @@ var zhFont : Font;
 var oldRotation : Quaternion;
 var scoreCredited : float;
 var exploding : boolean = false;
+var totalSize : Vector3;
 
 function Explode() {
 	if (exploding && !returnedToVerse) return;
@@ -74,7 +75,6 @@ function boxCollider2D() {
 function SetBlockLength(l : float, h : float) {
 	var padding = bgLeft.bounds.size.x + bgRight.bounds.size.y;
 	l -= padding;
-	boxCollider2D().size = Vector2(l,h);
 	var size : Vector3 = bgMiddle.renderer.bounds.size;
 	
 	var yScale = h / size.y;
@@ -85,6 +85,13 @@ function SetBlockLength(l : float, h : float) {
 	bgLeft.transform.position = new Vector3(-l*0.5f,0,1.0f);
 	bgRight.transform.localScale = new Vector3(yScale, yScale, 1.0f);
 	bgRight.transform.position = new Vector3(l*0.5f,0,1.0f);
+	
+	var sm = bgMiddle.renderer.bounds.size;
+	var sr = bgLeft.renderer.bounds.size;
+	var sl = bgRight.renderer.bounds.size;
+	totalSize = new Vector3(sl.x+sm.x+sr.x, sm.y, sm.z);
+	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
+
 }
 
 function setWord(w : String) {
@@ -161,15 +168,14 @@ function calculateVersePosition () {
 	oldRotation = transform.rotation;
 	transform.rotation = new Quaternion.Euler(0,0,0);
 	var spacing = 0.0f;
-	var size = boxCollider2D().size;
-	var wordWidth = size.x;
+	var wordWidth = totalSize.x;
 	
 	versePosition.x += wordWidth + spacing;
 	
 	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y);
 	var screenBounds = GameManager.screenBounds;
 	var maxX = screenBounds.x + screenBounds.width*0.95;
-	var vSpacing = size.y;
+	var vSpacing = totalSize.y;
 	
 	transform.rotation = oldRotation;
 	
