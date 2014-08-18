@@ -635,7 +635,7 @@ function SetupVerse() {
 	
 	for (var i : int=index;i<wordLabels.length;i++) {
 		var wordObject : WordLabel = wordLabels[i];
-		var h = wordObject.renderer.bounds.size.y;
+		var h = wordObject.boxCollider2D().size.y;
 
 		wordObject.transform.position.y = screenBounds.y+h*2;
 		wordObject.rigidbody2D.isKinematic = false;

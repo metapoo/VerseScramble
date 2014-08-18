@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 var label : TextMesh;
+var bgSprite : SpriteRenderer;
 var word : String;
 var lineNumber : int;
 var charPosition : int;
@@ -53,11 +54,11 @@ function FixedUpdate() {
 }
 
 function SetColor(color : Color) {
-	renderer.material.color = color;
+	bgSprite.renderer.material.color = color;
 }
 
 function GetColor() {
-	return renderer.material.color;
+	return bgSprite.renderer.material.color;
 }
 
 function SetMeshLength(l : float) {
@@ -70,16 +71,29 @@ function SetMeshLength(l : float) {
 	mesh.vertices = vertices;
 	mesh.RecalculateBounds();
 	
-	var boxCollider2D : BoxCollider2D = GetComponent(BoxCollider2D);
-	boxCollider2D.size = Vector2(l,1.0);
 	var s = 1.0;
 	renderer.material.mainTextureScale = Vector2(l*s,1.0*s);
 	var ts : Vector2 = renderer.material.mainTextureScale;
 	//renderer.material.mainTextureOffset = Vector2(Random.RandomRange(0,ts[0]),Random.RandomRange(0,ts[1]));
 }
 
+function boxCollider2D() {
+	var boxCollider2D : BoxCollider2D = GetComponent(BoxCollider2D);
+	return boxCollider2D;
+}
+
+function SetBlockLength(l : float, h : float) {
+	boxCollider2D().size = Vector2(l,h);
+	var size : Vector3 = bgSprite.renderer.bounds.size;
+	
+	var xScale = l / size.x;
+	var yScale = h / size.y;
+	
+	bgSprite.transform.localScale = new Vector3(xScale, yScale, 1.0f);
+}
+
 function setWord(w : String) {
-	var mesh = GetComponent(MeshFilter).mesh;
+	//var mesh = GetComponent(MeshFilter).mesh;
 	
 	var language = verseManager.GetLanguage();
 
@@ -98,9 +112,13 @@ function setWord(w : String) {
 	label.text = w;
 	word = w;
 	
-	var textWidth = label.renderer.bounds.size.x;
+	var size = label.renderer.bounds.size;
+	var textWidth = size.x;
+	var textHeight = size.y;
 	var padding = 0.5;
-	SetMeshLength(textWidth + padding);
+	var l = textWidth + padding;
+	var h = textHeight + padding;
+	SetBlockLength(l, h);
 	
 }
 
@@ -149,7 +167,7 @@ function calculateVersePosition () {
 	transform.rotation = new Quaternion.Euler(0,0,0);
 	var spacing = 0.0f;
 	
-	var wordWidth = renderer.bounds.size.x;
+	var wordWidth = boxCollider2D().size.x;
 	
 	versePosition.x += wordWidth + spacing;
 	
