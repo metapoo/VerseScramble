@@ -10,5 +10,5 @@
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
 <input type="hidden" name="verseset_id" value="{{verseset._id}}" />
 <input type="submit" value="{% if verse %}save {% else %}add verse{% end %}" />
-
+{% if verse %}<input type="button" value="cancel" onclick="location.href='/verseset/show/{{verseset._id}}'; return false;" />{% end %}
 </form>

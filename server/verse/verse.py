@@ -47,9 +47,10 @@ class UpdateVerseHandler(BaseHandler):
         verseset_id = verse['verseset_id']
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
+        version = verse.get('version')
 
         self.render("verse/edit.html", verse=verse, verseset=verseset,
-                    user=user, versions=versions)
+                    user=user, versions=versions, version=version)
     def post(self):
         verse_id = self.get_argument("verse_id")
         verse_id = ObjectId(verse_id)

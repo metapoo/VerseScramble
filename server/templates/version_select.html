@@ -1,5 +1,5 @@
 <select id="version_select" name="version" > 
 {% for version_code, version_desc in versions %}
-<option value="{{version_code}}">{{version_desc}}</option>
+<option value="{{version_code}}" {% if version_code==version %}selected="true"{% end %}>{{version_desc}}</option>
 {% end %}
 </select>
