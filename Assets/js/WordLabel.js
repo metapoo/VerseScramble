@@ -5,8 +5,6 @@ var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
 var word : String;
-var lineNumber : int;
-var charPosition : int;
 static var versePosition : Vector3;
 static var startPosition : Vector3;
 var destination : Vector3;
@@ -24,6 +22,10 @@ var oldRotation : Quaternion;
 var scoreCredited : float;
 var exploding : boolean = false;
 var totalSize : Vector3;
+var wordIndex : int;
+var isFirstInLine : boolean;
+var isLastInLine : boolean;
+private var shrinkingEdges : boolean = false;
 
 function Explode() {
 	if (exploding && !returnedToVerse) return;
@@ -94,6 +96,59 @@ function SetBlockLength(l : float, h : float) {
 
 }
 
+function ShrinkLeftEdge(duration : float) {
+	while (shrinkingEdges) {
+		yield WaitForSeconds(0.1f);
+	}
+	shrinkingEdges = true;
+	var startScale = bgLeft.transform.localScale;
+	var endScale = new Vector3(0,startScale.y, startScale.z);
+	var dw = bgLeft.renderer.bounds.size.x;
+	
+	// move right edge to the right and shrink
+	AnimationManager.ScaleOverTime(bgLeft.transform,endScale, duration);
+	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw,0,0), duration);
+	
+	var oldW = bgMiddle.renderer.bounds.size.x;
+	var newW = oldW+dw;
+	startScale = bgMiddle.transform.localScale;
+	endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
+	
+	// scale middle to fill in gap, move right to compensate
+	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1*dw*0.5f,0,0), duration);
+	
+	yield WaitForSeconds(duration);
+	shrinkingEdges = false;
+}
+
+function ShrinkRightEdge(duration : float) {
+	while (shrinkingEdges) {
+		yield WaitForSeconds(0.1f);
+	}
+	shrinkingEdges = true;
+	var startScale = bgRight.transform.localScale;
+	var endScale = new Vector3(0,startScale.y, startScale.z);
+	var dw = bgRight.renderer.bounds.size.x;
+	
+	// move right edge to the right and shrink
+	AnimationManager.ScaleOverTime(bgRight.transform,endScale, duration);
+	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw,0,0), duration);
+	
+	
+	var oldW = bgMiddle.renderer.bounds.size.x;
+	var newW = oldW+dw;
+	startScale = bgMiddle.transform.localScale;
+	endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
+	
+	// scale middle to fill in gap, move right to compensate
+	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*0.5f,0,0), duration);
+	
+	yield WaitForSeconds(duration);
+	shrinkingEdges = false;
+}
+
 function setWord(w : String) {
 	//var mesh = GetComponent(MeshFilter).mesh;
 	
@@ -157,10 +212,27 @@ function Update () {
 	
 }
 
+function GetPreviousWordLabel() {
+	return gameManager.GetWordLabelAt(wordIndex-1);	
+}
+
+function GetNextWordLabel() {
+	return gameManager.GetWordLabelAt(wordIndex+1);	
+}
+
 function handleReturnedToVerse() {
 	transform.position = destination;
 	returnedToVerse = true;
 	gotoVerse = false;
+	
+	var d = 0.5f;
+	if (!isFirstInLine) {
+		ShrinkLeftEdge(d);
+		var pw = GetPreviousWordLabel();
+		if (pw) {
+			pw.ShrinkRightEdge(d);
+		}
+	}
 }
 
 
@@ -179,11 +251,18 @@ function calculateVersePosition () {
 	
 	transform.rotation = oldRotation;
 	
+	if (wordIndex == 0) isFirstInLine = true;
+	
 	if ((destination.x + wordWidth*0.5) > maxX) {
 		versePosition = new Vector3(startPosition.x,
 									versePosition.y-vSpacing,
 									0);
+		isFirstInLine = true;
 		calculateVersePosition();
+		var pw = GetPreviousWordLabel();
+		if (pw) {
+			pw.isLastInLine = true;
+		}
 	}
 }
 

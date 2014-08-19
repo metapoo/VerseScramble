@@ -1,11 +1,17 @@
-static function Translation (thisTransform : Transform, startPos : Vector3, endPos : Vector3, duration : float) {
+static function Translation (thisTransform : Transform, endPos : Vector3, duration : float) {
 	var rate = 1.0/duration;
 	var t = 0.0;
+	var startPos = thisTransform.position;
 	while (t < 1.0) {
 		t += Time.deltaTime * rate;
 		thisTransform.position = Vector3.Lerp(startPos, endPos, t);
 		yield; 
 	}
+}
+
+static function TranslationBy(thisTransform : Transform, dPos : Vector3, duration : float) {
+	var endPos = thisTransform.position + dPos;
+	return Translation(thisTransform, endPos, duration);
 }
 
 static function SetTextMeshAlpha (textMesh : TextMesh, alpha : float) {
@@ -23,8 +29,9 @@ static function FadeOverTime(textMesh : TextMesh, startAlpha : float, endAlpha :
 	}
 }
 
-static function ScaleOverTime (thisTransform : Transform, startScale : Vector3, endScale : Vector3, duration : float) {
+static function ScaleOverTime (thisTransform : Transform, endScale : Vector3, duration : float) {
 	var rate = 1.0/duration;
+	var startScale = thisTransform.localScale;
 	var t = 0.0;
 	while (t < 1.0) {
 		t += Time.deltaTime * rate;
@@ -34,7 +41,8 @@ static function ScaleOverTime (thisTransform : Transform, startScale : Vector3, 
 }
 
 
-static function ChangeFontOverTime (guiText : GUIText, startFont : float, endFont : float, duration : float) {
+static function ChangeFontOverTime (guiText : GUIText, endFont : float, duration : float) {
+	var startFont = guiText.fontSize;
 	var rate = 1.0/duration;
 	var t = 0.0;
 	while (t < 1.0) {

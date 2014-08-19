@@ -200,7 +200,8 @@ function showFeedback(feedbackText : String, time : float) {
 	feedbackLabel.renderer.enabled = true;
 	AnimationManager.SetTextMeshAlpha(feedbackLabel, 1.0);
 	var animDuration = 0.25f;
-	AnimationManager.ScaleOverTime(feedbackLabel.transform, Vector3(0,0,1), Vector3(0.1,0.1,1), animDuration);
+	feedbackLabel.transform.localScale = new Vector3(0,0,1);
+	AnimationManager.ScaleOverTime(feedbackLabel.transform, Vector3(0.1,0.1,1), animDuration);
 	feedbackLabel.text = feedbackText;
 	yield WaitForSeconds(time+animDuration);
 	// there could be another feedback animation running, in which case we want to let that one take over
@@ -249,13 +250,12 @@ function nextWord() {
 
 function moveReferenceToTopLeft() {
 	var duration : float = 0.5;
-	var start : Vector3 = referenceLabel.transform.position;
 	var refSize = referenceLabel.renderer.bounds.size;
 	var destination : Vector3 = new Vector3(screenBounds.x+refSize.x*0.5+screenBounds.width*0.02, 
 	screenBounds.y-refSize.y*0.5-screenBounds.height*0.02, 1);
 	
 	
-	AnimationManager.Translation(referenceLabel.transform, start, destination, duration);
+	AnimationManager.Translation(referenceLabel.transform, destination, duration);
 	
 	yield WaitForSeconds(duration);
 	
@@ -271,14 +271,14 @@ function AnimateIntro() {
 	var w = Screen.width;
 	var startScale : Vector3 = new Vector3(0.12f,0.12f,1.0f);
 	var endScale : Vector3 = new Vector3(0.06f,0.06f,1.0f);
-	
-	AnimationManager.ScaleOverTime(referenceLabel.transform, Vector3(0,0,0), startScale, duration);
+	referenceLabel.transform.localScale = Vector3.zero;
+	AnimationManager.ScaleOverTime(referenceLabel.transform, startScale, duration);
 	
 	verseManager.SayVerseReference();	
 
 	yield WaitForSeconds(2.0f);
 	
-	AnimationManager.ScaleOverTime(referenceLabel.transform, startScale, endScale, duration);
+	AnimationManager.ScaleOverTime(referenceLabel.transform, endScale, duration);
 	
 	yield WaitForSeconds(duration);
 	
@@ -585,10 +585,11 @@ function SetupVerse() {
 	}
 	
 	var dy = screenBounds.y;
-	
+	var i = 0;
 	for (word in words) {
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
 		clone.setWord(word);
+		clone.wordIndex = i;
 		wordLabels.push(clone);
 		var w = clone.renderer.bounds.size.x;
 		var h = clone.renderer.bounds.size.y;
@@ -596,6 +597,7 @@ function SetupVerse() {
 		var y = screenBounds.y+screenBounds.height+h*2;
 		clone.transform.position = new Vector3(x,y,0);
 		clone.rigidbody2D.isKinematic = true;
+		i += 1;
 	}
 	
 	yield WaitForSeconds(2.5f);
@@ -613,6 +615,12 @@ function SetupVerse() {
 	}
 	numWordsReleased = wordLabels.length;
 	
+}
+
+function GetWordLabelAt(index : int) : WordLabel {
+	if (index < 0) return null;
+	if (index >= wordLabels.length) return null;
+	return wordLabels[index];
 }
 
  function releaseWords(index: int) {
