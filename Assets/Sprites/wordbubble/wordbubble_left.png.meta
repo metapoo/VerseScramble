@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 55cc84cd9c1ef4bdfa0c192b1a52ef2a
+guid: 42a93782aee6341438a95ae716e5aa3d
 TextureImporter:
   fileIDToRecycleName:
-    21300000: wordbubble
+    21300000: wordbubble_left
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -35,8 +35,8 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: .5, y: .5}
+  alignment: 5
+  spritePivot: {x: 1, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
@@ -44,5 +44,5 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: 
+  spritePackingTag: 1000
   userData: 
