@@ -49,9 +49,9 @@ TextureImporter:
     - name: wordbubble_middle
       rect:
         serializedVersion: 2
-        x: 2
+        x: 3
         y: 8
-        width: 199
+        width: 197
         height: 54
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -59,9 +59,9 @@ TextureImporter:
     - name: wordbubble_right
       rect:
         serializedVersion: 2
-        x: 203
+        x: 204
         y: 8
-        width: 24
+        width: 23
         height: 54
       alignment: 4
       pivot: {x: 0, y: .5}
@@ -71,7 +71,7 @@ TextureImporter:
         serializedVersion: 2
         x: 229
         y: 8
-        width: 24
+        width: 23
         height: 54
       alignment: 5
       pivot: {x: 1, y: .5}
