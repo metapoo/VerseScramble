@@ -28,7 +28,9 @@ var isLastInLine : boolean;
 private var shrinkingEdges : boolean = false;
 
 function Explode() {
-	if (exploding && !returnedToVerse) return;
+	if (exploding || !returnedToVerse) return;
+	
+	ResetBubble();
 	exploding = true;
 	var wasReturnedToVerse = returnedToVerse;
 	
@@ -75,25 +77,34 @@ function boxCollider2D() {
 }
 
 function SetBlockLength(l : float, h : float) {
+	var elements = [bgLeft, bgRight, bgMiddle];
+	
+	for (var el in elements) {
+		el.transform.localScale = Vector3.one;
+	}
+	
 	var padding = bgLeft.bounds.size.x + bgRight.bounds.size.y;
 	l -= padding;
 	var size : Vector3 = bgMiddle.renderer.bounds.size;
 	
 	var yScale = h / size.y;
 	var xScale = l / size.x;
-	bgMiddle.transform.localScale = new Vector3(xScale, yScale, 1.0f);
-	
-	bgLeft.transform.localScale = new Vector3(yScale, yScale, 1.0f);
-	bgLeft.transform.position = new Vector3(-l*0.5f,0,1.0f);
-	bgRight.transform.localScale = new Vector3(yScale, yScale, 1.0f);
-	bgRight.transform.position = new Vector3(l*0.5f,0,1.0f);
+	bgMiddle.transform.localScale = Vector3(xScale, yScale, 1.0f);
+	bgMiddle.transform.localPosition = Vector3.zero;
+	bgLeft.transform.localScale = Vector3(yScale, yScale, 1.0f);
+	bgLeft.transform.localPosition = Vector3(-l*0.5f,0,1.0f);
+	bgRight.transform.localScale = Vector3(yScale, yScale, 1.0f);
+	bgRight.transform.localPosition = Vector3(l*0.5f,0,1.0f);
 	
 	var sm = bgMiddle.renderer.bounds.size;
 	var sr = bgLeft.renderer.bounds.size;
 	var sl = bgRight.renderer.bounds.size;
 	totalSize = new Vector3(sl.x+sm.x+sr.x, sm.y, sm.z);
 	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
-
+	
+	for (var el in elements) {
+		Debug.Log(el.transform.position);
+	}
 }
 
 function ShrinkLeftEdge(duration : float) {
@@ -169,14 +180,17 @@ function setWord(w : String) {
 	label.text = w;
 	word = w;
 	
+	ResetBubble();
+}
+
+function ResetBubble() {
 	var size = label.renderer.bounds.size;
 	var textWidth = size.x;
 	var textHeight = size.y;
-	var padding = 0.5;
-	var l = textWidth + padding;
-	var h = textHeight + padding;
+	var padding = new Vector2(0.5,0.5);
+	var l = textWidth + padding.x;
+	var h = textHeight + padding.y;
 	SetBlockLength(l, h);
-	
 }
 
 function Start () {
@@ -193,7 +207,7 @@ function Update () {
 		var distance = Vector3.Distance(transform.position, destination);
 		var speed: float = 0.5;
 		var elapsedTime = (Time.time-startTime);
-		transform.position = new Vector3.Lerp(transform.position, destination, speed*elapsedTime);
+		transform.localPosition = new Vector3.Lerp(transform.position, destination, speed*elapsedTime);
 		if (distance < 0.001) {
 			handleReturnedToVerse();
 		}
@@ -221,11 +235,11 @@ function GetNextWordLabel() {
 }
 
 function handleReturnedToVerse() {
-	transform.position = destination;
+	transform.localPosition = destination;
 	returnedToVerse = true;
 	gotoVerse = false;
 	
-	var d = 0.5f;
+	var d = 0.25f;
 	if (!isFirstInLine) {
 		ShrinkLeftEdge(d);
 		var pw = GetPreviousWordLabel();
