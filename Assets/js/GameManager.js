@@ -591,8 +591,8 @@ function SetupVerse() {
 		clone.setWord(word);
 		clone.wordIndex = i;
 		wordLabels.push(clone);
-		var w = clone.renderer.bounds.size.x;
-		var h = clone.renderer.bounds.size.y;
+		var w = clone.totalSize.x;
+		var h = clone.totalSize.y;
 		var x = Random.Range(screenBounds.x+w*0.5,screenBounds.x+screenBounds.width-w*0.5);
 		var y = screenBounds.y+screenBounds.height+h*2;
 		clone.transform.position = new Vector3(x,y,0);

@@ -22,6 +22,8 @@ var oldRotation : Quaternion;
 var scoreCredited : float;
 var exploding : boolean = false;
 var totalSize : Vector3;
+var nonEdgeSize : Vector3;
+var shrinkEdgeFactor : float = 0.5f;
 var wordIndex : int;
 var isFirstInLine : boolean;
 var isLastInLine : boolean;
@@ -90,16 +92,18 @@ function SetBlockLength(l : float, h : float) {
 	var yScale = h / size.y;
 	var xScale = l / size.x;
 	bgMiddle.transform.localScale = Vector3(xScale, yScale, 1.0f);
-	bgMiddle.transform.localPosition = Vector3.zero;
+	bgMiddle.transform.localPosition = Vector3(0,0,0);
 	bgLeft.transform.localScale = Vector3(yScale, yScale, 1.0f);
-	bgLeft.transform.localPosition = Vector3(-l*0.5f,0,1.0f);
+	bgLeft.transform.localPosition = Vector3(-l*0.5f,0,0.0f);
 	bgRight.transform.localScale = Vector3(yScale, yScale, 1.0f);
-	bgRight.transform.localPosition = Vector3(l*0.5f,0,1.0f);
+	bgRight.transform.localPosition = Vector3(l*0.5f,0,0.0f);
 	
 	var sm = bgMiddle.renderer.bounds.size;
 	var sr = bgLeft.renderer.bounds.size;
 	var sl = bgRight.renderer.bounds.size;
+	var f = shrinkEdgeFactor;
 	totalSize = new Vector3(sl.x+sm.x+sr.x, sm.y, sm.z);
+	nonEdgeSize = new Vector3(totalSize.x-f*sl.x-f*sr.x,sm.y,sm.z);
 	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
 	
 	for (var el in elements) {
@@ -116,9 +120,11 @@ function ShrinkLeftEdge(duration : float) {
 	var endScale = new Vector3(0,startScale.y, startScale.z);
 	var dw = bgLeft.renderer.bounds.size.x;
 	
+	var f = shrinkEdgeFactor;
+	
 	// move right edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgLeft.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw,0,0), duration);
+	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw*f,0,0), duration);
 	
 	var oldW = bgMiddle.renderer.bounds.size.x;
 	var newW = oldW+dw;
@@ -127,8 +133,8 @@ function ShrinkLeftEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1*dw*0.5f,0,0), duration);
-	
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-0.5f*dw*f,0,0), duration);
+		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
 }
@@ -142,11 +148,13 @@ function ShrinkRightEdge(duration : float) {
 	var endScale = new Vector3(0,startScale.y, startScale.z);
 	var dw = bgRight.renderer.bounds.size.x;
 	
+	var f = shrinkEdgeFactor;
+	
 	// move right edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgRight.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw,0,0), duration);
+	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw*f,0,0), duration);
 	
-	
+
 	var oldW = bgMiddle.renderer.bounds.size.x;
 	var newW = oldW+dw;
 	startScale = bgMiddle.transform.localScale;
@@ -154,7 +162,7 @@ function ShrinkRightEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*0.5f,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*0.5f*f,0,0), duration);
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
@@ -256,14 +264,16 @@ function calculateVersePosition () {
 	oldRotation = transform.rotation;
 	transform.rotation = new Quaternion.Euler(0,0,0);
 	var spacing = 0.0f;
-	var wordWidth = totalSize.x;
+	var wordWidth = nonEdgeSize.x;
 	
 	versePosition.x += wordWidth + spacing;
 	
-	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y);
+	// z = 1 so placed words are drawn behind other wordlabels
+	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y, 1);
 	var screenBounds = GameManager.screenBounds;
 	var maxX = screenBounds.x + screenBounds.width*0.95;
-	var vSpacing = totalSize.y;
+	var padding = 0.25f;
+	var vSpacing = nonEdgeSize.y + padding;
 	
 	transform.rotation = oldRotation;
 	
