@@ -217,7 +217,7 @@ function Update () {
 		var distance = Vector3.Distance(transform.position, destination);
 		var speed: float = 0.5;
 		var elapsedTime = (Time.time-startTime);
-		transform.localPosition = new Vector3.Lerp(transform.position, destination, speed*elapsedTime);
+		transform.position = new Vector3.Lerp(transform.position, destination, speed*elapsedTime);
 		if (distance < 0.001) {
 			handleReturnedToVerse();
 		}
@@ -293,6 +293,9 @@ function calculateVersePosition () {
 }
 
 function returnToVerse () {
+	// sync word index incase there is another word label which is duplicate of this one
+	wordIndex = gameManager.wordIndex;
+	
 	collider2D.enabled = false;
 	rigidbody2D.fixedAngle = true;
 	rigidbody2D.gravityScale = 0;

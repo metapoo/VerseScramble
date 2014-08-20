@@ -1,16 +1,16 @@
-static function Translation (thisTransform : Transform, endPos : Vector3, duration : float) {
+static function Translation(thisTransform : Transform, endPos : Vector3, duration : float) {
 	var rate = 1.0/duration;
 	var t = 0.0;
-	var startPos = thisTransform.position;
+	var startPos = thisTransform.localPosition;
 	while (t < 1.0) {
 		t += Time.deltaTime * rate;
-		thisTransform.position = Vector3.Lerp(startPos, endPos, t);
+		thisTransform.localPosition = Vector3.Lerp(startPos, endPos, t);
 		yield; 
 	}
 }
 
 static function TranslationBy(thisTransform : Transform, dPos : Vector3, duration : float) {
-	var endPos = thisTransform.position + dPos;
+	var endPos = thisTransform.localPosition + dPos;
 	return Translation(thisTransform, endPos, duration);
 }
 
