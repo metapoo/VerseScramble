@@ -446,7 +446,7 @@ function SplitVerse(verse : String) {
 				if (language == "zh") { phrase = phrase.Replace(" ",""); }
 				
 				// filter out leading or trailing spaces
-				if (phrase[0] == " ") {
+				if ((phrase.Length > 0) && (phrase[0] == " ")) {
 					phrase = phrase.Substring(1,phrase.Length-1);
 				}
 				//Debug.Log("phrase.Length = " + phrase.Length);
