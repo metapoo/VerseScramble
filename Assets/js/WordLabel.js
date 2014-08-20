@@ -157,13 +157,15 @@ function setWord(w : String) {
 	if (language == "zh") {
 		label.font = zhFont;
 		label.renderer.material = zhFont.material;
-		label.fontSize = 75;
+		label.fontSize = 85;
 		label.fontStyle = FontStyle.Normal;
+		label.color = Color.black;
 	} else {
 		label.font = enFont;
 		label.renderer.material = enFont.material;
 		label.fontSize = 80;
 		label.fontStyle = FontStyle.Normal;
+		label.color = Color.black;
 	}
 	
 	label.text = w;

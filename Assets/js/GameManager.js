@@ -329,7 +329,7 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
-								  				'zh':[20,10,5]});
+								  				'zh':[12,6,1]});
 	var language : String = verseManager.GetLanguage();
 	var phraseLengths : Array = langConfig[language];
 	var clauseBreakMultiplier = 1.0f;
@@ -397,7 +397,7 @@ function SplitVerse(verse : String) {
 			}
 		}
 
-		//Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " " + phraseLength + " "+ clauseBreakMultiplier);
+		Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " " + phraseLength + " "+ clauseBreakMultiplier);
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
