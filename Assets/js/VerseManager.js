@@ -13,6 +13,7 @@ var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
 var numVerses = 0;
+static var verseLoaded : boolean = false;
 var totalScore : int = -1;
 private var currentCategory : String = "";
 
@@ -385,12 +386,13 @@ function CreateCategory(category : String) {
 	if (referencesByCategory[category] == null) {
 	  	referencesByCategory.Add(category, new Array());
 	  	categories.push(category);
-	  	Debug.Log("Creating category " + category);
 	}
 }
 
-function LoadOnlineVerse(verse_id) {
-	var data = '{"status": "OK", "message": null, "latest_version": 1.0, "result": {"verse": {"version": "NIV", "user_id": "53e42f6da2ff374cfa320f32", "reference": "John 3:16", "language": "en", "verseset_id": "53ea96a0a2ff375c3bb54953", "text": "For God so loved the world that He gave His one and only Son, that whoever believes in him shall not perish but have eternal life", "_id": "53ea9752a2ff375c3bb54954"}}, "api_name": "verse/show"}';
+function LoadOnlineVerse(verseId) {
+	var www : WWW = new WWW("http://verserain.eternityinourheart.com/api/verse/show?verse_id="+verseId);
+	yield www;	
+	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
 	var resultData : Hashtable = apiData["result"];
 	var verseData : Hashtable = resultData["verse"];
@@ -400,8 +402,10 @@ function LoadOnlineVerse(verse_id) {
 	var language = verseData["language"];
 	
 	CreateCategory(versesetId);
+	SetCurrentCategory(versesetId);
 	AddVerseAndReference(versesetId, reference, verse);
-	Load();
+	verseIndex = 0;
+	verseLoaded = true;
 }
 
 function LoadVerses() {
@@ -475,11 +479,15 @@ function LoadVersesLocally() {
   		AddVerseAndReference(category, reference, verse);
   		
   	}
+  	verseLoaded = true;
   	Load();
 	
   	Debug.Log(references.join(";"));
 }
 
+function Awake() {
+	verseLoaded = false;
+}
 
 function Load () {
 	verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);

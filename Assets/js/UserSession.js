@@ -23,7 +23,6 @@ function SetOption(key : String, value : String) {
 }
 
 function VerseId() {
-	//return "53ea9752a2ff375c3bb54954";
 	if (options.ContainsKey("verse_id")) {
 		return options["verse_id"];
 	}
