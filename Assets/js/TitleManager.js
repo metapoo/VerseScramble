@@ -58,9 +58,7 @@ function OnGUI() {
 
 }
 
-function Start () {
-	Application.targetFrameRate = 60;
-	TextManager.LoadLanguage(verseManager.GetLanguage());
+function CheckOption() {
 	
 	var us : UserSession = UserSession.GetUserSession();
 	
@@ -68,9 +66,16 @@ function Start () {
 		var verseId = us.VerseId();
 		if (verseId) {
 			Application.LoadLevel("scramble");
-			return;
+			return true;
 		}
 	}
+	return false;
+}
+
+function Start () {
+	Application.targetFrameRate = 60;
+	TextManager.LoadLanguage(verseManager.GetLanguage());
+
 	
 	var gt = TextManager.GetText;
 	
@@ -78,7 +83,10 @@ function Start () {
 	
 	selectLanguageLabel.guiText.text = gt("Select Language");
 	
-	
+	while (1) {
+		if (CheckOption()) return;
+		yield WaitForSeconds(0.1f);
+	}
 }
 
 function Update () {

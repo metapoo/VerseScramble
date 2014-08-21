@@ -19,17 +19,25 @@ function Awake() {
 }
 
 function SetOption(key : String, value : String) {
-	options.Add(key, value);
+	options[key] = value;
 }
 
-function VerseId() {
+function SetVerseId(verse_id : String) {
+	SetOption("verse_id", verse_id);
+}
+
+function SetVerseSetId(verseset_id : String) {
+	SetOption("verseset_id", verseset_id);
+}
+
+function VerseId() : String {
 	if (options.ContainsKey("verse_id")) {
 		return options["verse_id"];
 	}
 	return null;
 }
 
-function VerseSetId() {
+function VerseSetId() : String {
 	if (options.ContainsKey("verseset_id")) {
 		return options["verseset_id"];
 	}
