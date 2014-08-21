@@ -389,6 +389,21 @@ function CreateCategory(category : String) {
 	}
 }
 
+function LoadOnlineVerse(verse_id) {
+	var data = '{"status": "OK", "message": null, "latest_version": 1.0, "result": {"verse": {"version": "NIV", "user_id": "53e42f6da2ff374cfa320f32", "reference": "John 3:16", "language": "en", "verseset_id": "53ea96a0a2ff375c3bb54953", "text": "For God so loved the world that He gave His one and only Son, that whoever believes in him shall not perish but have eternal life", "_id": "53ea9752a2ff375c3bb54954"}}, "api_name": "verse/show"}';
+	var apiData : Hashtable = JSONUtils.ParseJSON(data);
+	var resultData : Hashtable = apiData["result"];
+	var verseData : Hashtable = resultData["verse"];
+	var versesetId = verseData["verseset_id"];
+	var reference = verseData["reference"];
+	var verse = verseData["text"];
+	var language = verseData["language"];
+	
+	CreateCategory(versesetId);
+	AddVerseAndReference(versesetId, reference, verse);
+	Load();
+}
+
 function LoadVerses() {
 	
 	verses.clear();
@@ -396,6 +411,16 @@ function LoadVerses() {
 	categories.clear();
 	versesByReference.Clear();
 	referencesByCategory.Clear();
+	
+	var us : UserSession = UserSession.GetUserSession();
+	
+	if (us) {
+		var verseId = us.VerseId();
+		if (verseId) {
+			LoadOnlineVerse(verseId);
+			return;
+		}
+	}
 	
 	var language = GetLanguage();
 	
@@ -407,6 +432,22 @@ function LoadVerses() {
 		verseText = verseTextHE;
 	}
 	
+	LoadVersesLocally();
+}
+
+function AddVerseAndReference(category : String, reference : String, verse : String) {
+  	verses.push(verse);
+  	references.push(reference);
+  		
+  	var refs : Array = referencesByCategory[category];
+  	refs.push(reference);
+  		
+  	if (versesByReference[reference] == null) {
+  		versesByReference[reference] = verse;
+  	}
+}
+
+function LoadVersesLocally() {
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";
@@ -431,15 +472,7 @@ function LoadVerses() {
 	  	}
 	  	
   		var reference = parts[0];
-  		verses.push(verse);
-  		references.push(reference);
-  		
-  		var refs : Array = referencesByCategory[category];
-  		refs.push(reference);
-  		
-  		if (versesByReference[reference] == null) {
-  			versesByReference[reference] = verse;
-  		}
+  		AddVerseAndReference(category, reference, verse);
   		
   	}
   	Load();

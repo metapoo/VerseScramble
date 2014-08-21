@@ -97,8 +97,13 @@ function SetupWalls () {
 	var w = mainCam.pixelWidth;
 	var h = mainCam.pixelHeight;
 
+	Debug.Log("width = " + w + " height = " + h);
+	
 	topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w*2.0f, 0f, 0f)).x, 1f);
 	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h,0f)).y + 0.5f);	
+	
+	Debug.Log("topwall size = " + topWall.size);
+	Debug.Log("topwall center = " + topWall.center);
 	
 	bottomWall.size = topWall.size;
 	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	

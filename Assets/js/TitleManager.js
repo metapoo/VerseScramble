@@ -61,6 +61,17 @@ function OnGUI() {
 function Start () {
 	Application.targetFrameRate = 60;
 	TextManager.LoadLanguage(verseManager.GetLanguage());
+	
+	var us : UserSession = UserSession.GetUserSession();
+	
+	if (us) {
+		var verseId = us.VerseId();
+		if (verseId) {
+			Application.LoadLevel("scramble");
+			return;
+		}
+	}
+	
 	var gt = TextManager.GetText;
 	
 	titleLabel.guiText.text = gt("Bible Verse Rain");
