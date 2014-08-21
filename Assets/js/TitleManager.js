@@ -58,16 +58,35 @@ function OnGUI() {
 
 }
 
+function CheckOption() {
+	
+	var us : UserSession = UserSession.GetUserSession();
+	
+	if (us) {
+		var verseId = us.VerseId();
+		if (verseId) {
+			Application.LoadLevel("scramble");
+			return true;
+		}
+	}
+	return false;
+}
+
 function Start () {
 	Application.targetFrameRate = 60;
 	TextManager.LoadLanguage(verseManager.GetLanguage());
+
+	
 	var gt = TextManager.GetText;
 	
 	titleLabel.guiText.text = gt("Bible Verse Rain");
 	
 	selectLanguageLabel.guiText.text = gt("Select Language");
 	
-	
+	while (1) {
+		if (CheckOption()) return;
+		yield WaitForSeconds(0.1f);
+	}
 }
 
 function Update () {

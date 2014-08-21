@@ -288,7 +288,10 @@ function AnimateIntro() {
 }
 
 function Start() {
-
+	while (!VerseManager.verseLoaded) {
+		yield WaitForSeconds(0.1);
+	}
+	
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
 	
@@ -537,6 +540,7 @@ function Cleanup () {
 }
 
 function BeginGame() {
+
 	SetupVerse();
 	AnimateIntro();
 }

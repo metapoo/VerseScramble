@@ -242,6 +242,9 @@ function difficultyMultiplier(difficulty : Difficulty) {
 }
 
 function Start() {
+	while (!VerseManager.verseLoaded) {
+		yield WaitForSeconds(0.1f);
+	}
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	resetStats();
 	reset();

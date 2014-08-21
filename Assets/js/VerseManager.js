@@ -13,6 +13,7 @@ var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
 var numVerses = 0;
+static var verseLoaded : boolean = false;
 var totalScore : int = -1;
 private var currentCategory : String = "";
 
@@ -385,8 +386,26 @@ function CreateCategory(category : String) {
 	if (referencesByCategory[category] == null) {
 	  	referencesByCategory.Add(category, new Array());
 	  	categories.push(category);
-	  	Debug.Log("Creating category " + category);
 	}
+}
+
+function LoadOnlineVerse(verseId) {
+	var www : WWW = new WWW("http://verserain.eternityinourheart.com/api/verse/show?verse_id="+verseId);
+	yield www;	
+	var data = www.text;
+	var apiData : Hashtable = JSONUtils.ParseJSON(data);
+	var resultData : Hashtable = apiData["result"];
+	var verseData : Hashtable = resultData["verse"];
+	var versesetId = verseData["verseset_id"];
+	var reference = verseData["reference"];
+	var verse = verseData["text"];
+	var language = verseData["language"];
+	
+	CreateCategory(versesetId);
+	SetCurrentCategory(versesetId);
+	AddVerseAndReference(versesetId, reference, verse);
+	verseIndex = 0;
+	verseLoaded = true;
 }
 
 function LoadVerses() {
@@ -396,6 +415,16 @@ function LoadVerses() {
 	categories.clear();
 	versesByReference.Clear();
 	referencesByCategory.Clear();
+	
+	var us : UserSession = UserSession.GetUserSession();
+	
+	if (us) {
+		var verseId = us.VerseId();
+		if (verseId) {
+			LoadOnlineVerse(verseId);
+			return;
+		}
+	}
 	
 	var language = GetLanguage();
 	
@@ -407,6 +436,22 @@ function LoadVerses() {
 		verseText = verseTextHE;
 	}
 	
+	LoadVersesLocally();
+}
+
+function AddVerseAndReference(category : String, reference : String, verse : String) {
+  	verses.push(verse);
+  	references.push(reference);
+  		
+  	var refs : Array = referencesByCategory[category];
+  	refs.push(reference);
+  		
+  	if (versesByReference[reference] == null) {
+  		versesByReference[reference] = verse;
+  	}
+}
+
+function LoadVersesLocally() {
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";
@@ -431,22 +476,18 @@ function LoadVerses() {
 	  	}
 	  	
   		var reference = parts[0];
-  		verses.push(verse);
-  		references.push(reference);
-  		
-  		var refs : Array = referencesByCategory[category];
-  		refs.push(reference);
-  		
-  		if (versesByReference[reference] == null) {
-  			versesByReference[reference] = verse;
-  		}
+  		AddVerseAndReference(category, reference, verse);
   		
   	}
+  	verseLoaded = true;
   	Load();
 	
   	Debug.Log(references.join(";"));
 }
 
+function Awake() {
+	verseLoaded = false;
+}
 
 function Load () {
 	verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);
