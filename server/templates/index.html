@@ -1,20 +1,14 @@
 {% extends "base.html" %}
 {% block page_content %}
 
-{% if user %}
-
 <div>
 Verse Sets:
 {% for verseset in versesets %}
-<p><div><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a></div>
-<span>{{verseset.verse_count()}} verses | <a href="/verseset/edit/{{verseset._id}}">edit</a> |
-<a href="/verseset/remove/{{verseset._id}}">remove</a> </span></p>
+<p><div><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a><br/>
+<span>by {{verseset.user().display_name()}}, {{verseset.verse_count()}} verses</span>
+</div></p>
 
 {% end %}
 </div>
-
-<a href="/verseset/create">create a verse set</a>
-
-{% end %}
 
 {% end %}

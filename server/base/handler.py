@@ -8,6 +8,12 @@ from verserain.user.models import User
 class BaseHandler(tornado.web.RequestHandler):
     cookieless_okay = False
 
+    def get(self):
+        return self.post()
+
+    def post(self):
+        return self.get()
+
     def authenticate_session_key(self, session_key):
         from verserain.login.auth import authenticate_session_key
         user_key = authenticate_session_key(session_key)

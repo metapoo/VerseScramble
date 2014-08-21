@@ -10,12 +10,18 @@ def get_handlers():
             (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
+            (r"/verseset/list", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
+            (r"/verse/play/([^/]+)/?", PlayVerseHandler),
             )
+
+class PlayVerseHandler(BaseHandler):
+    def get(self, verse_id):
+        self.render("webplayer.html",verse_id=verse_id)
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):
@@ -190,4 +196,10 @@ class CreateVerseSetHandler(BaseHandler):
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            version=version,verseset=None,language=language,versions=versions)
 
+class ListVerseSetHandler(BaseHandler):
+    @require_login
+    def get(self):
+        user = self.current_user
+        versesets = user.versesets()
+        return self.render("verseset/list.html", user=user, versesets=versesets)
 
