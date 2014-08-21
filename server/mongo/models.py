@@ -1,10 +1,24 @@
 from minimongo import Model
 from minimongo import configure
 from verserain import settings
+from bson.objectid import ObjectId
 configure(settings)
 
 class BaseModel(Model):
     _metadata = {}
+
+    def json(self):
+        d = dict(self)
+        okeys = []
+
+        for k,v in d.iteritems():
+            if type(v) is ObjectId:
+                okeys.append(k)
+
+        for k in okeys:
+            d[k] = str(d[k])
+
+        return d
 
     @classmethod
     def metadata(cls, attrname):
@@ -60,16 +74,8 @@ class BaseModel(Model):
         if name is None:
             name = model.__name__.lower()
 
-        if attrname is None:
-            attrname = "_%s" % name
-
         if keyname is None:
             keyname = model.key_name()
-
-        if hasattr(self, attrname):
-            r = getattr(self, attrname)
-            if r:
-                return r
 
         if self.get(keyname) is None:
             return None
@@ -77,7 +83,6 @@ class BaseModel(Model):
         r = model.collection.find_one({'_id':self[keyname]})
 
         if r:
-            setattr(self, attrname, r)
             return r
 
         return None

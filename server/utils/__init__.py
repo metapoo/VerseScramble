@@ -7,4 +7,3 @@ def sort_by_value(d, ascending=True):
     if not ascending:
         keys.reverse()
     return keys
-
