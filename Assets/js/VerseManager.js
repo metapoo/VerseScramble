@@ -13,6 +13,7 @@ var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
 var numVerses = 0;
+
 static var verseLoaded : boolean = false;
 var totalScore : int = -1;
 private var currentCategory : String = "";

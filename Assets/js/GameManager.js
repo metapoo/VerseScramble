@@ -473,7 +473,7 @@ function SplitVerse(verse : String) {
 			if (language == "zh") {clause = clause.Replace(" ","");}
 			phraseArray.push(clause);
 			
-		}
+		}		
 	}
 	return phraseArray;
 
