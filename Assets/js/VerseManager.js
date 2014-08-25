@@ -12,10 +12,14 @@ var verseText : TextAsset;
 var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
+var versesetLanguage : String;
+var rightToLeft : boolean = false;
 var numVerses = 0;
+var apiDomain = "verserain.eternityinourheart.com";
 static var verseLoaded : boolean = false;
 var totalScore : int = -1;
 private var currentCategory : String = "";
+private var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
 function GetCurrentCategory() {
 
@@ -389,8 +393,18 @@ function CreateCategory(category : String) {
 	}
 }
 
+function CheckRightToLeft(language) {
+	for (var i=0;i<RTL_LANGUAGE_CODES.length;i++) {
+		if (language == RTL_LANGUAGE_CODES[i]) {
+			rightToLeft = true;
+			return;
+		}
+	}
+	rightToLeft = false;
+}
+
 function LoadOnlineVerse(verseId) {
-	var www : WWW = new WWW("http://verserain.eternityinourheart.com/api/verse/show?verse_id="+verseId);
+	var www : WWW = new WWW("http://"+apiDomain+"/api/verse/show?verse_id="+verseId);
 	yield www;	
 	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
@@ -400,12 +414,24 @@ function LoadOnlineVerse(verseId) {
 	var reference = verseData["reference"];
 	var verse = verseData["text"];
 	var language = verseData["language"];
-	
+
+	CheckRightToLeft(language);	
 	CreateCategory(versesetId);
 	SetCurrentCategory(versesetId);
 	AddVerseAndReference(versesetId, reference, verse);
 	verseIndex = 0;
 	verseLoaded = true;
+	UserSession.GetUserSession().ClearOptions();
+}
+
+function LoadOnlineVerseSet(versesetId) {
+	var www : WWW = new WWW("http://"+apiDomain+"/api/verse/show?verse_id="+versesetId);
+	yield www;
+	var data = www.text;
+	var apiData : Hashtable = JSONUtils.ParseJSON(data);
+	var versesetData : Hashtable = apiData["result"];
+	var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
+	
 }
 
 function LoadVerses() {

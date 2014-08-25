@@ -30,6 +30,10 @@ function SetVerseSetId(verseset_id : String) {
 	SetOption("verseset_id", verseset_id);
 }
 
+function ClearOptions() {
+	options.Clear();
+}
+
 function VerseId() : String {
 	if (options.ContainsKey("verse_id")) {
 		return options["verse_id"];
