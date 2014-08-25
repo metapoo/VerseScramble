@@ -295,7 +295,7 @@ function calculateVersePosition () {
 function returnToVerse () {
 	// sync word index incase there is another word label which is duplicate of this one
 	wordIndex = gameManager.wordIndex;
-	
+	hinting = false;
 	collider2D.enabled = false;
 	rigidbody2D.fixedAngle = true;
 	rigidbody2D.gravityScale = 0;
