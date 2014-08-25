@@ -144,17 +144,17 @@ function HandleWordWrong() {
 	
 	audio.PlayOneShot(sndExplode1, 1.0f);
 	
-	for (var wordLabel :WordLabel in wordLabels) {
-		wordLabel.Explode();
-	}
+	//for (var wordLabel :WordLabel in wordLabels) {
+	//	wordLabel.Explode();
+	//}
 	
 	
 	if (!GetChallengeModeEnabled()) {
 		scoreManager.maxTime += wordIndex;
 	}
 	
-	wordIndex = 0;
-	currentWord = words[wordIndex];
+	//wordIndex = 0;
+	//currentWord = words[wordIndex];
 }
 
 function HandleWordCorrect() {
@@ -473,7 +473,7 @@ function SplitVerse(verse : String) {
 			if (language == "zh") {clause = clause.Replace(" ","");}
 			phraseArray.push(clause);
 			
-		}
+		}		
 	}
 	return phraseArray;
 

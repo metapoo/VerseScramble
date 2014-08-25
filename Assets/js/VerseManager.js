@@ -16,8 +16,9 @@ var versesetLanguage : String;
 var rightToLeft : boolean = false;
 var numVerses = 0;
 var apiDomain = "verserain.eternityinourheart.com";
-static var verseLoaded : boolean = false;
 var totalScore : int = -1;
+
+static var verseLoaded : boolean = false;
 private var currentCategory : String = "";
 private var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
