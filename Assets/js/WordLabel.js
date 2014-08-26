@@ -180,7 +180,7 @@ function reverseString(s : String) {
 function setWord(w : String) {
 	//var mesh = GetComponent(MeshFilter).mesh;
 	
-	var language = verseManager.GetLanguage();
+	var language : String = VerseManager.GetVerseLanguage();
 
 	if (language == "zh") {
 		label.font = zhFont;

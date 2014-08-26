@@ -101,11 +101,22 @@ static function GetVoiceLanguage() {
 	}
 }
 
-static function GetLanguage() {
+static function SetVerseLanguage(language : String) : String {
+	PlayerPrefs.SetString("verse_language", language);
+}
+
+static function GetVerseLanguage() : String{
+	var l : String = PlayerPrefs.GetString("language", "en");
+	if (l) return l;
+	return GetLanguage();
+}
+
+
+static function GetLanguage() : String {
 	return PlayerPrefs.GetString("language", "en");
 }
 
-static function SetLanguage(language : String) {
+static function SetLanguage(language : String) : String {
 	PlayerPrefs.SetString("language", language);
 }
 
@@ -416,6 +427,7 @@ function LoadOnlineVerse(verseId) {
 	var verse = verseData["text"];
 	var language = verseData["language"];
 
+	SetVerseLanguage(language);
 	CheckRightToLeft(language);	
 	CreateCategory(versesetId);
 	SetCurrentCategory(versesetId);
