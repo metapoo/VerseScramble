@@ -101,6 +101,10 @@ static function GetVoiceLanguage() {
 	}
 }
 
+static function IsLanguageChinese(language : String) : boolean {
+	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant');
+}
+
 static function SetVerseLanguage(language : String) : String {
 	PlayerPrefs.SetString("verse_language", language);
 }
