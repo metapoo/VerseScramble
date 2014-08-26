@@ -479,6 +479,8 @@ function AddVerseAndReference(category : String, reference : String, verse : Str
 }
 
 function LoadVersesLocally() {
+	var language = GetLanguage();
+	CheckRightToLeft(language);
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";
