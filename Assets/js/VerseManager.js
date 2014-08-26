@@ -110,7 +110,7 @@ static function SetVerseLanguage(language : String) : String {
 }
 
 static function GetVerseLanguage() : String{
-	var l : String = PlayerPrefs.GetString("language", "en");
+	var l : String = PlayerPrefs.GetString("verse_language", "en");
 	if (l) return l;
 	return GetLanguage();
 }

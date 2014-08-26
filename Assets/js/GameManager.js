@@ -333,7 +333,8 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
 								  				'zh':[12,6,1]});
-	var language : String = verseManager.GetVerseLanguage();
+	var language : String = VerseManager.GetVerseLanguage();
+	Debug.Log("VERSE LANGUAGE = " + language);
 	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
 	
 	var phraseLengths : Array = langConfig['en'];
