@@ -27,6 +27,7 @@ var shrinkEdgeFactor : float = 0.5f;
 var wordIndex : int;
 var isFirstInLine : boolean;
 var isLastInLine : boolean;
+var rightToLeft : boolean;
 private var shrinkingEdges : boolean = false;
 
 function Explode() {
@@ -168,6 +169,14 @@ function ShrinkRightEdge(duration : float) {
 	shrinkingEdges = false;
 }
 
+function reverseString(s : String) {
+	var str : String = "";
+	for (var i=s.Length-1;i>=0;i--) {
+		str += s[i];
+	}
+	return str;
+}
+
 function setWord(w : String) {
 	//var mesh = GetComponent(MeshFilter).mesh;
 	
@@ -187,7 +196,11 @@ function setWord(w : String) {
 		label.color = Color.black;
 	}
 	
-	label.text = w;
+	if (rightToLeft) {
+		label.text = reverseString(w);
+	} else {
+		label.text = w;
+	}
 	word = w;
 	
 	ResetBubble();
@@ -204,12 +217,18 @@ function ResetBubble() {
 }
 
 function Start () {
-    var screenBounds = GameManager.screenBounds;
-	startPosition = new Vector3(screenBounds.x+screenBounds.width*.075,screenBounds.y-screenBounds.height*0.25);
-	versePosition = startPosition;
-	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
+    scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
 	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
+    var screenBounds = GameManager.screenBounds;
+    var startx = screenBounds.x+screenBounds.width*.075;
+    if (verseManager.rightToLeft) {
+    	startx = screenBounds.x+screenBounds.width*(0.925);
+    }
+    
+	startPosition = new Vector3(startx,screenBounds.y-screenBounds.height*0.25);
+	versePosition = startPosition;
+	
 }
 
 function Update () {
@@ -251,10 +270,18 @@ function handleReturnedToVerse() {
 	
 	var d = 0.25f;
 	if (!isFirstInLine) {
-		ShrinkLeftEdge(d);
+		if (rightToLeft) {
+			ShrinkRightEdge(d);
+		} else {
+			ShrinkLeftEdge(d);
+		}
 		var pw = GetPreviousWordLabel();
 		if (pw) {
-			pw.ShrinkRightEdge(d);
+			if (rightToLeft) {
+				pw.ShrinkLeftEdge(d);
+			} else {
+				pw.ShrinkRightEdge(d);
+			}
 		}
 	}
 }
@@ -266,12 +293,19 @@ function calculateVersePosition () {
 	var spacing = 0.0f;
 	var wordWidth = nonEdgeSize.x;
 	
-	versePosition.x += wordWidth + spacing;
+	var dx = wordWidth + spacing;
+
+	if (rightToLeft) {
+		dx *= -1;
+	} 
+	
+	versePosition.x += dx;
 	
 	// z = 1 so placed words are drawn behind other wordlabels
-	destination = new Vector3(versePosition.x - wordWidth*0.5 - spacing*0.5f, versePosition.y, 1);
+	destination = new Vector3(versePosition.x - dx*0.5f, versePosition.y, 1);
 	var screenBounds = GameManager.screenBounds;
 	var maxX = screenBounds.x + screenBounds.width*0.95;
+	var minX = screenBounds.x + screenBounds.width*0.05;
 	var padding = 0.25f;
 	var vSpacing = nonEdgeSize.y + padding;
 	
@@ -279,7 +313,9 @@ function calculateVersePosition () {
 	
 	if (wordIndex == 0) isFirstInLine = true;
 	
-	if ((destination.x + wordWidth*0.5) > maxX) {
+	if ((!rightToLeft && (destination.x + wordWidth*0.5) > maxX) ||
+	    (rightToLeft && (destination.x - wordWidth*0.5) < minX))
+	 {
 		versePosition = new Vector3(startPosition.x,
 									versePosition.y-vSpacing,
 									0);

@@ -590,8 +590,10 @@ function SetupVerse() {
 	
 	var dy = screenBounds.y;
 	var i = 0;
+	var rTL = verseManager.rightToLeft;
 	for (word in words) {
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
+		clone.rightToLeft = rTL;
 		clone.setWord(word);
 		clone.wordIndex = i;
 		wordLabels.push(clone);
