@@ -71,38 +71,63 @@ function currentVerse() {
 function SayVerseReference() {
 	var reference : String = currentReference();
 	var refParts = reference.Split(":"[0]);
-	var language = GetLanguage();
+	var language = GetVerseLanguage();
+	language = GetVoiceLanguage(language);
 	
-	if (language == "zh") {
+	if (IsLanguageChinese(language)) {
 		refParts[0] += "章";
 		refParts[1] += "節";
 	}
 		
 	for (var refPart in refParts) {
-		SpeakUtterance(refPart);
+		SpeakUtterance(refPart, language);
 		yield WaitForSeconds(1);
 	}
 }
 
 static function SpeakUtterance(word : String) {
-	var language = GetVoiceLanguage();
+	var language = GetLanguage();
+	SpeakUtterance(word, language);
+}
+
+static function SpeakUtterance(word : String, language: String) {
 	VoiceSynth.SpeakUtterance(word,language);
 	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
 
 static function GetVoiceLanguage() {
 	var language = GetLanguage();
+	return GetVoiceLanguage(language);
+}
+
+static function GetVoiceLanguage(language : String) {
 	if (language == "en") {
 		return "en-US";
-	} else if (language == "zh") {
+	} else if ((language == "zh") || (language == "zh-hant")) {
 		return "zh-TW";
+	} else if (language == "zh-hans") {
+		return "zh-CN";
+	} else if (language == "he") {
+		return "he-IL";
+	} else if (language == "ur") {
+		return "ur-PK";
+	} else if (language == "ja") {
+		return "ja-JP";
+	} else if (language == "ko") {
+		return "ko-KR";
+	} else if (language == "th") {
+		return "th-TH";
+	} else if (language == "vi") {
+		return "vi-VN";
+	} else if (language == "mn") {
+		return "mn-MN";
 	} else {
 		return "en-US";
 	}
 }
 
 static function IsLanguageChinese(language : String) : boolean {
-	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant');
+	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant') || (language == 'zh-CN') || (language == 'zh-TW');
 }
 
 static function SetVerseLanguage(language : String) : String {
@@ -497,6 +522,7 @@ function AddVerseAndReference(category : String, reference : String, verse : Str
 function LoadVersesLocally() {
 	var language = GetLanguage();
 	CheckRightToLeft(language);
+	SetVerseLanguage(language);
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";
