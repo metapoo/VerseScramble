@@ -12,11 +12,15 @@ var verseText : TextAsset;
 var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
+var versesetLanguage : String;
+var rightToLeft : boolean = false;
 var numVerses = 0;
+var apiDomain = "verserain.eternityinourheart.com";
+var totalScore : int = -1;
 
 static var verseLoaded : boolean = false;
-var totalScore : int = -1;
 private var currentCategory : String = "";
+private var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
 function GetCurrentCategory() {
 
@@ -67,41 +71,81 @@ function currentVerse() {
 function SayVerseReference() {
 	var reference : String = currentReference();
 	var refParts = reference.Split(":"[0]);
-	var language = GetLanguage();
+	var language = GetVerseLanguage();
+	language = GetVoiceLanguage(language);
 	
-	if (language == "zh") {
+	if (IsLanguageChinese(language)) {
 		refParts[0] += "章";
 		refParts[1] += "節";
 	}
 		
 	for (var refPart in refParts) {
-		SpeakUtterance(refPart);
+		SpeakUtterance(refPart, language);
 		yield WaitForSeconds(1);
 	}
 }
 
 static function SpeakUtterance(word : String) {
-	var language = GetVoiceLanguage();
+	var language = GetLanguage();
+	SpeakUtterance(word, language);
+}
+
+static function SpeakUtterance(word : String, language: String) {
 	VoiceSynth.SpeakUtterance(word,language);
 	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
 
 static function GetVoiceLanguage() {
 	var language = GetLanguage();
+	return GetVoiceLanguage(language);
+}
+
+static function GetVoiceLanguage(language : String) {
 	if (language == "en") {
 		return "en-US";
-	} else if (language == "zh") {
+	} else if ((language == "zh") || (language == "zh-hant")) {
 		return "zh-TW";
+	} else if (language == "zh-hans") {
+		return "zh-CN";
+	} else if (language == "he") {
+		return "he-IL";
+	} else if (language == "ur") {
+		return "ur-PK";
+	} else if (language == "ja") {
+		return "ja-JP";
+	} else if (language == "ko") {
+		return "ko-KR";
+	} else if (language == "th") {
+		return "th-TH";
+	} else if (language == "vi") {
+		return "vi-VN";
+	} else if (language == "mn") {
+		return "mn-MN";
 	} else {
 		return "en-US";
 	}
 }
 
-static function GetLanguage() {
+static function IsLanguageChinese(language : String) : boolean {
+	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant') || (language == 'zh-CN') || (language == 'zh-TW');
+}
+
+static function SetVerseLanguage(language : String) : String {
+	PlayerPrefs.SetString("verse_language", language);
+}
+
+static function GetVerseLanguage() : String{
+	var l : String = PlayerPrefs.GetString("verse_language", "en");
+	if (l) return l;
+	return GetLanguage();
+}
+
+
+static function GetLanguage() : String {
 	return PlayerPrefs.GetString("language", "en");
 }
 
-static function SetLanguage(language : String) {
+static function SetLanguage(language : String) : String {
 	PlayerPrefs.SetString("language", language);
 }
 
@@ -390,8 +434,18 @@ function CreateCategory(category : String) {
 	}
 }
 
+function CheckRightToLeft(language) {
+	for (var i=0;i<RTL_LANGUAGE_CODES.length;i++) {
+		if (language == RTL_LANGUAGE_CODES[i]) {
+			rightToLeft = true;
+			return;
+		}
+	}
+	rightToLeft = false;
+}
+
 function LoadOnlineVerse(verseId) {
-	var www : WWW = new WWW("http://verserain.eternityinourheart.com/api/verse/show?verse_id="+verseId);
+	var www : WWW = new WWW("http://"+apiDomain+"/api/verse/show?verse_id="+verseId);
 	yield www;	
 	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
@@ -401,12 +455,25 @@ function LoadOnlineVerse(verseId) {
 	var reference = verseData["reference"];
 	var verse = verseData["text"];
 	var language = verseData["language"];
-	
+
+	SetVerseLanguage(language);
+	CheckRightToLeft(language);	
 	CreateCategory(versesetId);
 	SetCurrentCategory(versesetId);
 	AddVerseAndReference(versesetId, reference, verse);
 	verseIndex = 0;
 	verseLoaded = true;
+	UserSession.GetUserSession().ClearOptions();
+}
+
+function LoadOnlineVerseSet(versesetId) {
+	var www : WWW = new WWW("http://"+apiDomain+"/api/verse/show?verse_id="+versesetId);
+	yield www;
+	var data = www.text;
+	var apiData : Hashtable = JSONUtils.ParseJSON(data);
+	var versesetData : Hashtable = apiData["result"];
+	var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
+	
 }
 
 function LoadVerses() {
@@ -453,6 +520,9 @@ function AddVerseAndReference(category : String, reference : String, verse : Str
 }
 
 function LoadVersesLocally() {
+	var language = GetLanguage();
+	CheckRightToLeft(language);
+	SetVerseLanguage(language);
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";

@@ -333,8 +333,16 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
 								  				'zh':[12,6,1]});
-	var language : String = verseManager.GetLanguage();
-	var phraseLengths : Array = langConfig[language];
+	var language : String = VerseManager.GetVerseLanguage();
+	Debug.Log("VERSE LANGUAGE = " + language);
+	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
+	
+	var phraseLengths : Array = langConfig['en'];
+	
+	if (isChinese) {
+		phraseLengths = langConfig['zh'];
+	}
+	
 	var clauseBreakMultiplier = 1.0f;
 	var difficultyInt = verseManager.GetDifficultyFromInt(difficulty);
 	var phraseLength : int = phraseLengths[difficultyInt];
@@ -446,7 +454,7 @@ function SplitVerse(verse : String) {
 				phrase = phrase.Replace("／","");
 				phrase = phrase.Replace("/","");
 				
-				if (language == "zh") { phrase = phrase.Replace(" ",""); }
+				if (isChinese) { phrase = phrase.Replace(" ",""); }
 				
 				// filter out leading or trailing spaces
 				if ((phrase.Length > 0) && (phrase[0] == " ")) {
@@ -461,7 +469,7 @@ function SplitVerse(verse : String) {
 				l = l + phraseLengthForClause;
 				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
-					if (language == "zh") {phrase = phrase.Replace(" ","");}
+					if (isChinese) {phrase = phrase.Replace(" ","");}
 					phraseArray.push(phrase);
 					
 				}
@@ -470,7 +478,7 @@ function SplitVerse(verse : String) {
 			// filter out no break markers
 			clause = clause.Replace("／","");
 			clause = clause.Replace("/","");
-			if (language == "zh") {clause = clause.Replace(" ","");}
+			if (isChinese) {clause = clause.Replace(" ","");}
 			phraseArray.push(clause);
 			
 		}		
@@ -590,8 +598,10 @@ function SetupVerse() {
 	
 	var dy = screenBounds.y;
 	var i = 0;
+	var rTL = verseManager.rightToLeft;
 	for (word in words) {
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
+		clone.rightToLeft = rTL;
 		clone.setWord(word);
 		clone.wordIndex = i;
 		wordLabels.push(clone);
