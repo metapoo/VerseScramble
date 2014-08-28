@@ -8,7 +8,17 @@ from bson.objectid import ObjectId
 def get_handlers():
     return ((r"/api/verse/show", ShowVerseApiHandler),
             (r"/api/verseset/show", ShowVerseSetApiHandler),
+            (r"/api/verseset/list", ListVerseSetApiHandler),
             )
+
+class ListVerseSetApiHandler(BaseHandler, ApiMixin):
+    api_name = "verseset/list"
+    def get(self):
+        versesets = VerseSet.collection.find()
+        versesets_json = [verseset.json() for verseset in versesets]
+        result = {"versesets":versesets_json,
+                  }
+        return self.return_success(result)
 
 class ShowVerseApiHandler(BaseHandler, ApiMixin):
     api_name = "verse/show"
@@ -18,7 +28,10 @@ class ShowVerseApiHandler(BaseHandler, ApiMixin):
         verse = Verse.collection.find_one({'_id':verse_id})
         if verse is None:
             self.return_error("verse not found")
-        self.return_success({"verse":verse.json()})
+        verse_json = verse.json()
+        vs = verse.verseset()
+        verse_json["language"] = vs["language"]
+        self.return_success({"verse":verse_json})
 
 class ShowVerseSetApiHandler(BaseHandler, ApiMixin):
     api_name = "verseset/show"

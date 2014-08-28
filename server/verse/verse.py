@@ -106,7 +106,7 @@ class CreateVerseHandler(BaseHandler):
                        'version':version,
                        'text':text,
                        'verseset_id':verseset_id,
-                       'user_id':user._id,
+                       'user_id':user._id
                    })
         verse.save()
         verseset.update_verse_count()
