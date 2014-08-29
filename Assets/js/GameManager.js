@@ -31,6 +31,7 @@ var highScoreLabel : TextMesh;
 var referenceLabel : TextMesh;
 var healthBar : HealthBar;
 
+public var maxWordsActive : int = 10;
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
 public var endOfGameOptions : EndOfGameOptions;
@@ -618,9 +619,21 @@ function SetupVerse() {
 	
 	
 	numWordsReleased = 0;	
+	var numWordsActive = 0;
+	var wordDelay = 0.4f + 0.1f*(4-parseInt(difficulty));
+	
 	while (numWordsReleased < wordLabels.length) {
+		numWordsActive = (numWordsReleased - wordIndex);
+		Debug.Log("numWordsActive = " + numWordsActive);
+		
+		// don't allow more than maxWordsActive words on screen at the same time
+		while (numWordsActive >= maxWordsActive) {
+			yield WaitForSeconds(0.2f);
+			numWordsActive = (numWordsReleased - wordIndex);
+		}		
+		
 		numWordsReleased = releaseWords(numWordsReleased) + 1;
-		yield WaitForSeconds(1.5f);
+		yield WaitForSeconds(0.5f);
 		// start game on second round
 		if (!gameStarted) {
 			gameStarted = true;
@@ -640,14 +653,15 @@ function GetWordLabelAt(index : int) : WordLabel {
  function releaseWords(index: int) {
  	//Debug.Log("release words index = " + index);
  
-	var groupSize : int = 3;
+ 	// try group size = 1
+	var groupSize : int = 1;
 	
 	switch(difficulty) {
 		case Difficulty.Medium:
-			groupSize = 4;
+			groupSize = 1;
 			break;
 		case Difficulty.Hard:
-			groupSize = 5;
+			groupSize = 1;
 			break;
 		default:
 			break;
