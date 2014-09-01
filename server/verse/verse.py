@@ -28,8 +28,14 @@ class UpdateVersionSelectorHandler(BaseHandler):
         version = self.get_argument("version")
         language = self.get_argument("language")
         versions = VERSION_BY_LANGUAGE_CODE[language]
+        selected_nav = "my sets"
+        context = {"selected_nav":selected_nav}
 
-        self.render("version_select.html",version=version,language=language,versions=versions)
+        self.render("version_select.html",
+                    version=version,
+                    language=language,
+                    versions=versions,
+                    selected_nav=selected_nav)
 
     def post(self):
         return self.get()
@@ -66,9 +72,11 @@ class UpdateVerseHandler(BaseHandler):
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
         version = verse.get('version')
+        selected_nav = "my sets"
+        context = {"selected_nav":selected_nav}
 
         self.render("verse/edit.html", verse=verse, verseset=verseset,
-                    user=user, versions=versions, version=version)
+                    user=user, versions=versions, version=version, context=context)
     def post(self):
         verse_id = self.get_argument("verse_id")
         verse_id = ObjectId(verse_id)
@@ -122,9 +130,16 @@ class ShowVerseSetHandler(BaseHandler):
         verses = list(verseset.verses())
         verseset.update_verse_count(len(verses))
         user = self.current_user
+
+        if verseset["user_id"] == user._id:
+            selected_nav = "my sets"
+        else:
+            selected_nav = "all sets"
+        context = {"selected_nav":selected_nav}
+
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
-                           versions=versions)
+                           versions=versions, context=context)
 
 
 class UpdateVerseSetHandler(BaseHandler):
@@ -139,10 +154,12 @@ class UpdateVerseSetHandler(BaseHandler):
         version = verseset.get("version")
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE[language]
+        selected_nav = "my sets"
+        context = {"selected_nav":selected_nav}
         return self.render("verseset/edit.html",
                            user=user, language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            verseset=verseset,versions=versions, language=language,
-                           version=version)
+                           version=version, context=context)
 
     @require_login
     def post(self):
@@ -192,14 +209,20 @@ class CreateVerseSetHandler(BaseHandler):
         version = "NIV"
         language = 'en'
         versions = VERSION_BY_LANGUAGE_CODE[language]
+        selected_nav = "my sets"
+        context = {"selected_nav":selected_nav}
+
         return self.render("verseset/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
-                           version=version,verseset=None,language=language,versions=versions)
+                           version=version,verseset=None,language=language,versions=versions,
+                           context=context)
 
 class ListVerseSetHandler(BaseHandler):
     @require_login
     def get(self):
+        selected_nav = "my sets"
+        context = {"selected_nav":selected_nav}
         user = self.current_user
         versesets = user.versesets()
-        return self.render("verseset/list.html", user=user, versesets=versesets)
+        return self.render("verseset/list.html", user=user, versesets=versesets, context=context)
 

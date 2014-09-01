@@ -2,7 +2,6 @@
 {% block page_content %}
 
 <div>
-Verse Sets:
 {% for verseset in versesets %}
 <p><div><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a><br/>
 <span>by {{verseset.user().display_name()}}, {{verseset.verse_count()}} verses</span>

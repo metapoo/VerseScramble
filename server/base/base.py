@@ -9,8 +9,9 @@ def get_handlers():
 class FrontPageHandler(BaseHandler):
     def get(self, path=None):
         user = self.current_user
+        selected_nav = "all sets"
         
         versesets = list(VerseSet.collection.find())
-
-        return self.render("index.html", user=user, versesets=versesets)
+        context = {"selected_nav": selected_nav}
+        return self.render("verseset/list.html", user=user, versesets=versesets, context=context)
         

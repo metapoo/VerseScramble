@@ -33,18 +33,22 @@
 
 <body>
 
-{% if not user %}
-<div><a href="/login">login</a> | <a href="/login/register">register</a></div>
-{% else %}
-<div>
-logged in as {{user.display_name()}}
-[<a href="/login/logout">logout</a> | <a href="/">all sets</a> | <a href="/verseset/list">my sets</a> ]
+<div id="page_layout_wrapper">
+<div id="page_layout">
+
+<div id="page_menu">
+<a href="/" {% if context.get("selected_nav") == "all sets" %}class="selected"{% end %}>all sets</a><a href="/verseset/list" {% if context.get("selected_nav") == "my sets" %}class="selected"{% end %}>my sets</a>{% if not user %}<a {% if context.get("selected_nav") == "login" %}class="selected"{% end %} href="/login">login</a> <a {% if context.get("selected_nav") == "register" %}class="selected"{% end %} href="/login/register">register</a>{% else %}<a href="/login/logout">logout</a>{% end %}
+
+
 </div>
-{% end %}
-<br/>
+
+<div id="page_content">
 {% block page_content %}
 {% end %}
+</div>
 
+</div>
+</div>
 
 <script src="/javascripts/application.js?v={{random.random()}}"></script>
 <script src="/javascripts/jquery-2.1.1.min.js"></script>
@@ -52,4 +56,5 @@ logged in as {{user.display_name()}}
 {% block script_content %}
 {% end %}    
 </script>
+
 </body>

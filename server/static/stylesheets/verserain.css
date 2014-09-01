@@ -1,8 +1,66 @@
+body, input, div {
+  padding: 0;
+  margin: 0;
+}
+
+#page_layout_wrapper {
+  text-align: center;
+  width: 100%;
+}
+
+#page_layout {
+  text-align: left;
+  width: 800px;
+  margin: auto;
+  padding: 20px 0px 20px 0px;
+}
+
 form.login input[type="text"], form.login input[type="password"] {
-    width:200px;
+  width:200px;
 }
 
 form textarea[name="text"] {
   width: 400px;
   height: 100px;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial;
+}
+
+#page_menu a {
+  color: #333;
+  padding: 5px 30px 5px 30px;
+  display: inline-block;
+  margin: 0px;
+}
+
+#page_menu a:hover, #page_menu a:active, #page_menu a.selected {
+  background-color:rgba(200,220,240,1.0);
+  color: #555;
+}
+
+#page_menu {
+  cursor: pointer;
+  font-size: 1.2em;
+  width: 100%;
+  background-color: rgba(169, 201, 224, 1.0);
+  text-align: center;
+}
+
+#page_content {
+  padding-top: 10px;
+}
+
+a {
+  font-weight: bold;
+}
+
+a, a:visited, a:link, a:hover, a:active {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover, a:active {
+  color: #666;
 }

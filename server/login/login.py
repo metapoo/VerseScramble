@@ -16,8 +16,10 @@ class RegisterHandler(BaseHandler):
     def get(self):
         user = self.current_user
         error_message = None
+        selected_nav = "register"
+        context = {"selected_nav":selected_nav}
         self.render("login/register.html",user=user,error_message=error_message,
-                    email="",username="")
+                    email="",username="",context=context)
 
     def post(self):
         password = self.get_argument("password")
@@ -60,7 +62,10 @@ class LoginHandler(BaseHandler):
         email = self.get_secure_cookie("email")
         if email is None:
             email = ""
-        self.render("login/login.html",user=user,error_message=error_message,email=email)
+        selected_nav = "login"
+        context = {"selected_nav":selected_nav}
+        self.render("login/login.html",user=user,error_message=error_message,email=email,
+                    context=context)
 
     def post(self):
         password = self.get_argument("password")
