@@ -29,6 +29,7 @@ function HandleURL(url : String) {
 	} else if (subject == "verseset") {
 		SetVerseSetId(idstr);
 	}
+	Application.LoadLevel("scramble");
 }
 
 function SetOption(key : String, value : String) {
