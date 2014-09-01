@@ -6,6 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
 <link rel="stylesheet" href="/stylesheets/verserain.css" type="text/css" />
+<link rel="stylesheet" href="/stylesheets/cssmenu.css" type="text/css" />
+
 {% import random %}
 {% from verserain import settings %}
 
@@ -36,9 +38,18 @@
 <div id="page_layout_wrapper">
 <div id="page_layout">
 
-<div id="page_menu">
-<a href="/" {% if context.get("selected_nav") == "all sets" %}class="selected"{% end %}>all sets</a><a href="/verseset/list" {% if context.get("selected_nav") == "my sets" %}class="selected"{% end %}>my sets</a>{% if not user %}<a {% if context.get("selected_nav") == "login" %}class="selected"{% end %} href="/login">login</a> <a {% if context.get("selected_nav") == "register" %}class="selected"{% end %} href="/login/register">register</a>{% else %}<a href="/login/logout">logout</a>{% end %}
-
+<div id="cssmenu">
+<div id="bg-one"></div><div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
+<ul>
+  <li {% if context.get("selected_nav") == "all sets" %}class="active"{% end %}><a href="/"><span>all sets</span></a></li>
+  <li {% if context.get("selected_nav") == "my sets" %}class="active"{% end %}><a href="/verseset/list" ><span>my sets</span></a></li>
+  {% if not user %}
+  <li {% if context.get("selected_nav") == "login" %}class="active"{% end %}  ><a href="/login"><span>login</span></a></li>
+  <li {% if context.get("selected_nav") == "register" %}class="active"{% end %}><a  href="/login/register"><span>register</span></a></li>
+  {% else %}
+  <li class="last"><a href="/login/logout"><span>logout</span></a></li>
+  {% end %}
+</ul>
 
 </div>
 
