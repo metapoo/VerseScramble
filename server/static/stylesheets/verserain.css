@@ -1,3 +1,9 @@
+@import url(http://fonts.googleapis.com/css?family=Halant:400,500);
+
+body {
+  font-family: Halant, "Helvetica Neue", Helvetica, Arial;
+}
+
 body, input, div {
   padding: 0;
   margin: 0;
@@ -22,10 +28,6 @@ form.login input[type="text"], form.login input[type="password"] {
 form textarea[name="text"] {
   width: 400px;
   height: 100px;
-}
-
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial;
 }
 
 #page_content {

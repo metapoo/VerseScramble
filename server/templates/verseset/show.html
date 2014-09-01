@@ -23,7 +23,14 @@
 </div>
 
 <div>{{v['text']}}</div>
-<div><a href="/verse/play/{{v._id}}">play</a> | <a href="verserain://com.hopeofglory.verserain/verse/{{v._id}}">play on iOS</a>
+<div>
+
+{% if isIOS %}
+<a href="verserain://com.hopeofglory.verserain/verse/{{v._id}}">play</a>
+{% else %}
+<a href="/verse/play/{{v._id}}">play</a> 
+{% end %}
+
 {% if user and (verseset['user_id'] == user._id) %}
 | <a href="/verse/edit/{{v._id}}">edit</a> | <a href="/verse/remove/{{v._id}}">remove</a>
 {% end %}

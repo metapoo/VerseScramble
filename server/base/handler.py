@@ -8,6 +8,18 @@ from verserain.user.models import User
 class BaseHandler(tornado.web.RequestHandler):
     cookieless_okay = False
 
+    def isIOS(self):
+        user_agent = self.request.headers['User-Agent']
+        if ("iPod" in user_agent) or ("iPhone" in user_agent) or ("iPad" in user_agent):
+            return True
+        return False
+
+    def isAndroid(self):
+        user_agent = self.request.headers['User-Agent']
+        if ("Android" in user_agent):
+            return True
+        return False
+
     def get(self):
         return self.post()
 
@@ -52,6 +64,11 @@ class BaseHandler(tornado.web.RequestHandler):
 
         return user
 
+    def render(self, *args, **kwargs):
+        kwargs['user'] = self.current_user
+        kwargs['isIOS'] = self.isIOS()
+        kwargs['isAndroid'] = self.isAndroid()
+        super(BaseHandler, self).render(*args, **kwargs)
 
     def get_current_user_cookieless(self):
         fb_uid = self.get_argument("fb_uid", "unknown_fb_uid")

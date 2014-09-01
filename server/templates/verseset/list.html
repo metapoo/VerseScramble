@@ -4,7 +4,7 @@
 <div>
 {% for verseset in versesets %}
 <p><div><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a></div>
-<span>{{verseset.verse_count()}} verses {% if user and user._id == verseset['user_id'] %}| <a href="/verseset/edit/{{verseset._id}}">edit</a> |
+<span>{{verseset.verse_count()}} verses {% if user and (user._id == verseset['user_id']) %}| <a href="/verseset/edit/{{verseset._id}}">edit</a> |
 <a href="/verseset/remove/{{verseset._id}}">remove</a> {% end %}</span></p>
 {% end %}
 </div>

@@ -131,7 +131,7 @@ class ShowVerseSetHandler(BaseHandler):
         verseset.update_verse_count(len(verses))
         user = self.current_user
 
-        if verseset["user_id"] == user._id:
+        if user and (verseset["user_id"] == user._id):
             selected_nav = "my sets"
         else:
             selected_nav = "all sets"
@@ -221,7 +221,9 @@ class ListVerseSetHandler(BaseHandler):
     @require_login
     def get(self):
         selected_nav = "my sets"
-        context = {"selected_nav":selected_nav}
+        context = {"selected_nav":selected_nav,
+                   "request":self.request,
+        }
         user = self.current_user
         versesets = user.versesets()
         return self.render("verseset/list.html", user=user, versesets=versesets, context=context)
