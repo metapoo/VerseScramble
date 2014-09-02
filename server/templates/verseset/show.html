@@ -15,7 +15,7 @@
 
 <div>
 {% for v in verses %}
-<p><div>{{v['reference'] }}
+<div><div>{{v['reference'] }}
 
 {% if v.has_key('version') %}
 ({{v['version']}})
@@ -39,11 +39,10 @@
 {% end %}
 </div>
 
-<p>
-<p>Add a verse to this set:</p>
+<div>
 
 {% include "../verse/_form.html" %}
 
-</p>
+</div>
 
 {% end %}

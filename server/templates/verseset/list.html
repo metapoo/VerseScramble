@@ -1,16 +1,50 @@
 {% extends "../base.html" %}
 {% block page_content %}
 
-<div>
+<table class="pure-table pure-table-bordered">
+
+    <style scoped>
+
+        .button-xsmall {
+            font-size: 70%;
+        }
+
+        .button-small {
+            font-size: 85%;
+        }
+
+        .button-large {
+            font-size: 110%;
+        }
+
+        .button-xlarge {
+            font-size: 125%;
+        }
+
+    </style>
+
+<thead><tr><th>Verse Set</th><th>Language</th><th># Verses</th><th>Creator</th></thead>
+<tbody>
 {% for verseset in versesets %}
-<p><div><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a></div>
-<span>{{verseset.verse_count()}} verses {% if user and (user._id == verseset['user_id']) %}| <a href="/verseset/edit/{{verseset._id}}">edit</a> |
-<a href="/verseset/remove/{{verseset._id}}">remove</a> {% end %}</span></p>
+<tr>
+  <td><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a>
+ {% if user and (user._id == verseset['user_id']) %} <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit</a> 
+<a class="button-xsmall pure-button" href="#" onclick="if (confirm('Are you sure?')) { location.href = '/verseset/remove/{{verseset._id}}'}">x</a> {% end %}
+  </td>
+
+  </td>
+  <td>{{verseset['language']}}</td>
+  <td>{{verseset.verse_count()}}</td>
+  <td>{{verseset.user().display_name()}}</td>
+</tr>
+{% end %}
+</tbody>
+</table>
+
+<div style="padding-top:8px;">
+{% if user %}
+<a  class="pure-button pure-button-primary" href="/verseset/create">create a verse set</a>
 {% end %}
 </div>
-
-{% if user %}
-<a href="/verseset/create">create a verse set</a>
-{% end %}
 
 {% end %}
