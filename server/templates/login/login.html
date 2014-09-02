@@ -4,13 +4,17 @@
 
 
 {% if error_message %}
-<br/><div class="error_message">{{error_message}}</div>
+<div class="error_message">{{error_message}}</div>
 {% end %}
 
-<form action="/login" method="POST" class="login">
-<p>email:<br/><input type="text" name="email" value="{{email}}" /></p>
-<p>password:<br/><input type="password" name="password" /></p>
-<input type="submit" value="login" />
+<form class="pure-form pure-form-stacked" action="/login" method="POST" class="login">
+<fieldset>
+<label for="email">Email</label><input placeholder="Email" type="text" name="email" value="{{email}}" />
+
+<label for="password">Password</label><input type="password" name="password" />
+</fieldset>
+
+<input class="pure-button pure-button-primary" type="submit" value="login" />
 
 </form>
 

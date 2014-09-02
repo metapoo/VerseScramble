@@ -1,5 +1,22 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+
+a.button-xsmall {
+  font-size: 70%;
+}
+
+a.button-small {
+  font-size: 85%;
+}
+
+a.button-large {
+  font-size: 110%;
+}
+
+a.button-xlarge {
+  font-size: 125%;
+}
+
 body {
   font-family: "PT Sans", "Helvetica Neue", Helvetica, Arial;
 }

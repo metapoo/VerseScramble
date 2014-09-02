@@ -4,18 +4,21 @@
 {% end %}
 
 {% block page_content %}
-<div><b>{{verseset.get('name')}}</b></br>
-<span>{{verseset.verse_count()}} verses 
-{% if user and (verseset['user_id'] == user._id) %}
-| <a href="/verseset/edit/{{verseset._id}}">edit</a> |
-<a href="/verseset/remove/{{verseset._id}}">remove</a>
-{% end %}
-</span>
-</div>
 
-<div>
+<table class="pure-table pure-table-bordered">
+<thead>
+<tr><th>{{verseset.get('name')}} ({{verseset.verse_count()}} verses )
+{% if user and (verseset['user_id'] == user._id) %}
+<a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">rename</a>
+<a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a>
+{% end %}
+</th></tr>
+
+<tbody>
+
 {% for v in verses %}
-<div><div>{{v['reference'] }}
+<tr><td>
+<div>{{v['reference'] }}
 
 {% if v.has_key('version') %}
 ({{v['version']}})
@@ -23,26 +26,28 @@
 </div>
 
 <div>{{v['text']}}</div>
-<div>
+<div style="padding-top:6px;">
 
 {% if isIOS %}
-<a href="verserain://com.hopeofglory.verserain/verse/{{v._id}}">play</a>
+<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verse/{{v._id}}">play</a>
 {% else %}
-<a href="/verse/play/{{v._id}}">play</a> 
+<a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play</a> 
 {% end %}
 
 {% if user and (verseset['user_id'] == user._id) %}
-| <a href="/verse/edit/{{v._id}}">edit</a> | <a href="/verse/remove/{{v._id}}">remove</a>
+ <a class="button-xsmall pure-button" href="/verse/edit/{{v._id}}">edit</a> 
+ <a class="button-xsmall pure-button" href="/verse/remove/{{v._id}}">x</a>
 {% end %}
-</div>
+</td></tr>
 
 {% end %}
-</div>
+</tbody>
 
-<div>
+</table>
+
+<br/>
 
 {% include "../verse/_form.html" %}
 
-</div>
 
 {% end %}

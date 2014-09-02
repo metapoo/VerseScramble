@@ -1,27 +1,8 @@
 {% extends "../base.html" %}
 {% block page_content %}
+{% from verserain.verse import language %}
 
 <table class="pure-table pure-table-bordered">
-
-    <style scoped>
-
-        .button-xsmall {
-            font-size: 70%;
-        }
-
-        .button-small {
-            font-size: 85%;
-        }
-
-        .button-large {
-            font-size: 110%;
-        }
-
-        .button-xlarge {
-            font-size: 125%;
-        }
-
-    </style>
 
 <thead><tr><th>Verse Set</th><th>Language</th><th># Verses</th><th>Creator</th></thead>
 <tbody>
@@ -33,7 +14,7 @@
   </td>
 
   </td>
-  <td>{{verseset['language']}}</td>
+  <td>{{language.language_by_code(verseset['language'])}}</td>
   <td>{{verseset.verse_count()}}</td>
   <td>{{verseset.user().display_name()}}</td>
 </tr>

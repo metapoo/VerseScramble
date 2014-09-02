@@ -1,14 +1,20 @@
-<form action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
+<form class="pure-form pure-form-stacked" action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
+<legend>{% if verse %}Update Verse{% else %}Add a Verse to this Set{% end %}</legend>
 
-<div>Reference (Ex: John 3:16)<br/><input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %}/> </div>
+<fieldset>
+<label for="reference">Reference (Ex: John 3:16)</label>
+<input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference"/> 
 <div>
 {% include "../version_select.html" %}
-
 </div>
-<div>Verse Text<br/><textarea name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea></div>
+
+<label for="text">Verse Text</label>
+
+<textarea name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
+</fieldset>
 
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
 <input type="hidden" name="verseset_id" value="{{verseset._id}}" />
-<input type="submit" value="{% if verse %}save {% else %}add verse{% end %}" />
-{% if verse %}<input type="button" value="cancel" onclick="location.href='/verseset/show/{{verseset._id}}'; return false;" />{% end %}
+<input class="pure-button" type="submit" value="{% if verse %}save {% else %}add verse{% end %}" />
+{% if verse %}<input class="pure-button" type="button" value="cancel" onclick="location.href='/verseset/show/{{verseset._id}}'; return false;" />{% end %}
 </form>
