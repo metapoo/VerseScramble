@@ -9,7 +9,7 @@
 {% for verseset in versesets %}
 <tr>
   <td><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a>
- {% if user and (user._id == verseset['user_id']) %} <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit</a> 
+ {% if user and (user._id == verseset['user_id']) %} <a class="button-xsmall pure-button" href="/verseset/show/{{verseset._id}}">edit</a> 
 <a class="button-xsmall pure-button" href="#" onclick="if (confirm('Are you sure?')) { location.href = '/verseset/remove/{{verseset._id}}'}">x</a> {% end %}
   </td>
 

@@ -92,6 +92,8 @@ class UpdateVerseHandler(BaseHandler):
         reference = self.get_argument("reference")
         version = self.get_argument("version")
         text = self.get_argument("text")
+
+        text = text.replace("\n","")
         verse.update({"version":version,
                       "text":text,
                       "reference":reference})
@@ -108,8 +110,19 @@ class CreateVerseHandler(BaseHandler):
         verseset_id = self.get_argument("verseset_id")
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        error_message = None
+
         if verseset is None:
-            return self.write("Invalid verse set: %s" % verseset_id)
+            error_message = "Invalid verse set: %s" % verseset_id
+        if verseset['user_id'] != user._id:
+            error_message = "You can't edit a verse set you don't own"
+
+        if error_message:
+            self.write(error_message)
+            return
+
+        text = text.replace("\n","")
+
         verse = Verse({'reference':reference,
                        'version':version,
                        'text':text,
@@ -194,6 +207,10 @@ class CreateVerseSetHandler(BaseHandler):
         name = self.get_argument("name",None)
         language = self.get_argument("language",None)
         version = self.get_argument("version",None)
+
+        if (not name):
+            return self.get(error_message="Verse Set name cannot be blank")
+
         vs = VerseSet({'name':name,
                        'language':language,
                        'user_id':user._id})
@@ -201,10 +218,10 @@ class CreateVerseSetHandler(BaseHandler):
             vs["version"] = version
 
         vs.save()
-        self.redirect("/")
+        self.redirect("/verseset/show/%s" % str(vs._id))
 
     @require_login
-    def get(self):
+    def get(self, error_message=None):
         user = self.current_user
         version = "NIV"
         language = 'en'
@@ -215,7 +232,7 @@ class CreateVerseSetHandler(BaseHandler):
         return self.render("verseset/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            version=version,verseset=None,language=language,versions=versions,
-                           context=context)
+                           context=context, error_message=error_message)
 
 class ListVerseSetHandler(BaseHandler):
     @require_login

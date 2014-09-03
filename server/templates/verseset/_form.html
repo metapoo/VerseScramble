@@ -1,5 +1,8 @@
 <form class="pure-form pure-form-stacked" action="/verseset/{% if verseset %}update{% else %}create{% end %}" method="POST">
   <legend>{% if verseset %}Update Verse Set{% else %}Create a Verse Set{% end %}</legend>
+  {% if error_message %}
+  <div class="error">{{error_message}}</div>
+  {% end %}
 
   <fieldset>
   <label for="name">Verse Set Name (Ex: Healing, Salvation, etc)</label>

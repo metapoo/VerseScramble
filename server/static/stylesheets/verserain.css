@@ -1,5 +1,11 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+.error {
+  margin: 5px 0px 5px 0px;
+  border: 2px solid red;
+  text-align: center;
+  padding: 5px;
+}
 
 a.button-xsmall {
   font-size: 70%;

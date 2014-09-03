@@ -60,6 +60,10 @@ class BaseModel(Model):
     def key_name(cls):
         return "%s_id" % cls.__name__.lower()
 
+    @classmethod
+    def by_id(cls, idstr):
+        from bson.objectid import ObjectId
+        return cls.collection.find_one({'_id':ObjectId(idstr)})
 
     def get_children(self, model, keyname=None, **kwargs):
         cls = self.__class__

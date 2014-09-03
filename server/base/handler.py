@@ -68,6 +68,10 @@ class BaseHandler(tornado.web.RequestHandler):
         kwargs['user'] = self.current_user
         kwargs['isIOS'] = self.isIOS()
         kwargs['isAndroid'] = self.isAndroid()
+
+        if not kwargs.has_key('error_message'):
+            kwargs['error_message'] = None
+
         super(BaseHandler, self).render(*args, **kwargs)
 
     def get_current_user_cookieless(self):

@@ -1,6 +1,10 @@
 <form class="pure-form pure-form-stacked" action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
 <legend>{% if verse %}Update Verse{% else %}Add a Verse to this Set{% end %}</legend>
 
+  {% if error_message %}
+  <div class="error">{{error_message}}</div>
+  {% end %}
+
 <fieldset>
 <label for="reference">Reference (Ex: John 3:16)</label>
 <input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference"/> 
