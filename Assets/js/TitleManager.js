@@ -64,7 +64,8 @@ function CheckOption() {
 	
 	if (us) {
 		var verseId = us.VerseId();
-		if (verseId) {
+		var versesetId = us.VerseSetId();
+		if (verseId || versesetId) {
 			Application.LoadLevel("scramble");
 			return true;
 		}

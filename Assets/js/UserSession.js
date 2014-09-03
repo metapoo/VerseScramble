@@ -62,7 +62,20 @@ function VerseSetId() : String {
 	return null;
 }
 
+function ApiDomain() : String {
+	if (options.ContainsKey("api_domain")) {
+		return options["api_domain"];
+	} else {
+		return "verserain.eternityinourheart.com";
+	}
+}
+
+function SetApiDomain(api_domain : String) {
+	SetOption("api_domain", api_domain);
+}
+
 function Start () {
+	//SetVerseSetId("53eaddd8a2ff376c08f277df");
 }
 
 function Update () {

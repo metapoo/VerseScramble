@@ -292,16 +292,6 @@ static function DifficultyToString(difficulty : Difficulty) {
 	}		
 }
 
-function GetGlobalDifficulty__deprecated__() {
-	var selectedDifficulty = GetSelectedDifficulty();
-	var maxDifficulty : Difficulty = GetCurrentDifficultyAllowed__deprecated__();
-	if (parseInt(maxDifficulty) < parseInt(selectedDifficulty)) {
-		return maxDifficulty;
-	} else {
-		return selectedDifficulty;
-	}
-}
-
 static function GetChallengeModeEnabled() {
 	return PlayerPrefs.GetInt("challenge_mode") == 1;
 }
@@ -349,16 +339,6 @@ function SetDifficulty(difficulty:Difficulty) {
 function GetSelectedDifficulty() {
 	var result : int = PlayerPrefs.GetInt("selected_difficulty_"+GetLanguage(),0);
 	return GetDifficultyFromInt(result);
-}
-
-function GetCurrentDifficultyAllowed__deprecated__() {
-	var numMastered = GetMasteredVerses(Difficulty.Easy);
-	if (numMastered < verses.length) return Difficulty.Easy;
-	numMastered = GetMasteredVerses(Difficulty.Medium);
-	if (numMastered < verses.length) return Difficulty.Medium;
-	numMastered = GetMasteredVerses(Difficulty.Hard);
-	if (numMastered < verses.length) return Difficulty.Hard;
-	return Difficulty.Hard;
 }
 
 function GetCachedTotalScore() {
@@ -444,8 +424,19 @@ function CheckRightToLeft(language) {
 	rightToLeft = false;
 }
 
+function GetApiDomain() {
+	var us : UserSession = UserSession.GetUserSession();
+	if (us) {
+		apiDomain = us.ApiDomain();
+		return apiDomain;
+	} else {
+		return "verserain.eternityinourheart.com";
+	}
+}
+
 function LoadOnlineVerse(verseId) {
-	var www : WWW = new WWW("http://"+apiDomain+"/api/verse/show?verse_id="+verseId);
+	var url : String = "http://"+GetApiDomain()+"/api/verse/show?verse_id="+verseId;
+	var www : WWW = new WWW(url);
 	yield www;	
 	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
@@ -467,7 +458,9 @@ function LoadOnlineVerse(verseId) {
 }
 
 function LoadOnlineVerseSet(versesetId) {
-	var www : WWW = new WWW("http://"+apiDomain+"/api/verse/show?verse_id="+versesetId);
+	var url : String = "http://"+GetApiDomain()+"/api/verseset/show?verseset_id="+versesetId;
+	Debug.Log(url);
+	var www : WWW = new WWW(url);
 	yield www;
 	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
@@ -490,6 +483,11 @@ function LoadVerses() {
 		var verseId = us.VerseId();
 		if (verseId) {
 			LoadOnlineVerse(verseId);
+			return;
+		}
+		var versesetId = us.VerseSetId();
+		if (versesetId) {
+			LoadOnlineVerseSet(versesetId);
 			return;
 		}
 	}
