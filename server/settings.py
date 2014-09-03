@@ -1,3 +1,12 @@
+import os
+
+VERSERAIN_ENV = os.environ.get("VERSERAIN_ENV","development")
+if VERSERAIN_ENV == "development":
+    SITE_DOMAIN = "dev.verserain.com"
+else:
+    SITE_DOMAIN = "www.verserain.com"
+SITE_URL = "http://%s/" % SITE_DOMAIN
+
 MONGODB_HOST = "localhost"
 MONGODB_PORT = 27017
 MONGODB_USERNAME = "admin"

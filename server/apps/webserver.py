@@ -49,7 +49,7 @@ class Application(tornado.web.Application):
             debug=True,
             facebook_api_key=settings.FACEBOOK_API_KEY,
             facebook_secret="30934f472bc7108037ccc7e31f480366",
-            site_url="http://verserain.eternityinourheart.com",
+            site_url=settings.SITE_URL,
         )
         tornado.web.Application.__init__(self, handlers, **app_settings)
 

@@ -4,6 +4,7 @@ import tornado.httpclient
 import tornado.web
 
 from verserain.user.models import User
+from verserain import settings
 
 class BaseHandler(tornado.web.RequestHandler):
     cookieless_okay = False
@@ -68,6 +69,7 @@ class BaseHandler(tornado.web.RequestHandler):
         kwargs['user'] = self.current_user
         kwargs['isIOS'] = self.isIOS()
         kwargs['isAndroid'] = self.isAndroid()
+        kwargs['settings'] = settings
 
         if not kwargs.has_key('error_message'):
             kwargs['error_message'] = None

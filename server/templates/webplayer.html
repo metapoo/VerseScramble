@@ -57,9 +57,10 @@
 					}
 				});
 				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=7");
-{% if verse_id %}
- u.getUnity().SendMessage("UserSession", "SetVerseId", "{{verse_id}}");
-{% end %}
+			        u.getUnity().SendMessage("UserSession", "SetApiDomain", "{{settings.SITE_DOMAIN}}");
+			        {% if verse_id %}
+			        u.getUnity().SendMessage("UserSession", "SetVerseId", "{{verse_id}}");
+			        {% end %}
 			});
 		
 		</script>
