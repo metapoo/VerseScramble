@@ -362,10 +362,11 @@ function SplitVerse(verse : String) {
 	
 	var paransRe:Regex = new Regex("(.*)");
 	
-	// filter out paranthesis
+	// filter out paranthesis, unwanted characters
 	verse = Regex.Replace(verse, "\\(.*\\)","");
 	verse = Regex.Replace(verse, "\\（.*\\）","");
-
+	verse = Regex.Replace(verse, "\n","");
+	
 	for (var c in verse) {
 		clause = clause + c;
 		for (var s in seps) {
@@ -654,14 +655,14 @@ function GetWordLabelAt(index : int) : WordLabel {
  	//Debug.Log("release words index = " + index);
  
  	// try group size = 1
-	var groupSize : int = 1;
+	var groupSize : int = 3;
 	
 	switch(difficulty) {
 		case Difficulty.Medium:
-			groupSize = 1;
+			groupSize = 4;
 			break;
 		case Difficulty.Hard:
-			groupSize = 1;
+			groupSize = 5;
 			break;
 		default:
 			break;
