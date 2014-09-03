@@ -143,19 +143,25 @@ function HandleWordWrong() {
 	
 	if (finished) return;
 	
+	if (GetChallengeModeEnabled()) {
+		ExplodeWords();
+	}
+}
+	
+function ExplodeWords() {
 	audio.PlayOneShot(sndExplode1, 1.0f);
 	
-	//for (var wordLabel :WordLabel in wordLabels) {
-	//	wordLabel.Explode();
-	//}
+	for (var wordLabel :WordLabel in wordLabels) {
+		wordLabel.Explode();
+	}
 	
 	
 	if (!GetChallengeModeEnabled()) {
 		scoreManager.maxTime += wordIndex;
 	}
 	
-	//wordIndex = 0;
-	//currentWord = words[wordIndex];
+	wordIndex = 0;
+	currentWord = words[wordIndex];
 }
 
 function HandleWordCorrect() {
@@ -362,10 +368,11 @@ function SplitVerse(verse : String) {
 	
 	var paransRe:Regex = new Regex("(.*)");
 	
-	// filter out paranthesis
+	// filter out paranthesis, unwanted characters
 	verse = Regex.Replace(verse, "\\(.*\\)","");
 	verse = Regex.Replace(verse, "\\（.*\\）","");
-
+	verse = Regex.Replace(verse, "\n","");
+	
 	for (var c in verse) {
 		clause = clause + c;
 		for (var s in seps) {
@@ -654,14 +661,14 @@ function GetWordLabelAt(index : int) : WordLabel {
  	//Debug.Log("release words index = " + index);
  
  	// try group size = 1
-	var groupSize : int = 1;
+	var groupSize : int = 3;
 	
 	switch(difficulty) {
 		case Difficulty.Medium:
-			groupSize = 1;
+			groupSize = 4;
 			break;
 		case Difficulty.Hard:
-			groupSize = 1;
+			groupSize = 5;
 			break;
 		default:
 			break;
