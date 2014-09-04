@@ -38,6 +38,10 @@ function HandleURL(url : String) {
 		us.SetApiDomain(apiDomain);
 	}
 	
+	var gameManager : GameManager = GameObject.Find("GameManager").GetComponent("GameManager");
+	if (gameManager) {
+		gameManager.Cleanup();
+	}
 	Application.LoadLevel("scramble");
 }
 
