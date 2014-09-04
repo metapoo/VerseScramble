@@ -15,7 +15,7 @@ var verseTextHE : TextAsset;
 var versesetLanguage : String;
 var rightToLeft : boolean = false;
 var numVerses = 0;
-var apiDomain = "verserain.eternityinourheart.com";
+var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
 static var verseLoaded : boolean = false;
@@ -430,7 +430,7 @@ function GetApiDomain() {
 		apiDomain = us.ApiDomain();
 		return apiDomain;
 	} else {
-		return "verserain.eternityinourheart.com";
+		return "dev.verserain.com";
 	}
 }
 

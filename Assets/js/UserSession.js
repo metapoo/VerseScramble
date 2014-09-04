@@ -18,17 +18,26 @@ function Awake() {
 	options = new Hashtable();
 }
 
-// example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4
+// example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
 function HandleURL(url : String) {
 
 	var parts = url.Split("/"[0]);
 	var subject = parts[3];
 	var idstr = parts[4];
+	var apiDomain = parts[5];
+	
 	if (subject == "verse") {
 		SetVerseId(idstr);
 	} else if (subject == "verseset") {
 		SetVerseSetId(idstr);
 	}
+	
+	var us = GetUserSession();
+	
+	if (us) {
+		us.SetApiDomain(apiDomain);
+	}
+	
 	Application.LoadLevel("scramble");
 }
 
@@ -66,7 +75,7 @@ function ApiDomain() : String {
 	if (options.ContainsKey("api_domain")) {
 		return options["api_domain"];
 	} else {
-		return "verserain.eternityinourheart.com";
+		return "dev.verserain.com";
 	}
 }
 

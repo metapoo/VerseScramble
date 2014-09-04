@@ -628,13 +628,14 @@ function SetupVerse() {
 	numWordsReleased = 0;	
 	var numWordsActive = 0;
 	var wordDelay = 0.4f + 0.1f*(4-parseInt(difficulty));
+	var groupSize = GetGroupSize();
 	
 	while (numWordsReleased < wordLabels.length) {
 		numWordsActive = (numWordsReleased - wordIndex);
 		Debug.Log("numWordsActive = " + numWordsActive);
 		
 		// don't allow more than maxWordsActive words on screen at the same time
-		while (numWordsActive >= maxWordsActive) {
+		while ((numWordsActive + groupSize) > maxWordsActive) {
 			yield WaitForSeconds(0.2f);
 			numWordsActive = (numWordsReleased - wordIndex);
 		}		
@@ -657,9 +658,7 @@ function GetWordLabelAt(index : int) : WordLabel {
 	return wordLabels[index];
 }
 
- function releaseWords(index: int) {
- 	//Debug.Log("release words index = " + index);
- 
+function GetGroupSize() {
  	// try group size = 1
 	var groupSize : int = 3;
 	
@@ -673,7 +672,14 @@ function GetWordLabelAt(index : int) : WordLabel {
 		default:
 			break;
 	}
+	return groupSize;
+}
 
+function releaseWords(index: int) {
+ 	//Debug.Log("release words index = " + index);
+ 
+	var groupSize = GetGroupSize();
+	
 	var c : int  = 0;
 	
 	for (var i : int=index;i<wordLabels.length;i++) {
