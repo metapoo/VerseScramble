@@ -32,7 +32,6 @@ function ApplyCurrentFont() {
 	var font : Font = GetCurrentFont();
 	
 	for (var guitext : GUIText in guitexts) {
-		Debug.Log(guitext);
 		guitext.font = font;
 	}
 }
