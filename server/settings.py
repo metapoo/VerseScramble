@@ -2,7 +2,8 @@ import os
 
 VERSERAIN_ENV = os.environ.get("VERSERAIN_ENV","development")
 if VERSERAIN_ENV == "development":
-    SITE_DOMAIN = "dev.verserain.com"
+    SITE_DOMAIN = "verserain.eternityinourheart.com"
+#    SITE_DOMAIN = "dev.verserain.com"
 else:
     SITE_DOMAIN = "www.verserain.com"
 SITE_URL = "http://%s/" % SITE_DOMAIN

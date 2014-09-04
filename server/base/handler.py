@@ -74,6 +74,9 @@ class BaseHandler(tornado.web.RequestHandler):
         if not kwargs.has_key('error_message'):
             kwargs['error_message'] = None
 
+        if not kwargs.has_key('context'):
+            kwargs['context'] = {}
+
         super(BaseHandler, self).render(*args, **kwargs)
 
     def get_current_user_cookieless(self):

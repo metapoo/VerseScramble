@@ -29,7 +29,7 @@
 <div style="padding-top:6px;">
 
 {% if isIOS %}
-<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verse/{{v._id}}">play</a>
+<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verse/{{v._id}}/{{settings.SITE_DOMAIN}}">play</a>
 {% else %}
 <a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play</a> 
 {% end %}
