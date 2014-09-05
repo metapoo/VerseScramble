@@ -5,16 +5,23 @@
 
 {% block page_content %}
 
-<table class="pure-table pure-table-bordered">
-<thead>
-<tr><th>{{verseset.get('name')}} ({{verseset.verse_count()}} verses )
+<div>
+<span style="font-size:2.0em;">{{verseset.get('name')}}</span>
+
 {% if user and (verseset['user_id'] == user._id) %}
-<a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">rename</a>
-<a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a>
+<div><a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
+<a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a></div>
 {% end %}
-</th></tr>
+</div>
+
+{% if verseset.has_key('commentary') %}
+<div style="padding:10px 0px 10px 0px">{% raw verseset['commentary'] %}</div>
+{% end %}
+
+<table class="pure-table pure-table-bordered">
 
 <tbody>
+
 
 {% for v in verses %}
 <tr><td>

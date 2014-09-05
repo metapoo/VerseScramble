@@ -20,9 +20,13 @@ selected="selected"
   <div id="version_select_parent">
 {% include "../version_select.html" %}
   </div>
+  <label for="commentary">Commentary (Optional)</label>
+  <textarea name="commentary" cols="80" rows="14">{% if verseset and verseset.has_key("commentary") %}{% raw verseset['commentary'] %}{% end %}</textarea>
   </fieldset>
 
 {% if verseset %}<input type="hidden" name="verseset_id" value="{{verseset._id}}" />{% end %}
+
+
   <input class="pure-button" type="submit" value="{% if verseset %}update{% else %}create{% end %}" />
   <input class="pure-button" type="button" value="cancel" onclick="location.href='/'; return false;" />
 </form>

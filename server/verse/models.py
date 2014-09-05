@@ -27,6 +27,9 @@ class VerseSet(BaseModel):
         cls.register_foreign_key(Verse,one_to_many=True)
         return new_instance
 
+    def url(self):
+        return "/verseset/show/%s" % str(self._id)
+
     def update_verse_count(self, count=None):
         old_count = self.verse_count()
         if count:

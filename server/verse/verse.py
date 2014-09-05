@@ -184,11 +184,17 @@ class UpdateVerseSetHandler(BaseHandler):
         name = self.get_argument("name")
         language = self.get_argument("language")
         version = self.get_argument("version")
+        commentary = self.get_argument("commentary",None)
+
         verseset.update({"name":name,
                          "language":language,
                          "version":version})
+
+        if commentary:
+            verseset['commentary'] = commentary
+
         verseset.save()
-        self.redirect("/")
+        self.redirect(verseset.url())
 
 class RemoveVerseSetHandler(BaseHandler):
     @require_login
@@ -197,7 +203,7 @@ class RemoveVerseSetHandler(BaseHandler):
         user = self.current_user
         verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
         verseset.remove()
-        self.redirect("/")
+        self.redirect("/verseset/list")
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -218,7 +224,7 @@ class CreateVerseSetHandler(BaseHandler):
             vs["version"] = version
 
         vs.save()
-        self.redirect("/verseset/show/%s" % str(vs._id))
+        self.redirect(vs.url())
 
     @require_login
     def get(self, error_message=None):
