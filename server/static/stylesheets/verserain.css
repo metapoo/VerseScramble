@@ -39,7 +39,7 @@ body {
   font-family: "PT Sans", "Helvetica Neue", Helvetica, Arial;
 }
 
-body, input, div, p {
+* {
   padding: 0;
   margin: 0;
 }

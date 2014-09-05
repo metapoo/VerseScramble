@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="/stylesheets/cssmenu.css" type="text/css" />
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
 
+{% block head %}
+{% end %}
+
 {% import random %}
 {% from verserain import settings %}
 
@@ -69,5 +72,7 @@
 {% block script_content %}
 {% end %}    
 </script>
+{% block extra_js %}
+{% end %}
 
 </body>

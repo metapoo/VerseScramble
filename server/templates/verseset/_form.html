@@ -1,3 +1,18 @@
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/markitup/skins/markitup/style.css" />
+<link rel="stylesheet" type="text/css" href="/markitup/sets/html/style.css" />
+{% end %}
+
+{% block extra_js %}
+<script type="text/javascript" src="/markitup/jquery.markitup.js"></script>
+<script type="text/javascript" src="/markitup/sets/html/set.js"></script>
+<script language="javascript">
+  $(document).ready(function(){
+   $('#mark-it-up').markItUp(mySettings);
+});
+</script>
+{% end %}
+
 <form class="pure-form pure-form-stacked" action="/verseset/{% if verseset %}update{% else %}create{% end %}" method="POST">
   <legend>{% if verseset %}Update Verse Set{% else %}Create a Verse Set{% end %}</legend>
   {% if error_message %}
@@ -20,8 +35,10 @@ selected="selected"
   <div id="version_select_parent">
 {% include "../version_select.html" %}
   </div>
+
+
   <label for="commentary">Commentary (Optional)</label>
-  <textarea name="commentary" cols="80" rows="14">{% if verseset and verseset.has_key("commentary") %}{% raw verseset['commentary'] %}{% end %}</textarea>
+  <textarea id="mark-it-up" name="commentary" cols="80" rows="14">{% if verseset and verseset.has_key("commentary") %}{% raw verseset['commentary'] %}{% end %}</textarea>
   </fieldset>
 
 {% if verseset %}<input type="hidden" name="verseset_id" value="{{verseset._id}}" />{% end %}
@@ -30,3 +47,4 @@ selected="selected"
   <input class="pure-button" type="submit" value="{% if verseset %}update{% else %}create{% end %}" />
   <input class="pure-button" type="button" value="cancel" onclick="location.href='/'; return false;" />
 </form>
+
