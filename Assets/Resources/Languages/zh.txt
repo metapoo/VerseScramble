@@ -1,4 +1,4 @@
-msgid "high score"
+msgid "High Score"
 msgstr "高分"
 msgid "Bible Verse Rain"
 msgstr "經文雨"

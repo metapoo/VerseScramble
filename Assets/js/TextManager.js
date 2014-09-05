@@ -94,7 +94,7 @@ class TextManager extends MonoBehaviour {
  
             if (line.StartsWith("msgid \""))
             {
-                key = line.Substring(7, line.Length - 8);
+                key = line.Substring(7, line.Length - 8).ToLower();
             }
             else if (line.StartsWith("msgstr \""))
             {
@@ -120,17 +120,20 @@ class TextManager extends MonoBehaviour {
  
     public static function GetText (key:String)
     {
+    	var originalKey:String = key;
         if (key != null && textTable != null)
         {
+        	key = key.ToLower();
+        	
             if (textTable.ContainsKey(key))
             {
                 var result:String = textTable[key];
                 if (result.Length > 0)
                 {
-                    key = result;
+                	return result;
                 }
             }
         }
-        return key;
+        return originalKey;
     }
 }
