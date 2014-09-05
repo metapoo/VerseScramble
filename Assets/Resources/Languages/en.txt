@@ -1,5 +1,5 @@
-msgid "high score"
-msgstr "high score"
+msgid "High Score"
+msgstr "High Score"
 msgid "Bible Verse Rain"
 msgstr "Bible Verse Rain"
 msgid "Hallelujah!"
