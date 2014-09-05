@@ -78,9 +78,7 @@ function OnGUI() {
 }
 
 function CanShowSolution() {
-	return (numWordsReleased == wordLabels.length) && (!showingSolution)
-	&& (wordIndex < wordLabels.length) && gameStarted && 
-	(!GetChallengeModeEnabled());	
+	return (!showingSolution && (wordIndex < wordLabels.length) && gameStarted && !GetChallengeModeEnabled());	
 }
 
 function ShowSolution() {
