@@ -1,5 +1,17 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+.heading {
+  font-size: 2.0em;
+}
+
+.pad_bottom {
+  padding-bottom: 8px;
+}
+
+.paragraph {
+  padding: 8px 0px 8px 0px;
+}
+
 .error {
   margin: 5px 0px 5px 0px;
   border: 2px solid red;

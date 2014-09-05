@@ -190,7 +190,7 @@ class UpdateVerseSetHandler(BaseHandler):
                          "language":language,
                          "version":version})
 
-        if commentary:
+        if commentary is not None:
             verseset['commentary'] = commentary
 
         verseset.save()
