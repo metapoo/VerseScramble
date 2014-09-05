@@ -31,6 +31,7 @@ class ShowVerseApiHandler(BaseHandler, ApiMixin):
         verse_json = verse.json()
         vs = verse.verseset()
         verse_json["language"] = vs["language"]
+        verse_json["verseset_name"] = vs["name"]
         self.return_success({"verse":verse_json})
 
 class ShowVerseSetApiHandler(BaseHandler, ApiMixin):
