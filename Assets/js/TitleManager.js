@@ -43,12 +43,16 @@ function OnGUI() {
 	}
 
 	if (GUI.Button(Rect(w*0.666-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"中文", style)) {
-		verseManager.SetLanguage("zh");
+		verseManager.SetLanguage("zh-hant");
 		selected = true;
 	}
 	
 	if (selected) {
 		audio.PlayOneShot(sndSelect);
+		
+		// reload verses
+		verseManager.Reload();
+		
 		Application.LoadLevel("verselist");
 	}
 	

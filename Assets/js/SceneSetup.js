@@ -21,7 +21,7 @@ function GetCurrentFont() {
 	var font : Font = enFont;
 	if (language == 'en') {
 		font = enFont;
-	} else {
+	} else if (VerseManager.IsLanguageChinese(language)) {
 		font = zhFont;
 	}
 	return font;

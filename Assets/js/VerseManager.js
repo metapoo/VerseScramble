@@ -20,6 +20,20 @@ static var offlineVersesLoaded : boolean = false;
 
 private static var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
+static function Unload() {
+	for (var vs : VerseSet in versesets) {
+		Destroy(vs);
+	}
+	versesets.Clear();
+	loaded = false;
+	offlineVersesLoaded = false;
+}
+
+function Reload() {
+	Unload();
+	Start();
+}
+
 function GetCurrentVerseSet() : VerseSet {
 
 	if (currentVerseSet != null) return currentVerseSet;
@@ -515,7 +529,7 @@ function LoadVerses() {
 	
 	if (language == "en") {
 		verseText = verseTextEN;
-	} else if (language == "zh") {
+	} else if (language == "zh-hant") {
 		verseText = verseTextZH;
 	} else if (language == "he") {
 		verseText = verseTextHE;

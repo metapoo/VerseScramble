@@ -193,7 +193,7 @@ function setWord(w : String) {
 	
 	var language : String = VerseManager.GetVerseLanguage();
 
-	if (language == "zh") {
+	if (VerseManager.IsLanguageChinese(language)) {
 		label.font = zhFont;
 		label.renderer.material = zhFont.material;
 		label.fontSize = 85;
