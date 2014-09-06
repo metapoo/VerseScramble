@@ -17,11 +17,17 @@ def get_handlers():
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
             (r"/verse/play/([^/]+)/?", PlayVerseHandler),
+            (r"/verseset/play/([^/]+)/?", PlayVerseSetHandler),
+
             )
 
 class PlayVerseHandler(BaseHandler):
     def get(self, verse_id):
-        self.render("webplayer.html",verse_id=verse_id)
+        self.render("webplayer.html",verse_id=verse_id, verseset_id=None)
+
+class PlayVerseSetHandler(BaseHandler):
+    def get(self, verseset_id):
+        self.render("webplayer.html",verse_id=None, verseset_id=verseset_id)
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):

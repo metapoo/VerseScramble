@@ -51,15 +51,19 @@
 						break;
 					}
 				});
-				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=7");
+				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=8");
 			        u.getUnity().SendMessage("UserSession", "SetApiDomain", "{{settings.SITE_DOMAIN}}");
 			        {% if verse_id %}
 			        u.getUnity().SendMessage("UserSession", "SetVerseId", "{{verse_id}}");
 			        {% end %}
+                                {% if verseset_id %}
+                                u.getUnity().SendMessage("UserSession","SetVerseSetId", "{{verseset_id}}");
+                                {% end %}
 			});
 </script>
 {% end %}
 {% block page_content %}
+<div style="text-align:center;margin:auto;">
 		<div class="content">
 			<div id="unityPlayer">
 				<div class="missing">
@@ -74,4 +78,5 @@
 				</div>
 			</div>
 		</div>
+</div>
 {% end %}

@@ -9,12 +9,19 @@ B1;2c{% extends "../base.html" %}
 <div class="heading">{{verseset.get('name')}}</div>
 <div class="pad_bottom">by {{verseset.user().display_name()}}</div>
 
-{% if user and (verseset['user_id'] == user._id) %}
 <div class="pad_bottom">
+
+{% if isIOS %}
+<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verseset/{{verseset._id}}/{{settings.SITE_DOMAIN}}">play set</a>
+{% else %}
+<a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play set</a>
+{% end %}
+
+{% if user and (verseset['user_id'] == user._id) %}
 <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
 <a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a>
-</div>
 {% end %}
+</div>
 
 </div>
 
@@ -40,9 +47,9 @@ B1;2c{% extends "../base.html" %}
 <div>
 
 {% if isIOS %}
-<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verse/{{v._id}}/{{settings.SITE_DOMAIN}}">play</a>
+<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verse/{{v._id}}/{{settings.SITE_DOMAIN}}">play verse</a>
 {% else %}
-<a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play</a> 
+<a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play verse</a> 
 {% end %}
 
 {% if user and (verseset['user_id'] == user._id) %}
