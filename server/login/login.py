@@ -22,6 +22,7 @@ class RegisterHandler(BaseHandler):
                     email="",username="",context=context)
 
     def post(self):
+        confirm_password = self.get_argument("confirm_password")
         password = self.get_argument("password")
         email = self.get_argument("email")
         username = self.get_argument("username")
@@ -35,8 +36,14 @@ class RegisterHandler(BaseHandler):
         if user:
             error_message = "An account is already registered with that username."
         
+        if not confirm_password:
+            error_message = "Password confirmation is required"
+
         if not password:
             error_message = "Password is required."
+
+        if password != confirm_password:
+            error_message = "Password does not match with confirmation"
 
         if not email:
             error_message = "Email is required."
