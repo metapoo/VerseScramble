@@ -10,6 +10,7 @@
 // Basic set. Feel free to add more tags
 // ----------------------------------------------------------------------------
 mySettings = {
+        previewAutoRefresh: true,
         nameSpace:       "html", // Useful to prevent multi-instances CSS conflict
 	onShiftEnter:	{keepDefault:false, replaceWith:'<br />\n'},
 	onCtrlEnter:	{keepDefault:false, openWith:'\n<p>', closeWith:'</p>\n'},
