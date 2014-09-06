@@ -148,10 +148,10 @@ function HandleWordWrong() {
 	
 function ExplodeWords() {
 	
-	for (var wordLabel :WordLabel in wordLabels) {
+	for (var wordLabel : WordLabel in wordLabels) {
+		wordLabel.hinting = false;
 		wordLabel.Explode();
 	}
-	
 	
 	if (!GetChallengeModeEnabled()) {
 		scoreManager.maxTime += wordIndex;
@@ -631,7 +631,6 @@ function SetupVerse() {
 	
 	numWordsReleased = 0;	
 	var numWordsActive = 0;
-	var wordDelay = 0.4f + 0.1f*(4-parseInt(difficulty));
 	var groupSize = GetGroupSize();
 	
 	while (numWordsReleased < wordLabels.length) {
@@ -645,13 +644,14 @@ function SetupVerse() {
 		}		
 		
 		numWordsReleased = releaseWords(numWordsReleased) + 1;
-		yield WaitForSeconds(0.5f);
-		// start game on second round
-		if (!gameStarted) {
+		yield WaitForSeconds(1.0f);
+		if (!gameStarted  && (numWordsReleased > groupSize)) {
 			gameStarted = true;
 			scoreManager.resetTime();
 		}
 	}
+
+	
 	numWordsReleased = wordLabels.length;
 	
 }
