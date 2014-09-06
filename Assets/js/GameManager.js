@@ -141,9 +141,9 @@ function HandleWordWrong() {
 	
 	if (finished) return;
 	
-	if (GetChallengeModeEnabled()) {
+//	if (GetChallengeModeEnabled()) {
 		ExplodeWords();
-	}
+//	}
 }
 	
 function ExplodeWords() {
@@ -166,9 +166,15 @@ function HandleWordCorrect() {
 	lastWordTime = Time.time;
 	
 	var snd : AudioClip = sndSuccess1;
+	
 	if (Random.RandomRange(0,10.0f) > 5.0f) {
 		snd = sndSuccess2;
 	}
+	
+	for (var wordLabel : WordLabel in wordLabels) {
+		wordLabel.hinting = false;
+	}
+	
 	audio.PlayOneShot(snd, 0.2);
 	return scoreManager.HandleWordCorrect(elapsedTime);
 }

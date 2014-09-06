@@ -35,7 +35,6 @@ private var shrinkingEdges : boolean = false;
 function Explode() {
 	if (exploding || !returnedToVerse) return;
 	
-	ResetBubble();
 	exploding = true;
 	var wasReturnedToVerse = returnedToVerse;
 	
@@ -53,7 +52,12 @@ function Explode() {
 	returnedToVerse = false;
 	
 	yield WaitForSeconds(Random.RandomRange(0.0f,0.5f));
+	
+	while (shrinkingEdges) {
+		yield WaitForSeconds(0.1f);
+	}
 
+	ResetBubble();
 	collider2D.enabled = true;
 	rigidbody2D.fixedAngle = false;
 	rigidbody2D.isKinematic = false;

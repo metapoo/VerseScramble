@@ -59,7 +59,7 @@ function UpdateHealthBar(newHealth : float) {
 function HandleWordWrong() {
 	streak = 0;
 	var dScore = 0;
-	var dHealth = -1.0f;
+	var dHealth = -0.66f;
 	if (!GameManager.GetChallengeModeEnabled()) {
 		dHealth = -0.33f;
 	 	dScore = score*-.5;
