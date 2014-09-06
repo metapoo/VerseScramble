@@ -41,7 +41,7 @@ public class Verse extends MonoBehaviour
 	
 	public function SaveMetadata(metadata : Hashtable) {
 		var metadataJSON : String = JSONUtils.HashtableToJSON(metadata);
-		PlayerPrefs.SetString("vs_"+SaveKey(), metadataJSON);
+		PlayerPrefs.SetString("vm_"+SaveKey(), metadataJSON);
 	}
 
 	public function GetMetadata() {
