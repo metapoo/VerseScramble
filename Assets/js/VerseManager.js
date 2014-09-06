@@ -2,7 +2,6 @@
 
 import JSONUtils;
 
-var versesets : Array = new Array();
 var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
@@ -15,7 +14,9 @@ var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 var currentVerseSet : VerseSet = null;
 
-static var verseLoaded : boolean = false;
+static var versesets : Array = new Array();
+static var loaded : boolean = false;
+static var offlineVersesLoaded : boolean = false;
 
 private var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
@@ -362,6 +363,20 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 	SetMasteredVerses(difficulty, masteredVerses);
 }
 
+function AddOnlineVerseSet(verseset : VerseSet) {
+	// if verse set already exists, replace the old one and return the new
+	for (var i=0;i<versesets.length;i++) {
+		var vs : VerseSet = versesets[i];
+		
+		if (vs.onlineId == verseset) {
+			versesets[i] = verseset;
+			Destroy(vs);
+			return verseset;
+		}
+	}
+	versesets.push(verseset);
+	return verseset;
+}
 
 function CreateVerseSet(name : String) {
 	var vs : VerseSet = new VerseSet(name);
@@ -406,7 +421,7 @@ function LoadOnlineVerse(verseId) {
 	var versesetName = verseData["verseset_name"];
 	
 	var verseset : VerseSet = new VerseSet(versesetId, versesetName, language, version);
-	versesets.push(verseset);
+	AddOnlineVerseSet(verseset);
 	
 	var verse : Verse = new Verse(verseId, reference, text, version, verseset);
 	verseset.AddVerse(verse);
@@ -415,7 +430,7 @@ function LoadOnlineVerse(verseId) {
 	CheckRightToLeft(language);	
 	SetCurrentVerseSet(verseset);
 	verseIndex = 0;
-	verseLoaded = true;
+	loaded = true;
 	UserSession.GetUserSession().ClearOptions();
 }
 
@@ -432,10 +447,6 @@ function LoadOnlineVerseSet(versesetId) {
 }
 
 function LoadVerses() {
-	for (var vs in versesets) {
-		Destroy(vs);
-	}
-	versesets.clear();
 	
 	var us : UserSession = UserSession.GetUserSession();
 	
@@ -466,6 +477,10 @@ function LoadVerses() {
 }
 
 function LoadVersesLocally() {
+	if (offlineVersesLoaded) {
+		return;
+	}
+	offlineVersesLoaded = true;
 	var language = GetLanguage();
 	CheckRightToLeft(language);
 	SetVerseLanguage(language);
@@ -499,12 +514,11 @@ function LoadVersesLocally() {
   		
   		verseset.AddVerse(verse);  	
   	}
-  	verseLoaded = true;
   	Load();
+  	loaded = true;
 }
 
 function Awake() {
-	verseLoaded = false;
 }
 
 function Load () {

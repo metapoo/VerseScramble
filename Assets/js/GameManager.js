@@ -295,7 +295,7 @@ function AnimateIntro() {
 }
 
 function Start() {
-	while (!VerseManager.verseLoaded) {
+	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1);
 	}
 	

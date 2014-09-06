@@ -244,7 +244,7 @@ function difficultyMultiplier(difficulty : Difficulty) {
 }
 
 function Start() {
-	while (!VerseManager.verseLoaded) {
+	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1f);
 	}
 	TextManager.LoadLanguage(verseManager.GetLanguage());
