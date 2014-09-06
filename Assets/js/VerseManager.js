@@ -44,6 +44,9 @@ function SetCurrentVerseSet(verseset : VerseSet) {
 
 function GetCurrentVerses() : Array {
 	var vs : VerseSet = GetCurrentVerseSet();
+	if (Object.ReferenceEquals(vs, null)) {
+		return new Array();
+	}
 	return vs.verses;
 }
 
@@ -270,7 +273,6 @@ static function GetChallengeModeEnabled() {
 
 function GetCurrentDifficulty() {
 	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
-	var verseset = GetCurrentVerseSet();
 	var verses : Array = GetCurrentVerses();
 	var verse : Verse = GetCurrentVerse();
 	var verseMetadata =	verse.GetMetadata();
