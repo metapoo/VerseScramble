@@ -147,7 +147,6 @@ function HandleWordWrong() {
 }
 	
 function ExplodeWords() {
-	audio.PlayOneShot(sndExplode1, 1.0f);
 	
 	for (var wordLabel :WordLabel in wordLabels) {
 		wordLabel.Explode();

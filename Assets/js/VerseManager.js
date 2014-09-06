@@ -39,7 +39,13 @@ function GetCurrentVerseSet() : VerseSet {
 
 function SetCurrentVerseSet(verseset : VerseSet) {
 	currentVerseSet = verseset;
-	PlayerPrefs.SetString(String.Format("current_verseset_{0}",GetLanguage()), verseset.SaveKey());
+	var language = GetLanguage();
+	if (verseset.language != null) {
+		SetVerseLanguage(verseset.language);
+	} else {
+		SetVerseLanguage(language);
+	}
+	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
 function GetCurrentVerses() : Array {
@@ -441,7 +447,6 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 	var verse : Verse = new Verse(verseId, reference, text, version, verseset);
 	verseset.AddVerse(verse);
 	
-	SetVerseLanguage(language);
 	SetCurrentVerseSet(verseset);
 	verseIndex = 0;
 	loaded = true;
@@ -483,7 +488,6 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		}
 	}
 	
-	SetVerseLanguage(language);
 	SetCurrentVerseSet(verseset);
 	GameManager.SetChallengeModeEnabled((verseId == null));
 	loaded = true;

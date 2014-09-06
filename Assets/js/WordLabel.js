@@ -28,6 +28,8 @@ var wordIndex : int;
 var isFirstInLine : boolean;
 var isLastInLine : boolean;
 var rightToLeft : boolean;
+var sndPop : AudioClip;
+
 private var shrinkingEdges : boolean = false;
 
 function Explode() {
@@ -47,15 +49,20 @@ function Explode() {
 	
 	versePosition = startPosition;
 	hinting = false;
+	gotoVerse = false;
+	returnedToVerse = false;
+	
+	yield WaitForSeconds(Random.RandomRange(0.0f,0.5f));
+
 	collider2D.enabled = true;
 	rigidbody2D.fixedAngle = false;
 	rigidbody2D.isKinematic = false;
-	gotoVerse = false;
-	returnedToVerse = false;
+	
 	rigidbody2D.AddForce (new Vector3(Random.Range(-100,100), Random.Range(300,400), 0));
 	rigidbody2D.gravityScale = 1.0;
 	rigidbody2D.AddTorque(Random.Range(-100,100));
-	yield WaitForSeconds(3);
+	audio.PlayOneShot(sndPop, Random.RandomRange(0.5f,1.0f));
+	yield WaitForSeconds(2.5f);
 	exploding = false;
 	rigidbody2D.gravityScale = 0.1;
 }
