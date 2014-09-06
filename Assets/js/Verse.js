@@ -1,19 +1,66 @@
 public class Verse extends MonoBehaviour
 {
-	public var _onlineId : String;
-	public var _reference : String;
-	public var _text : String;
-	public var _version : String;
-	public var _isOnline : boolean;
+	public var onlineId : String;
+	public var reference : String;
+	public var text : String;
+	public var version : String;
+	public var isOnline : boolean;
+	public var verseset : VerseSet;
 	
-	public function Verse(onlineId : String, reference : String, text : String, version: String) {
-		_onlineId = onlineId;
+	public function Verse(onlineId_ : String, reference_ : String, text_ : String, version_: String, verseset_ : VerseSet) {
+		onlineId = onlineId_;
 		if (onlineId != null) {
-			_isOnline = true;
+			isOnline = true;
+		} else {
+			isOnline = false;
 		}
-		_reference = reference;
-		_text = text;
-		_version = version;
+		reference = reference_;
+		text = text_;
+		version = version_;
+		verseset = verseset_;
 	}
 	
+	public function ToString() {
+		return String.Format("{0} - {1}", reference, text);
+	}
+	
+	public function Verse(reference_ : String, text_ : String, verseset_ : VerseSet) {
+		isOnline = false;
+		reference = reference_;
+		text = text_;
+		verseset = verseset_;
+	}
+	
+	public function SaveKey() {
+		if (isOnline) {
+			return onlineId;
+		} else {
+			return String.Format("{0}_{1}", reference, verseset.language);
+		}
+	}
+	
+	public function SaveMetadata(metadata : Hashtable) {
+		var metadataJSON : String = JSONUtils.HashtableToJSON(metadata);
+		PlayerPrefs.SetString("vs_"+SaveKey(), metadataJSON);
+	}
+
+	public function GetMetadata() {
+		var key = "vm_"+SaveKey();
+		var metadataJSON : String = null;
+	
+		if (PlayerPrefs.HasKey(key)) {
+			metadataJSON = PlayerPrefs.GetString(key);
+		}
+	
+	
+		if (metadataJSON != null) {
+			var h : Hashtable = JSONUtils.ParseJSON(metadataJSON);
+			return h;		
+		}
+	
+		var metadata : Hashtable = new Hashtable();
+		metadata["high_score"] = 0;
+		metadata["difficulty"] = parseInt(Difficulty.Easy);
+		return metadata;
+	}
 }

@@ -264,7 +264,9 @@ function moveReferenceToTopLeft() {
 	
 	yield WaitForSeconds(duration);
 	
-	SetVerseReference(verseManager.currentReference(), false);
+	var verse : Verse = verseManager.GetCurrentVerse();
+	
+	SetVerseReference(verse.reference, false);
 }
 
 
@@ -576,16 +578,15 @@ function SetupVerse() {
 	
 	var clone : WordLabel;
 	
-	var reference = verseManager.currentReference();
-	SetVerseReference(reference, false);
-	verseMetadata = verseManager.GetVerseMetadata(reference);
+	var verse : Verse = verseManager.GetCurrentVerse();
+	SetVerseReference(verse.reference, false);
+	verseMetadata = verse.GetMetadata();
 	//Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
 	if (verseMetadata["difficulty"] != null) {
 		//difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	}
 	
-	var verse : String = verseManager.currentVerse();
-	words = SplitVerse(verse);
+	words = SplitVerse(verse.text);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
 	

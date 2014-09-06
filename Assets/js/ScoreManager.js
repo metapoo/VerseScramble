@@ -13,7 +13,7 @@ var mainCamera : Camera;
 var gameManager : GameManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
-var categoryMetadata : Hashtable;
+var versesetMetadata : Hashtable;
 var highScore : int;
 var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
@@ -189,15 +189,17 @@ function HandleCountTimeLeftFinished() {
 	if (gameManager.GetChallengeModeEnabled()) {
 		if (score > highScore) {
 			highScore = score;
-			categoryMetadata["high_score"] = highScore;
-			verseManager.SaveCategoryMetadata(categoryMetadata);
+			versesetMetadata["high_score"] = highScore;
+			var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+			verseset.SaveMetadata(versesetMetadata);
 		}
-		verseManager.HandleCategoryMastered(gameManager.difficulty, categoryMetadata);
+		verseManager.HandleVerseSetMastered(gameManager.difficulty, versesetMetadata);
 	} else {
 		if (score > highScore) {
 			highScore = score;
+			var verse : Verse = verseManager.GetCurrentVerse();
 			verseMetadata["high_score"] = highScore;
-			verseManager.SaveVerseMetadata(verseMetadata);
+			verse.SaveMetadata(verseMetadata);
 		}
 		
 		if (WasVerseMastered()) {
@@ -216,13 +218,13 @@ function resetTime() {
 
 function reset() {
 	if (!gameManager.GetChallengeModeEnabled()) {
-		var reference = verseManager.currentReference();
-		verseMetadata = verseManager.GetVerseMetadata(reference);
+		var verse : Verse = verseManager.GetCurrentVerse();
+		verseMetadata = verse.GetMetadata();
 		highScore = verseMetadata["high_score"];
 	} else {
-		var category = verseManager.GetCurrentCategory();
-		categoryMetadata = verseManager.GetCategoryMetadata(category);
-		highScore = categoryMetadata["high_score"];
+		var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+		versesetMetadata = verseset.GetMetadata();
+		highScore = versesetMetadata["high_score"];
 	}
 	updateHighScoreLabel();
 	resetTime();	

@@ -35,7 +35,7 @@ public var topMargin : float;
 public var bottomMargin : float;
 public var rightMargin : float;
 public var scrollBarWidth : float;
-public var currentCategory : String;
+public var currentVerseSet : VerseSet;
 
 public var verseManager : VerseManager;
 public var sceneSetup : SceneSetup;
@@ -177,11 +177,13 @@ function OnGUI () //this deals with the display
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var totalScore = verseManager.GetCachedTotalScore();
 	var gt = TextManager.GetText;
+	var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+	var verses : Array = verseset.verses;
 	var headerText = String.Format("{0}:{1} {2}:{3}/{4} ",
 	gt("Total Score"),
 	totalScore,
 	gt("Mastered"),
-	verseManager.GetMasteredVerses(), verseManager.verses.length);
+	verseManager.GetMasteredVerses(), verses.length);
 	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
@@ -191,27 +193,27 @@ function OnGUI () //this deals with the display
 	var catHeaderRect = Rect(padding,padding,catWidth,rowHeight);
 	GUI.Label(catHeaderRect, TextManager.GetText("Categories"), headerStyle);
 	
-	var categories = verseManager.categories;
-	currentCategory = verseManager.GetCurrentCategory();
+	var versesets = verseManager.versesets;
+	currentVerseSet = verseManager.GetCurrentVerseSet();
 	
-	for (var i=0;i<categories.length;i++) {
-		var category : String = categories[i];
+	for (var i=0;i<versesets.length;i++) {
+		verseset = versesets[i];
 		var catButtonRect : Rect = Rect(padding,padding+(catHeaderRect.height+padding)*(i+1),
 		catHeaderRect.width, catHeaderRect.height);
 		var selected : boolean = false;
-		if (category == currentCategory) {
-			if (GUI.Button(catButtonRect, category, rowEasyStyle)) {
+		if (currentVerseSet == verseset) {
+			if (GUI.Button(catButtonRect, verseset.setname, rowEasyStyle)) {
 				selected = true;
 			}
 		} else {
-			if (GUI.Button(catButtonRect, category, customSkin.button)) {
+			if (GUI.Button(catButtonRect, verseset.setname, customSkin.button)) {
 				selected = true;
 			}
 		}
 		
 		if (selected) {
 			verseManager.verseIndex = 0;
-			verseManager.SetCurrentCategory(category);
+			verseManager.SetCurrentVerseSet(verseset);
 		}
 	}
 	
@@ -232,8 +234,8 @@ function GetStyleForDifficulty(difficultyInt : int) {
 
 function DoWindow (windowID : int) //here you build the table
 {
-	var refs = verseManager.GetCurrentReferences();
-	var numRows = refs.length;
+	var verses = verseManager.GetCurrentVerses();
+	var numRows = verses.length;
 	var rScrollFrame :Rect = Rect(0, 0, listSize.x, listSize.y);
 	var rList :Rect = Rect(0, 0, rowSize.x, (1+numRows)*(rowHeight+padding));
 	
@@ -243,8 +245,8 @@ function DoWindow (windowID : int) //here you build the table
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	
-	var categoryMetadata = verseManager.GetCategoryMetadata(currentCategory);
-	var categoryDifficulty = categoryMetadata["difficulty"];
+	var versesetMetadata = currentVerseSet.GetMetadata();
+	var versesetDifficulty = versesetMetadata["difficulty"];
 	
 	var rowStyle : GUIStyle;
 	var rowLabel : String;
@@ -258,8 +260,8 @@ function DoWindow (windowID : int) //here you build the table
              rBtn.yMin <= (scrollPosition.y + rScrollFrame.height) )
        	{
 			var fClicked : boolean = false;
-			var reference = refs[iRow];
-			var metadata = verseManager.GetVerseMetadata(reference);
+			var verse : Verse = verses[iRow];
+			var metadata = verse.GetMetadata();
 			var verseDifficulty : int = metadata["difficulty"];
 			var mastered : boolean = false;
 			
@@ -268,7 +270,7 @@ function DoWindow (windowID : int) //here you build the table
 				// verse was mastered
 			} 
 			
-			rowLabel = String.Format("{0} \t\t {1}: {2}",reference,
+			rowLabel = String.Format("{0} \t\t {1}: {2}",verse.reference,
 			TextManager.GetText("high score"),
 			metadata["high_score"]); //this is what will be written in the rows
 			rowStyle = GetStyleForDifficulty(verseDifficulty);
@@ -288,9 +290,9 @@ function DoWindow (windowID : int) //here you build the table
 	rowLabel = String.Format("{0} \t\t {1}: {2}",
 			TextManager.GetText("Play Challenge (All Verses)"),
 			TextManager.GetText("high score"),
-			categoryMetadata["high_score"]); //this is what will be written in the rows
+			versesetMetadata["high_score"]); //this is what will be written in the rows
 	
-	rowStyle = GetStyleForDifficulty(categoryDifficulty);
+	rowStyle = GetStyleForDifficulty(versesetDifficulty);
 	
 	if (GUI.Button(rBtn, rowLabel, rowStyle)) {
 		StartChallenge();

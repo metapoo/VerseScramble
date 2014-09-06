@@ -1,26 +1,65 @@
 public class VerseSet extends MonoBehaviour
 {
-	public var _onlineId : String;
-	public var _name : String;
-	public var _language : String;
-	public var _verses : Array = new Array();
-	public var _isOnline : boolean;
-	public var _version : String;
+	public var onlineId : String;
+	public var setname : String;
+	public var language : String;
+	public var verses : Array;
+	public var isOnline : boolean;
+	public var version : String;
 	
-	public function VerseSet(onlineId : String, name : String, language : String, version: String) {
-		_onlineId = onlineId;
-		_isOnline = true;	
-		_name = name;
-		_language = language;
-		_version = version;
+	public function VerseSet(onlineId_ : String, setname_ : String, language_ : String, version_: String) {
+		onlineId = onlineId_;
+		isOnline = true;	
+		setname = setname_;
+		language = language_;
+		version = version_;
+		verses = new Array();
 	}
 	
-	public function VerseSet(name : String) {
-		_isOnline = false;
-		_name = name;
+	public function VerseSet(setname_ : String) {
+		isOnline = false;
+		setname = setname_;
+		verses = new Array();
 	}
 	
-	public function AddVerse(verse : Verse) {
-		_verses.push(verse);
+	public function AddVerse(verse_ : Verse) {
+		verses.push(verse_);
 	}
+	
+	public function ToString() {
+		return String.Format("verseset: {0}", setname);
+	}
+	
+	public function SaveKey() {
+		if (onlineId != null) {
+			return onlineId;
+		}
+		return String.Format("{0}_{1}",setname,language);
+	}
+	
+	public function GetMetadata() {
+		var key = "vs_"+SaveKey();
+		var metadataJSON : String = null;
+	
+		if (PlayerPrefs.HasKey(key)) {
+			metadataJSON = PlayerPrefs.GetString(key);
+		}
+	
+		if (metadataJSON != null) {
+			var h : Hashtable = JSONUtils.ParseJSON(metadataJSON);
+			return h;		
+		}
+	
+		var metadata : Hashtable = new Hashtable();
+		metadata["high_score"] = 0;
+		metadata["difficulty"] = parseInt(Difficulty.Easy);
+		return metadata;
+	}
+	
+	public function SaveMetadata(metadata : Hashtable) {
+		var metadataJSON : String = JSONUtils.HashtableToJSON(metadata);
+		PlayerPrefs.SetString("vs_"+SaveKey(), metadataJSON);
+	}
+    
+    
 }
