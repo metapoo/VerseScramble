@@ -178,7 +178,12 @@ function OnGUI () //this deals with the display
 	var totalScore = verseManager.GetCachedTotalScore();
 	var gt = TextManager.GetText;
 	var verseset : VerseSet = verseManager.GetCurrentVerseSet();
-	var verses : Array = verseset.verses;
+	var verses : Array = [];
+	
+	if (!Object.ReferenceEquals(verseset, null)) {
+		verses = verseset.verses;
+	}
+	
 	var headerText = String.Format("{0}:{1} {2}:{3}/{4} ",
 	gt("Total Score"),
 	totalScore,

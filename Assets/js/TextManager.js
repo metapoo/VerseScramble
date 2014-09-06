@@ -105,7 +105,7 @@ class TextManager extends MonoBehaviour {
             {
                     // TODO: add error handling here in case of duplicate keys
                     textTable.Add(key, val);
- 
+
                     key = val = null;
             } 
  
@@ -113,7 +113,9 @@ class TextManager extends MonoBehaviour {
         }
  
         reader.Close();
- 
+ 		
+ 		Debug.Log("textTable = " + textTable);
+ 	
         return true;
     }
  

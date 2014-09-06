@@ -7,6 +7,8 @@ var verseText : TextAsset;
 var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
+var verseTextKO : TextAsset;
+
 var versesetLanguage : String;
 var numVerses = 0;
 var apiDomain = "dev.verserain.com";
@@ -77,6 +79,10 @@ function GetCurrentVerse() : Verse {
 		verseIndex = 0;
 	}
 
+	if (verses.length == 0) {
+		return null;
+	}
+	
 	return verses[verseIndex];
 }
 
@@ -295,6 +301,9 @@ function GetCurrentDifficulty() {
 	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
 	var verses : Array = GetCurrentVerses();
 	var verse : Verse = GetCurrentVerse();
+	if (Object.ReferenceEquals(verse, null)) {
+		return Difficulty.Easy;
+	}
 	var verseMetadata =	verse.GetMetadata();
 	var maxDifficultyInt : int = verseMetadata["difficulty"];
 	if ((maxDifficultyInt < parseInt(selectedDifficulty)) &&
@@ -527,15 +536,21 @@ function LoadVerses() {
 	
 	var language = GetLanguage();
 	
+	verseText = null;
+	
 	if (language == "en") {
 		verseText = verseTextEN;
 	} else if (language == "zh-hant") {
 		verseText = verseTextZH;
 	} else if (language == "he") {
 		verseText = verseTextHE;
+	} else if (language == "ko") {
+		verseText = verseTextKO;
 	}
 	
-	LoadVersesLocally();
+	if (verseText != null) {
+		LoadVersesLocally();
+	}
 }
 
 function LoadVersesLocally() {

@@ -37,13 +37,18 @@ function OnGUI() {
 	selected = false;
 	style = customSkin.button;
 	
-	if (GUI.Button(Rect(w*0.333-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"English", style)) {
+	if (GUI.Button(Rect(w*0.25-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"English", style)) {
 		verseManager.SetLanguage("en");
 		selected = true;
 	}
 
-	if (GUI.Button(Rect(w*0.666-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"中文", style)) {
+	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"中文", style)) {
 		verseManager.SetLanguage("zh-hant");
+		selected = true;
+	}
+
+	if (GUI.Button(Rect(w*0.75-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"한국어", style)) {
+		verseManager.SetLanguage("ko");
 		selected = true;
 	}
 	
