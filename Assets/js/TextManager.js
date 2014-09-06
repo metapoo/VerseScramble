@@ -114,8 +114,6 @@ class TextManager extends MonoBehaviour {
  
         reader.Close();
  		
- 		Debug.Log("textTable = " + textTable);
- 	
         return true;
     }
  

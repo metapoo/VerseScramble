@@ -85,11 +85,10 @@ function CheckOption() {
 function Start () {
 	Application.targetFrameRate = 60;
 	TextManager.LoadLanguage(verseManager.GetLanguage());
-
 	
 	var gt = TextManager.GetText;
 	
-	titleLabel.guiText.text = gt("Bible Verse Rain");
+	titleLabel.guiText.text = gt("Verse Rain");
 	
 	selectLanguageLabel.guiText.text = gt("Select Language");
 	

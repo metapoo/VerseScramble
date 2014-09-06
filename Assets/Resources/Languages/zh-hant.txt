@@ -1,6 +1,6 @@
 msgid "High Score"
 msgstr "高分"
-msgid "Bible Verse Rain"
+msgid "Verse Rain"
 msgstr "經文雨"
 msgid "Hallelujah!"
 msgstr "哈利路亞！"

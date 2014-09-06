@@ -166,6 +166,17 @@ static function IsLanguageChinese(language : String) : boolean {
 static function SetVerseLanguage(language : String) {
 	PlayerPrefs.SetString("verse_language", language);
 	CheckRightToLeft(language);
+	
+	var gameLanguage = GetLanguage();
+	
+	// try to load game language as verse language if available
+	if (gameLanguage != language) {
+		var success = TextManager.LoadLanguage(language);
+		if (!success) {
+			TextManager.LoadLanguage(gameLanguage);
+		}
+		SetLanguage(language);
+	}
 }
 
 static function GetVerseLanguage() : String{
