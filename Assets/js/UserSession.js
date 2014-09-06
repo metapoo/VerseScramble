@@ -1,13 +1,17 @@
 ﻿#pragma strict
 
 var options : Hashtable;
+static var singleton : UserSession = null;
 
 static function GetUserSession() {
+	if (singleton) return singleton;
+	
 	var usGO : GameObject = GameObject.Find("UserSession");
 	if (usGO == null) return null;
 	
 	var us : UserSession = usGO.GetComponent("UserSession");
 	if (us) {
+		singleton = us;
 		return us;
 	}
 	return null;
@@ -88,8 +92,8 @@ function SetApiDomain(api_domain : String) {
 }
 
 function Start () {
-	//SetApiDomain("www.verserain.com");
-	//SetVerseId("540a14e73f7ab072f26e348a");
+//	SetApiDomain("www.verserain.com");
+//    SetVerseSetId("540a149f3f7ab072f26e3489");
 }
 
 function Update () {
