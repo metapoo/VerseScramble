@@ -89,7 +89,7 @@ function SetApiDomain(api_domain : String) {
 
 function Start () {
 	SetApiDomain("www.verserain.com");
-	SetVerseSetId("540a149f3f7ab072f26e3489");
+	SetVerseId("540a14e73f7ab072f26e348a");
 }
 
 function Update () {

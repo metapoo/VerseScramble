@@ -406,7 +406,11 @@ function GetApiDomain() {
 	}
 }
 
-function LoadOnlineVerse(verseId) {
+function LoadOnlineVerse(verseId : String) {
+	LoadOnlineVerse(verseId, true);
+}
+
+function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 	var url : String = "http://"+GetApiDomain()+"/api/verse/show?verse_id="+verseId;
 	var www : WWW = new WWW(url);
 	yield www;	
@@ -415,6 +419,12 @@ function LoadOnlineVerse(verseId) {
 	var resultData : Hashtable = apiData["result"];
 	var verseData : Hashtable = resultData["verse"];
 	var versesetId = verseData["verseset_id"];
+	
+	if (includeSet) {
+		LoadOnlineVerseSet(versesetId, verseId);
+		return;
+	}
+	
 	var reference = verseData["reference"];
 	var text = verseData["text"];
 	var language = verseData["language"];
@@ -434,7 +444,11 @@ function LoadOnlineVerse(verseId) {
 	UserSession.GetUserSession().ClearOptions();
 }
 
-function LoadOnlineVerseSet(versesetId) {
+function LoadOnlineVerseSet(versesetId : String) {
+	LoadOnlineVerseSet(versesetId, null);
+}
+
+function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	var url : String = "http://"+GetApiDomain()+"/api/verseset/show?verseset_id="+versesetId;
 	Debug.Log(url);
 	var www : WWW = new WWW(url);
@@ -448,22 +462,25 @@ function LoadOnlineVerseSet(versesetId) {
 	var version = versesetData["version"];
 	var setname = versesetData["name"];
 	var versesData : Array = resultData["verses"];
-	Debug.Log("set name = " + setname);
 	var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
 	AddOnlineVerseSet(verseset);
+	verseIndex = 0;
 	
-	for (var verseData : Hashtable in versesData) {
-		var verseId = verseData["_id"];
+	for (var i=0;i<versesData.length;i++) {
+		var verseData : Hashtable = versesData[i];
+		var verseId_ = verseData["_id"];
 		var reference = verseData["reference"];
 		var text = verseData["text"];
 		version = verseData["version"];
-		var verse : Verse = new Verse(verseId, reference, text, version, verseset);
+		var verse : Verse = new Verse(verseId_, reference, text, version, verseset);
 		verseset.AddVerse(verse);
+		if (verseId == verseId_) {
+			verseIndex = i;
+		}
 	}
 	
 	SetVerseLanguage(language);
 	SetCurrentVerseSet(verseset);
-	verseIndex = 0;
 	loaded = true;
 	UserSession.GetUserSession().ClearOptions();
 }
