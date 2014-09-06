@@ -201,7 +201,7 @@ function OnGUI () //this deals with the display
 		var catButtonRect : Rect = Rect(padding,padding+(catHeaderRect.height+padding)*(i+1),
 		catHeaderRect.width, catHeaderRect.height);
 		var selected : boolean = false;
-		if (currentVerseSet == verseset) {
+		if (currentVerseSet.SaveKey() == verseset.SaveKey()) {
 			if (GUI.Button(catButtonRect, verseset.setname, rowEasyStyle)) {
 				selected = true;
 			}
