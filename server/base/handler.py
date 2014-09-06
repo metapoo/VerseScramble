@@ -77,6 +77,16 @@ class BaseHandler(tornado.web.RequestHandler):
         if not kwargs.has_key('context'):
             kwargs['context'] = {}
 
+        context = kwargs['context']
+        selected_nav = context.get('selected_nav')
+
+        if selected_nav is None:
+            selected_nav = self.get_secure_cookie('selected_nav',None)
+            if selected_nav:
+                context['selected_nav'] = selected_nav
+        else:
+            self.set_secure_cookie('selected_nav',selected_nav)
+
         super(BaseHandler, self).render(*args, **kwargs)
 
     def get_current_user_cookieless(self):
