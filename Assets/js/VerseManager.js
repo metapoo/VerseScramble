@@ -371,7 +371,7 @@ function AddOnlineVerseSet(verseset : VerseSet) {
 	for (var i=0;i<versesets.length;i++) {
 		var vs : VerseSet = versesets[i];
 		
-		if (vs.onlineId == verseset) {
+		if (verseset.isOnline && (vs.onlineId == verseset.onlineId)) {
 			versesets[i] = verseset;
 			Destroy(vs);
 			return verseset;

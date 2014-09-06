@@ -1,17 +1,14 @@
 ﻿#pragma strict
 
 var options : Hashtable;
-static var singleton : UserSession = null;
 
 static function GetUserSession() {
-	if (singleton) return singleton;
 	
 	var usGO : GameObject = GameObject.Find("UserSession");
 	if (usGO == null) return null;
 	
 	var us : UserSession = usGO.GetComponent("UserSession");
 	if (us) {
-		singleton = us;
 		return us;
 	}
 	return null;
@@ -42,10 +39,14 @@ function HandleURL(url : String) {
 		us.SetApiDomain(apiDomain);
 	}
 	
-	var gameManager : GameManager = GameObject.Find("GameManager").GetComponent("GameManager");
-	if (gameManager) {
+	var gmObject = GameObject.Find("GameManager");	
+	
+	if (gmObject) {
+		var gameManager : GameManager = gmObject.GetComponent("GameManager");
 		gameManager.Cleanup();
 	}
+	
+	VerseManager.loaded = false;
 	Application.LoadLevel("scramble");
 }
 
