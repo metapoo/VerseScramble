@@ -427,6 +427,8 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		return;
 	}
 	
+	GameManager.SetChallengeModeEnabled(false);
+
 	var reference = verseData["reference"];
 	var text = verseData["text"];
 	var language = verseData["language"];
@@ -483,6 +485,7 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	
 	SetVerseLanguage(language);
 	SetCurrentVerseSet(verseset);
+	GameManager.SetChallengeModeEnabled((verseId == null));
 	loaded = true;
 	UserSession.GetUserSession().ClearOptions();
 }

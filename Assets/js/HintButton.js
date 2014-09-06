@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 var gameManager : GameManager;
+var scoreManager : ScoreManager;
 var level : String;
 var sndSelect : AudioClip;
 var floatingPoints : FloatingPoints;
@@ -8,8 +9,14 @@ var floatingPoints : FloatingPoints;
 function OnMouseDown() {
 	audio.PlayOneShot(sndSelect,1.0);
 	gameManager.ShowHint();
-	yield WaitForSeconds(1);
 	gameManager.HandleWordWrong();
+	var dScore = scoreManager.HandleWordWrong();
+	if (dScore != 0) {
+		var clone : FloatingPoints;
+		clone = Instantiate(floatingPoints, transform.position, Quaternion.identity);
+		clone.SetPoints(dScore, false);
+
+	}
 }
 
 function OnMouseUp() {
