@@ -88,7 +88,8 @@ function SetApiDomain(api_domain : String) {
 }
 
 function Start () {
-	//SetVerseSetId("53eaddd8a2ff376c08f277df");
+	//SetApiDomain("www.verserain.com");
+	//SetVerseId("540a33fb3f7ab072f26e34ad");
 }
 
 function Update () {

@@ -48,10 +48,6 @@ function GetCurrentVerses() : Array {
 
 function GetCurrentVerse() : Verse {
 	var verses = GetCurrentVerses();
-	Debug.Log("verses = " + verses);
-	if (verses == null) {
-		return null;
-	}
 	
 	if (verseIndex >= verses.length) {
 		verseIndex = 0;
@@ -72,12 +68,18 @@ function SayVerseReference() {
 	var verse : Verse = GetCurrentVerse();
 	var reference : String = verse.reference;
 	var refParts = reference.Split(":"[0]);
+	
 	var language = GetVerseLanguage();
 	language = GetVoiceLanguage(language);
 	
 	if (IsLanguageChinese(language)) {
-		refParts[0] += "章";
-		refParts[1] += "節";
+		if (refParts.Length < 2) {
+			refParts = reference.Split("："[0]);
+		}
+		if (refParts.length == 2) {
+			refParts[0] += "章";
+			refParts[1] += "節";
+		}
 	}
 		
 	for (var refPart in refParts) {
