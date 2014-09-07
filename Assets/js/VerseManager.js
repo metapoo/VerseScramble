@@ -168,14 +168,16 @@ static function SetVerseLanguage(language : String) {
 	CheckRightToLeft(language);
 	
 	var gameLanguage = GetLanguage();
-	
+	var defaultLanguage = "en";
 	// try to load game language as verse language if available
 	if (gameLanguage != language) {
 		var success = TextManager.LoadLanguage(language);
 		if (!success) {
-			TextManager.LoadLanguage(gameLanguage);
+			TextManager.LoadLanguage(defaultLanguage);
+			SetLanguage(defaultLanguage);
+		} else {
+			SetLanguage(language);
 		}
-		SetLanguage(language);
 	}
 }
 
