@@ -644,8 +644,9 @@ function SetupVerse() {
 		
 		numWordsReleased = releaseWords(numWordsReleased) + 1;
 		yield WaitForSeconds(1.0f);
+
 		if (!gameStarted  && ((numWordsReleased > groupSize) ||
-		    (numWordsReleased == wordLabels.length)))
+		    (numWordsReleased >= wordLabels.length)))
 		{
 			gameStarted = true;
 			scoreManager.resetTime();
