@@ -1,7 +1,6 @@
 ﻿#pragma strict
 
-public var zhFont : Font;
-public var enFont : Font;
+public var defaultFont : Font;
 static var hiRes : boolean;
 
 function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
@@ -18,12 +17,7 @@ function resizeBackground(mainCam : Camera, background : SpriteRenderer) {
 
 function GetCurrentFont() {
 	var language = VerseManager.GetLanguage();
-	var font : Font = enFont;
-	if (language == 'en') {
-		font = enFont;
-	} else if (VerseManager.IsLanguageChinese(language)) {
-		font = zhFont;
-	}
+	var font : Font = defaultFont;
 	return font;
 }
 

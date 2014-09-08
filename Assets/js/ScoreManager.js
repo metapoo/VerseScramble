@@ -59,9 +59,22 @@ function UpdateHealthBar(newHealth : float) {
 function HandleWordWrong() {
 	streak = 0;
 	var dScore = 0;
-	var dHealth = -0.66f;
+	var dHealth = -0.3f;
+	var difficulty = gameManager.difficulty;
+
+	switch (difficulty) {
+		case Difficulty.Easy:
+			dHealth = -0.15f;
+			break;
+		case Difficulty.Medium:
+			dHealth = -0.3f;
+			break;
+		case Difficulty.Hard:
+			dHealth = -0.5f;
+			break;
+	}	
+	
 	if (!GameManager.GetChallengeModeEnabled()) {
-		dHealth = -0.33f;
 	 	dScore = score*-.5;
 	
 		if (dScore > -1*maxTime) {

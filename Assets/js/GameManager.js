@@ -357,11 +357,7 @@ function SplitVerse(verse : String) {
 	var clauseBreakMultiplier = 1.0f;
 	var difficultyInt = verseManager.GetDifficultyFromInt(difficulty);
 	var phraseLength : int = phraseLengths[difficultyInt];
-	
-	if (difficulty == Difficulty.Hard) {
-		clauseBreakMultiplier = 2f;
-	}
-	
+		
 	//Debug.Log("SplitVerse = " + verse );
 	
 	//Debug.Log("phrase length = " + phraseLength);
@@ -375,7 +371,7 @@ function SplitVerse(verse : String) {
 	// filter out paranthesis, unwanted characters
 	verse = Regex.Replace(verse, "\\(.*\\)","");
 	verse = Regex.Replace(verse, "\\（.*\\）","");
-	verse = Regex.Replace(verse, "\n","");
+	verse = Regex.Replace(verse, "」|「|\n","");
 	
 	for (var c in verse) {
 		clause = clause + c;
@@ -419,8 +415,10 @@ function SplitVerse(verse : String) {
 				nobreakMarkers.Add(i);
 			}
 		}
-
-		Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " " + phraseLength + " "+ clauseBreakMultiplier);
+		
+		nobreakMarkers.Add(clause.Length-1);
+		
+		//Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " " + phraseLength + " "+ clauseBreakMultiplier);
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
@@ -433,7 +431,7 @@ function SplitVerse(verse : String) {
 					phraseLengthForClause = Mathf.RoundToInt(clause.Length/divisor);
 				}
 				
-				if ((l + phraseLengthForClause) > clause.Length) {
+				if ((l + phraseLengthForClause*1.5) > clause.Length) {
 					phraseLengthForClause = clause.Length - l;	
 				}
 				
@@ -442,9 +440,8 @@ function SplitVerse(verse : String) {
 							 (clause[l+phraseLengthForClause] != " ") ) {
 							phraseLengthForClause += 1;
 				}
-
 				
-				// find closest '/' to glob onto
+				// glob onto the closest no break marker
 				if (nobreakMarkers.length > 0) {
 					var best = 100;
 					var bestIndex = -1;
@@ -453,6 +450,7 @@ function SplitVerse(verse : String) {
 						if ((diff < best) && (index >= l)) {
 							bestIndex = index;
 							best = diff;
+//							Debug.Log("best index = " + index + " best diff = " +  best);
 						}
 					}
 					if (bestIndex != -1) {
@@ -644,8 +642,9 @@ function SetupVerse() {
 		
 		numWordsReleased = releaseWords(numWordsReleased) + 1;
 		yield WaitForSeconds(1.0f);
+
 		if (!gameStarted  && ((numWordsReleased > groupSize) ||
-		    (numWordsReleased == wordLabels.length)))
+		    (numWordsReleased >= wordLabels.length)))
 		{
 			gameStarted = true;
 			scoreManager.resetTime();

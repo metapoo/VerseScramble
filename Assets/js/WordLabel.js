@@ -16,8 +16,6 @@ var scoreManager : ScoreManager;
 var verseManager : VerseManager;
 var hinting : boolean = false;
 var floatingPoints : FloatingPoints;
-var enFont : Font;
-var zhFont : Font;
 var oldRotation : Quaternion;
 var scoreCredited : float;
 var exploding : boolean = false;
@@ -29,6 +27,7 @@ var isFirstInLine : boolean;
 var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
+var sceneSetup : SceneSetup;
 
 private var shrinkingEdges : boolean = false;
 
@@ -118,9 +117,6 @@ function SetBlockLength(l : float, h : float) {
 	nonEdgeSize = new Vector3(totalSize.x-f*sl.x-f*sr.x,sm.y,sm.z);
 	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
 	
-	for (var el in elements) {
-		Debug.Log(el.transform.position);
-	}
 }
 
 function ShrinkLeftEdge(duration : float) {
@@ -193,19 +189,11 @@ function setWord(w : String) {
 	
 	var language : String = VerseManager.GetVerseLanguage();
 
-	if (VerseManager.IsLanguageChinese(language)) {
-		label.font = zhFont;
-		label.renderer.material = zhFont.material;
-		label.fontSize = 85;
-		label.fontStyle = FontStyle.Normal;
-		label.color = Color.black;
-	} else {
-		label.font = enFont;
-		label.renderer.material = enFont.material;
-		label.fontSize = 80;
-		label.fontStyle = FontStyle.Normal;
-		label.color = Color.black;
-	}
+	label.fontStyle = FontStyle.Normal;
+	label.color = Color.black;
+	label.font = sceneSetup.GetCurrentFont();
+	label.renderer.material = label.font.material;
+	label.fontSize = 80;	
 	
 	if (rightToLeft) {
 		label.text = reverseString(w);
@@ -227,10 +215,14 @@ function ResetBubble() {
 	SetBlockLength(l, h);
 }
 
-function Start () {
+function Awake () {
+	sceneSetup = GameObject.Find("SceneSetup").GetComponent("SceneSetup");
     scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
 	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
+}
+
+function Start () {
     var screenBounds = GameManager.screenBounds;
     var startx = screenBounds.x+screenBounds.width*.075;
     if (verseManager.rightToLeft) {

@@ -143,7 +143,7 @@ function OnGUI () //this deals with the display
 	var w = Screen.width;
 	padding = 0.009*h;
 	rowHeight = 0.065*h;
-	catWidth = 0.2*w;
+	catWidth = 0.3*w;
 	scrollBarWidth = 25;
 	bottomMargin = 0.1*h;
 	
@@ -184,19 +184,22 @@ function OnGUI () //this deals with the display
 		verses = verseset.verses;
 	}
 	
-	var headerText = String.Format("{0}:{1} {2}:{3}/{4} ",
+	var headerText = String.Format("{0}:{1} {2}:{3} ",
 	gt("Total Score"),
 	totalScore,
 	gt("Mastered"),
-	verseManager.GetMasteredVerses(), verses.length);
+	verseManager.GetMasteredVerses());
 	GUI.Label(headerRect, headerText, headerStyle);
 	
 	GUI.Window (0, windowRect, GUI.WindowFunction (DoWindow), "", windowStyle); //this draws the frame
 	
-	// draw categories
+	DoVerseSets();	
 	
+}
+
+function DoVerseSets() {
 	var catHeaderRect = Rect(padding,padding,catWidth,rowHeight);
-	GUI.Label(catHeaderRect, TextManager.GetText("Categories"), headerStyle);
+	GUI.Label(catHeaderRect, TextManager.GetText("Verse Sets"), headerStyle);
 	
 	var versesets = verseManager.versesets;
 	currentVerseSet = verseManager.GetCurrentVerseSet();
@@ -221,7 +224,6 @@ function OnGUI () //this deals with the display
 			verseManager.SetCurrentVerseSet(verseset);
 		}
 	}
-	
 }
 
 function GetStyleForDifficulty(difficultyInt : int) {
