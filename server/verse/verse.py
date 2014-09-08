@@ -1,6 +1,5 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
-from verserain.verse.language import *
 from verserain.verse.models import *
 from bson.objectid import ObjectId
 
@@ -31,6 +30,7 @@ class PlayVerseSetHandler(BaseHandler):
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):
+        from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
         version = self.get_argument("version")
         language = self.get_argument("language")
         versions = VERSION_BY_LANGUAGE_CODE[language]
@@ -64,6 +64,8 @@ class RemoveVerseHandler(BaseHandler):
 
 class UpdateVerseHandler(BaseHandler):
     def get(self, verse_id):
+        from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
+
         verse_id = ObjectId(verse_id)
         user = self.current_user
         verse = Verse.collection.find_one({'_id':verse_id})
@@ -141,6 +143,8 @@ class CreateVerseHandler(BaseHandler):
         
 class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
+        from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
+
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
         language = verseset['language']
@@ -164,6 +168,8 @@ class ShowVerseSetHandler(BaseHandler):
 class UpdateVerseSetHandler(BaseHandler):
     @require_login
     def get(self, verseset_id):
+        from verserain.verse.language import VERSION_BY_LANGUAGE_CODE, LANGUAGE_BY_CODE, LANGUAGE_CODES
+
         verseset_id = ObjectId(verseset_id)
         user = self.current_user
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
@@ -234,6 +240,8 @@ class CreateVerseSetHandler(BaseHandler):
 
     @require_login
     def get(self, error_message=None):
+        from verserain.verse.language import VERSION_BY_LANGUAGE_CODE, LANGUAGE_BY_CODE, LANGUAGE_CODES
+
         user = self.current_user
         version = "NIV"
         language = 'en'
