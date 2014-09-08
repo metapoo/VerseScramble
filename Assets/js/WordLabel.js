@@ -117,9 +117,6 @@ function SetBlockLength(l : float, h : float) {
 	nonEdgeSize = new Vector3(totalSize.x-f*sl.x-f*sr.x,sm.y,sm.z);
 	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
 	
-	for (var el in elements) {
-		Debug.Log(el.transform.position);
-	}
 }
 
 function ShrinkLeftEdge(duration : float) {
