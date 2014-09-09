@@ -93,6 +93,13 @@ function SetApiDomain(api_domain : String) {
 }
 
 function Start () {
+    // we're ready to pass in parameters from web client to user session
+	if (Application.isWebPlayer) {
+		Application.ExternalEval(
+    	"u.start_verserain();"
+		);
+	}
+	
 	//SetApiDomain("www.verserain.com");
     //SetVerseId("540a33fb3f7ab072f26e34ad");
 }
