@@ -4,7 +4,6 @@ import TextManager;
 
 public var customSkin : GUISkin;
 public var disabledStyle : GUIStyle;
-public var verseManager : VerseManager;
 public var showError : boolean = false;
 public var sndSelect : AudioClip;
 public var background : Transform;
@@ -38,25 +37,22 @@ function OnGUI() {
 	style = customSkin.button;
 	
 	if (GUI.Button(Rect(w*0.25-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"English", style)) {
-		verseManager.SetLanguage("en");
+		VerseManager.SetLanguage("en");
 		selected = true;
 	}
 
 	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"中文", style)) {
-		verseManager.SetLanguage("zh-hant");
+		VerseManager.SetLanguage("zh-hant");
 		selected = true;
 	}
 
 	if (GUI.Button(Rect(w*0.75-buttonSize.x*0.5,h*0.55,buttonSize.x,buttonSize.y),"한국어", style)) {
-		verseManager.SetLanguage("ko");
+		VerseManager.SetLanguage("ko");
 		selected = true;
 	}
 	
 	if (selected) {
 		audio.PlayOneShot(sndSelect);
-		
-		// reload verses
-		verseManager.Reload();
 		
 		Application.LoadLevel("verselist");
 	}
@@ -84,7 +80,7 @@ function CheckOption() {
 
 function Start () {
 	Application.targetFrameRate = 60;
-	TextManager.LoadLanguage(verseManager.GetLanguage());
+	TextManager.LoadLanguage(VerseManager.GetLanguage());
 	
 	var gt = TextManager.GetText;
 	

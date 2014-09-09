@@ -344,7 +344,8 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
-								  				'zh':[12,6,1]});
+								  				'zh':[10,5,2],
+								  				'ko':[12,6,3]});
 	var language : String = VerseManager.GetVerseLanguage();
 	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
 	
@@ -378,7 +379,17 @@ function SplitVerse(verse : String) {
 		for (var s in seps) {
 			if (s == c) {
 				if ((clause != "") && (clause != " ") && (clause != "  ")) {
-					clauseArray.push(clause);
+					var combined : boolean = false;
+					if (clauseArray.length > 0) {
+						var previousClause : String = clauseArray[clauseArray.length-1];
+						if ((clause.Length + previousClause.Length) < phraseLength) {
+							clauseArray[clauseArray.length-1] += clause;
+							combined = true;
+						}	
+					}
+					if (!combined) {
+						clauseArray.push(clause);
+					}
 					//Debug.Log("clause : " + clause);
 				}
 				clause = "";
