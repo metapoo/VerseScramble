@@ -52,14 +52,17 @@
 					}
 				});
 
-				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=8");
-			        u.getUnity().SendMessage("UserSession", "SetApiDomain", "{{settings.SITE_DOMAIN}}");
+                                u.start_verserain = function() { 
+                                  var unity = u.getUnity();
+                                unity.SendMessage("UserSession", "SetApiDomain", "{{settings.SITE_DOMAIN}}");
 			        {% if verse_id %}
-			        u.getUnity().SendMessage("UserSession", "SetVerseId", "{{verse_id}}");
+			        unity.SendMessage("UserSession", "SetVerseId", "{{verse_id}}");
 			        {% end %}
                                 {% if verseset_id %}
-                                u.getUnity().SendMessage("UserSession","SetVerseSetId", "{{verseset_id}}");
+                                unity.SendMessage("UserSession","SetVerseSetId", "{{verseset_id}}");
                                 {% end %}
+                                };
+				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=9");
 			});
 </script>
 {% end %}
