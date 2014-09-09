@@ -205,7 +205,7 @@ function DoVerseSets() {
 	currentVerseSet = verseManager.GetCurrentVerseSet();
 	
 	for (var i=0;i<versesets.length;i++) {
-		verseset = versesets[i];
+		var verseset : VerseSet = versesets[i];
 		var catButtonRect : Rect = Rect(padding,padding+(catHeaderRect.height+padding)*(i+1),
 		catHeaderRect.width, catHeaderRect.height);
 		var selected : boolean = false;
