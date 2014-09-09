@@ -372,7 +372,7 @@ function SplitVerse(verse : String) {
 	// filter out paranthesis, unwanted characters
 	verse = Regex.Replace(verse, "\\(.*\\)","");
 	verse = Regex.Replace(verse, "\\（.*\\）","");
-	verse = Regex.Replace(verse, "」|「|\n","");
+	verse = Regex.Replace(verse, "」|「|\n|『|』","");
 	
 	for (var c in verse) {
 		clause = clause + c;
