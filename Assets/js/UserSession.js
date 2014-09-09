@@ -100,8 +100,8 @@ function Start () {
 		);
 	}
 	
-	SetApiDomain("www.verserain.com");
-    SetVerseId("540a11813f7ab072f26e3485");
+	//SetApiDomain("www.verserain.com");
+    //SetVerseId("540a11813f7ab072f26e3485");
 }
 
 function Update () {
