@@ -130,11 +130,11 @@ function SetupWalls () {
 function HandleWordWrong() {
 	
 	if (!GetChallengeModeEnabled()) {
-		ShowHint();
-		audio.PlayOneShot(sndFailure1, 0.5f);
-		
+		ShowHint();	
 	}
 	
+	audio.PlayOneShot(sndFailure1, 0.5f);
+		
 	if (!healthBar.IsEmpty()) {
 		return;
 	}
