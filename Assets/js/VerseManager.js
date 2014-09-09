@@ -134,29 +134,17 @@ static function GetVoiceLanguage() {
 }
 
 static function GetVoiceLanguage(language : String) {
-	if (language == "en") {
-		return "en-US";
-	} else if ((language == "zh") || (language == "zh-hant")) {
-		return "zh-TW";
-	} else if (language == "zh-hans") {
-		return "zh-CN";
-	} else if (language == "he") {
-		return "he-IL";
-	} else if (language == "ur") {
-		return "ur-PK";
-	} else if (language == "ja") {
-		return "ja-JP";
-	} else if (language == "ko") {
-		return "ko-KR";
-	} else if (language == "th") {
-		return "th-TH";
-	} else if (language == "vi") {
-		return "vi-VN";
-	} else if (language == "mn") {
-		return "mn-MN";
-	} else {
-		return "en-US";
+	var voiceConfig : Hashtable = new Hashtable({"en":"en-US","zh-hant":"zh-TW","zh":"zh-TW","zh-hans":"zh-CN",
+	"he":"he-IL","ur":"ur-PK","ja":"ja-JP","ko":"ko-KR","th":"th-TH","vi":"vi-VN","mn":"mn-MN",
+	"ar":"ar-SA","cs":"cs-CZ","da":"da-DK","nl":"nl-NL","fi":"fi-FI","fr":"fr-FR","hi":"hi-IN",
+	"hu":"hu-HU","id":"id-ID","it":"it-IT","no":"no-NO","pl":"pl-PL","pt":"pt-BR","ro":"ro-RO",
+	"ru":"ru-RU","sk":"sk-SK","es":"es-MX","es-ES":"es-ES","sv":"sv-SE","tr":"tr-TR"});
+	
+	if (voiceConfig.ContainsKey(language)) {
+		return voiceConfig[language];
 	}
+	
+	return "en-US";
 }
 
 static function IsLanguageChinese(language : String) : boolean {
