@@ -51,6 +51,16 @@ function OnGUI() {
 		selected = true;
 	}
 	
+	if (GUI.Button(Rect(w*0.25-buttonSize.x*0.5,h*0.75,buttonSize.x,buttonSize.y),"Монгол", style)) {
+		VerseManager.SetLanguage("mn");
+		selected = true;
+	}
+	
+	if (GUI.Button(Rect(w*0.5-buttonSize.x*0.5,h*0.75,buttonSize.x,buttonSize.y),"Русский", style)) {
+		VerseManager.SetLanguage("ru");
+		selected = true;
+	}
+	
 	if (selected) {
 		audio.PlayOneShot(sndSelect);
 		

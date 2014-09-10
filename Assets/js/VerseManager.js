@@ -8,6 +8,8 @@ var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
 var verseTextHE : TextAsset;
 var verseTextKO : TextAsset;
+var verseTextMN : TextAsset;
+var verseTextRU : TextAsset;
 
 var versesetLanguage : String;
 var numVerses = 0;
@@ -547,6 +549,10 @@ function LoadVerses() {
 		verseText = verseTextHE;
 	} else if (language == "ko") {
 		verseText = verseTextKO;
+	} else if (language == "mn") {
+		verseText = verseTextMN;
+	} else if (language == "ru") {
+		verseText = verseTextRU;
 	}
 	
 	if (verseText != null) {
