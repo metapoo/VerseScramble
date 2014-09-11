@@ -14,7 +14,7 @@ B1;2c{% extends "../base.html" %}
 {% if isIOS %}
 <a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verseset/{{verseset._id}}/{{settings.SITE_DOMAIN}}">play set</a>
 {% else %}
-<a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play set</a>
+<a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play challenge (all verses)</a>
 {% end %}
 
 {% if user and (verseset['user_id'] == user._id) %}
