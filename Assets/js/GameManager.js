@@ -130,11 +130,11 @@ function SetupWalls () {
 function HandleWordWrong() {
 	
 	if (!GetChallengeModeEnabled()) {
-		ShowHint();
-		audio.PlayOneShot(sndFailure1, 0.5f);
-		
+		ShowHint();	
 	}
 	
+	audio.PlayOneShot(sndFailure1, 0.5f);
+		
 	if (!healthBar.IsEmpty()) {
 		return;
 	}
@@ -303,6 +303,7 @@ function Start() {
 	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1);
 	}
+	Debug.Log("VerseManager.loaded, GameManager starting");
 	
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
@@ -372,7 +373,9 @@ function SplitVerse(verse : String) {
 	// filter out paranthesis, unwanted characters
 	verse = Regex.Replace(verse, "\\(.*\\)","");
 	verse = Regex.Replace(verse, "\\（.*\\）","");
-	verse = Regex.Replace(verse, "」|「|\n","");
+	verse = Regex.Replace(verse, "\\[.*\\]","");
+	verse = Regex.Replace(verse, "」|「|『|』","");
+	verse = Regex.Replace(verse, "\n", " ");
 	
 	for (var c in verse) {
 		clause = clause + c;

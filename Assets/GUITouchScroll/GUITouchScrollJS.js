@@ -1,5 +1,3 @@
-@script ExecuteInEditMode()
-
 import TextManager;
 
 //Original Script in C from http://www.mindthecube.com/blog/2010/09/adding-iphone-touches-to-unitygui-scrollview/comment-page-1#comment-2935
@@ -252,8 +250,13 @@ function DoWindow (windowID : int) //here you build the table
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	
-	var versesetMetadata = currentVerseSet.GetMetadata();
-	var versesetDifficulty = versesetMetadata["difficulty"];
+	var versesetMetadata : Hashtable;
+	var versesetDifficulty : int;
+	
+	if (currentVerseSet != null) {
+		versesetMetadata = currentVerseSet.GetMetadata();
+		versesetDifficulty = versesetMetadata["difficulty"];
+	}
 	
 	var rowStyle : GUIStyle;
 	var rowLabel : String;
@@ -283,8 +286,8 @@ function DoWindow (windowID : int) //here you build the table
 			rowStyle = GetStyleForDifficulty(verseDifficulty);
 			fClicked = GUI.Button(rBtn, rowLabel, rowStyle);
 			
-			// Allow mouse selection, if not running on iPhone.
-			if ( fClicked ) //&& Application.platform != RuntimePlatform.IPhonePlayer )
+			
+			if ( fClicked )
 			{
 				HandleRowSelected(iRow);
 				Debug.Log("Player mouse-clicked on row " + iRow);
@@ -294,18 +297,21 @@ function DoWindow (windowID : int) //here you build the table
 		rBtn.y += rowHeight + padding;
 	}
 	
-	rowLabel = String.Format("{0} \t\t {1}: {2}",
+	if (versesetMetadata != null) {
+		rowLabel = String.Format("{0} \t\t {1}: {2}",
 			TextManager.GetText("Play Challenge (All Verses)"),
 			TextManager.GetText("high score"),
 			versesetMetadata["high_score"]); //this is what will be written in the rows
 	
-	rowStyle = GetStyleForDifficulty(versesetDifficulty);
+		rowStyle = GetStyleForDifficulty(versesetDifficulty);
 	
-	if (GUI.Button(rBtn, rowLabel, rowStyle)) {
-		StartChallenge();
-		return;
+		if (GUI.Button(rBtn, rowLabel, rowStyle)) {
+			StartChallenge();
+			return;
+		}
+		
+		rBtn.y += rowHeight + padding;
 	}
-	rBtn.y += rowHeight + padding;
 
 	GUI.EndScrollView();
 }

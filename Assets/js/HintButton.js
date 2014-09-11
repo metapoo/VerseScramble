@@ -26,6 +26,12 @@ function Start () {
 
 }
 
-function Update () {
 
+function Update () {
+	if (GameManager.GetChallengeModeEnabled()) 
+	{
+		renderer.enabled = false;
+	} else {
+		renderer.enabled = true;
+	}
 }
