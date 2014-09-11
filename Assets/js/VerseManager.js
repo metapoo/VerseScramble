@@ -113,6 +113,8 @@ function SayVerseReference() {
 	var language = GetVerseLanguage();
 	language = GetVoiceLanguage(language);
 	
+	if (language == null) return;
+	
 	if (IsLanguageChinese(language)) {
 		if (refParts.Length < 2) {
 			refParts = reference.Split("："[0]);
@@ -135,6 +137,7 @@ static function SpeakUtterance(word : String) {
 }
 
 static function SpeakUtterance(word : String, language: String) {
+	if (language == null) return;
 	VoiceSynth.SpeakUtterance(word,language);
 	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
@@ -155,7 +158,7 @@ static function GetVoiceLanguage(language : String) {
 		return voiceConfig[language];
 	}
 	
-	return "en-US";
+	return null;
 }
 
 static function IsLanguageChinese(language : String) : boolean {
