@@ -29,12 +29,9 @@ static function Unload() {
 		Destroy(vs);
 	}
 	versesets.Clear();
-	SetNeedsLoad();
-}
-
-static function SetNeedsLoad() {
 	loaded = false;
 	offlineVersesLoaded = false;
+
 }
 
 function Reload() {

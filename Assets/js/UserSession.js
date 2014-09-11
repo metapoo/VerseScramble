@@ -44,7 +44,7 @@ function HandleURL(url : String) {
 		gameManager.Cleanup();
 	}
 	
-	VerseManager.SetNeedsLoad();
+	VerseManager.loaded = false;
 	Application.LoadLevel("scramble");
 }
 
