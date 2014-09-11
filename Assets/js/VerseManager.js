@@ -147,7 +147,7 @@ static function GetVoiceLanguage() {
 static function GetVoiceLanguage(language : String) {
 	var voiceConfig : Hashtable = new Hashtable({"en":"en-US","zh-hant":"zh-TW","zh":"zh-TW","zh-hans":"zh-CN",
 	"he":"he-IL","ur":"ur-PK","ja":"ja-JP","ko":"ko-KR","th":"th-TH","vi":"vi-VN","mn":"mn-MN",
-	"ar":"ar-SA","cs":"cs-CZ","da":"da-DK","nl":"nl-NL","fi":"fi-FI","fr":"fr-FR","hi":"hi-IN",
+	"ar":"ar-SA","cs":"cs-CZ","da":"da-DK","de":"de-DE","nl":"nl-NL","fi":"fi-FI","fr":"fr-FR","hi":"hi-IN",
 	"hu":"hu-HU","id":"id-ID","it":"it-IT","no":"no-NO","pl":"pl-PL","pt":"pt-BR","ro":"ro-RO",
 	"ru":"ru-RU","sk":"sk-SK","es":"es-MX","es-ES":"es-ES","sv":"sv-SE","tr":"tr-TR"});
 	
