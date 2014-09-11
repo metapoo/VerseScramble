@@ -11,11 +11,13 @@ B1;2c{% extends "../base.html" %}
 
 <div class="pad_bottom">
 
+<a class="button-xsmall pure-button" 
 {% if isIOS %}
-<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verseset/{{verseset._id}}/{{settings.SITE_DOMAIN}}">play set</a>
+href="verserain://com.hopeofglory.verserain/verseset/{{verseset._id}}/{{settings.SITE_DOMAIN}}"
 {% else %}
-<a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play challenge (all verses)</a>
+href="/verseset/play/{{verseset._id}}"
 {% end %}
+>play challenge (all verses)</a>
 
 {% if user and (verseset['user_id'] == user._id) %}
 <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
