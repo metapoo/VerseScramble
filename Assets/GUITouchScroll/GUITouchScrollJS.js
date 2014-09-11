@@ -250,8 +250,8 @@ function DoWindow (windowID : int) //here you build the table
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var diffString = verseManager.DifficultyToString(difficulty);
 	
-	var versesetMetadata;
-	var versesetDifficulty;
+	var versesetMetadata : Hashtable;
+	var versesetDifficulty : int;
 	
 	if (currentVerseSet != null) {
 		versesetMetadata = currentVerseSet.GetMetadata();
