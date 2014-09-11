@@ -286,8 +286,8 @@ function DoWindow (windowID : int) //here you build the table
 			rowStyle = GetStyleForDifficulty(verseDifficulty);
 			fClicked = GUI.Button(rBtn, rowLabel, rowStyle);
 			
-			// Allow mouse selection, if not running on iPhone.
-			if ( fClicked ) //&& Application.platform != RuntimePlatform.IPhonePlayer )
+			
+			if ( fClicked )
 			{
 				HandleRowSelected(iRow);
 				Debug.Log("Player mouse-clicked on row " + iRow);
