@@ -303,6 +303,7 @@ function Start() {
 	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1);
 	}
+	Debug.Log("VerseManager.loaded, GameManager starting");
 	
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();

@@ -21,7 +21,9 @@ function Awake() {
 
 // example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
 function HandleURL(url : String) {
-
+	ClearOption("verse_id");
+	ClearOption("verseset_id");
+	
 	var parts = url.Split("/"[0]);
 	var subject = parts[3];
 	var idstr = parts[4];
@@ -33,11 +35,7 @@ function HandleURL(url : String) {
 		SetVerseSetId(idstr);
 	}
 	
-	var us = GetUserSession();
-	
-	if (us) {
-		us.SetApiDomain(apiDomain);
-	}
+	SetApiDomain(apiDomain);
 	
 	var gmObject = GameObject.Find("GameManager");	
 	
@@ -46,12 +44,16 @@ function HandleURL(url : String) {
 		gameManager.Cleanup();
 	}
 	
-	VerseManager.Unload();
+	VerseManager.SetNeedsLoad();
 	Application.LoadLevel("scramble");
 }
 
 function SetOption(key : String, value : String) {
 	options[key] = value;
+}
+
+function ClearOption(key : String) {
+	options.Remove(key);
 }
 
 function SetVerseId(verse_id : String) {

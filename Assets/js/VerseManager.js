@@ -29,6 +29,10 @@ static function Unload() {
 		Destroy(vs);
 	}
 	versesets.Clear();
+	SetNeedsLoad();
+}
+
+static function SetNeedsLoad() {
 	loaded = false;
 	offlineVersesLoaded = false;
 }
@@ -40,18 +44,25 @@ function Reload() {
 
 function GetCurrentVerseSet() : VerseSet {
 
-	if (currentVerseSet != null) return currentVerseSet;
-
+	if (!Object.ReferenceEquals(currentVerseSet, null)) {
+		//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
+		return currentVerseSet;
+ 	}
+ 	
 	if (versesets.length == 0) return null;
 	var verseset : VerseSet = versesets[0];
 	
 	var versesetSaveKey = PlayerPrefs.GetString(String.Format("current_verseset_{0}",GetLanguage()), verseset.SaveKey());
 	
 	for (var vs : VerseSet in versesets) {
-		if (vs.SaveKey() == versesetSaveKey) return vs;
+		if (vs.SaveKey() == versesetSaveKey) {
+			//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
+			return vs;
+		}
 	}
 
 	currentVerseSet = versesets[0];
+	//Debug.Log("current verse set (from save) = " + currentVerseSet.SaveKey());
 	return currentVerseSet;
 }
 
@@ -63,6 +74,7 @@ function SetCurrentVerseSet(verseset : VerseSet) {
 	} else {
 		SetVerseLanguage(language);
 	}
+	Debug.Log("verseset set to " + verseset.SaveKey());
 	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
@@ -447,7 +459,9 @@ function LoadOnlineVerse(verseId : String) {
 function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 	var url : String = "http://"+GetApiDomain()+"/api/verse/show?verse_id="+verseId;
 	var www : WWW = new WWW(url);
+	Debug.Log("request " + url);
 	yield www;	
+	Debug.Log("loaded " + url);
 	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
 	var resultData : Hashtable = apiData["result"];
@@ -485,9 +499,10 @@ function LoadOnlineVerseSet(versesetId : String) {
 
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	var url : String = "http://"+GetApiDomain()+"/api/verseset/show?verseset_id="+versesetId;
-	Debug.Log(url);
+	Debug.Log("request " + url);
 	var www : WWW = new WWW(url);
 	yield www;
+	Debug.Log("loaded " + url);
 	var data = www.text;
 	var apiData : Hashtable = JSONUtils.ParseJSON(data);
 	var resultData : Hashtable = apiData["result"];
@@ -499,6 +514,7 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	var versesData : Array = resultData["verses"];
 	var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
 	AddOnlineVerseSet(verseset);
+	SetCurrentVerseSet(verseset);
 	verseIndex = 0;
 	
 	for (var i=0;i<versesData.length;i++) {
@@ -511,13 +527,14 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		verseset.AddVerse(verse);
 		if (verseId == verseId_) {
 			verseIndex = i;
+			Debug.Log("set verseIndex = " + i);
 		}
 	}
 	
-	SetCurrentVerseSet(verseset);
 	GameManager.SetChallengeModeEnabled((verseId == null));
 	loaded = true;
 	UserSession.GetUserSession().ClearOptions();
+	Debug.Log("finished loading verse set");
 }
 
 function LoadVerses() {
