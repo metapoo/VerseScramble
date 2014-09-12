@@ -209,7 +209,7 @@ function ResetBubble() {
 	var size = label.renderer.bounds.size;
 	var textWidth = size.x;
 	var textHeight = size.y;
-	var padding = new Vector2(0.5,0.5);
+	var padding = new Vector2(0.5,0.35);
 	var l = textWidth + padding.x;
 	var h = textHeight + padding.y;
 	SetBlockLength(l, h);
@@ -309,7 +309,7 @@ function calculateVersePosition () {
 	var screenBounds = GameManager.screenBounds;
 	var maxX = screenBounds.x + screenBounds.width*0.95;
 	var minX = screenBounds.x + screenBounds.width*0.05;
-	var padding = 0.25f;
+	var padding = 0.0f;
 	var vSpacing = nonEdgeSize.y + padding;
 	
 	transform.rotation = oldRotation;

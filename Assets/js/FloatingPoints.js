@@ -6,13 +6,11 @@ var startingScale : float;
 
 function Start () {
 	rigidbody2D.velocity = new Vector3(0,4,0);
-	renderer.sortingLayerID = 0;
-	renderer.sortingOrder = 1;	
 	renderer.material.color.a = 1.0;
 	startTime = Time.time;
 	startingScale = transform.localScale.x;
 	transform.localScale = new Vector3(0,0,1.0f);
-	
+	transform.position.z = 2;
 }
 
 function Update () {

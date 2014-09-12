@@ -40,10 +40,17 @@ extern "C" {
 	{
         NSString *languageString = CreateNSString(language);
         AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
+        NSArray *speechVoices = [AVSpeechSynthesisVoice speechVoices];
+        AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
         
+        if (![speechVoices containsObject:voice]) {
+            NSLog(@"speech voice not found for: %@", languageString);
+            // don't play speech if language not available
+            return;
+        }
         AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:CreateNSString(text)];
 
-        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
+        utterance.voice = voice;
         [utterance setRate:0.2f];
         [synthesizer speakUtterance:utterance];
         [synthesizer release];

@@ -113,6 +113,8 @@ function SayVerseReference() {
 	var language = GetVerseLanguage();
 	language = GetVoiceLanguage(language);
 	
+	if (language == null) return;
+	
 	if (IsLanguageChinese(language)) {
 		if (refParts.Length < 2) {
 			refParts = reference.Split("："[0]);
@@ -135,6 +137,7 @@ static function SpeakUtterance(word : String) {
 }
 
 static function SpeakUtterance(word : String, language: String) {
+	if (language == null) return;
 	VoiceSynth.SpeakUtterance(word,language);
 	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
@@ -147,7 +150,7 @@ static function GetVoiceLanguage() {
 static function GetVoiceLanguage(language : String) {
 	var voiceConfig : Hashtable = new Hashtable({"en":"en-US","zh-hant":"zh-TW","zh":"zh-TW","zh-hans":"zh-CN",
 	"he":"he-IL","ur":"ur-PK","ja":"ja-JP","ko":"ko-KR","th":"th-TH","vi":"vi-VN","mn":"mn-MN",
-	"ar":"ar-SA","cs":"cs-CZ","da":"da-DK","nl":"nl-NL","fi":"fi-FI","fr":"fr-FR","hi":"hi-IN",
+	"ar":"ar-SA","cs":"cs-CZ","da":"da-DK","de":"de-DE","nl":"nl-NL","fi":"fi-FI","fr":"fr-FR","hi":"hi-IN",
 	"hu":"hu-HU","id":"id-ID","it":"it-IT","no":"no-NO","pl":"pl-PL","pt":"pt-BR","ro":"ro-RO",
 	"ru":"ru-RU","sk":"sk-SK","es":"es-MX","es-ES":"es-ES","sv":"sv-SE","tr":"tr-TR"});
 	
@@ -155,7 +158,7 @@ static function GetVoiceLanguage(language : String) {
 		return voiceConfig[language];
 	}
 	
-	return "en-US";
+	return null;
 }
 
 static function IsLanguageChinese(language : String) : boolean {

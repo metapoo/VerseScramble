@@ -343,10 +343,11 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 	
 }
 
+
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
-								  				'zh':[10,5,2],
-								  				'ko':[12,6,3]});
+								  				'zh':[10,6,3],
+								  				'ko':[10,6,3]});
 	var language : String = VerseManager.GetVerseLanguage();
 	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
 	
@@ -377,23 +378,29 @@ function SplitVerse(verse : String) {
 	verse = Regex.Replace(verse, "」|「|『|』","");
 	verse = Regex.Replace(verse, "\n", " ");
 	
+	var processClause = function(clause : String) {
+		var combined : boolean = false;
+		if (clauseArray.length > 0) {
+			// combine with previous clause if too small
+			var previousClause : String = clauseArray[clauseArray.length-1];
+			// subtract 2 to account for separators
+			if (((clause.Length + previousClause.Length - 2) < phraseLength) ||
+				(clause.Length == 1)) {
+				clauseArray[clauseArray.length-1] += clause;
+				combined = true;
+			}	
+		}
+		if (!combined) {
+			clauseArray.push(clause);
+		}
+	};
+	
 	for (var c in verse) {
 		clause = clause + c;
 		for (var s in seps) {
 			if (s == c) {
 				if ((clause != "") && (clause != " ") && (clause != "  ")) {
-					var combined : boolean = false;
-					if (clauseArray.length > 0) {
-						var previousClause : String = clauseArray[clauseArray.length-1];
-						if ((clause.Length + previousClause.Length) < phraseLength) {
-							clauseArray[clauseArray.length-1] += clause;
-							combined = true;
-						}	
-					}
-					if (!combined) {
-						clauseArray.push(clause);
-					}
-					//Debug.Log("clause : " + clause);
+					processClause(clause);
 				}
 				clause = "";
 			}
@@ -402,8 +409,7 @@ function SplitVerse(verse : String) {
 	
 	
 	if ((clause != "") && (clause != " ") && (clause != "  ")) {
-		clauseArray.push(clause);
-		//Debug.Log("clause : " + clause);
+		processClause(clause);
 	}
 	
 		
