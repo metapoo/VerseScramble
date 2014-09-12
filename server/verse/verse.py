@@ -1,6 +1,7 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.verse.models import *
+from verserain.utils.encoding import *
 from bson.objectid import ObjectId
 
 def get_handlers():
@@ -195,7 +196,7 @@ class UpdateVerseSetHandler(BaseHandler):
         verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
         name = self.get_argument("name")
         language = self.get_argument("language")
-        version = self.get_argument("version")
+        version = smart_text(self.get_argument("version"))
         commentary = self.get_argument("commentary",None)
 
         verseset.update({"name":name,
