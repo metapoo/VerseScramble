@@ -8,8 +8,13 @@
 <fieldset>
 <label for="reference">Reference (Ex: John 3:16)</label>
 <input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference"/> 
+
 <div>
-{% include "../version_select.html" %}
+{% if verse %}
+  {% include "../version_select.html" %}
+{% else %}
+  <input type="hidden" name="version" value="{{version}}" />
+{% end %}
 </div>
 
 <label for="text">Verse Text</label>
