@@ -347,14 +347,19 @@ function SetVerseReference (reference : String, showDifficulty : boolean) {
 function SplitVerse(verse : String) {
 	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
 								  				'zh':[10,6,3],
-								  				'ko':[10,6,3]});
+								  				'ko':[11,6,3],
+								  				'ja':[11,6,3]});
 	var language : String = VerseManager.GetVerseLanguage();
 	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
 	
 	var phraseLengths : Array = langConfig['en'];
 	
-	if (isChinese) {
-		phraseLengths = langConfig['zh'];
+	if (langConfig.Contains(language)) {
+		phraseLengths = langConfig[language];
+	} else {
+		if (isChinese) {
+			phraseLengths = langConfig['zh'];
+		}
 	}
 	
 	var clauseBreakMultiplier = 1.0f;
@@ -427,6 +432,8 @@ function SplitVerse(verse : String) {
 		return false;
 	};
 	
+	Debug.Log("clause array = " + clauseArray);
+	
 	for (clause in clauseArray) {
 		// check for special '\' marker which we cannot split on
 		var nobreakMarkers = new Array();
@@ -438,7 +445,7 @@ function SplitVerse(verse : String) {
 		
 		nobreakMarkers.Add(clause.Length-1);
 		
-		//Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " " + phraseLength + " "+ clauseBreakMultiplier);
+		Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " >" + phraseLength + "*"+ clauseBreakMultiplier);
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
