@@ -64,11 +64,9 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
         if user is None:
             return None
     elif username:
-        user = User.collection.find_one({'lower_username':username.lower()})
-        if user and user.has_key('password'):
-            if not user.check_password(password):
-                return None
-        return user
+        user = User.collection.find_one({'username':username})
+        if user is None:
+            return None
     elif fb_uid:
         user = User.collection.find_one({'fb_uid':fb_uid})
         return user

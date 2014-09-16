@@ -76,18 +76,28 @@ class LoginHandler(BaseHandler):
 
     def post(self):
         password = self.get_argument("password")
-        email = self.get_argument("email")
-        user = authenticate_login(email=email, password=password)
+        login_subject = self.get_argument("email")
+        username = None
+        email = login_subject
+        login_subject_desc = "email"
+
+        if "@" not in email:
+            login_subject_desc = "username"
+            username = login_subject
+            email = None
+
+        user = authenticate_login(email=email, username=username, password=password)
         error_message = None
 
         if user is None:
-            error_message = "Invalid email or password"        
-            self.render("login/login.html",user=user,error_message=error_message,email=email)
+            user = User.collection.find_one({'username':username})
+            error_message = "Invalid %s or password" % login_subject_desc       
+            self.render("login/login.html",user=user,error_message=error_message,email=login_subject,username=username)
             return
 
         session_key = user.session_key()
         self.set_secure_cookie("session_key",session_key)
-        self.set_secure_cookie("email",email)
+        self.set_secure_cookie("email",login_subject)
         self.redirect("/")
 
 class LogoutHandler(BaseHandler):
