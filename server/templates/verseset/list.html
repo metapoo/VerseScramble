@@ -1,8 +1,13 @@
 {% extends "../base.html" %}
 {% block page_content %}
 {% from verserain.verse import language %}
+{% if user and context.get('selected_nav') == "my sets" %}
+<div class="pad_bottom">
+  <a  class="pure-button pure-button-primary" href="/verseset/create">create a verse set</a>
+</div>
+{% end %}
 
-<table class="pure-table pure-table-bordered">
+<table class="pure-table pure-table-bordered pad_bottom">
 
 <thead><tr><th>Verse Set</th><th>Language</th><th># Verses</th><th>Creator</th></thead>
 <tbody>
@@ -20,10 +25,5 @@
 </tbody>
 </table>
 
-<div style="padding-top:8px;">
-{% if user %}
-<a  class="pure-button pure-button-primary" href="/verseset/create">create a verse set</a>
-{% end %}
-</div>
 
 {% end %}
