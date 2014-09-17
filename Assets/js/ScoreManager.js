@@ -58,7 +58,7 @@ function UpdateHealthBar(newHealth : float) {
 
 function HandleWordWrong() {
 	streak = 0;
-	var dScore = 0;
+	var dScore = -1*maxTime;
 	var dHealth = -0.3f;
 	var difficulty = gameManager.difficulty;
 
