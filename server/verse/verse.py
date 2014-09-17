@@ -2,6 +2,7 @@ from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.verse.models import *
 from verserain.utils.encoding import *
+from verserain import settings
 from bson.objectid import ObjectId
 
 def get_handlers():
@@ -26,10 +27,25 @@ def get_handlers():
 
 class PlayVerseHandler(BaseHandler):
     def get(self, verse_id):
+        verse = Verse.by_id(verse_id)
+        if verse:
+            vs = verse.verseset()
+            vs["play_count"] = vs.play_count() + 1
+            vs.save()
+
+        if self.isIOS():
+            return self.redirect("verserain://com.hopeofglory.verserain/verse/%s/%s" % (verse_id, settings.SITE_DOMAIN))
+
         self.render("webplayer.html",verse_id=verse_id, verseset_id=None)
 
 class PlayVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
+        vs = VerseSet.by_id(verseset_id)
+        if vs:
+            vs["play_count"] = vs.play_count() + 1
+            vs.save()
+        if self.isIOS():
+            return self.redirect("verserain://com.hopeofglory.verserain/verseset/%s/%s" % (verseset_id, settings.SITE_DOMAIN))
         self.render("webplayer.html",verse_id=None, verseset_id=verseset_id)
 
 class UpdateVersionSelectorHandler(BaseHandler):
@@ -272,6 +288,8 @@ class ListVerseSetHandler(BaseHandler):
                 versesets = VerseSet.collection.find({"language":language_code})
             if option == "new":
                 versesets = versesets.sort("_id",-1)
+            elif option == "popular":
+                versesets = versesets.sort("play_count",-1)
             versesets = list(versesets)
 
         self.set_cookie("language_code", language_code)

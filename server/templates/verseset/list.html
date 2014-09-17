@@ -33,7 +33,9 @@
 {% if language_code == "ALL" %}
 <th>Language</th>
 {% end %}
-<th># Verses</th><th>Creator</th></thead>
+<th># Verses</th>
+<th># Plays</th>
+<th>Creator</th></thead>
 <tbody>
 {% for verseset in versesets %}
 <tr>
@@ -45,6 +47,7 @@
   <td>{{language.language_by_code(verseset['language'])}}</td>
 {% end %}
   <td>{{verseset.verse_count()}}</td>
+  <td>{{verseset.play_count()}}</td>
   <td>{{verseset.user().display_name()}}</td>
 </tr>
 {% end %}

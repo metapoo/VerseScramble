@@ -30,6 +30,9 @@ class VerseSet(BaseModel):
     def url(self):
         return "/verseset/show/%s" % str(self._id)
 
+    def play_count(self):
+        return self.get("play_count",0)
+
     def update_verse_count(self, count=None):
         old_count = self.verse_count()
         if count:

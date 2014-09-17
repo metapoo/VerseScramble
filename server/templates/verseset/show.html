@@ -1,4 +1,4 @@
-B1;2c{% extends "../base.html" %}
+{% extends "../base.html" %}
 
 {% block script_content %}
 {% end %}
@@ -11,13 +11,7 @@ B1;2c{% extends "../base.html" %}
 
 <div class="pad_bottom">
 
-<a class="button-xsmall pure-button" 
-{% if isIOS %}
-href="verserain://com.hopeofglory.verserain/verseset/{{verseset._id}}/{{settings.SITE_DOMAIN}}"
-{% else %}
-href="/verseset/play/{{verseset._id}}"
-{% end %}
->play challenge (all verses)</a>
+<a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play challenge (all verses)</a>
 
 {% if user and (verseset['user_id'] == user._id) %}
 <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
@@ -48,11 +42,7 @@ href="/verseset/play/{{verseset._id}}"
 <div class="paragraph">{{v['text']}}</div>
 <div>
 
-{% if isIOS %}
-<a class="button-xsmall pure-button" href="verserain://com.hopeofglory.verserain/verse/{{v._id}}/{{settings.SITE_DOMAIN}}">play verse</a>
-{% else %}
 <a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play verse</a> 
-{% end %}
 
 {% if user and (verseset['user_id'] == user._id) %}
  <a class="button-xsmall pure-button" href="/verse/edit/{{v._id}}">edit</a> 
