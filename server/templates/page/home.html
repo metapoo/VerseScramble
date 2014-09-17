@@ -1,0 +1,13 @@
+{% extends "../base.html" %}
+
+{% block page_content %}
+
+{% if page %}
+<div class="pad_bottom" >{% raw page.get("content") %}</div>
+{% end %}
+
+{% if user and user.is_admin() %}
+<a href="/page/edit" class="pure-button">edit page</a>
+{% end %}
+
+{% end %}
