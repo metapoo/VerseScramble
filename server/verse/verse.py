@@ -11,6 +11,7 @@ def get_handlers():
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
             (r"/verseset/list", ListVerseSetHandler),
+            (r"/([^/]+)/verseset/list/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
@@ -158,7 +159,7 @@ class ShowVerseSetHandler(BaseHandler):
         if user and (verseset["user_id"] == user._id):
             selected_nav = "my sets"
         else:
-            selected_nav = "all sets"
+            selected_nav = "verse sets"
         context = {"selected_nav":selected_nav}
 
         return self.render("verseset/show.html", verseset=verseset,
@@ -256,13 +257,17 @@ class CreateVerseSetHandler(BaseHandler):
                            context=context, error_message=error_message)
 
 class ListVerseSetHandler(BaseHandler):
-    @require_login
-    def get(self):
-        selected_nav = "my sets"
+    def get(self, username=None):
+        user = self.current_user
+        if user and (username == "profile"):            
+            selected_nav = "my sets"
+            versesets = user.versesets()
+        else:
+            selected_nav = "verse sets"
+            versesets = list(VerseSet.collection.find())
+
         context = {"selected_nav":selected_nav,
                    "request":self.request,
         }
-        user = self.current_user
-        versesets = user.versesets()
         return self.render("verseset/list.html", user=user, versesets=versesets, context=context)
 

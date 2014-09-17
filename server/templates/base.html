@@ -45,8 +45,10 @@
 <div id="cssmenu">
 <div id="bg-one"></div><div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
 <ul>
-  <li {% if context.get("selected_nav") == "all sets" %}class="active"{% end %}><a href="/"><span>all sets</span></a></li>
-  <li {% if context.get("selected_nav") == "my sets" %}class="active"{% end %}><a href="/verseset/list" ><span>my sets</span></a></li>
+  <li {% if context.get("selected_nav") == "verse sets" %}class="active"{% end %}><a href="/verseset/list"><span>verse sets</span></a></li>
+  {% if user %}
+  <li {% if context.get("selected_nav") == "my sets" %}class="active"{% end %}><a href="/profile/verseset/list" ><span>my sets</span></a></li>
+  {% end %}
   {% if not user %}
   <li {% if context.get("selected_nav") == "login" %}class="active"{% end %}  ><a href="/login"><span>login</span></a></li>
   <li {% if context.get("selected_nav") == "register" %}class="active"{% end %}><a  href="/login/register"><span>register</span></a></li>
