@@ -1,10 +1,11 @@
 from verserain.base import base
 from verserain.login import login
 from verserain.verse import verse, api as verse_api
+from verserain.page import page
 
 def get_handlers():
     handlers = []
-    mods = [base,login,verse, verse_api]
+    mods = [base,login,verse, verse_api, page]
 
     for mod in mods:
         handlers.extend(mod.get_handlers())
