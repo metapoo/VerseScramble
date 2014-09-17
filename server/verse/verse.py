@@ -10,8 +10,10 @@ def get_handlers():
             (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
-            (r"/verseset/list", ListVerseSetHandler),
-            (r"/([^/]+)/verseset/list/?", ListVerseSetHandler),
+            (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
+            (r"/versesets/([^/]+)/?", ListVerseSetHandler),
+            (r"/versesets/?", ListVerseSetHandler),
+            (r"/([^/]+)/versesets/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
@@ -37,8 +39,7 @@ class UpdateVersionSelectorHandler(BaseHandler):
         language = self.get_argument("language")
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "my sets"
-        context = {"selected_nav":selected_nav}
-
+        
         self.render("version_select.html",
                     version=version,
                     language=language,
@@ -83,10 +84,9 @@ class UpdateVerseHandler(BaseHandler):
         versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
         version = verse.get('version')
         selected_nav = "my sets"
-        context = {"selected_nav":selected_nav}
-
+        
         self.render("verse/edit.html", verse=verse, verseset=verseset,
-                    user=user, versions=versions, version=version, context=context)
+                    user=user, versions=versions, version=version, selected_nav=selected_nav)
     def post(self):
         verse_id = self.get_argument("verse_id")
         verse_id = ObjectId(verse_id)
@@ -160,11 +160,10 @@ class ShowVerseSetHandler(BaseHandler):
             selected_nav = "my sets"
         else:
             selected_nav = "verse sets"
-        context = {"selected_nav":selected_nav}
-
+        
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
-                           versions=versions, context=context)
+                           versions=versions, selected_nav=selected_nav)
 
 
 class UpdateVerseSetHandler(BaseHandler):
@@ -182,11 +181,10 @@ class UpdateVerseSetHandler(BaseHandler):
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "my sets"
-        context = {"selected_nav":selected_nav}
         return self.render("verseset/edit.html",
                            user=user, language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            verseset=verseset,versions=versions, language=language,
-                           version=version, context=context)
+                           version=version, selected_nav=selected_nav)
 
     @require_login
     def post(self):
@@ -217,7 +215,7 @@ class RemoveVerseSetHandler(BaseHandler):
         user = self.current_user
         verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
         verseset.remove()
-        self.redirect("/verseset/list")
+        self.redirect("/profile/versesets")
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -249,25 +247,36 @@ class CreateVerseSetHandler(BaseHandler):
         language = 'en'
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "my sets"
-        context = {"selected_nav":selected_nav}
-
+        
         return self.render("verseset/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            version=version,verseset=None,language=language,versions=versions,
-                           context=context, error_message=error_message)
+                           selected_nav=selected_nav, error_message=error_message)
 
 class ListVerseSetHandler(BaseHandler):
-    def get(self, username=None):
+    def get(self, option="popular", language_code=None):
         user = self.current_user
-        if user and (username == "profile"):            
+        selected_subnav = option
+        
+        if language_code is None:
+            language_code = self.get_cookie("language_code","en")
+
+        if user and (option == "profile"):            
             selected_nav = "my sets"
             versesets = user.versesets()
         else:
             selected_nav = "verse sets"
-            versesets = list(VerseSet.collection.find())
+            if language_code == "ALL":
+                versesets = VerseSet.collection.find()
+            else:
+                versesets = VerseSet.collection.find({"language":language_code})
+            if option == "new":
+                versesets = versesets.sort("_id",-1)
+            versesets = list(versesets)
 
-        context = {"selected_nav":selected_nav,
-                   "request":self.request,
-        }
-        return self.render("verseset/list.html", user=user, versesets=versesets, context=context)
+        self.set_cookie("language_code", language_code)
+
+        return self.render("verseset/list.html", user=user, versesets=versesets, selected_nav=selected_nav,
+                           selected_subnav=option,language_code=language_code
+        )
 

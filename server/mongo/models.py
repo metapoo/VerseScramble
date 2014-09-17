@@ -2,10 +2,15 @@ from minimongo import Model
 from minimongo import configure
 from verserain import settings
 from bson.objectid import ObjectId
+from datetime import datetime
+
 configure(settings)
 
 class BaseModel(Model):
     _metadata = {}
+
+    def created_at(self):
+        return self._id.generation_time
 
     def json(self):
         d = dict(self)

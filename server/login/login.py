@@ -17,9 +17,8 @@ class RegisterHandler(BaseHandler):
         user = self.current_user
         error_message = None
         selected_nav = "register"
-        context = {"selected_nav":selected_nav}
         self.render("login/register.html",user=user,error_message=error_message,
-                    email="",username="",context=context)
+                    email="",username="",selected_nav=selected_nav)
 
     def post(self):
         confirm_password = self.get_argument("confirm_password")
@@ -70,9 +69,8 @@ class LoginHandler(BaseHandler):
         if email is None:
             email = ""
         selected_nav = "login"
-        context = {"selected_nav":selected_nav}
         self.render("login/login.html",user=user,error_message=error_message,email=email,
-                    context=context)
+                    selected_nav=selected_nav)
 
     def post(self):
         password = self.get_argument("password")

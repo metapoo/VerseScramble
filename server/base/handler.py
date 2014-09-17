@@ -70,6 +70,7 @@ class BaseHandler(tornado.web.RequestHandler):
         kwargs['isIOS'] = self.isIOS()
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
+        kwargs['request'] = self.request
 
         if not kwargs.has_key('error_message'):
             kwargs['error_message'] = None
@@ -77,15 +78,15 @@ class BaseHandler(tornado.web.RequestHandler):
         if not kwargs.has_key('context'):
             kwargs['context'] = {}
 
+        selected_nav = kwargs.get('selected_nav')
         context = kwargs['context']
-        selected_nav = context.get('selected_nav')
-
+        
         if selected_nav is None:
             selected_nav = self.get_secure_cookie('selected_nav',None)
-            if selected_nav:
-                context['selected_nav'] = selected_nav
         else:
             self.set_secure_cookie('selected_nav',selected_nav)
+        
+        kwargs['selected_nav'] = selected_nav
 
         super(BaseHandler, self).render(*args, **kwargs)
 

@@ -12,10 +12,9 @@ def get_handlers():
 class EditPageHandler(BaseHandler):
     def get(self):
         selected_nav = "home"
-        context = {"selected_nav":selected_nav}
         page = Page.collection.find_one(name="home")
         name = self.get_argument("name", "home")
-        return self.render("page/edit.html", context=context, page=page, name=name)
+        return self.render("page/edit.html", selected_nav=selected_nav, page=page, name=name)
 
 class UpdatePageHandler(BaseHandler):
     def get(self):
@@ -32,7 +31,6 @@ class UpdatePageHandler(BaseHandler):
 class HomePageHandler(BaseHandler):
     def get(self):
         selected_nav = "home"
-        context = {"selected_nav":selected_nav}
         page = Page.collection.find_one(name="home")
-        return self.render("page/home.html", context=context, page=page)
+        return self.render("page/home.html", selected_nav=selected_nav, page=page)
 
