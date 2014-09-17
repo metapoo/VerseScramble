@@ -29,7 +29,11 @@
 
 <table class="pure-table pure-table-bordered pad_bottom">
 
-<thead><tr><th>Verse Set</th><th>Language</th><th># Verses</th><th>Creator</th></thead>
+<thead><tr><th>Verse Set</th>
+{% if language_code == "ALL" %}
+<th>Language</th>
+{% end %}
+<th># Verses</th><th>Creator</th></thead>
 <tbody>
 {% for verseset in versesets %}
 <tr>
@@ -37,7 +41,9 @@
   </td>
 
   </td>
+{% if language_code == "ALL" %}
   <td>{{language.language_by_code(verseset['language'])}}</td>
+{% end %}
   <td>{{verseset.verse_count()}}</td>
   <td>{{verseset.user().display_name()}}</td>
 </tr>
