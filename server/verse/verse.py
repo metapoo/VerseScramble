@@ -33,9 +33,9 @@ class PlayVerseHandler(BaseHandler):
             vs["play_count"] = vs.play_count() + 1
             vs.save()
 
-        if self.isIOS():
+        if self.isIOS() or self.isAndroid():
             return self.redirect("verserain://com.hopeofglory.verserain/verse/%s/%s" % (verse_id, settings.SITE_DOMAIN))
-
+            
         self.render("webplayer.html",verse_id=verse_id, verseset_id=None)
 
 class PlayVerseSetHandler(BaseHandler):
@@ -44,7 +44,7 @@ class PlayVerseSetHandler(BaseHandler):
         if vs:
             vs["play_count"] = vs.play_count() + 1
             vs.save()
-        if self.isIOS():
+        if self.isIOS() or self.isAndroid():
             return self.redirect("verserain://com.hopeofglory.verserain/verseset/%s/%s" % (verseset_id, settings.SITE_DOMAIN))
         self.render("webplayer.html",verse_id=None, verseset_id=verseset_id)
 
