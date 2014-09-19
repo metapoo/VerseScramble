@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+body h1,body h2,body h3,body h4 {
+  margin: 0.5em 0em 1em 0em;
+}
+
 #unity_player_content {
   margin: auto;
   text-align:center;

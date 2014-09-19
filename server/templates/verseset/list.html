@@ -3,11 +3,10 @@
 {% from verserain.verse import language %}
 
 {% if user and (selected_nav == "my sets") %}
-
 <div class="pad_bottom">
   <a  class="pure-button pure-button-primary" href="/verseset/create">create a verse set</a>
 </div>
-{% else %}
+{% elif selected_subnav in ("popular", "hot", "new") %}
 <div class="pad_bottom">
         <a class="pure-button {% if selected_subnav=="popular" %}pure-button-primary{% end %}" href="/versesets/popular/{{language_code}}">Popular</a>
         <a class="pure-button {% if selected_subnav=="hot" %}pure-button-primary{% end %}" href="/versesets/hot/{{language_code}}">Hot</a>
@@ -21,7 +20,8 @@
 </select>
 </form>
 </div>
-
+{% else %}
+<h3>{{selected_subnav}}'s Verse Sets</h3>
 {% end %}
 
 <table class="pure-table pure-table-bordered pad_bottom">
@@ -43,9 +43,10 @@
 {% if language_code == "ALL" %}
   <td>{{language.language_by_code(verseset['language'])}}</td>
 {% end %}
+  {% set vuser = verseset.user() %}
   <td>{{verseset.verse_count()}}</td>
   <td>{{verseset.play_count()}}</td>
-  <td>{{verseset.user().display_name()}}</td>
+  <td><a href="/{{vuser['username']}}/versesets/">{{vuser.display_name()}}</a></td>
 </tr>
 {% end %}
 </tbody>
