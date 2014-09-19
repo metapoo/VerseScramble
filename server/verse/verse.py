@@ -290,6 +290,9 @@ class ListVerseSetHandler(BaseHandler):
                 versesets = versesets.sort("_id",-1)
             elif option == "popular":
                 versesets = versesets.sort("play_count",-1)
+            elif option == "hot":
+                versesets = versesets.sort("play_count",-1)
+
             versesets = list(versesets)
 
         self.set_cookie("language_code", language_code)
