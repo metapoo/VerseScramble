@@ -142,7 +142,7 @@ function HandleWordWrong() {
 	if (finished) return;
 	
 //	if (GetChallengeModeEnabled()) {
-		ExplodeWords();
+//		ExplodeWords();
 //	}
 }
 	
