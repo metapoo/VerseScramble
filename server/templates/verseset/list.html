@@ -1,4 +1,4 @@
-{% extends "../base.html" %}
+B1;2c{% extends "../base.html" %}
 {% block page_content %}
 {% from verserain.verse import language %}
 
@@ -11,7 +11,7 @@
         <a class="pure-button {% if selected_subnav=="popular" %}pure-button-primary{% end %}" href="/versesets/popular/{{language_code}}">Popular</a>
         <a class="pure-button {% if selected_subnav=="hot" %}pure-button-primary{% end %}" href="/versesets/hot/{{language_code}}">Hot</a>
         <a class="pure-button {% if selected_subnav=="new" %}pure-button-primary{% end %}" href="/versesets/new/{{language_code}}">New</a>
-<form style="display:inline;">
+<form style="display:inline;float:right;padding-top:7px;">
 &nbsp; Language: &nbsp; <select name="language" onchange="location.href='/versesets/{{selected_subnav}}/'+this.value;">
 <option value="ALL" {% if language_code == "ALL" %}selected {% end %}>All Languages</option>
 {% for lang_code in language.LANGUAGE_CODES %}
@@ -24,7 +24,7 @@
 <h3>{{selected_subnav}}'s Verse Sets</h3>
 {% end %}
 
-<table class="pure-table pure-table-bordered pad_bottom">
+<table class="pure-table pure-table-bordered pad_bottom" style="width:100%;">
 
 <thead><tr><th>Verse Set</th>
 {% if language_code == "ALL" %}
