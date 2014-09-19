@@ -273,14 +273,15 @@ class ListVerseSetHandler(BaseHandler):
     def get(self, option="popular", language_code=None):
         user = self.current_user
         selected_subnav = option
-        
+        versesets = []
+
         if language_code is None:
             language_code = self.get_cookie("language_code","en")
 
         if user and (option == "profile"):            
             selected_nav = "my sets"
             versesets = user.versesets()
-        elif (option in ("new","popular","hot")):
+        elif (option in ("new","popular")):
             selected_nav = "verse sets"
             if language_code == "ALL":
                 versesets = VerseSet.collection.find()
@@ -290,17 +291,13 @@ class ListVerseSetHandler(BaseHandler):
                 versesets = versesets.sort("_id",-1)
             elif option == "popular":
                 versesets = versesets.sort("play_count",-1)
-            elif option == "hot":
-                versesets = versesets.sort("play_count",-1)
-
+            
             versesets = list(versesets)
         else:
             selected_nav = "verse sets"
             viewed_user = User.collection.find_one({'username':option})
             if viewed_user:
                 versesets = viewed_user.versesets()
-            else:
-                versesets = []
 
         self.set_cookie("language_code", language_code)
 

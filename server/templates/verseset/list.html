@@ -4,12 +4,11 @@ B1;2c{% extends "../base.html" %}
 
 {% if user and (selected_nav == "my sets") %}
 <div class="pad_bottom">
-  <a  class="pure-button pure-button-primary" href="/verseset/create">create a verse set</a>
+  <a  class="pure-button" href="/verseset/create">create a verse set</a>
 </div>
 {% elif selected_subnav in ("popular", "hot", "new") %}
 <div class="pad_bottom">
         <a class="pure-button {% if selected_subnav=="popular" %}pure-button-primary{% end %}" href="/versesets/popular/{{language_code}}">Popular</a>
-        <a class="pure-button {% if selected_subnav=="hot" %}pure-button-primary{% end %}" href="/versesets/hot/{{language_code}}">Hot</a>
         <a class="pure-button {% if selected_subnav=="new" %}pure-button-primary{% end %}" href="/versesets/new/{{language_code}}">New</a>
 <form style="display:inline;float:right;padding-top:7px;">
 &nbsp; Language: &nbsp; <select name="language" onchange="location.href='/versesets/{{selected_subnav}}/'+this.value;">
