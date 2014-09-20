@@ -777,6 +777,23 @@ function ShowHint() {
 	}
 }
 
+
+function increaseSize() {
+	var wObject : WordLabel;
+	
+	for (wObject in wordLabels) {
+			wObject.setFontSize(wObject.getFontSize() + 5);
+		}
+}
+
+function decreaseSize() {
+	var wObject : WordLabel;
+	
+	for (wObject in wordLabels) {
+			wObject.setFontSize(wObject.getFontSize() - 5);
+		}
+}
+
 function Update () {
 	var elapsedTime : float = Time.time - lastWordTime;
 	

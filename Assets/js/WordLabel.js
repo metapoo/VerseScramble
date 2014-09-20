@@ -205,6 +205,15 @@ function setWord(w : String) {
 	ResetBubble();
 }
 
+function setFontSize(s: int){
+  label.fontSize = s;
+  	ResetBubble();
+}
+
+function getFontSize(){
+  return label.fontSize;
+}
+
 function ResetBubble() {
 	var size = label.renderer.bounds.size;
 	var textWidth = size.x;
