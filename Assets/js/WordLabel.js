@@ -207,7 +207,7 @@ function setWord(w : String) {
 
 function setFontSize(s: int){
   label.fontSize = s;
-  	ResetBubble();
+  ResetBubble();
 }
 
 function getFontSize(){
@@ -215,6 +215,8 @@ function getFontSize(){
 }
 
 function ResetBubble() {
+	var oldRotation = transform.rotation;
+	transform.rotation = Quaternion.identity;
 	var size = label.renderer.bounds.size;
 	var textWidth = size.x;
 	var textHeight = size.y;
@@ -222,6 +224,7 @@ function ResetBubble() {
 	var l = textWidth + padding.x;
 	var h = textHeight + padding.y;
 	SetBlockLength(l, h);
+	transform.rotation = oldRotation;
 }
 
 function Awake () {

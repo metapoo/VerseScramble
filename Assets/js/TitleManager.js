@@ -77,10 +77,11 @@ function OnGUI() {
 		Application.LoadLevel("verselist");
 	}
 	
-		
+	/*
 	if (Popup.List (Rect(w*0.75-buttonSize.x*0.5, h*0.75, 180, 20), showList, listEntry, GUIContent("Choose your country!"), list, listStyle)) {
 		picked = true;
-	}
+	}*/
+	
 	//if (picked) {
 	//	GUI.Label (Rect(50, 70, 400, 20), "You picked " + list[listEntry].text + "!");
 	//}	
