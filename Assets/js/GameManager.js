@@ -20,7 +20,6 @@ var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var timeUntilHint : int ;
 var exitButton : BoxCollider2D;
-var hintButton : BoxCollider2D;
 var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
@@ -28,6 +27,7 @@ var sndFailure1 : AudioClip;
 var sndExplode1 : AudioClip;
 var sndSelect : AudioClip;
 var refreshButton : Button;
+var hintButton : Button;
 var feedbackLabel : Text;
 var introReferenceLabel : Text;
 var panelReferenceLabel : Text;
@@ -118,10 +118,6 @@ function SetupWalls () {
 	exitButton.transform.position = new Vector3(baseX - 0.75f,
 									  y,
 									  0);
-	hintButton.transform.position = new Vector3(baseX-2.0f,
-									  y,
-									  0);
-									  
 	screenBounds = Rect(leftWall.center.x+0.5,topWall.center.y-0.5,
 	rightWall.center.x-leftWall.center.x-1.0,
 	topWall.center.y-bottomWall.center.y-1.0);
@@ -728,6 +724,12 @@ function HandleVerseFinished() {
 	}
 }
 
+function ShowHintFromButton() {
+	ShowHint();
+	scoreManager.HandleWordWrong();
+	audio.PlayOneShot(sndSuccess1, 0.5f);
+}
+
 function ShowHint() {
 	wordHinted = true;	
 	var wObject : WordLabel;
@@ -763,4 +765,5 @@ function Update () {
 		ShowHint();
 	}
 	refreshButton.active = CanShowSolution();
+	hintButton.active = !GetChallengeModeEnabled();
 }
