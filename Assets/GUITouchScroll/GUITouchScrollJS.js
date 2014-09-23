@@ -280,7 +280,7 @@ function DoWindow (windowID : int) //here you build the table
 				// verse was mastered
 			} 
 			
-			rowLabel = String.Format("{0} \t\t {1}: {2}",verse.reference,
+			rowLabel = String.Format("{0} - {1}: {2}",verse.reference,
 			TextManager.GetText("high score"),
 			metadata["high_score"]); //this is what will be written in the rows
 			rowStyle = GetStyleForDifficulty(verseDifficulty);
