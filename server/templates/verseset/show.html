@@ -13,7 +13,7 @@
 
 <a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play challenge (all verses)</a>
 
-{% if user and (verseset['user_id'] == user._id) %}
+{% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
 <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
 <a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a>
 {% end %}
@@ -44,7 +44,7 @@
 
 <a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play verse</a> 
 
-{% if user and (verseset['user_id'] == user._id) %}
+{% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
  <a class="button-xsmall pure-button" href="/verse/edit/{{v._id}}">edit</a> 
  <a class="button-xsmall pure-button" href="/verse/remove/{{v._id}}">x</a>
 {% end %}
