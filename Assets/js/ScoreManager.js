@@ -1,9 +1,10 @@
 ﻿#pragma strict
 
 import TextManager;
+import UnityEngine.UI;
 
 var scoreLabel : TextMesh;
-var timeLabel : TextMesh;
+var timeLabel : Text;
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
