@@ -30,6 +30,7 @@ var hintButton : Button;
 var feedbackLabel : Text;
 var introReferenceLabel : Text;
 var panelReferenceLabel : Text;
+var difficultyLabel : Text;
 var healthBar : HealthBar;
 
 public var maxWordsActive : int = 10;
@@ -183,7 +184,6 @@ function SetupUI() {
 	var w = screenBounds.width;
 	var h = screenBounds.height;
 		
-	healthBar.maxLength = w*0.4;										   
 	healthBar.SetPercentage(healthBar.targetPercentage);
 
 }
@@ -246,7 +246,7 @@ function AnimateIntro() {
 	var endScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
 	var verse : Verse = verseManager.GetCurrentVerse();
 	SetVerseReference(verse.reference);	
-	
+	introReferenceLabel.color.a = 1.0f;
 	introReferenceLabel.transform.localScale = Vector3.zero;
 	AnimationManager.ScaleOverTime(introReferenceLabel.transform, endScale, duration);
 	
@@ -298,7 +298,8 @@ function SetVerseReference (reference : String) {
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	
 	introReferenceLabel.text = reference;
-	panelReferenceLabel.text = String.Format("{0}\n{1}",reference, diffString);
+	panelReferenceLabel.text = reference;
+	difficultyLabel.text = diffString;
 }
 
 

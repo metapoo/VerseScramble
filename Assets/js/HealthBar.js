@@ -1,31 +1,14 @@
 ﻿#pragma strict
 
-public var maxLength : float = 0;
+import UnityEngine.UI;
+
 public var gameManager : GameManager;
 public var currentPercentage : float = 0;
 public var targetPercentage : float = 0;
+public var maxLength : float;
 
-function SetColor(color : Color) {
-	renderer.material.color = color;
-}
-
-function SetMeshBounds(l : float, h:float) {
-	var mesh = GetComponent(MeshFilter).mesh;
-	var vertices : Vector3[] = mesh.vertices;
-	vertices[0] = Vector3(0,-0.5*h,0);
-	vertices[1] = Vector3(l,0.5*h,0);
-	vertices[2] = Vector3(l,-0.5*h,0);
-	vertices[3] = Vector3(0,0.5*h,0);
-	mesh.vertices = vertices;
-	mesh.RecalculateBounds();
-	
-	var s = 1.0;
-	renderer.material.mainTextureScale = Vector2(l*s,1.0*s);
-}
-
-function GetHeight() {
-	return maxLength*0.08f;
-}
+var rectTransform : RectTransform;
+var image : Image;
 
 function IsEmpty() {
 	return targetPercentage == 0;
@@ -43,11 +26,24 @@ function IsGreen() {
 	return targetPercentage >= 0.66f;
 }
 
+function SetColor(color : Color) {
+	image.color = color;
+}
+
+function GetHeight() {
+	return rectTransform.sizeDelta[1];
+}
+
 function SetProgress(p : float) {
 	currentPercentage = p;
-	SetMeshBounds(maxLength * p, GetHeight());
+	if (p > 1.0f) {
+		p = 1.0f;
+	}
+	var newSize : Vector2 = new Vector2(maxLength*p, GetHeight());
+	rectTransform.sizeDelta = newSize;
 	
 	if (IsRed()) {
+		
 		SetColor(Color.red);
 	} else if (IsYellow()) {
 		SetColor(Color.yellow);
@@ -76,7 +72,9 @@ function SetPercentage(p : float) {
 }
 
 function Start () {
-	maxLength = 0;
+	rectTransform = GetComponent(RectTransform);
+	image = GetComponent(Image);
+	maxLength = rectTransform.sizeDelta[0];
 }
 
 function Update () {
