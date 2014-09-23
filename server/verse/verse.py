@@ -74,7 +74,7 @@ class RemoveVerseHandler(BaseHandler):
             self.write("verse not found: %s" % verse_id)
             return
         verseset = verse.verseset()
-        if verseset['user_id'] != user._id:
+        if ((verseset['user_id'] != user._id) and not user.is_admin()):
             self.write("not authorized")
             return
         verseset_id = verse['verseset_id']
@@ -92,9 +92,11 @@ class UpdateVerseHandler(BaseHandler):
             self.write("verse not found: %s" % verse_id)
             return
         verseset = verse.verseset()
-        if verseset['user_id'] != user._id:
+
+        if ((verseset['user_id'] != user._id) and not user.is_admin()):
             self.write("not authorized")
             return
+
         verseset_id = verse['verseset_id']
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
@@ -112,7 +114,7 @@ class UpdateVerseHandler(BaseHandler):
             self.write("verse not found: %s" % verse_id)
             return
         verseset = verse.verseset()
-        if verseset['user_id'] != user._id:
+        if (verseset['user_id'] != user._id) and (not user.is_admin()):
             self.write("not authorized")
             return
         reference = self.get_argument("reference")
@@ -208,7 +210,12 @@ class UpdateVerseSetHandler(BaseHandler):
         verseset_id = self.get_argument("verseset_id")
         verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+
+        if ((verseset['user_id'] != user._id) and not user.is_admin()):
+            self.write("not authorized")
+            return
+
         name = self.get_argument("name")
         language = self.get_argument("language")
         version = smart_text(self.get_argument("version"))
@@ -229,7 +236,12 @@ class RemoveVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+
+        if ((verseset['user_id'] != user._id) and not user.is_admin()):
+            self.write("not authorized")
+            return
+
         verseset.remove()
         self.redirect("/profile/versesets")
 
