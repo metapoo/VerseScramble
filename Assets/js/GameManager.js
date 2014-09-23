@@ -28,9 +28,6 @@ var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
 var sndExplode1 : AudioClip;
 var feedbackLabel : TextMesh;
-var timeLabel : Text;
-var scoreLabel : TextMesh;
-var highScoreLabel : TextMesh;
 var referenceLabel : TextMesh;
 var healthBar : HealthBar;
 
@@ -190,13 +187,6 @@ function SetupUI() {
 	
 	feedbackLabel.transform.position =	new Vector3(screenBounds.x+w*0.5,
 												screenBounds.y-h*0.7,1);
-	scoreLabel.transform.position = new Vector3(screenBounds.x+w*0.98,
-												screenBounds.y-h*0.02,1);
-	var p = scoreLabel.transform.position;
-	var s = scoreLabel.renderer.bounds.size;
-	
-	highScoreLabel.transform.position = new Vector3(screenBounds.x+w*0.98,
-													p.y-s.y*1.1f,1);							
 	
 	healthBar.maxLength = w*0.4;										   
 	healthBar.SetPercentage(healthBar.targetPercentage);

@@ -3,7 +3,7 @@
 import TextManager;
 import UnityEngine.UI;
 
-var scoreLabel : TextMesh;
+var scoreLabel : Text;
 var timeLabel : Text;
 var score : int = 0;
 var streak : int = 0;
@@ -20,7 +20,6 @@ var totalElapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
-var highScoreLabel : TextMesh;
 var healthBar : HealthBar;
 var healthBarUnits : float = 0.67f;
 
@@ -96,15 +95,13 @@ function calculatedTime() {
 }
 
 function updateHighScoreLabel() {
-	var gt = TextManager.GetText;
-	
-	highScoreLabel.text = String.Format("{0}: {1}",gt("High Score"), highScore.ToString());
 }
 
 function updateScoreLabel() {
 	var gt = TextManager.GetText;
 	
-	scoreLabel.text = String.Format("{0}: {1}",gt("Score"), score.ToString());
+	//scoreLabel.text = String.Format("{0}: {1}",gt("Score"), score.ToString());
+	scoreLabel.text = score.ToString("000000");
 	if (timeLeft < 0) timeLeft = 0;
 	
 	timeLabel.text = timeLeft.ToString("00");
