@@ -21,12 +21,13 @@ var verseMetadata : Hashtable;
 var timeUntilHint : int ;
 var exitButton : BoxCollider2D;
 var hintButton : BoxCollider2D;
-var refreshButton : BoxCollider2D;
 var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
 var sndExplode1 : AudioClip;
+var sndSelect : AudioClip;
+var refreshButton : Button;
 var feedbackLabel : Text;
 var introReferenceLabel : Text;
 var panelReferenceLabel : Text;
@@ -83,8 +84,11 @@ function CanShowSolution() {
 }
 
 function ShowSolution() {
-	if (!CanShowSolution()) return;
-	
+	if (!CanShowSolution()) {
+		audio.PlayOneShot(sndFailure1,1.0f);
+		return;
+	}
+	audio.PlayOneShot(sndSelect,1.0);
 	showingSolution = true;
 	
 	for (var i=wordIndex;i<wordLabels.length;i++) {
@@ -115,9 +119,6 @@ function SetupWalls () {
 									  y,
 									  0);
 	hintButton.transform.position = new Vector3(baseX-2.0f,
-									  y,
-									  0);
-	refreshButton.transform.position = new Vector3(baseX-3.25f,
 									  y,
 									  0);
 									  
@@ -176,7 +177,7 @@ function HandleWordCorrect() {
 		wordLabel.hinting = false;
 	}
 	
-	audio.PlayOneShot(snd, 0.2);
+	audio.PlayOneShot(sndSelect, 0.2);
 	return scoreManager.HandleWordCorrect(elapsedTime);
 }
 
@@ -761,4 +762,5 @@ function Update () {
 	if (!wordHinted && !finished && (elapsedTime > timeUntilHint)) {
 		ShowHint();
 	}
+	refreshButton.active = CanShowSolution();
 }
