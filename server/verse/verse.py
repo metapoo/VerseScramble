@@ -236,7 +236,12 @@ class RemoveVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id,'user_id':user._id})
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+
+        if ((verseset['user_id'] != user._id) and not user.is_admin()):
+            self.write("not authorized")
+            return
+
         verseset.remove()
         self.redirect("/profile/versesets")
 
