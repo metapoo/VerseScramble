@@ -27,8 +27,9 @@ var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
 var sndFailure1 : AudioClip;
 var sndExplode1 : AudioClip;
-var feedbackLabel : TextMesh;
-var referenceLabel : TextMesh;
+var feedbackLabel : Text;
+var introReferenceLabel : Text;
+var panelReferenceLabel : Text;
 var healthBar : HealthBar;
 
 public var maxWordsActive : int = 10;
@@ -180,29 +181,22 @@ function HandleWordCorrect() {
 }
 
 function SetupUI() {
-	feedbackLabel.renderer.enabled = false;
+	feedbackLabel.enabled = false;
 	
 	var w = screenBounds.width;
 	var h = screenBounds.height;
-	
-	feedbackLabel.transform.position =	new Vector3(screenBounds.x+w*0.5,
-												screenBounds.y-h*0.7,1);
-	
+		
 	healthBar.maxLength = w*0.4;										   
 	healthBar.SetPercentage(healthBar.targetPercentage);
-	
-	var v = referenceLabel.renderer.bounds.size;
-	healthBar.transform.position = Vector3(screenBounds.x+screenBounds.width*0.02, 
-	screenBounds.y-screenBounds.height*0.04-v.y*0.5);
 
 }
 
 function showFeedback(feedbackText : String, time : float) {
-	feedbackLabel.renderer.enabled = true;
-	AnimationManager.SetTextMeshAlpha(feedbackLabel, 1.0);
+	feedbackLabel.enabled = true;
+	feedbackLabel.color.a = 1.0f;
 	var animDuration = 0.25f;
 	feedbackLabel.transform.localScale = new Vector3(0,0,1);
-	AnimationManager.ScaleOverTime(feedbackLabel.transform, Vector3(0.1,0.1,1), animDuration);
+	AnimationManager.ScaleOverTime(feedbackLabel.transform, Vector3(1.0,1.0,1), animDuration);
 	feedbackLabel.text = feedbackText;
 	yield WaitForSeconds(time+animDuration);
 	// there could be another feedback animation running, in which case we want to let that one take over
@@ -249,43 +243,23 @@ function nextWord() {
 }
 
 
-function moveReferenceToTopLeft() {
-	var duration : float = 0.5;
-	var refSize = referenceLabel.renderer.bounds.size;
-	var destination : Vector3 = new Vector3(screenBounds.x+refSize.x*0.5+screenBounds.width*0.02, 
-	screenBounds.y-refSize.y*0.5-screenBounds.height*0.02, 1);
-	
-	
-	AnimationManager.Translation(referenceLabel.transform, destination, duration);
-	
-	yield WaitForSeconds(duration);
-	
-	var verse : Verse = verseManager.GetCurrentVerse();
-	
-	SetVerseReference(verse.reference, false);
-}
-
-
 function AnimateIntro() {
-	var center : Vector3 = new Vector3(0.0,0.0,1);
 	
 	var duration : float = 0.25f;
-	referenceLabel.transform.position = center;
-	var w = Screen.width;
-	var startScale : Vector3 = new Vector3(0.12f,0.12f,1.0f);
-	var endScale : Vector3 = new Vector3(0.06f,0.06f,1.0f);
-	referenceLabel.transform.localScale = Vector3.zero;
-	AnimationManager.ScaleOverTime(referenceLabel.transform, startScale, duration);
+	var endScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
+	var verse : Verse = verseManager.GetCurrentVerse();
+	SetVerseReference(verse.reference);	
+	
+	introReferenceLabel.transform.localScale = Vector3.zero;
+	AnimationManager.ScaleOverTime(introReferenceLabel.transform, endScale, duration);
 	
 	verseManager.SayVerseReference();	
 
 	yield WaitForSeconds(2.0f);
-	
-	AnimationManager.ScaleOverTime(referenceLabel.transform, endScale, duration);
+
+	AnimationManager.FadeOverTime(introReferenceLabel, 1.0f, 0.0f, duration);
 	
 	yield WaitForSeconds(duration);
-	
-	moveReferenceToTopLeft();	
 	
 	
 }
@@ -301,7 +275,7 @@ function Start() {
 	
 	SetupWalls();
 	SetupUI();
-	SetVerseReference("",false);
+	SetVerseReference("");
 	
 	DidRanOutOfTime = false;
 	
@@ -323,15 +297,11 @@ function Start() {
 	}
 }
 
-function SetVerseReference (reference : String, showDifficulty : boolean) {
+function SetVerseReference (reference : String) {
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	
-	if (showDifficulty) {
-		referenceLabel.text = String.Format("{0}\n{1}",reference, diffString);
-	} else {
-		referenceLabel.text = reference + "\n";
-	}
-	
+	introReferenceLabel.text = reference;
+	panelReferenceLabel.text = String.Format("{0}\n{1}",reference, diffString);
 }
 
 
@@ -599,7 +569,7 @@ function SetupVerse() {
 	var clone : WordLabel;
 	
 	var verse : Verse = verseManager.GetCurrentVerse();
-	SetVerseReference(verse.reference, false);
+	SetVerseReference(verse.reference);
 	verseMetadata = verse.GetMetadata();
 	//Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
 	if (verseMetadata["difficulty"] != null) {

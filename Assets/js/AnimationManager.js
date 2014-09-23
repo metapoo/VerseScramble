@@ -1,3 +1,5 @@
+import UnityEngine.UI;
+
 static function Translation(thisTransform : Transform, endPos : Vector3, duration : float) {
 	var rate = 1.0/duration;
 	var t = 0.0;
@@ -14,17 +16,12 @@ static function TranslationBy(thisTransform : Transform, dPos : Vector3, duratio
 	return Translation(thisTransform, endPos, duration);
 }
 
-static function SetTextMeshAlpha (textMesh : TextMesh, alpha : float) {
-	var c : Color = textMesh.color;
-	textMesh.color = Color(c[0],c[1],c[2],alpha);
-}
-
-static function FadeOverTime(textMesh : TextMesh, startAlpha : float, endAlpha : float, duration : float) {
+static function FadeOverTime(text : Text, startAlpha : float, endAlpha : float, duration : float) {
 	var rate = 1.0/duration;
 	var t = 0.0f;
 	while (t < 1.0) {
 		t += Time.deltaTime * rate;
-		SetTextMeshAlpha(textMesh, startAlpha + (endAlpha-startAlpha)*t);
+		text.color.a = startAlpha + (endAlpha - startAlpha) * t;
 		yield;
 	}
 }
@@ -40,14 +37,3 @@ static function ScaleOverTime (thisTransform : Transform, endScale : Vector3, du
 	}
 }
 
-
-static function ChangeFontOverTime (guiText : GUIText, endFont : float, duration : float) {
-	var startFont = guiText.fontSize;
-	var rate = 1.0/duration;
-	var t = 0.0;
-	while (t < 1.0) {
-		t += Time.deltaTime * rate;
-		guiText.fontSize = startFont + (endFont - startFont) *t;
-		yield;
-	}
-}
