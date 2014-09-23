@@ -19,7 +19,6 @@ var scoreManager : ScoreManager;
 var verseManager : VerseManager;
 var verseMetadata : Hashtable;
 var timeUntilHint : int ;
-var exitButton : BoxCollider2D;
 var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
@@ -79,6 +78,12 @@ function OnGUI() {
 
 }
 
+function ExitToVerseList() {
+	audio.PlayOneShot(sndSelect, 1.0f);
+	Cleanup();
+	Application.LoadLevel("verselist");
+}
+
 function CanShowSolution() {
 	return (!showingSolution && (wordIndex < wordLabels.length) && gameStarted && !GetChallengeModeEnabled());	
 }
@@ -113,11 +118,6 @@ function SetupWalls () {
 	rightWall.size = leftWall.size;
 	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f, 0f);
 	
-	var y : float = mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y+0.75f;
-	var baseX : float = mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x;
-	exitButton.transform.position = new Vector3(baseX - 0.75f,
-									  y,
-									  0);
 	screenBounds = Rect(leftWall.center.x+0.5,topWall.center.y-0.5,
 	rightWall.center.x-leftWall.center.x-1.0,
 	topWall.center.y-bottomWall.center.y-1.0);
