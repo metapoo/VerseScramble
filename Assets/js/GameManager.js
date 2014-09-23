@@ -142,7 +142,7 @@ function HandleWordWrong() {
 	if (finished) return;
 	
 //	if (GetChallengeModeEnabled()) {
-		ExplodeWords();
+//		ExplodeWords();
 //	}
 }
 	
@@ -775,6 +775,23 @@ function ShowHint() {
 			wObject.HintAt();
 		}
 	}
+}
+
+
+function increaseSize() {
+	var wObject : WordLabel;
+	
+	for (wObject in wordLabels) {
+			wObject.setFontSize(wObject.getFontSize() + 5);
+		}
+}
+
+function decreaseSize() {
+	var wObject : WordLabel;
+	
+	for (wObject in wordLabels) {
+			wObject.setFontSize(wObject.getFontSize() - 5);
+		}
 }
 
 function Update () {
