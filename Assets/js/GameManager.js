@@ -260,6 +260,10 @@ function AnimateIntro() {
 }
 
 function Start() {
+	SetupWalls();
+	SetupUI();	
+	DidRanOutOfTime = false;
+
 	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1);
 	}
@@ -267,12 +271,6 @@ function Start() {
 	
 	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
-	
-	SetupWalls();
-	SetupUI();
-	SetVerseReference("");
-	
-	DidRanOutOfTime = false;
 	
 	if (GetChallengeModeEnabled()) {
 		if (verseManager.verseIndex == 0) {
