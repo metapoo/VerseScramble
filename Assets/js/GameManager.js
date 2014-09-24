@@ -607,7 +607,6 @@ function SetupVerse() {
 	
 	yield WaitForSeconds(2.5f);
 	
-	
 	numWordsReleased = 0;	
 	var numWordsActive = 0;
 	var groupSize = GetGroupSize();
@@ -628,6 +627,7 @@ function SetupVerse() {
 		if (!gameStarted  && ((numWordsReleased > groupSize) ||
 		    (numWordsReleased >= wordLabels.length)))
 		{
+			yield WaitForSeconds(2.0f);
 			gameStarted = true;
 			scoreManager.resetTime();
 		}

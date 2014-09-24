@@ -9,6 +9,8 @@
 #import "VoiceSynthClient.h"
 #import <AVFoundation/AVFoundation.h>
 
+static AVSpeechSynthesizer *synthesizer = nil;
+
 @implementation VoiceSynthClient
 
 @end
@@ -39,7 +41,9 @@ extern "C" {
 	void _SpeakUtterance (const char* text, const char* language)
 	{
         NSString *languageString = CreateNSString(language);
-        AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
+        if (synthesizer == nil) {
+            synthesizer = [[AVSpeechSynthesizer alloc] init];
+        }
         NSArray *speechVoices = [AVSpeechSynthesisVoice speechVoices];
         AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
         
@@ -51,8 +55,16 @@ extern "C" {
         AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:CreateNSString(text)];
 
         utterance.voice = voice;
-        [utterance setRate:0.2f];
+        
+        float rate = 0.2f;
+        
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+            rate = 0.12f;
+        }
+        
+        [utterance setRate:rate];
+        
         [synthesizer speakUtterance:utterance];
-        [synthesizer release];
+        
 	}
 }
