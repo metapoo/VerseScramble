@@ -179,13 +179,11 @@ function HandleWordCorrect() {
 }
 
 function SetupUI() {
+	feedbackLabel.text = "";
+	introReferenceLabel.text = "";
+	panelReferenceLabel.text = "";
 	feedbackLabel.enabled = false;
-	
-	var w = screenBounds.width;
-	var h = screenBounds.height;
-		
 	healthBar.SetPercentage(healthBar.targetPercentage);
-
 }
 
 function showFeedback(feedbackText : String, time : float) {
