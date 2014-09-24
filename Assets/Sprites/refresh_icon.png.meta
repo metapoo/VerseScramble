@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 07f7220fdfbd942a9b10a964c0cb89ea
+guid: 7447f7fe3de4e4050a3ce4b7555e8618
 TextureImporter:
   fileIDToRecycleName:
-    21300000: hint-icon
+    21300000: refresh_icon
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -25,7 +25,7 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 1
+    filterMode: -1
     aniso: 1
     mipBias: -1
     wrapMode: 1

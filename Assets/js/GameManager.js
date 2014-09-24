@@ -174,7 +174,7 @@ function HandleWordCorrect() {
 		wordLabel.hinting = false;
 	}
 	
-	audio.PlayOneShot(sndSelect, 0.2);
+	audio.PlayOneShot(sndSelect, 0.5f);
 	return scoreManager.HandleWordCorrect(elapsedTime);
 }
 
