@@ -11,5 +11,5 @@
 /*.userprefs
 /*.pidb
 /*.booproj
-/*~
-/*.DS_Store
+*~
+.DS_Store
