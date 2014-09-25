@@ -5,10 +5,12 @@ public var label : Text;
 private var normalColor : Color;
 static var selectedButton : NavigationButton = null;
 
+function Awake() {
+	normalColor = button.colors.normalColor;
+}
 
 function Start () {
 	button = GetComponent(Button);
-	normalColor = button.colors.normalColor;
 	button.onClick.AddListener(HandleOnClick);
 }
 

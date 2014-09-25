@@ -9,6 +9,7 @@ public var verseSetButton : VerseSetButton;
 function ShowVerseSets() {
 	var versesets = verseManager.versesets;
 	var clone : VerseSetButton;
+	var firstButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
 	
@@ -21,6 +22,9 @@ function ShowVerseSets() {
 		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerseSet(verseset);
 		clone.AddToScrollView(scrollContent, i);
+		
+		if (i == 0) firstButton = clone;
+		
 		var rt = clone.GetComponent(RectTransform);
 		
 		rt.anchoredPosition.x = padding;
@@ -30,8 +34,10 @@ function ShowVerseSets() {
 	scrollContent.sizeDelta.y = versesets.length*(rowHeight+padding);
 	
 	var scrollView = scrollContent.parent.GetComponent(RectTransform);
-	Debug.Log(scrollView.sizeDelta);
 	
+	if (firstButton != null) {
+		firstButton.HandleOnClick();
+	}
 }
 
 function Start () {

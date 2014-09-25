@@ -9,6 +9,13 @@ function Start () {
 	button.onClick.AddListener(HandleOnClick);
 }
 
+function SetVerse(verse : Verse) {
+	verse = verse;
+	
+	label.text = String.Format("{0} (high: {1})", verse.reference, 
+	verse.GetMetadata()["high_score"]);
+}
+
 function  HandleOnClick() {
 }
 

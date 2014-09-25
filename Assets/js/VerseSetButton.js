@@ -4,12 +4,15 @@ import UnityEngine.UI;
 public var button : Button;
 public var verseset : VerseSet;
 public var label : Text;
-private var normalColor : Color;
+public var normalColor : Color;
 static var selectedButton : VerseSetButton = null;
+
+function Awake() {
+	normalColor = button.colors.normalColor;
+}
 
 function Start () {
 	button = GetComponent(Button);
-	normalColor = button.colors.normalColor;
 	button.onClick.AddListener(HandleOnClick);
 }
 
@@ -35,15 +38,19 @@ function SetVerseSet(vs : VerseSet) {
 
 function Highlight() {
 	var rt : RectTransform = GetComponent(RectTransform);	
+	Debug.Log("selected button = " + selectedButton);
 	if (selectedButton != null) {
 		selectedButton.UnHighlight();
 	}
-	selectedButton = this;
+	
 	button.colors.normalColor = button.colors.highlightedColor;
+	selectedButton = this;
+	
 }
 
 function UnHighlight() {
 	button.colors.normalColor = normalColor;
+	
 }
 
 function HandleOnClick() {
