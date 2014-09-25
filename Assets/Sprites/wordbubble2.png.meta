@@ -67,7 +67,7 @@ TextureImporter:
         height: 114
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 7, z: 0, w: 7}
     - name: wordbubble2_right
       rect:
         serializedVersion: 2
@@ -87,6 +87,6 @@ TextureImporter:
         height: 114
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 41, y: 41, z: 41, w: 41}
   spritePackingTag: 1001
   userData: 

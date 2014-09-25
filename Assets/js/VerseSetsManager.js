@@ -26,7 +26,7 @@ function ShowVerseSets() {
 		
 		var rt = clone.GetComponent(RectTransform);
 		
-		rt.anchoredPosition.x = rowPadding;
+		rt.anchoredPosition.x = 0;
 		rt.anchoredPosition.y = -i*(rowHeight + rowPadding) - rowPadding;	
 	}
 	
