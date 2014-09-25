@@ -196,6 +196,7 @@ static function GetLanguage() : String {
 
 static function SetLanguage(language : String) : String {
 	PlayerPrefs.SetString("language", language);
+	TextManager.LoadLanguage(language);
 }
 
 function IsAtFinalVerseOfChallenge() {

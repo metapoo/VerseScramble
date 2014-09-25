@@ -54,6 +54,7 @@ function ShowVerses() {
 		var verse: Verse = verses[i];
 		clone = Instantiate(verseButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerse(verse);
+		clone.verseIndex = i;
 		clone.AddToScrollView(verseScrollContent, i);
 		
 		var rt = clone.GetComponent(RectTransform);
@@ -68,6 +69,10 @@ function ShowVerses() {
 	yield WaitForSeconds(0);
 	verseScrollContent.anchoredPosition.y = 0;
 	
+}
+
+function Awake () {
+	TextManager.LoadLanguage(VerseManager.GetLanguage());
 }
 
 function Start () {

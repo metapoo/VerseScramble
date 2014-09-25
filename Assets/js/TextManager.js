@@ -75,8 +75,6 @@ class TextManager extends MonoBehaviour {
             return false;
         }
  
-        Debug.Log("[TextManager] loading: "+ fullpath);
- 
         if (textTable == null) 
         {
             textTable = new Hashtable();
@@ -113,7 +111,8 @@ class TextManager extends MonoBehaviour {
         }
  
         reader.Close();
- 		
+ 		Debug.Log("[TextManager] loaded: "+ fullpath);
+
         return true;
     }
  
@@ -121,6 +120,7 @@ class TextManager extends MonoBehaviour {
     public static function GetText (key:String)
     {
     	var originalKey:String = key;
+    	
         if (key != null && textTable != null)
         {
         	key = key.ToLower();

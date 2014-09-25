@@ -53,7 +53,6 @@ function Start () {
 	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
 	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
 	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
-	TextManager.LoadLanguage(verseManager.GetLanguage());
 	windowText = gt("Choose difficulty");
 }
 

@@ -37,7 +37,7 @@ function EndGameWindowForChallenge (windowId : int) {
 		
 		gameManager.Cleanup();
 		Destroy(this.gameObject);
-		Application.LoadLevel("verselist");
+		Application.LoadLevel("versesets");
 		return;
 	}
 

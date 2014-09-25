@@ -82,7 +82,7 @@ function OnGUI() {
 function ExitToVerseList() {
 	audio.PlayOneShot(sndSelect, 1.0f);
 	Cleanup();
-	Application.LoadLevel("verselist");
+	Application.LoadLevel("versesets");
 }
 
 function CanShowSolution() {
@@ -269,7 +269,6 @@ function Start() {
 	}
 	Debug.Log("VerseManager.loaded, GameManager starting");
 	
-	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
 	
 	if (GetChallengeModeEnabled()) {

@@ -248,7 +248,6 @@ function Start() {
 	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1f);
 	}
-	TextManager.LoadLanguage(verseManager.GetLanguage());
 	resetStats();
 	reset();
 	SetupUI();

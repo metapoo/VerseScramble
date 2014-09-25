@@ -3,6 +3,8 @@
 public var button : Button;
 public var verse : Verse;
 public var label : Text;
+public var verseIndex : int;
+public var verseManager : VerseManager;
 
 function Start () {
 	button = GetComponent(Button);
@@ -28,6 +30,11 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 }
 
 function  HandleOnClick() {
+	verseManager = GameObject.FindObjectOfType(VerseManager);
+	verseManager.verseIndex = verseIndex;
+	verseManager.Save();
+	GameManager.SetChallengeModeEnabled(false);
+	Application.LoadLevel("scramble");
 }
 
 function Update () {

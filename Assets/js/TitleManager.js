@@ -64,7 +64,7 @@ function OnGUI() {
 	if (selected) {
 		audio.PlayOneShot(sndSelect);
 		
-		Application.LoadLevel("verselist");
+		Application.LoadLevel("versesets");
 	}
 	
 
@@ -90,8 +90,6 @@ function Start () {
 	
 	Application.targetFrameRate = 60;
 	TextManager.LoadLanguage(VerseManager.GetLanguage());
-	
-	var gt = TextManager.GetText;
 		
 	while (1) {
 		if (CheckOption()) return;
