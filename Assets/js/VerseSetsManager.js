@@ -12,7 +12,7 @@ function ShowVerseSets() {
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
 	
-	var padding = 10;
+	var padding = 15;
 	var rowHeight = vsButtonTransform.sizeDelta.y;
 	
 
@@ -23,7 +23,7 @@ function ShowVerseSets() {
 		clone.AddToScrollView(scrollContent, i);
 		var rt = clone.GetComponent(RectTransform);
 		
-		rt.anchoredPosition.x = 10;
+		rt.anchoredPosition.x = padding;
 		rt.anchoredPosition.y = -i*(rowHeight + padding) - padding;	
 	}
 	
