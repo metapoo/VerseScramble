@@ -24,6 +24,7 @@ var healthBar : HealthBar;
 var healthBarUnits : float = 0.67f;
 
 function HandleWordCorrect(elapsedTime : float) {
+	UpdateHealthBar(healthBarUnits + 0.05f);
 	
 	var baseTime = 5;
 	if (moves == 0) {
@@ -42,10 +43,9 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
-	var dScore = timeLeft;
+	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits);
 	score += dScore;
 	
-	UpdateHealthBar(healthBarUnits + 0.05f);
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
 	return dScore;
 }
@@ -58,7 +58,7 @@ function UpdateHealthBar(newHealth : float) {
 
 function HandleWordWrong() {
 	streak = 0;
-	var dScore = -1*maxTime;
+	var dScore = 0;
 	var dHealth = -0.3f;
 	var difficulty = gameManager.difficulty;
 
@@ -73,16 +73,6 @@ function HandleWordWrong() {
 			dHealth = -0.5f;
 			break;
 	}	
-	
-	if (!GameManager.GetChallengeModeEnabled()) {
-	 	dScore = score*-.5;
-	
-		if (dScore > -1*maxTime) {
-			dScore = -1*maxTime;
-		}
-			
-		score += dScore;
-	}
 	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
@@ -169,7 +159,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += 1*difficultyMultiplier(gameManager.difficulty);
+		score += Mathf.RoundToInt(1*difficultyMultiplier(gameManager.difficulty)*healthBarUnits);
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
