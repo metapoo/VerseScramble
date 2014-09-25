@@ -5,6 +5,8 @@ TextureImporter:
     21300000: wordbubble2_left
     21300002: wordbubble2_middle
     21300004: wordbubble2_right
+    21300006: wordbubble2_all
+    21300008: wordbubble2_all
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -59,7 +61,7 @@ TextureImporter:
     - name: wordbubble2_middle
       rect:
         serializedVersion: 2
-        x: 56
+        x: 94
         y: 0
         width: 107
         height: 114
@@ -69,10 +71,20 @@ TextureImporter:
     - name: wordbubble2_right
       rect:
         serializedVersion: 2
-        x: 167
-        y: 0
-        width: 55
+        x: 249
+        y: 1
+        width: 51
         height: 113
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: wordbubble2_all
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 300
+        height: 114
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
