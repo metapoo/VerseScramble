@@ -64,13 +64,13 @@ function HandleWordWrong() {
 
 	switch (difficulty) {
 		case Difficulty.Easy:
-			dHealth = -0.25f;
+			dHealth = -0.25f*healthBarUnits;
 			break;
 		case Difficulty.Medium:
-			dHealth = -0.35f;
+			dHealth = -0.35f*healthBarUnits;
 			break;
 		case Difficulty.Hard:
-			dHealth = -0.5f;
+			dHealth = -0.45f*healthBarUnits;
 			break;
 	}	
 	

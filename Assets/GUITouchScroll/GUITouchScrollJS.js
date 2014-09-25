@@ -297,21 +297,25 @@ function DoWindow (windowID : int) //here you build the table
 		rBtn.y += rowHeight + padding;
 	}
 	
+	var highScore = 0;
+	
 	if (versesetMetadata != null) {
-		rowLabel = String.Format("{0} \t\t {1}: {2}",
+		highScore = versesetMetadata["high_score"];
+	}
+	
+	rowLabel = String.Format("{0} - {1}: {2}",
 			TextManager.GetText("Play Challenge (All Verses)"),
 			TextManager.GetText("high score"),
-			versesetMetadata["high_score"]); //this is what will be written in the rows
+			highScore); //this is what will be written in the rows
 	
-		rowStyle = GetStyleForDifficulty(versesetDifficulty);
+	rowStyle = GetStyleForDifficulty(versesetDifficulty);
 	
-		if (GUI.Button(rBtn, rowLabel, rowStyle)) {
-			StartChallenge();
-			return;
-		}
-		
-		rBtn.y += rowHeight + padding;
+	if (GUI.Button(rBtn, rowLabel, rowStyle)) {
+		StartChallenge();
+		return;
 	}
+		
+	rBtn.y += rowHeight + padding;
 
 	GUI.EndScrollView();
 }
