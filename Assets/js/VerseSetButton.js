@@ -20,6 +20,8 @@ function SetVerseSet(vs : VerseSet) {
 }
 
 function HandleOnClick() {
+	VerseManager.verseIndex = 0;
+	VerseManager.SetCurrentVerseSet(verseset);
 }
 
 function Update () {

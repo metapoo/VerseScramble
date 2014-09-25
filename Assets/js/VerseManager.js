@@ -2,7 +2,6 @@
 
 import JSONUtils;
 
-var verseIndex = 0;
 var verseText : TextAsset;
 var verseTextEN : TextAsset;
 var verseTextZH : TextAsset;
@@ -15,8 +14,9 @@ var versesetLanguage : String;
 var numVerses = 0;
 var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
-var currentVerseSet : VerseSet = null;
 
+static var currentVerseSet : VerseSet = null;
+static var verseIndex = 0;
 static var rightToLeft : boolean = false;
 static var versesets : Array = new Array();
 static var loaded : boolean = false;
@@ -63,7 +63,7 @@ function GetCurrentVerseSet() : VerseSet {
 	return currentVerseSet;
 }
 
-function SetCurrentVerseSet(verseset : VerseSet) {
+static function SetCurrentVerseSet(verseset : VerseSet) {
 	currentVerseSet = verseset;
 	var language = GetLanguage();
 	if (verseset.language != null) {
