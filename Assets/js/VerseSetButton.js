@@ -10,9 +10,13 @@ function Start () {
 	button.onClick.AddListener(HandleOnClick);
 }
 
+function Metadata() : Hashtable {
+	return verseset.GetMetadata(); 
+}
+
 function SetVerseSet(vs : VerseSet) {
 	verseset = vs;
-	label.text = vs.setname;
+	label.text = String.Format("{0} (high: {1})", vs.setname, Metadata()["high_score"]);
 }
 
 function HandleOnClick() {

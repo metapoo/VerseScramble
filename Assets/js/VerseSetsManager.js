@@ -5,15 +5,14 @@ public var scrollContent : RectTransform;
 public var verseManager : VerseManager;
 public var verseSetButton : VerseSetButton;
 
-function Start () {
-	verseManager.LoadVerses();
+function ShowVerseSets() {
 	var versesets = verseManager.versesets;
 	var clone : VerseSetButton;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
 	var position = 0;
 	var padding = 10;
-	var rowHeight = vsButtonTransform.rect.height;
+	var rowHeight = vsButtonTransform.sizeDelta.y;
 	
 	for (var i=0;i<versesets.length;i++) {
 		var verseset : VerseSet = versesets[i];
@@ -25,8 +24,14 @@ function Start () {
 		var cloneLabel : RectTransform = clone.label.GetComponent(RectTransform);
 		cloneLabel.offsetMin.y = 0;
 		cloneLabel.offsetMax.y = 0;
-		
 	}
+	scrollContent.sizeDelta.y = versesets.length*(rowHeight+padding);
+}
+
+function Start () {
+	verseManager.LoadVerses();
+	
+	ShowVerseSets();
 }
 
 function Update () {

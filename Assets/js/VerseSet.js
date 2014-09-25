@@ -6,6 +6,7 @@ public class VerseSet extends MonoBehaviour
 	public var verses : Array;
 	public var isOnline : boolean;
 	public var version : String;
+	public var playCount : int;
 		
 	public function VerseSet(onlineId_ : String, setname_ : String, language_ : String, version_: String) {
 		onlineId = onlineId_;
