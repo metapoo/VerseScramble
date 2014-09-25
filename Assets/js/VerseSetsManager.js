@@ -2,6 +2,7 @@
 import UnityEngine.UI;
 
 public var scrollContent : RectTransform;
+public var scrollBar : RectTransform;
 public var verseManager : VerseManager;
 public var verseSetButton : VerseSetButton;
 
@@ -10,22 +11,27 @@ function ShowVerseSets() {
 	var clone : VerseSetButton;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
-	var position = 0;
+	
 	var padding = 10;
 	var rowHeight = vsButtonTransform.sizeDelta.y;
 	
+
 	for (var i=0;i<versesets.length;i++) {
 		var verseset : VerseSet = versesets[i];
 		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerseSet(verseset);
-		var rt : RectTransform = clone.GetComponent(RectTransform);
-		rt.SetParent(scrollContent, false);
-		rt.localPosition.y = -i*(rowHeight + padding);	
-		var cloneLabel : RectTransform = clone.label.GetComponent(RectTransform);
-		cloneLabel.offsetMin.y = 0;
-		cloneLabel.offsetMax.y = 0;
+		clone.AddToScrollView(scrollContent, i);
+		var rt = clone.GetComponent(RectTransform);
+		
+		rt.anchoredPosition.x = 10;
+		rt.anchoredPosition.y = -i*(rowHeight + padding) - padding;	
 	}
+	
 	scrollContent.sizeDelta.y = versesets.length*(rowHeight+padding);
+	
+	var scrollView = scrollContent.parent.GetComponent(RectTransform);
+	Debug.Log(scrollView.sizeDelta);
+	
 }
 
 function Start () {
