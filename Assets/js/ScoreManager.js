@@ -21,7 +21,8 @@ var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
 var healthBar : HealthBar;
-var healthBarUnits : float = 0.67f;
+var startingHealth : float = 0.5f;
+var healthBarUnits : float = startingHealth;
 
 function HandleWordCorrect(elapsedTime : float) {
 	UpdateHealthBar(healthBarUnits + 0.05f);
@@ -126,7 +127,7 @@ function resetStatsForChallenge() {
 }
 
 function resetStats() {
-	UpdateHealthBar(0.67);
+	UpdateHealthBar(startingHealth);
 	moves = 0;
 	streak = 0;
 	score = 0;
@@ -181,7 +182,7 @@ function HandleFinished() {
 }
 
 function WasVerseMastered() {
-	return (healthBar.IsGreen());
+	return (healthBar.IsGreen() || (mistakes == 0));
 }
 
 function HandleCountTimeLeftFinished() {
