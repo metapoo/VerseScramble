@@ -21,10 +21,10 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 	
 	rt.SetParent(scrollContent, false);
 	var labelTransform : RectTransform = label.GetComponent(RectTransform);
-	labelTransform.offsetMin.x = 30;
-	labelTransform.offsetMin.y = 10;
-	labelTransform.offsetMax.x = -30;
-	labelTransform.offsetMax.y = -10;
+	labelTransform.offsetMin.x = 0;
+	labelTransform.offsetMin.y = 0;
+	labelTransform.offsetMax.x = 0;
+	labelTransform.offsetMax.y = 0;
 }
 
 function  HandleOnClick() {

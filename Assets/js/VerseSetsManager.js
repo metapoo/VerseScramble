@@ -43,9 +43,14 @@ function ShowVerses() {
 	var verseButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vButtonTransform : RectTransform = verseButton.GetComponent(RectTransform);
 	var rowHeight = vButtonTransform.sizeDelta.y;
+	var children : Array = verseScrollContent.GetComponentsInChildren(VerseButton);
+	for (var i=0;i<children.length;i++) {
+		var vButton : VerseButton = children[i];
+		Destroy(vButton.gameObject);
+	}
+	verseScrollContent.DetachChildren();
 	
-		
-	for (var i=0;i<verses.length;i++) {
+	for ( i=0;i<verses.length;i++) {
 		var verse: Verse = verses[i];
 		clone = Instantiate(verseButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerse(verse);
@@ -53,12 +58,16 @@ function ShowVerses() {
 		
 		var rt = clone.GetComponent(RectTransform);
 		
-		rt.anchoredPosition.x = rowPadding;
+		
+		rt.anchoredPosition.x = 0;
 		rt.anchoredPosition.y = -i*(rowHeight + rowPadding) - rowPadding;	
 	}
 	
 	verseScrollContent.sizeDelta.y = verses.length*(rowHeight+rowPadding);
-
+	
+	yield WaitForSeconds(0);
+	verseScrollContent.anchoredPosition.y = 0;
+	
 }
 
 function Start () {
