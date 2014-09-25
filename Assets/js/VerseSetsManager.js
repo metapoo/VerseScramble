@@ -1,10 +1,12 @@
 ﻿#pragma strict
 import UnityEngine.UI;
 
-public var scrollContent : RectTransform;
-public var scrollBar : RectTransform;
+public var verseSetScrollContent : RectTransform;
+public var verseScrollContent : RectTransform;
 public var verseManager : VerseManager;
 public var verseSetButton : VerseSetButton;
+public var verseButton : VerseButton;
+public var rowPadding : float = 15;
 
 function ShowVerseSets() {
 	var versesets = verseManager.versesets;
@@ -12,37 +14,55 @@ function ShowVerseSets() {
 	var firstButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
-	
-	var padding = 15;
 	var rowHeight = vsButtonTransform.sizeDelta.y;
-	
 
 	for (var i=0;i<versesets.length;i++) {
 		var verseset : VerseSet = versesets[i];
 		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerseSet(verseset);
-		clone.AddToScrollView(scrollContent, i);
+		clone.AddToScrollView(verseSetScrollContent, i);
 		
 		if (i == 0) firstButton = clone;
 		
 		var rt = clone.GetComponent(RectTransform);
 		
-		rt.anchoredPosition.x = padding;
-		rt.anchoredPosition.y = -i*(rowHeight + padding) - padding;	
+		rt.anchoredPosition.x = rowPadding;
+		rt.anchoredPosition.y = -i*(rowHeight + rowPadding) - rowPadding;	
 	}
 	
-	scrollContent.sizeDelta.y = versesets.length*(rowHeight+padding);
-	
-	var scrollView = scrollContent.parent.GetComponent(RectTransform);
+	verseSetScrollContent.sizeDelta.y = versesets.length*(rowHeight+rowPadding);
 	
 	if (firstButton != null) {
 		firstButton.HandleOnClick();
 	}
 }
 
+function ShowVerses() {
+	var verses = verseManager.GetCurrentVerses();
+	var clone : VerseButton;
+	var verseButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
+	var vButtonTransform : RectTransform = verseButton.GetComponent(RectTransform);
+	var rowHeight = vButtonTransform.sizeDelta.y;
+	
+		
+	for (var i=0;i<verses.length;i++) {
+		var verse: Verse = verses[i];
+		clone = Instantiate(verseButton, Vector3.zero, Quaternion.identity);
+		clone.SetVerse(verse);
+		clone.AddToScrollView(verseScrollContent, i);
+		
+		var rt = clone.GetComponent(RectTransform);
+		
+		rt.anchoredPosition.x = rowPadding;
+		rt.anchoredPosition.y = -i*(rowHeight + rowPadding) - rowPadding;	
+	}
+	
+	verseScrollContent.sizeDelta.y = verses.length*(rowHeight+rowPadding);
+
+}
+
 function Start () {
 	verseManager.LoadVerses();
-	
 	ShowVerseSets();
 }
 
