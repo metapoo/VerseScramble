@@ -94,18 +94,19 @@ function SetBlockLength(l : float, h : float) {
 	
 	for (var el in elements) {
 		el.transform.localScale = Vector3.one;
-	}
+	}	
 	
-	var padding = bgLeft.bounds.size.x + bgRight.bounds.size.y;
-	l -= padding;
-	var size : Vector3 = bgMiddle.renderer.bounds.size;
+	var msize : Vector3 = bgMiddle.renderer.bounds.size;
 	
-	var yScale = h / size.y;
-	var xScale = l / size.x;
+	var yScale = h / msize.y;
+	var xScale = l / msize.x;
+	
 	bgMiddle.transform.localScale = Vector3(xScale, yScale, 1.0f);
 	bgMiddle.transform.localPosition = Vector3(0,0,0);
+	
 	bgLeft.transform.localScale = Vector3(yScale, yScale, 1.0f);
 	bgLeft.transform.localPosition = Vector3(-l*0.5f,0,0.0f);
+	
 	bgRight.transform.localScale = Vector3(yScale, yScale, 1.0f);
 	bgRight.transform.localPosition = Vector3(l*0.5f,0,0.0f);
 	
@@ -141,7 +142,7 @@ function ShrinkLeftEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-0.5f*dw*f,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1.0f*dw*f,0,0), duration);
 		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
@@ -170,7 +171,7 @@ function ShrinkRightEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*0.5f*f,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*1.0f*f,0,0), duration);
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
@@ -217,12 +218,13 @@ function getFontSize(){
 function ResetBubble() {
 	var oldRotation = transform.rotation;
 	transform.rotation = Quaternion.identity;
-	var size = label.renderer.bounds.size;
-	var textWidth = size.x;
-	var textHeight = size.y;
-	var padding = new Vector2(0.5,0.35);
-	var l = textWidth + padding.x;
-	var h = textHeight + padding.y;
+	var lsize = label.renderer.bounds.size;
+	var textWidth : float = lsize.x;
+	var textHeight : float  = lsize.y;
+	var padding = new Vector2(0.0,0.35);
+	var l : float= textWidth + padding.x;
+	var h : float = textHeight + padding.y;
+	
 	SetBlockLength(l, h);
 	transform.rotation = oldRotation;
 }
