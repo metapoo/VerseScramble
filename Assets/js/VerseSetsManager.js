@@ -11,10 +11,11 @@ public var rowPadding : float = 15;
 function ShowVerseSets() {
 	var versesets = verseManager.versesets;
 	var clone : VerseSetButton;
-	var firstButton : VerseSetButton = null;
+	var currentButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
 	var rowHeight = vsButtonTransform.sizeDelta.y;
+	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
 
 	for (var i=0;i<versesets.length;i++) {
 		var verseset : VerseSet = versesets[i];
@@ -22,7 +23,7 @@ function ShowVerseSets() {
 		clone.SetVerseSet(verseset);
 		clone.AddToScrollView(verseSetScrollContent, i);
 		
-		if (i == 0) firstButton = clone;
+		if (Object.ReferenceEquals(verseset, currentVerseSet)) currentButton = clone;
 		
 		var rt = clone.GetComponent(RectTransform);
 		
@@ -32,8 +33,8 @@ function ShowVerseSets() {
 	
 	verseSetScrollContent.sizeDelta.y = versesets.length*(rowHeight+rowPadding);
 	
-	if (firstButton != null) {
-		firstButton.HandleOnClick();
+	if (currentButton != null) {
+		currentButton.HandleOnClick();
 	}
 }
 
