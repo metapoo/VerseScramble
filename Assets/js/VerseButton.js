@@ -13,6 +13,19 @@ function Awake() {
 	verseManager = GameObject.FindObjectOfType(VerseManager);
 }
 
+function GetColorForDifficulty(difficultyInt : int) {
+	switch(difficultyInt) {
+		case 1:
+			return new Color(0.5f,1.0f,0.5f,1.0f);
+		case 2:
+			return Color(1.0f,1.0f,0.5f);
+		case 3:
+			return Color(1.0f,0.5f,0.5f);
+		default:
+			return Color.white;	
+	}
+}
+
 function SetVerse(v : Verse) {
 	verse = v;
 	
@@ -24,12 +37,14 @@ function SetVerse(v : Verse) {
 			TextManager.GetText("Play Challenge (All Verses)"),
 			TextManager.GetText("high"),
 			highScore); //this is what will be written in the rows
-
+		
 	} else {
 		highScore = verse.GetMetadata()["high_score"];
 	
 		label.text = String.Format("{0} (high: {1})", verse.reference, 
 		highScore);
+		var verseDifficulty : int = v.GetMetadata()["difficulty"];
+		button.colors.normalColor = GetColorForDifficulty(verseDifficulty);
 	}
 }
 
