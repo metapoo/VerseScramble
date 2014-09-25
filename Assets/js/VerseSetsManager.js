@@ -35,6 +35,12 @@ function ShowVerseSets() {
 	
 	if (currentButton != null) {
 		currentButton.HandleOnClick();
+		yield WaitForSeconds(0.01f);
+		
+		// maintain scroll position from previous when loading menu again from beginning
+		var y : float = PlayerPrefs.GetInt("verse_scroll_content_anchored_y",0);
+		verseScrollContent.anchoredPosition.y = y;
+
 	}
 }
 

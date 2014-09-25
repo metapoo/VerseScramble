@@ -5,6 +5,7 @@ public var verse : Verse;
 public var label : Text;
 public var verseIndex : int;
 public var verseManager : VerseManager;
+public var parentScrollContent : RectTransform;
 
 function Start () {
 	button = GetComponent(Button);
@@ -27,6 +28,8 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 	labelTransform.offsetMin.y = 0;
 	labelTransform.offsetMax.x = 0;
 	labelTransform.offsetMax.y = 0;
+	
+	parentScrollContent = scrollContent;
 }
 
 function  HandleOnClick() {
@@ -34,6 +37,8 @@ function  HandleOnClick() {
 	verseManager.verseIndex = verseIndex;
 	verseManager.Save();
 	GameManager.SetChallengeModeEnabled(false);
+	PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
+						parentScrollContent.anchoredPosition.y);
 	Application.LoadLevel("scramble");
 }
 
