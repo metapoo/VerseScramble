@@ -226,7 +226,7 @@ class UpdateVerseSetHandler(BaseHandler):
                          "version":version})
 
         if commentary is not None:
-            verseset['commentary'] = commentary
+            verseset.set_commentary_text(commentary)
 
         verseset.save()
         self.redirect(verseset.url())

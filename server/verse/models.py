@@ -10,7 +10,16 @@ class Version(BaseModel):
             Index("name",unique=False),
             Index("language",unique=False)
         )
-        
+
+class Commentary(BaseModel):
+    collection = "commentary"
+    
+    def __new__(cls, *args, **kwargs):
+        new_instance = BaseModel.__new__(cls, *args, **kwargs)
+        cls.register_foreign_key(VerseSet)
+        return new_instance
+
+
 class VerseSet(BaseModel):
     class Meta:
         collection = "verseset"
@@ -25,8 +34,30 @@ class VerseSet(BaseModel):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(User)
         cls.register_foreign_key(Verse,one_to_many=True)
+        cls.register_foreign_key(Commentary)
         return new_instance
 
+    def set_commentary_text(self, text):
+        commentary = self.commentary()
+        if commentary is None:
+            if text == "":
+                return
+            commentary = Commentary(verseset_id=self._id)
+
+        commentary["text"] = text
+        commentary["verseset_id"] = self._id
+        commentary.save()
+        if self.get("commentary_id") != commentary._id:
+            self["commentary_id"] = commentary._id
+            self.save()
+    
+    def get_commentary_text(self):
+        if self.has_key("commentary_id"):
+            commentary = self.commentary()
+            if commentary:
+                return commentary["text"]
+        return ""
+    
     def url(self):
         return "/verseset/show/%s" % str(self._id)
 
@@ -48,7 +79,10 @@ class VerseSet(BaseModel):
     def remove(self, *args, **kwargs):
         for verse in self.verses():
             verse.remove()
-
+        
+        commentary = self.commentary()
+        if commentary:
+            commentary.remove()
         super(VerseSet, self).remove(*args, **kwargs)
 
 class Verse(BaseModel):

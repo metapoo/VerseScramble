@@ -22,9 +22,7 @@
 </div>
 
 <div class="pad_bottom">
-{% if verseset.has_key('commentary') %}
-{% raw verseset['commentary'] %}
-{% end %}
+{% raw verseset.get_commentary_text() %}
 </div>
 
 <table class="pure-table pure-table-bordered">
