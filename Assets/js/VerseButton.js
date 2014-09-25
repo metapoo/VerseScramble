@@ -7,16 +7,30 @@ public var verseIndex : int;
 public var verseManager : VerseManager;
 public var parentScrollContent : RectTransform;
 
-function Start () {
+function Awake() {
 	button = GetComponent(Button);
 	button.onClick.AddListener(HandleOnClick);
+	verseManager = GameObject.FindObjectOfType(VerseManager);
 }
 
-function SetVerse(verse : Verse) {
-	verse = verse;
+function SetVerse(v : Verse) {
+	verse = v;
 	
-	label.text = String.Format("{0} (high: {1})", verse.reference, 
-	verse.GetMetadata()["high_score"]);
+	var highScore;
+	
+	if (Object.ReferenceEquals(v,null)) {
+		highScore = verseManager.GetCurrentVerseSet().GetMetadata()["high_score"];
+		label.text = String.Format("{0} - {1}: {2}",
+			TextManager.GetText("Play Challenge (All Verses)"),
+			TextManager.GetText("high"),
+			highScore); //this is what will be written in the rows
+
+	} else {
+		highScore = verse.GetMetadata()["high_score"];
+	
+		label.text = String.Format("{0} (high: {1})", verse.reference, 
+		highScore);
+	}
 }
 
 function AddToScrollView(scrollContent : RectTransform, index : int) {
@@ -33,12 +47,23 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 }
 
 function  HandleOnClick() {
-	verseManager = GameObject.FindObjectOfType(VerseManager);
+	if (Object.ReferenceEquals(verse,null)) {
+		StartChallenge();
+		return;
+	}
 	verseManager.verseIndex = verseIndex;
 	verseManager.Save();
 	GameManager.SetChallengeModeEnabled(false);
 	PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
 						parentScrollContent.anchoredPosition.y);
+	Application.LoadLevel("scramble");
+}
+
+
+function StartChallenge() {
+	verseManager.verseIndex = 0;
+	verseManager.Save();
+	GameManager.SetChallengeModeEnabled(true);
 	Application.LoadLevel("scramble");
 }
 

@@ -57,21 +57,23 @@ function ShowVerses() {
 	}
 	verseScrollContent.DetachChildren();
 	
-	for ( i=0;i<verses.length;i++) {
-		var verse: Verse = verses[i];
+	var addVerseButton = function(verse : Verse, index: int) {
 		clone = Instantiate(verseButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerse(verse);
-		clone.verseIndex = i;
-		clone.AddToScrollView(verseScrollContent, i);
+		clone.verseIndex = index;
+		clone.AddToScrollView(verseScrollContent, index);
 		
 		var rt = clone.GetComponent(RectTransform);
-		
-		
 		rt.anchoredPosition.x = 0;
-		rt.anchoredPosition.y = -i*(rowHeight + rowPadding) - rowPadding;	
-	}
+		rt.anchoredPosition.y = -index*(rowHeight + rowPadding) - rowPadding;	
+	};
 	
-	verseScrollContent.sizeDelta.y = verses.length*(rowHeight+rowPadding);
+	for ( i=0;i<verses.length;i++) {
+		var verse : Verse = verses[i];
+		addVerseButton(verse,i);
+	}
+	addVerseButton(null,i);
+	verseScrollContent.sizeDelta.y = (verses.length+1)*(rowHeight+rowPadding);
 	
 	yield WaitForSeconds(0);
 	verseScrollContent.anchoredPosition.y = 0;
