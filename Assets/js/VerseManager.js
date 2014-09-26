@@ -16,7 +16,7 @@ var totalScore : int = -1;
 
 static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
-static var currentView : String;
+static var currentView : String = null;
 static var currentVerseSet : VerseSet = null;
 static var verseIndex = 0;
 static var rightToLeft : boolean = false;
@@ -89,6 +89,7 @@ static function GetCurrentVerseSet() : VerseSet {
 }
 
 static function SetCurrentVerseSet(verseset : VerseSet) {
+Debug.Log("current verse set = " + verseset.SaveKey());
 	currentVerseSet = verseset;
 	var language = GetLanguage();
 	if (verseset.language != null) {
@@ -653,7 +654,10 @@ function Load () {
 }
 
 function Start () {
-	SetCurrentView("history");
+	if (currentView == null) {
+		SetCurrentView("history");
+	}
+	
 	LoadVerses();
 	Load();
 }
