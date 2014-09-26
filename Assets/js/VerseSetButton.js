@@ -41,7 +41,7 @@ function SetVerseSet(vs : VerseSet) {
 
 function Highlight() {
 	var rt : RectTransform = GetComponent(RectTransform);	
-	Debug.Log("selected button = " + selectedButton);
+	//Debug.Log("selected button = " + selectedButton);
 	if (selectedButton != null) {
 		selectedButton.UnHighlight();
 	}

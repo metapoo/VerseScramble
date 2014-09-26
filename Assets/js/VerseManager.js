@@ -87,7 +87,7 @@ static function SetCurrentVerseSet(verseset : VerseSet) {
 	} else {
 		SetVerseLanguage(language);
 	}
-	Debug.Log("verseset set to " + verseset.SaveKey());
+	//Debug.Log("verseset set to " + verseset.SaveKey());
 	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
@@ -436,7 +436,9 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 		
 		if (verseset.isOnline && (vs.onlineId == verseset.onlineId)) {
 			versesets[i] = verseset;
-			Destroy(vs);
+			if (!(Object.ReferenceEquals(vs, verseset))) {
+				Destroy(vs);
+			}
 			return verseset;
 		}
 	}
@@ -486,7 +488,7 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		var version = verseData["version"];
 		var versesetName = verseData["verseset_name"];
 	
-		var verseset : VerseSet = new VerseSet(versesetId, versesetName, language, version);
+		var verseset : VerseSet = VerseSet.GetVerseSet(versesetId, versesetName, language, version);
 		AddOnlineVerseSet(verseset);
 	
 		var verse : Verse = new Verse(verseId, reference, text, version, verseset);
@@ -513,8 +515,8 @@ static function LoadVerseSetData(versesetData : Hashtable) : VerseSet {
 	var setname : String = versesetData["name"];
 	var versesetId : String = versesetData["_id"];
 	var verseCount = versesetData["verse_count"];
-	Debug.Log("setname = " + setname + " verse count = " + verseCount);
-	var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
+	//Debug.Log("setname = " + setname + " verse count = " + verseCount);
+	var verseset : VerseSet = VerseSet.GetVerseSet(versesetId, setname, language, version);
 	verseset.verseCount = verseCount;
 	AddOnlineVerseSet(verseset);
 	return verseset;
