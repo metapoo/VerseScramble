@@ -527,7 +527,6 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		var verseset : VerseSet = LoadVerseSetData(versesetData);
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
-	
 		verseset.LoadVersesData(versesData);
 		verseIndex = verseset.IndexOfVerseId(verseId);
 		if (verseIndex < 0) verseIndex = 0;

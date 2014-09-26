@@ -86,7 +86,7 @@ function ApiDomain() : String {
 	if (options.ContainsKey("api_domain")) {
 		return options["api_domain"];
 	} else {
-		return "dev.verserain.com";
+		return "www.verserain.com";
 	}
 }
 

@@ -199,7 +199,7 @@ function DoVerseSets() {
 	var catHeaderRect = Rect(padding,padding,catWidth,rowHeight);
 	GUI.Label(catHeaderRect, TextManager.GetText("Verse Sets"), headerStyle);
 	
-	var versesets = verseManager.versesets;
+	var versesets = verseManager.GetCurrentVerseSets();
 	currentVerseSet = verseManager.GetCurrentVerseSet();
 	
 	for (var i=0;i<versesets.length;i++) {
