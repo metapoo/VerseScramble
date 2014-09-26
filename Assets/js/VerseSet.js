@@ -7,7 +7,7 @@ public class VerseSet extends MonoBehaviour
 	public var isOnline : boolean;
 	public var version : String;
 	public var playCount : int;
-		
+	
 	public function VerseSet(onlineId_ : String, setname_ : String, language_ : String, version_: String) {
 		onlineId = onlineId_;
 		isOnline = true;	
@@ -55,6 +55,38 @@ public class VerseSet extends MonoBehaviour
 		metadata["high_score"] = 0;
 		metadata["difficulty"] = parseInt(Difficulty.Easy);
 		return metadata;
+	}
+	
+	public function UnloadVerses() {
+		for (var i=0;i<verses.length;i++) {
+			Destroy(verses[i]);
+		}
+		verses.Clear();
+	}
+	
+	public function LoadVersesData(versesData : Array) {
+		UnloadVerses();
+		
+		for (var i=0;i<versesData.length;i++) {
+			var verseData : Hashtable = versesData[i];
+			var verseId_ = verseData["_id"];
+			var reference = verseData["reference"];
+			var text = verseData["text"];
+			version = verseData["version"];
+			var verse : Verse = new Verse(verseId_, reference, text, version, this);
+			AddVerse(verse);
+			
+		}
+	}
+	
+	public function IndexOfVerseId(verseId : String) {
+		for (var i=0;i<verses.length;i++) {
+			var verse : Verse = verses[i];
+			if (verse.SaveKey() == verseId) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	public function SaveMetadata(metadata : Hashtable) {

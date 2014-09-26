@@ -101,11 +101,11 @@ function Start () {
     	"u.start_verserain();"
 		);
 	}
-	
-//	SetApiDomain("www.verserain.com");
-	//SetVerseSetId("540bb0cd3f7ab072f29fdefb");
-//    SetVerseId("540bbe713f7ab072f29fdf0f");
-
+	/*
+	SetApiDomain("www.verserain.com");
+	SetVerseSetId("540a149f3f7ab072f26e3489");
+    SetVerseId("540a180c3f7ab072f26e3495");
+*/
 }
 
 function Update () {

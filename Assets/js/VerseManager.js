@@ -510,19 +510,10 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
 	
-		for (var i=0;i<versesData.length;i++) {
-			var verseData : Hashtable = versesData[i];
-			var verseId_ = verseData["_id"];
-			var reference = verseData["reference"];
-			var text = verseData["text"];
-			version = verseData["version"];
-			var verse : Verse = new Verse(verseId_, reference, text, version, verseset);
-			verseset.AddVerse(verse);
-			if (verseId == verseId_) {
-				verseIndex = i;
-				Debug.Log("set verseIndex = " + i);
-			}
-		}
+		verseset.LoadVersesData(versesData);
+		verseIndex = verseset.IndexOfVerseId(verseId);
+		if (verseIndex < 0) verseIndex = 0;
+		
 		GameManager.SetChallengeModeEnabled((verseId == null));
 		loaded = true;
 		UserSession.GetUserSession().ClearOptions();
