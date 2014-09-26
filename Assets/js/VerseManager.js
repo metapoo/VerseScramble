@@ -44,7 +44,18 @@ function Reload() {
 	Start();
 }
 
-function GetCurrentVerseSet() : VerseSet {
+static function SetCurrentView(view : String) {
+	currentView = view;
+	verseIndex = 0;
+	var versesets : Array = GetCurrentVerseSets();
+	if (versesets.length > 0) {
+		currentVerseSet = versesets[0];
+	} else {
+		currentVerseSet = null;
+	}
+}
+
+static function GetCurrentVerseSet() : VerseSet {
 
 	if (!Object.ReferenceEquals(currentVerseSet, null)) {
 		//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
@@ -80,15 +91,16 @@ static function SetCurrentVerseSet(verseset : VerseSet) {
 	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
-function GetCurrentVerses() : Array {
+static function GetCurrentVerses() : Array {
 	var vs : VerseSet = GetCurrentVerseSet();
+	
 	if (Object.ReferenceEquals(vs, null)) {
 		return new Array();
 	}
 	return vs.verses;
 }
 
-function GetCurrentVerse() : Verse {
+static function GetCurrentVerse() : Verse {
 	var verses = GetCurrentVerses();
 	
 	if (verseIndex >= verses.length) {
@@ -102,7 +114,7 @@ function GetCurrentVerse() : Verse {
 	return verses[verseIndex];
 }
 
-function GetCurrentReference() : String {
+static function GetCurrentReference() : String {
 	var verse : Verse = GetCurrentVerse();
 	if (verse != null) {
 		return verse.reference;
@@ -611,11 +623,11 @@ function LoadVersesLocally() {
   	loaded = true;
 }
 
-function GetCurrentVerseSets() : Array {
+static function GetCurrentVerseSets() : Array {
 	return GetVerseSets(currentView);
 }
 
-function GetVerseSets(view : String) : Array {
+static function GetVerseSets(view : String) : Array {
 	if (versesetsByView.ContainsKey(view)) {
 		return versesetsByView[view];
 	}

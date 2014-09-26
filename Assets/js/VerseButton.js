@@ -32,7 +32,9 @@ function SetVerse(v : Verse) {
 	var highScore;
 	
 	if (Object.ReferenceEquals(v,null)) {
-		highScore = verseManager.GetCurrentVerseSet().GetMetadata()["high_score"];
+		var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+		if (Object.ReferenceEquals(verseset, null)) return;
+		highScore = verseset.GetMetadata()["high_score"];
 		label.text = String.Format("{0} - {1}: {2}",
 			TextManager.GetText("Play Challenge (All Verses)"),
 			TextManager.GetText("high"),

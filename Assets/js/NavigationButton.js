@@ -2,20 +2,27 @@
 
 public var button : Button;
 public var label : Text;
+public var view : String;
+public var verseSetsManager : VerseSetsManager;
+
 private var normalColor : Color;
 static var selectedButton : NavigationButton = null;
 
 function Awake() {
 	normalColor = button.colors.normalColor;
-}
-
-function Start () {
+	verseSetsManager = GameObject.FindObjectOfType(VerseSetsManager);
 	button = GetComponent(Button);
 	button.onClick.AddListener(HandleOnClick);
 }
 
+function Start () {
+}
+
 function HandleOnClick() {
 	Highlight();
+	VerseManager.SetCurrentView(view);
+	verseSetsManager.ShowVerseSets();
+	verseSetsManager.ShowVerses();
 }
 
 function Highlight() {
