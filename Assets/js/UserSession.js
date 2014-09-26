@@ -102,8 +102,10 @@ function Start () {
 		);
 	}
 	
-	//SetApiDomain("www.verserain.com");
-    //SetVerseId("540bbe713f7ab072f29fdf0f");
+//	SetApiDomain("www.verserain.com");
+	//SetVerseSetId("540bb0cd3f7ab072f29fdefb");
+//    SetVerseId("540bbe713f7ab072f29fdf0f");
+
 }
 
 function Update () {

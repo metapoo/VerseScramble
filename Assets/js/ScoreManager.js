@@ -186,7 +186,7 @@ function CountTimeLeft() {
 
 function HandleFinished() {
 	if (gameManager.DidRanOutOfTime) {
-		gameManager.ShowEndOfGameOptions();
+		CountTimeLeft();
 		return;
 	}
 	
@@ -202,7 +202,6 @@ function WasVerseMastered() {
 
 function HandleCountTimeLeftFinished() {
 	
-
 	if (gameManager.GetChallengeModeEnabled()) {
 		if (score > highScore) {
 			highScore = score;
@@ -271,10 +270,12 @@ function Start() {
 
 function Update () {
 	if (!gameManager.finished && !gameManager.showingSolution) {
+		
 		if (gameManager.gameStarted) {
 			totalElapsedTime = Time.time - startTime;
 			if (!gameManager.DidRanOutOfTime && (timeLeft <= 0)) {
 				gameManager.HandleRanOutOfTime();
+				
 			}
 		} else {
 			totalElapsedTime = 0;

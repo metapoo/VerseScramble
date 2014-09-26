@@ -45,7 +45,6 @@ function SetProgress(p : float) {
 	rectTransform.sizeDelta = newSize;
 	
 	if (IsRed()) {
-		
 		SetColor(Color.red);
 	} else if (IsYellow()) {
 		SetColor(Color.yellow);
