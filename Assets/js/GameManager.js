@@ -640,6 +640,8 @@ function SetupVerse() {
 	numWordsReleased = 0;	
 	var numWordsActive = 0;
 	var groupSize = GetGroupSize();
+
+	var dt = 0.2f;
 	
 	while (numWordsReleased < wordLabels.length) {
 		numWordsActive = (numWordsReleased - wordIndex);
@@ -654,12 +656,11 @@ function SetupVerse() {
 		numWordsReleased = releaseWords(numWordsReleased, 1);
 		numWordsActive = (numWordsReleased - wordIndex);
 		
-		yield WaitForSeconds(0.1f);
+		yield WaitForSeconds(dt);
 
-		if (!gameStarted  && ((numWordsReleased > groupSize) ||
-		    (numWordsReleased >= wordLabels.length)))
+		if (!gameStarted  && ((numWordsReleased >= 2*groupSize) ||
+		    (numWordsReleased >= wordLabels.length) || (numWordsReleased == maxWordsActive) ))
 		{
-			yield WaitForSeconds(2.0f);
 			gameStarted = true;
 			scoreManager.resetTime();
 		}
