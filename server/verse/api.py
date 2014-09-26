@@ -18,11 +18,12 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         language_code = self.get_argument("language_code", "ALL")
         page = self.get_int_argument("page",1)
         per_page = 20
-        
-        if language_code == "ALL":
-            versesets = VerseSet.collection.find()
-        else:
-            versesets = VerseSet.collection.find({"language":language_code})
+        args = {"verse_count":{"$gt":0}}
+
+        if language_code != "ALL":
+            args.update({"language":language_code})
+
+        versesets = VerseSet.collection.find(args)
 
         if order_by == "new":
             versesets = versesets.sort("_id",-1)

@@ -30,6 +30,11 @@ class VerseSet(BaseModel):
             Index("user_id",unique=False)
         )
 
+    def json(self):
+        j = super(VerseSet, self).json()
+        j["verse_count"] = self.verse_count()
+        return j
+
     def __new__(cls, *args, **kwargs):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(User)
@@ -74,7 +79,7 @@ class VerseSet(BaseModel):
             self.save()
 
     def verse_count(self):
-        return self.get("verse_count",0)
+        return int(self.get("verse_count",0))
 
     def remove(self, *args, **kwargs):
         for verse in self.verses():
