@@ -5,10 +5,13 @@ public var button : Button;
 public var verseset : VerseSet;
 public var label : Text;
 public var normalColor : Color;
+public var verseSetsManager : VerseSetsManager;
 static var selectedButton : VerseSetButton = null;
 
 function Awake() {
 	normalColor = button.colors.normalColor;
+	verseSetsManager = GameObject.Find("VerseSetsManager").GetComponent(VerseSetsManager);
+		
 }
 
 function Start () {
@@ -53,13 +56,27 @@ function UnHighlight() {
 	
 }
 
+function HandleApiVerseSetShow(resultData : Hashtable) {
+	var versesetData : Hashtable = resultData["verseset"];
+	var versesData : Array = resultData["verses"];
+	VerseManager.LoadVerseSetData(versesetData);
+	verseset.LoadVersesData(versesData);
+	verseSetsManager.ShowVerses();
+}
+
 function HandleOnClick() {
 	VerseManager.verseIndex = 0;
 	VerseManager.SetCurrentVerseSet(verseset);
 	Highlight();
 	
-	var manager : VerseSetsManager = GameObject.Find("VerseSetsManager").GetComponent(VerseSetsManager);
-	manager.ShowVerses();
+	if (verseset.isOnline && (verseset.verses.length == 0)) {
+		var apiManager : ApiManager = ApiManager.GetInstance();
+		apiManager.CallApi("verseset/show",
+		new Hashtable({"verseset_id":verseset.onlineId}),
+		HandleApiVerseSetShow);
+	} else {
+		verseSetsManager.ShowVerses();
+	}
 }
 
 function Update () {

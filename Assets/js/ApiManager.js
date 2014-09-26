@@ -35,7 +35,7 @@ class ApiManager extends MonoBehaviour {
     	
     	for (var key:String in arguments.Keys) {
     		i += 1;
-    		var val : String = arguments[key];
+    		var val = arguments[key];
     		serializedArguments += (key+"="+val);
     		if (i < arguments.Count) {
     			serializedArguments += "&";
@@ -71,7 +71,7 @@ class ApiManager extends MonoBehaviour {
 			apiDomain = us.ApiDomain();
 			return apiDomain;
 		} else {
-			apiDomain = "dev.verserain.com";
+			apiDomain = "www.verserain.com";
 			return apiDomain;
 		}
 	}

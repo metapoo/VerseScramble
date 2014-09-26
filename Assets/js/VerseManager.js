@@ -428,7 +428,7 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 	SetMasteredVerses(difficulty, masteredVerses);
 }
 
-function AddOnlineVerseSet(verseset : VerseSet) {
+static function AddOnlineVerseSet(verseset : VerseSet) {
 	var versesets : Array = GetCurrentVerseSets();
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.length;i++) {
@@ -460,16 +460,6 @@ static function CheckRightToLeft(language : String) {
 		}
 	}
 	rightToLeft = false;
-}
-
-function GetApiDomain() {
-	var us : UserSession = UserSession.GetUserSession();
-	if (us) {
-		apiDomain = us.ApiDomain();
-		return apiDomain;
-	} else {
-		return "dev.verserain.com";
-	}
 }
 
 function LoadOnlineVerse(verseId : String) {
@@ -516,16 +506,25 @@ function LoadOnlineVerseSet(versesetId : String) {
 	LoadOnlineVerseSet(versesetId, null);
 }
 
+static function LoadVerseSetData(versesetData : Hashtable) : VerseSet {
+	var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
+	var language : String = versesetData["language"];
+	var version : String = versesetData["version"];
+	var setname : String = versesetData["name"];
+	var versesetId : String = versesetData["_id"];
+	var verseCount = versesetData["verse_count"];
+	Debug.Log("setname = " + setname + " verse count = " + verseCount);
+	var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
+	verseset.verseCount = verseCount;
+	AddOnlineVerseSet(verseset);
+	return verseset;
+}
+
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	var handleApi : Function = function(resultData : Hashtable) {
 		var versesetData : Hashtable = resultData["verseset"];
-		var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
-		var language = versesetData["language"];
-		var version = versesetData["version"];
-		var setname = versesetData["name"];
 		var versesData : Array = resultData["verses"];
-		var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
-		AddOnlineVerseSet(verseset);
+		var verseset : VerseSet = LoadVerseSetData(versesetData);
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
 	

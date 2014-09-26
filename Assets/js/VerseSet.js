@@ -9,6 +9,11 @@ public class VerseSet extends MonoBehaviour
 	public var version : String;
 	public var playCount : int;
 	
+	public function GetVerseCount() {
+		if (isOnline) return verseCount;
+		return verses.length;
+	}
+	
 	public function VerseSet(onlineId_ : String, setname_ : String, language_ : String, version_: String) {
 		onlineId = onlineId_;
 		isOnline = true;	
