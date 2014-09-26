@@ -1,10 +1,12 @@
 fileFormatVersion: 2
-guid: c0054744b91d5478189b4bd5a93ef623
+guid: 4dd268ae7271a4f0e8076c857ca10476
 TextureImporter:
   fileIDToRecycleName:
-    21300000: wordbubble_middle
-    21300002: wordbubble_right
-    21300004: wordbubble_left
+    21300000: wordbubble2_left
+    21300002: wordbubble2_middle
+    21300004: wordbubble2_right
+    21300006: wordbubble2_all
+    21300008: wordbubble2_all
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -46,35 +48,45 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: wordbubble_middle
+    - name: wordbubble2_left
       rect:
         serializedVersion: 2
-        x: 3
-        y: 8
-        width: 197
-        height: 54
+        x: 0
+        y: 0
+        width: 52
+        height: 114
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: wordbubble_right
+    - name: wordbubble2_middle
       rect:
         serializedVersion: 2
-        x: 204
-        y: 8
-        width: 23
-        height: 54
-      alignment: 4
-      pivot: {x: 0, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: wordbubble_left
+        x: 94
+        y: 0
+        width: 107
+        height: 114
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 7, z: 0, w: 7}
+    - name: wordbubble2_right
       rect:
         serializedVersion: 2
-        x: 229
-        y: 8
-        width: 23
-        height: 54
-      alignment: 5
-      pivot: {x: 1, y: .5}
+        x: 249
+        y: 1
+        width: 51
+        height: 113
+      alignment: 0
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-  spritePackingTag: 1000
+    - name: wordbubble2_all
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 300
+        height: 114
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 41, y: 41, z: 41, w: 41}
+  spritePackingTag: 1001
   userData: 

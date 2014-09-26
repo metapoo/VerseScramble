@@ -6,9 +6,10 @@ public var gameManager : GameManager;
 public var currentPercentage : float = 0;
 public var targetPercentage : float = 0;
 public var maxLength : float;
+public var healthLabel : Text;
 
-var rectTransform : RectTransform;
-var image : Image;
+public var rectTransform : RectTransform;
+public var image : Image;
 
 function IsEmpty() {
 	return targetPercentage == 0;
@@ -36,6 +37,7 @@ function GetHeight() {
 
 function SetProgress(p : float) {
 	currentPercentage = p;
+	healthLabel.text = String.Format("{0}%", Mathf.RoundToInt(p*100.0));
 	if (p > 1.0f) {
 		p = 1.0f;
 	}
@@ -57,7 +59,7 @@ function SetPercentage(p : float) {
 	targetPercentage = p;
 	var endPercentage = targetPercentage;
 	var startPercentage = currentPercentage;
-	var duration = 0.5f;
+	var duration = 1.0f;
 	var rate = 1.0/duration;
 	var t = 0.0f;
 	while (t < 1.0) {
@@ -69,11 +71,10 @@ function SetPercentage(p : float) {
 		SetProgress(startPercentage + (endPercentage-startPercentage)*t);
 		yield;
 	}
+	SetProgress(endPercentage);
 }
 
 function Start () {
-	rectTransform = GetComponent(RectTransform);
-	image = GetComponent(Image);
 	maxLength = rectTransform.sizeDelta[0];
 }
 

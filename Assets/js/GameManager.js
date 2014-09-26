@@ -47,6 +47,7 @@ private var wordHinted : boolean = false;
 static var currentWord : String;
 static var words : Array = new Array();
 static var wordLabels : Array = new Array();
+static var scrambledWordLabels : Array = new Array();
 static var wordIndex : int;
 static var score = 0;
 static var highScore = 0;
@@ -82,7 +83,7 @@ function OnGUI() {
 function ExitToVerseList() {
 	audio.PlayOneShot(sndSelect, 1.0f);
 	Cleanup();
-	Application.LoadLevel("verselist");
+	Application.LoadLevel("versesets");
 }
 
 function CanShowSolution() {
@@ -269,7 +270,6 @@ function Start() {
 	}
 	Debug.Log("VerseManager.loaded, GameManager starting");
 	
-	TextManager.LoadLanguage(verseManager.GetLanguage());
 	difficulty = verseManager.GetCurrentDifficulty();
 	
 	if (GetChallengeModeEnabled()) {
@@ -545,6 +545,34 @@ function BeginGame() {
 	AnimateIntro();
 }
 
+function scrambleWordLabels() {
+	scrambledWordLabels = new Array();
+	for (var i : int=0;i<wordLabels.length;i++) {
+		scrambledWordLabels.push(wordLabels[i]);
+	}
+	
+	var g = Mathf.RoundToInt(GetGroupSize() * 1.25);
+	if (g >= (maxWordsActive-1)) g = (maxWordsActive-1);
+	
+	var currentIndex : int = scrambledWordLabels.length;
+	var temporaryValue : WordLabel;
+	var randomIndex : int;
+
+  	// While there remain elements to shuffle...
+  	while (0 != currentIndex) {
+
+    	// Pick a remaining element...
+    	randomIndex = (currentIndex - g) + Mathf.Floor(Random.RandomRange(0,1.0f) * g);
+    	if (randomIndex < 0) randomIndex = 0;
+    	currentIndex -= 1;
+
+    	// And swap it with the current element.
+    	temporaryValue = scrambledWordLabels[currentIndex];
+    	scrambledWordLabels[currentIndex] = scrambledWordLabels[randomIndex];
+    	scrambledWordLabels[randomIndex] = temporaryValue;
+  	}
+}
+
 function SetupVerse() {
 	gameStarted = false;
 	showingSolution = false;
@@ -605,29 +633,34 @@ function SetupVerse() {
 		i += 1;
 	}
 	
+	scrambleWordLabels();
+	
 	yield WaitForSeconds(2.5f);
 	
 	numWordsReleased = 0;	
 	var numWordsActive = 0;
 	var groupSize = GetGroupSize();
+
+	var dt = 0.2f;
 	
 	while (numWordsReleased < wordLabels.length) {
 		numWordsActive = (numWordsReleased - wordIndex);
 		Debug.Log("numWordsActive = " + numWordsActive);
 		
 		// don't allow more than maxWordsActive words on screen at the same time
-		while ((numWordsActive + groupSize) > maxWordsActive) {
-			yield WaitForSeconds(0.2f);
+		while (numWordsActive >= maxWordsActive) {
+			yield WaitForSeconds(0.1f);
 			numWordsActive = (numWordsReleased - wordIndex);
 		}		
 		
-		numWordsReleased = releaseWords(numWordsReleased) + 1;
-		yield WaitForSeconds(1.0f);
+		numWordsReleased = releaseWords(numWordsReleased, 1);
+		numWordsActive = (numWordsReleased - wordIndex);
+		
+		yield WaitForSeconds(dt);
 
-		if (!gameStarted  && ((numWordsReleased > groupSize) ||
-		    (numWordsReleased >= wordLabels.length)))
+		if (!gameStarted  && ((numWordsReleased >= 2*groupSize) ||
+		    (numWordsReleased >= wordLabels.length) || (numWordsReleased == maxWordsActive) ))
 		{
-			yield WaitForSeconds(2.0f);
 			gameStarted = true;
 			scoreManager.resetTime();
 		}
@@ -661,25 +694,22 @@ function GetGroupSize() {
 	return groupSize;
 }
 
-function releaseWords(index: int) {
+function releaseWords(index: int, numWords : int) {
  	//Debug.Log("release words index = " + index);
  
-	var groupSize = GetGroupSize();
-	
 	var c : int  = 0;
 	
-	for (var i : int=index;i<wordLabels.length;i++) {
-		var wordObject : WordLabel = wordLabels[i];
+	for (var i : int=index;i<scrambledWordLabels.length;i++) {
+		var wordObject : WordLabel = scrambledWordLabels[i];
 		var h = wordObject.boxCollider2D().size.y;
-
 		wordObject.transform.position.y = screenBounds.y+h*2;
 		wordObject.rigidbody2D.isKinematic = false;
 		c += 1;	
-		if (c == groupSize) {
+		if (c == numWords) {
 			break;
 		}
 	}
-	return i;
+	return i+1;
 }
 
 function StartNextDifficulty() {
