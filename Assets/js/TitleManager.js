@@ -63,7 +63,7 @@ function OnGUI() {
 	
 	if (selected) {
 		audio.PlayOneShot(sndSelect);
-		
+		VerseManager.languageChosen = true;
 		Application.LoadLevel("versesets");
 	}
 	

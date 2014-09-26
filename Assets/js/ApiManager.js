@@ -67,11 +67,11 @@ class ApiManager extends MonoBehaviour {
 		var resultData : Hashtable;
 		
 		if (www.error != null) {
-			Debug.Log(www.error);
-			// todo handle error
 			resultData = GetApiCache(url);
 			if (resultData != null) {
 				handler(resultData);
+			} else {
+				// handle error
 			}
 			return;
 		}

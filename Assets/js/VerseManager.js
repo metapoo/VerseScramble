@@ -9,12 +9,12 @@ var verseTextHE : TextAsset;
 var verseTextKO : TextAsset;
 var verseTextMN : TextAsset;
 var verseTextRU : TextAsset;
-
 var versesetLanguage : String;
 var numVerses = 0;
 var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
+static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
 static var currentView : String = "history";
 static var currentVerseSet : VerseSet = null;
@@ -45,6 +45,9 @@ function Reload() {
 }
 
 static function SetCurrentView(view : String) {
+	if ((view == "new") || (view == "popular")) {
+		view = view+"_"+GetLanguage();
+	}
 	currentView = view;
 	verseIndex = 0;
 	var versesets : Array = GetCurrentVerseSets();
@@ -189,7 +192,8 @@ static function SetVerseLanguage(language : String) {
 	var gameLanguage = GetLanguage();
 	var defaultLanguage = "en";
 	// try to load game language as verse language if available
-	if (gameLanguage != language) {
+	// and user never "set the language" 
+	if ((gameLanguage != language) && (!languageChosen)) {
 		var success = TextManager.LoadLanguage(language);
 		if (!success) {
 			TextManager.LoadLanguage(defaultLanguage);
