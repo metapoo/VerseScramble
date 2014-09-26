@@ -290,15 +290,18 @@ class ListVerseSetHandler(BaseHandler):
         if language_code is None:
             language_code = self.get_cookie("language_code","en")
 
+        args = {"verse_count":{"$gt":0}}
+
         if user and (option == "profile"):            
             selected_nav = "my sets"
             versesets = user.versesets()
         elif (option in ("new","popular")):
             selected_nav = "verse sets"
             if language_code == "ALL":
-                versesets = VerseSet.collection.find()
-            else:
-                versesets = VerseSet.collection.find({"language":language_code})
+                args.update({"language":language_code})
+
+            versesets = VerseSet.collection.find(args)
+
             if option == "new":
                 versesets = versesets.sort("_id",-1)
             elif option == "popular":
