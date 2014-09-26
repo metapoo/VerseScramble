@@ -4,6 +4,7 @@ public class VerseSet extends MonoBehaviour
 	public var setname : String;
 	public var language : String;
 	public var verses : Array;
+	public var verseCount : int;
 	public var isOnline : boolean;
 	public var version : String;
 	public var playCount : int;
@@ -74,9 +75,9 @@ public class VerseSet extends MonoBehaviour
 			var text = verseData["text"];
 			version = verseData["version"];
 			var verse : Verse = new Verse(verseId_, reference, text, version, this);
-			AddVerse(verse);
-			
+			AddVerse(verse);	
 		}
+		verseCount = versesData.length;
 	}
 	
 	public function IndexOfVerseId(verseId : String) {

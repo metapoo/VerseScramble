@@ -15,20 +15,25 @@ var numVerses = 0;
 var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
+static var versesetsByView : Hashtable = new Hashtable();
+static var currentView : String = "history";
 static var currentVerseSet : VerseSet = null;
 static var verseIndex = 0;
 static var rightToLeft : boolean = false;
-static var versesets : Array = new Array();
 static var loaded : boolean = false;
 static var offlineVersesLoaded : boolean = false;
 
 private static var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
 static function Unload() {
-	for (var vs : VerseSet in versesets) {
-		Destroy(vs);
+	for (var view in versesetsByView.Keys) {
+		var versesets : Array = versesetsByView[view];
+		
+		for (var vs : VerseSet in versesets) {
+			Destroy(vs);
+		}
+		versesets.Clear();
 	}
-	versesets.Clear();
 	loaded = false;
 	offlineVersesLoaded = false;
 
@@ -45,7 +50,7 @@ function GetCurrentVerseSet() : VerseSet {
 		//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
 		return currentVerseSet;
  	}
- 	
+	var versesets : Array = GetCurrentVerseSets();
 	if (versesets.length == 0) return null;
 	var verseset : VerseSet = versesets[0];
 	
@@ -412,6 +417,7 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 }
 
 function AddOnlineVerseSet(verseset : VerseSet) {
+	var versesets : Array = GetCurrentVerseSets();
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.length;i++) {
 		var vs : VerseSet = versesets[i];
@@ -427,6 +433,7 @@ function AddOnlineVerseSet(verseset : VerseSet) {
 }
 
 function CreateVerseSet(name : String) {
+	var versesets : Array = GetCurrentVerseSets();
 	var vs : VerseSet = new VerseSet(name);
 	vs.language = GetLanguage();
 	versesets.push(vs);
@@ -604,7 +611,20 @@ function LoadVersesLocally() {
   	loaded = true;
 }
 
+function GetCurrentVerseSets() : Array {
+	return GetVerseSets(currentView);
+}
+
+function GetVerseSets(view : String) : Array {
+	if (versesetsByView.ContainsKey(view)) {
+		return versesetsByView[view];
+	}
+	versesetsByView[view] = new Array();
+	return versesetsByView[view];
+}
+
 function Awake() {
+	
 }
 
 function Load () {

@@ -9,7 +9,7 @@ public var verseButton : VerseButton;
 public var rowPadding : float = 15;
 
 function ShowVerseSets() {
-	var versesets = verseManager.versesets;
+	var versesets : Array = verseManager.GetCurrentVerseSets();
 	var clone : VerseSetButton;
 	var currentButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
