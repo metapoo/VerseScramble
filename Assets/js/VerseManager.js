@@ -16,7 +16,7 @@ var totalScore : int = -1;
 
 static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
-static var currentView : String = "history";
+static var currentView : String;
 static var currentVerseSet : VerseSet = null;
 static var verseIndex = 0;
 static var rightToLeft : boolean = false;
@@ -39,15 +39,21 @@ static function Unload() {
 
 }
 
+static function SwitchLanguage(language : String) {
+	offlineVersesLoaded = false;
+	languageChosen = true;
+	SetLanguage(language);
+	SetCurrentView("history");
+}
+
 function Reload() {
 	Unload();
 	Start();
 }
 
 static function SetCurrentView(view : String) {
-	if ((view == "new") || (view == "popular")) {
-		view = view+"_"+GetLanguage();
-	}
+	view = view+"_"+GetLanguage();
+	
 	currentView = view;
 	verseIndex = 0;
 	var versesets : Array = GetCurrentVerseSets();
@@ -640,7 +646,6 @@ static function GetVerseSets(view : String) : Array {
 }
 
 function Awake() {
-	
 }
 
 function Load () {
@@ -648,6 +653,7 @@ function Load () {
 }
 
 function Start () {
+	SetCurrentView("history");
 	LoadVerses();
 	Load();
 }
