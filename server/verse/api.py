@@ -14,7 +14,23 @@ def get_handlers():
 class ListVerseSetApiHandler(BaseHandler, ApiMixin):
     api_name = "verseset/list"
     def get(self):
-        versesets = VerseSet.collection.find()
+        order_by = self.get_argument("order_by", "popular")
+        language_code = self.get_argument("language_code", "ALL")
+        page = self.get_int_argument("page",1)
+        per_page = 20
+        
+        if language_code == "ALL":
+            versesets = VerseSet.collection.find()
+        else:
+            versesets = VerseSet.collection.find({"language":language_code})
+
+        if order_by == "new":
+            versesets = versesets.sort("_id",-1)
+        elif order_by == "popular":
+            versesets = versesets.sort("play_count",-1)
+
+        versesets = versesets[(page-1)*per_page:page*per_page]
+
         versesets_json = [verseset.json() for verseset in versesets]
         result = {"versesets":versesets_json,
                   }

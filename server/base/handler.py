@@ -94,3 +94,7 @@ class BaseHandler(tornado.web.RequestHandler):
         fb_uid = self.get_argument("fb_uid", "unknown_fb_uid")
         return self.authenticate_login(fb_uid=fb_uid, email=None, password=None)
 
+    def get_int_argument(self, key, default=0):
+        arg = self.get_argument(key, default)
+        arg = int(arg)
+        return arg
