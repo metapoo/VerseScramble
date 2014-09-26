@@ -1,6 +1,7 @@
 import System.IO;//using System.IO;
 import UnityEngine;
 import System.Collections;
+import JSONUtils;
 
 class ApiManager extends MonoBehaviour {
  
@@ -45,17 +46,42 @@ class ApiManager extends MonoBehaviour {
 		CallApi(apiName, serializedArguments, handler);
     }
     
+    public function SetApiCache(url : String, resultData : Hashtable) {
+    	var json : String = HashtableToJSON(resultData);
+    	PlayerPrefs.SetString(url, json);
+    }
+
+    public function GetApiCache(url : String) {
+    	var json : String = PlayerPrefs.GetString(url);
+    	if (json == null) return null;
+    	var resultData : Hashtable = ParseJSON(json);
+    	return resultData;
+    }
+    
     public function CallApi(apiName : String, arguments : String, handler : Function) {
     	var url : String = "http://"+GetApiDomain()+"/api/"+apiName+"?"+arguments;
 		Debug.Log("API request " + url);
 		
 		var www : WWW = new WWW(url);
 		yield www;	
+		var resultData : Hashtable;
+		
+		if (www.error != null) {
+			Debug.Log(www.error);
+			// todo handle error
+			resultData = GetApiCache(url);
+			if (resultData != null) {
+				handler(resultData);
+			}
+			return;
+		}
+		
 		var data = www.text;
 		var apiData : Hashtable = JSONUtils.ParseJSON(data);
 		var status = apiData["status"];
 		if (status == "OK") {
-			var resultData = apiData["result"];
+			resultData = apiData["result"];
+			SetApiCache(url, resultData);
 			handler(resultData);
 		} else {
 			Debug.Log("API error: " + url);
