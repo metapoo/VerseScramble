@@ -9,7 +9,14 @@ public var verseButton : VerseButton;
 public var rowPadding : float = 15;
 
 function ShowVerseSets() {
-	var versesets = verseManager.versesets;
+	var children : Array = verseSetScrollContent.GetComponentsInChildren(VerseSetButton);
+	for (var i=0;i<children.length;i++) {
+		var vsButton : VerseSetButton = children[i];
+		Destroy(vsButton.gameObject);
+	}
+	verseSetScrollContent.DetachChildren();
+	
+	var versesets : Array = verseManager.GetCurrentVerseSets();
 	var clone : VerseSetButton;
 	var currentButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
@@ -17,7 +24,7 @@ function ShowVerseSets() {
 	var rowHeight = vsButtonTransform.sizeDelta.y;
 	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
 
-	for (var i=0;i<versesets.length;i++) {
+	for (i=0;i<versesets.length;i++) {
 		var verseset : VerseSet = versesets[i];
 		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerseSet(verseset);
@@ -72,7 +79,11 @@ function ShowVerses() {
 		var verse : Verse = verses[i];
 		addVerseButton(verse,i);
 	}
-	addVerseButton(null,i);
+	
+	if (verses.length > 0) {
+		addVerseButton(null,i);
+	}
+	
 	verseScrollContent.sizeDelta.y = (verses.length+1)*(rowHeight+rowPadding);
 	
 	yield WaitForSeconds(0);
@@ -86,7 +97,13 @@ function Awake () {
 
 function Start () {
 	verseManager.LoadVerses();
-	ShowVerseSets();
+	var navButtons : Array = GameObject.FindObjectsOfType(NavigationButton);
+	for (var i=0;i<navButtons.length;i++) {
+		var navButton : NavigationButton = navButtons[i];
+		if (navButton.view == "history") {
+			navButton.HandleOnClick();
+		}
+	}
 }
 
 function Update () {

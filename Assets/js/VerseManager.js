@@ -15,20 +15,25 @@ var numVerses = 0;
 var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
+static var versesetsByView : Hashtable = new Hashtable();
+static var currentView : String = "history";
 static var currentVerseSet : VerseSet = null;
 static var verseIndex = 0;
 static var rightToLeft : boolean = false;
-static var versesets : Array = new Array();
 static var loaded : boolean = false;
 static var offlineVersesLoaded : boolean = false;
 
 private static var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
 static function Unload() {
-	for (var vs : VerseSet in versesets) {
-		Destroy(vs);
+	for (var view in versesetsByView.Keys) {
+		var versesets : Array = versesetsByView[view];
+		
+		for (var vs : VerseSet in versesets) {
+			Destroy(vs);
+		}
+		versesets.Clear();
 	}
-	versesets.Clear();
 	loaded = false;
 	offlineVersesLoaded = false;
 
@@ -39,13 +44,24 @@ function Reload() {
 	Start();
 }
 
-function GetCurrentVerseSet() : VerseSet {
+static function SetCurrentView(view : String) {
+	currentView = view;
+	verseIndex = 0;
+	var versesets : Array = GetCurrentVerseSets();
+	if (versesets.length > 0) {
+		currentVerseSet = versesets[0];
+	} else {
+		currentVerseSet = null;
+	}
+}
+
+static function GetCurrentVerseSet() : VerseSet {
 
 	if (!Object.ReferenceEquals(currentVerseSet, null)) {
 		//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
 		return currentVerseSet;
  	}
- 	
+	var versesets : Array = GetCurrentVerseSets();
 	if (versesets.length == 0) return null;
 	var verseset : VerseSet = versesets[0];
 	
@@ -75,15 +91,16 @@ static function SetCurrentVerseSet(verseset : VerseSet) {
 	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
-function GetCurrentVerses() : Array {
+static function GetCurrentVerses() : Array {
 	var vs : VerseSet = GetCurrentVerseSet();
+	
 	if (Object.ReferenceEquals(vs, null)) {
 		return new Array();
 	}
 	return vs.verses;
 }
 
-function GetCurrentVerse() : Verse {
+static function GetCurrentVerse() : Verse {
 	var verses = GetCurrentVerses();
 	
 	if (verseIndex >= verses.length) {
@@ -97,7 +114,7 @@ function GetCurrentVerse() : Verse {
 	return verses[verseIndex];
 }
 
-function GetCurrentReference() : String {
+static function GetCurrentReference() : String {
 	var verse : Verse = GetCurrentVerse();
 	if (verse != null) {
 		return verse.reference;
@@ -412,6 +429,7 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 }
 
 function AddOnlineVerseSet(verseset : VerseSet) {
+	var versesets : Array = GetCurrentVerseSets();
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.length;i++) {
 		var vs : VerseSet = versesets[i];
@@ -427,6 +445,7 @@ function AddOnlineVerseSet(verseset : VerseSet) {
 }
 
 function CreateVerseSet(name : String) {
+	var versesets : Array = GetCurrentVerseSets();
 	var vs : VerseSet = new VerseSet(name);
 	vs.language = GetLanguage();
 	versesets.push(vs);
@@ -458,40 +477,39 @@ function LoadOnlineVerse(verseId : String) {
 }
 
 function LoadOnlineVerse(verseId : String, includeSet : boolean) {
-	var url : String = "http://"+GetApiDomain()+"/api/verse/show?verse_id="+verseId;
-	var www : WWW = new WWW(url);
-	Debug.Log("request " + url);
-	yield www;	
-	Debug.Log("loaded " + url);
-	var data = www.text;
-	var apiData : Hashtable = JSONUtils.ParseJSON(data);
-	var resultData : Hashtable = apiData["result"];
-	var verseData : Hashtable = resultData["verse"];
-	var versesetId = verseData["verseset_id"];
-	
-	if (includeSet) {
-		LoadOnlineVerseSet(versesetId, verseId);
-		return;
-	}
-	
-	GameManager.SetChallengeModeEnabled(false);
 
-	var reference = verseData["reference"];
-	var text = verseData["text"];
-	var language = verseData["language"];
-	var version = verseData["version"];
-	var versesetName = verseData["verseset_name"];
+	var handleApi : Function = function(resultData : Hashtable) {
 	
-	var verseset : VerseSet = new VerseSet(versesetId, versesetName, language, version);
-	AddOnlineVerseSet(verseset);
+		var verseData : Hashtable = resultData["verse"];
+		var versesetId = verseData["verseset_id"];
 	
-	var verse : Verse = new Verse(verseId, reference, text, version, verseset);
-	verseset.AddVerse(verse);
+		if (includeSet) {
+			LoadOnlineVerseSet(versesetId, verseId);
+			return;
+		}
 	
-	SetCurrentVerseSet(verseset);
-	verseIndex = 0;
-	loaded = true;
-	UserSession.GetUserSession().ClearOptions();
+		GameManager.SetChallengeModeEnabled(false);
+
+		var reference = verseData["reference"];
+		var text = verseData["text"];
+		var language = verseData["language"];
+		var version = verseData["version"];
+		var versesetName = verseData["verseset_name"];
+	
+		var verseset : VerseSet = new VerseSet(versesetId, versesetName, language, version);
+		AddOnlineVerseSet(verseset);
+	
+		var verse : Verse = new Verse(verseId, reference, text, version, verseset);
+		verseset.AddVerse(verse);
+	
+		SetCurrentVerseSet(verseset);
+		verseIndex = 0;
+		loaded = true;
+		UserSession.GetUserSession().ClearOptions();
+	};
+	
+	ApiManager.GetInstance().CallApi("verse/show", new Hashtable({"verse_id":verseId}), handleApi);
+	
 }
 
 function LoadOnlineVerseSet(versesetId : String) {
@@ -499,43 +517,29 @@ function LoadOnlineVerseSet(versesetId : String) {
 }
 
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
-	var url : String = "http://"+GetApiDomain()+"/api/verseset/show?verseset_id="+versesetId;
-	Debug.Log("request " + url);
-	var www : WWW = new WWW(url);
-	yield www;
-	Debug.Log("loaded " + url);
-	var data = www.text;
-	var apiData : Hashtable = JSONUtils.ParseJSON(data);
-	var resultData : Hashtable = apiData["result"];
-	var versesetData : Hashtable = resultData["verseset"];
-	var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
-	var language = versesetData["language"];
-	var version = versesetData["version"];
-	var setname = versesetData["name"];
-	var versesData : Array = resultData["verses"];
-	var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
-	AddOnlineVerseSet(verseset);
-	SetCurrentVerseSet(verseset);
-	verseIndex = 0;
+	var handleApi : Function = function(resultData : Hashtable) {
+		var versesetData : Hashtable = resultData["verseset"];
+		var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
+		var language = versesetData["language"];
+		var version = versesetData["version"];
+		var setname = versesetData["name"];
+		var versesData : Array = resultData["verses"];
+		var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
+		AddOnlineVerseSet(verseset);
+		SetCurrentVerseSet(verseset);
+		verseIndex = 0;
 	
-	for (var i=0;i<versesData.length;i++) {
-		var verseData : Hashtable = versesData[i];
-		var verseId_ = verseData["_id"];
-		var reference = verseData["reference"];
-		var text = verseData["text"];
-		version = verseData["version"];
-		var verse : Verse = new Verse(verseId_, reference, text, version, verseset);
-		verseset.AddVerse(verse);
-		if (verseId == verseId_) {
-			verseIndex = i;
-			Debug.Log("set verseIndex = " + i);
-		}
-	}
+		verseset.LoadVersesData(versesData);
+		verseIndex = verseset.IndexOfVerseId(verseId);
+		if (verseIndex < 0) verseIndex = 0;
+		
+		GameManager.SetChallengeModeEnabled((verseId == null));
+		loaded = true;
+		UserSession.GetUserSession().ClearOptions();
+		Debug.Log("finished loading verse set");
+	};
 	
-	GameManager.SetChallengeModeEnabled((verseId == null));
-	loaded = true;
-	UserSession.GetUserSession().ClearOptions();
-	Debug.Log("finished loading verse set");
+	ApiManager.GetInstance().CallApi("verseset/show",new Hashtable({"verseset_id":versesetId}),handleApi);
 }
 
 function LoadVerses() {
@@ -619,7 +623,20 @@ function LoadVersesLocally() {
   	loaded = true;
 }
 
+static function GetCurrentVerseSets() : Array {
+	return GetVerseSets(currentView);
+}
+
+static function GetVerseSets(view : String) : Array {
+	if (versesetsByView.ContainsKey(view)) {
+		return versesetsByView[view];
+	}
+	versesetsByView[view] = new Array();
+	return versesetsByView[view];
+}
+
 function Awake() {
+	
 }
 
 function Load () {

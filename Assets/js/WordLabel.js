@@ -273,7 +273,17 @@ function Update () {
 }
 
 function GetPreviousWordLabel() {
-	return gameManager.GetWordLabelAt(wordIndex-1);	
+	var wordLabel = gameManager.GetWordLabelAt(wordIndex-1);	
+	// make sure the word label is returned to verse
+	if (!wordLabel.returnedToVerse && !wordLabel.gotoVerse) {
+		for (var i=0;i<gameManager.wordLabels.length;i++) {
+			var w:WordLabel = gameManager.wordLabels[i];
+			if ((w.returnedToVerse || w.gotoVerse) && (w.word == wordLabel.word)) {
+				return w;
+			}
+		}
+	}
+	return wordLabel;
 }
 
 function GetNextWordLabel() {
