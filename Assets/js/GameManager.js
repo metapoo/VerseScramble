@@ -22,6 +22,11 @@ var timeUntilHint : int ;
 var background : SpriteRenderer;
 var sndSuccess1 : AudioClip;
 var sndSuccess2 : AudioClip;
+var sndSuccess75 : AudioClip;
+var sndSuccess50 : AudioClip;
+var sndSuccess25 : AudioClip;
+var sndSuccess12 : AudioClip;
+
 var sndFailure1 : AudioClip;
 var sndExplode1 : AudioClip;
 var sndSelect : AudioClip;
@@ -33,7 +38,6 @@ var panelReferenceLabel : Text;
 var difficultyLabel : Text;
 var healthBar : HealthBar;
 
-public var maxWordsActive : int = 10;
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
 public var endOfGameOptions : EndOfGameOptions;
@@ -128,6 +132,7 @@ function SetupWalls () {
 }
 
 function HandleWordWrong() {
+	streak = 0;
 	
 	if (!GetChallengeModeEnabled()) {
 		ShowHint();	
@@ -162,20 +167,38 @@ function ExplodeWords() {
 }
 
 function HandleWordCorrect() {
+
 	var elapsedTime : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
 	
-	var snd : AudioClip = sndSuccess1;
+	if (elapsedTime < 5) {
+		streak += 1;
+	}
 	
-	if (Random.RandomRange(0,10.0f) > 5.0f) {
-		snd = sndSuccess2;
+	var snd : AudioClip = sndSuccess75;
+	
+	switch (streak) {
+		case 0: snd = sndSuccess75; break;
+		case 1: snd = sndSuccess50; break;
+		case 2: snd = sndSuccess25; break;
+		case 3: snd = sndSuccess12; break;
+		case 4: snd = sndSuccess2; break;
+		case 5: snd = sndSuccess1; break;
+	}
+	
+	if (streak > 5) {
+		if ((streak % 2) == 0) {
+			snd = sndSuccess2;
+		} else {
+			snd = sndSuccess1;
+		}
 	}
 	
 	for (var wordLabel : WordLabel in wordLabels) {
 		wordLabel.hinting = false;
 	}
 	
-	audio.PlayOneShot(sndSelect, 0.5f);
+	audio.PlayOneShot(snd, 0.25f);
 	return scoreManager.HandleWordCorrect(elapsedTime);
 }
 
@@ -545,12 +568,24 @@ function BeginGame() {
 	AnimateIntro();
 }
 
+function GetMaxWordsActive() {
+	switch(difficulty) {
+		case Difficulty.Easy:
+			return 4;
+		case Difficulty.Medium:
+			return 7;
+		case Difficulty.Hard:
+			return 10;
+	}
+	return 10;
+}
+
 function scrambleWordLabels() {
 	scrambledWordLabels = new Array();
 	for (var i : int=0;i<wordLabels.length;i++) {
 		scrambledWordLabels.push(wordLabels[i]);
 	}
-	
+	var maxWordsActive = GetMaxWordsActive();
 	var g = Mathf.RoundToInt(GetGroupSize() * 1.25);
 	if (g >= (maxWordsActive-1)) g = (maxWordsActive-1);
 	
@@ -576,7 +611,8 @@ function scrambleWordLabels() {
 function SetupVerse() {
 	gameStarted = false;
 	showingSolution = false;
-	
+	var maxWordsActive = GetMaxWordsActive();
+
 	if (GetChallengeModeEnabled()) {
 		scoreManager.resetStatsForChallenge();
 	} else {
