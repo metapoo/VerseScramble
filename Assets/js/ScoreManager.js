@@ -115,9 +115,9 @@ function CalculateMaxTime() {
 	if (n == 0) return 0;
 	
 	if (GameManager.GetChallengeModeEnabled()) {
-		return 2+n*2;
+		return 10+n*2;
 	} else {
-		return 2+n*4;
+		return 10+n*4;
 	}
 	
 }
