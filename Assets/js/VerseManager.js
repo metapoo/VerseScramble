@@ -40,10 +40,11 @@ static function Unload() {
 }
 
 static function SwitchLanguage(language : String) {
-	offlineVersesLoaded = false;
 	languageChosen = true;
 	SetLanguage(language);
 	SetCurrentView("history");
+	var versesets = GetCurrentVerseSets();
+	offlineVersesLoaded = (versesets.length > 0);
 }
 
 function Reload() {
