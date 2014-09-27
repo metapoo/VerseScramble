@@ -25,20 +25,8 @@ var startingHealth : float = 0.5f;
 var healthBarUnits : float = startingHealth;
 
 function HandleWordCorrect(elapsedTime : float) {
-	var dHealth = 0.04f;
-	var difficulty = gameManager.difficulty;
-
-	switch (difficulty) {
-		case Difficulty.Easy:
-			dHealth = 0.05f;
-			break;
-		case Difficulty.Medium:
-			dHealth = 0.04f;
-			break;
-		case Difficulty.Hard:
-			dHealth = 0.03f;
-			break;
-	}	
+	var dHealth = (2.0f-healthBarUnits)*0.025f;
+	if (dHealth < 0.01) dHealth = 0.01f;
 	
 	UpdateHealthBar(healthBarUnits + dHealth);
 	

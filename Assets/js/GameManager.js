@@ -681,7 +681,6 @@ function SetupVerse() {
 	
 	while (numWordsReleased < wordLabels.length) {
 		numWordsActive = (numWordsReleased - wordIndex);
-		Debug.Log("numWordsActive = " + numWordsActive);
 		
 		// don't allow more than maxWordsActive words on screen at the same time
 		while (numWordsActive >= maxWordsActive) {
