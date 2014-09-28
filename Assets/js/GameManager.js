@@ -569,6 +569,7 @@ function BeginGame() {
 }
 
 function GetMaxWordsActive() {
+	
 	switch(difficulty) {
 		case Difficulty.Easy:
 			return 4;
@@ -611,7 +612,6 @@ function scrambleWordLabels() {
 function SetupVerse() {
 	gameStarted = false;
 	showingSolution = false;
-	var maxWordsActive = GetMaxWordsActive();
 
 	if (GetChallengeModeEnabled()) {
 		scoreManager.resetStatsForChallenge();
@@ -620,6 +620,7 @@ function SetupVerse() {
 	}
 	finished = false;
 	difficulty = verseManager.GetCurrentDifficulty();
+	var maxWordsActive = GetMaxWordsActive();
 	
 	Cleanup();
 	lastWordTime = Time.time;
@@ -787,6 +788,7 @@ function HandleVerseFinished() {
 }
 
 function ShowHintFromButton() {
+	if (finished) return;
 	ShowHint();
 	scoreManager.HandleWordWrong();
 	audio.PlayOneShot(sndSuccess1, 0.5f);

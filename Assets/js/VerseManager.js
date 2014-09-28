@@ -58,6 +58,17 @@ static function SetCurrentView(view : String) {
 	currentView = view;
 	verseIndex = 0;
 	var versesets : Array = GetCurrentVerseSets();
+	
+	if (!Object.ReferenceEquals(currentVerseSet, null)) {
+		for (var i=0;i<versesets.length;i++) {
+			var verseset : VerseSet = versesets[i];
+			if (verseset.SaveKey() == currentVerseSet.SaveKey()) {
+				// current verse set is in view so leave it alone
+				return;
+			}
+		}
+	}
+	
 	if (versesets.length > 0) {
 		currentVerseSet = versesets[0];
 	} else {
@@ -460,7 +471,7 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 
 function CreateVerseSet(name : String) {
 	var versesets : Array = GetCurrentVerseSets();
-	var vs : VerseSet = new VerseSet(name);
+	var vs : VerseSet = VerseSet(name);
 	vs.language = GetLanguage();
 	versesets.push(vs);
 	return vs;
@@ -503,7 +514,7 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		var verseset : VerseSet = VerseSet.GetVerseSet(versesetId, versesetName, language, version);
 		AddOnlineVerseSet(verseset);
 	
-		var verse : Verse = new Verse(verseId, reference, text, version, verseset);
+		var verse : Verse = Verse(verseId, reference, text, version, verseset);
 		verseset.AddVerse(verse);
 	
 		SetCurrentVerseSet(verseset);
@@ -627,7 +638,7 @@ function LoadVersesLocally() {
 	  	}
 	  	
   		var reference = parts[0];
-  		verse = new Verse(reference, text, verseset);
+  		verse = Verse(reference, text, verseset);
   		
   		verseset.AddVerse(verse);  	
   	}
