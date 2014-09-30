@@ -640,7 +640,12 @@ function SetupVerse() {
 	currentWord = words[wordIndex];
 	
 	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
-		var newTime = scoreManager.CalculateMaxTime() + scoreManager.timeLeft;		
+		var extraTime = scoreManager.CalculateMaxTime();
+		if (scoreManager.timeLeft > 100) {
+			extraTime *= 0.5f;
+		}
+		var newTime = extraTime + scoreManager.timeLeft;		
+		
 		var duration = 0.1f*(newTime-scoreManager.timeLeft);
 		if ((duration) > 2.0f) duration = 2.0f;
 		Debug.Log("new time = " + newTime + " max time = " + scoreManager.timeLeft);

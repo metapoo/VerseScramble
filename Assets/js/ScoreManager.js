@@ -98,7 +98,13 @@ function updateScoreLabel() {
 	scoreLabel.text = score.ToString("000000");
 	if (timeLeft < 0) timeLeft = 0;
 	
-	timeLabel.text = timeLeft.ToString("00");
+	var digits = "00";
+	
+	if (gameManager.GetChallengeModeEnabled()) {
+		digits = "000";
+	}
+	
+	timeLabel.text = timeLeft.ToString(digits);
 	
 	/*
 	var hundredths : int = 100*(totalElapsedTime - parseInt(totalElapsedTime));
