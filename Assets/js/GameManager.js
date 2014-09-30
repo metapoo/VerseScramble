@@ -359,7 +359,7 @@ function SplitVerse(verse : String) {
 	verse = Regex.Replace(verse, "\\（.*\\）","");
 	verse = Regex.Replace(verse, "\\[.*\\]","");
 	verse = Regex.Replace(verse, "」|「|『|』","");
-	verse = Regex.Replace(verse, "\n", " ");
+	verse = Regex.Replace(verse, "\n|\t|\r", " ");
 	
 	var processClause = function(clause : String) {
 		var combined : boolean = false;
@@ -640,12 +640,12 @@ function SetupVerse() {
 	currentWord = words[wordIndex];
 	
 	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
-		var maxTime = scoreManager.CalculateMaxTime() + scoreManager.maxTime;		
-		scoreManager.CountTimeUpTo(maxTime);
-		
-		var duration = 0.1f*(maxTime-scoreManager.maxTime);
+		var newTime = scoreManager.CalculateMaxTime() + scoreManager.timeLeft;		
+		var duration = 0.1f*(newTime-scoreManager.timeLeft);
 		if ((duration) > 2.0f) duration = 2.0f;
-		
+		Debug.Log("new time = " + newTime + " max time = " + scoreManager.timeLeft);
+		scoreManager.CountTimeUpTo(newTime);
+				
 		yield WaitForSeconds(duration);
 		scoreManager.resetTime();
 	} else {

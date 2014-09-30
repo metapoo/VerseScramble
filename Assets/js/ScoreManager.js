@@ -47,7 +47,7 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
-	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits);
+	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits );
 	score += dScore;
 	
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
@@ -125,6 +125,7 @@ function CalculateMaxTime() {
 function resetStatsForChallenge() {
 	moves = 0;
 	streak = 0;
+	maxTime = timeLeft;
 	updateScoreLabel();
 	UpdateHealthBar(healthBarUnits);
 }
@@ -163,7 +164,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(1*difficultyMultiplier(gameManager.difficulty)*healthBarUnits);
+		score += Mathf.RoundToInt(1*difficultyMultiplier(gameManager.difficulty));
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
