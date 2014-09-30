@@ -104,7 +104,7 @@ public class VerseSet extends MonoBehaviour
 			var reference = verseData["reference"];
 			var text = verseData["text"];
 			version = verseData["version"];
-			var verse : Verse = new Verse(verseId_, reference, text, version, this);
+			var verse : Verse = Verse(verseId_, reference, text, version, this);
 			AddVerse(verse);	
 		}
 		verseCount = versesData.length;

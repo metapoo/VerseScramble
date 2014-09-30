@@ -64,14 +64,20 @@ class ApiManager extends MonoBehaviour {
 		
 		var www : WWW = new WWW(url);
 		yield www;	
-		var resultData : Hashtable;
+		var resultData : Hashtable = null;
 		
 		if (www.error != null) {
-			resultData = GetApiCache(url);
+			try {
+				resultData = GetApiCache(url);
+			} catch (err) {
+				
+			}
+			
 			if (resultData != null) {
 				handler(resultData);
 			} else {
-				// handle error
+				Debug.Log("API failed");
+				
 			}
 			return;
 		}
@@ -97,7 +103,7 @@ class ApiManager extends MonoBehaviour {
 			apiDomain = us.ApiDomain();
 			return apiDomain;
 		} else {
-			apiDomain = "www.verserain.com";
+			apiDomain = "dev.verserain.com";
 			return apiDomain;
 		}
 	}
