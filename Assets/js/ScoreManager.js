@@ -234,8 +234,10 @@ function reset() {
 		highScore = verseMetadata["high_score"];
 	} else {
 		var verseset : VerseSet = verseManager.GetCurrentVerseSet();
-		versesetMetadata = verseset.GetMetadata();
-		highScore = versesetMetadata["high_score"];
+		if (!Object.ReferenceEquals(verseset, null)) {
+			versesetMetadata = verseset.GetMetadata();
+			highScore = versesetMetadata["high_score"];
+		}
 	}
 	updateHighScoreLabel();
 	resetTime();	
