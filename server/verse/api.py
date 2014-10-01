@@ -9,7 +9,21 @@ def get_handlers():
     return ((r"/api/verse/show", ShowVerseApiHandler),
             (r"/api/verseset/show", ShowVerseSetApiHandler),
             (r"/api/verseset/list", ListVerseSetApiHandler),
+            (r"/api/verseset/record_play", RecordPlayVerseSetApiHandler),
             )
+
+class RecordPlayVerseSetApiHandler(BaseHandler, ApiMixin):
+    api_name = "verseset/record_play"
+
+    def get(self):
+        verseset_id = self.get_argument("verseset_id")
+        vs = VerseSet.by_id(verseset_id)
+        if vs:
+            vs["play_count"] = vs.play_count() + 1
+            vs.save()
+        
+        result = {"play_count": vs.play_count()}
+        return self.return_success(result)
 
 class ListVerseSetApiHandler(BaseHandler, ApiMixin):
     api_name = "verseset/list"
