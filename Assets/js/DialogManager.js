@@ -2,7 +2,12 @@
 
 var popupDialog : PopupDialog;
 
-function CreatePopupDialog(title : String, description : String) {
+static function CreatePopupDialog(title : String, description : String) {
+	var instance : DialogManager = GameObject.Find("DialogManager").GetComponent(DialogManager);
+	instance._CreatePopupDialog(title, description);
+}
+
+function _CreatePopupDialog(title : String, description : String) {
 	var clone : PopupDialog = Instantiate(popupDialog, Vector3.zero, Quaternion.identity);
 	
 	var canvas = GameObject.Find("Canvas");

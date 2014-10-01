@@ -66,7 +66,13 @@ class ApiManager extends MonoBehaviour {
 		yield www;	
 		var resultData : Hashtable = null;
 		
+		var handleError : Function = function() {
+			var gt : Function = TextManager.GetText;
+			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error."));
+		};
+
 		if (www.error != null) {
+				
 			try {
 				resultData = GetApiCache(url);
 			} catch (err) {
@@ -76,9 +82,7 @@ class ApiManager extends MonoBehaviour {
 			if (resultData != null) {
 				handler(resultData);
 			} else {
-				
-				Debug.Log("API failed");
-				
+				handleError();
 			}
 			return;
 		}
@@ -92,7 +96,7 @@ class ApiManager extends MonoBehaviour {
 			handler(resultData);
 		} else {
 			Debug.Log("API error: " + url);
-			// TODO: handle error
+			handleError();
 		}
     }
     

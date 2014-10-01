@@ -661,6 +661,7 @@ function Start () {
 	
 	LoadVerses();
 	Load();
+	
 }
 
 function Update () {
