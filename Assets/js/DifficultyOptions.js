@@ -21,11 +21,14 @@ function DifficultyWindow() {
 		Destroy(this.gameObject);
 	};
 
-	optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Easy),
+	if (verseManager.IsDifficultyAllowed(difficulty.Hard) ||
+		GameManager.GetChallengeModeEnabled()) {
+		optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Hard),
 		function() {
-			difficulty = difficulty.Easy;
+			difficulty = difficulty.Hard;
 			startGame();
 		});
+	}
 
 	if (verseManager.IsDifficultyAllowed(difficulty.Medium) || 
 	    GameManager.GetChallengeModeEnabled()) {
@@ -35,15 +38,12 @@ function DifficultyWindow() {
 			startGame();
 		});
 	}	
-	
-	if (verseManager.IsDifficultyAllowed(difficulty.Hard) ||
-		GameManager.GetChallengeModeEnabled()) {
-		optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Hard),
+
+	optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Easy),
 		function() {
-			difficulty = difficulty.Hard;
+			difficulty = difficulty.Easy;
 			startGame();
 		});
-	}
 
 }
 

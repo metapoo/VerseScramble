@@ -27,6 +27,14 @@ function EndGameWindowForChallenge () {
 	
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
 	
+	
+	optionDialog.AddOption(gt("Back to menu"),
+		function() {
+			gameManager.Cleanup();
+			Destroy(this.gameObject);
+			Application.LoadLevel("versesets");
+		});
+		
 	optionDialog.AddOption(gt("Try again"),
 		function() {
 			needToSelectDifficulty = false;
@@ -34,12 +42,6 @@ function EndGameWindowForChallenge () {
 			ReloadGame(needToSelectDifficulty);
 		});
 
-	optionDialog.AddOption(gt("Back to menu"),
-		function() {
-			gameManager.Cleanup();
-			Destroy(this.gameObject);
-			Application.LoadLevel("versesets");
-		});
 
 }
 
@@ -85,7 +87,7 @@ function EndGameWindow () {
 		}
 	};
 	
-	if (!mastered) {
+	if (mastered) {
 		tryAgain();
 	}
 	
@@ -95,7 +97,7 @@ function EndGameWindow () {
 			ReloadGame(false);
 		});
 	
-	if (mastered) {
+	if (!mastered) {
 		tryAgain();
 	}
 	
