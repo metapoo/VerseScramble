@@ -10,10 +10,10 @@ import os
 HOME = os.environ['HOME']
 
 BACKUP_PATH = "%s/backup" % HOME
-
-dirname = "%s/%s" % (BACKUP_PATH, datetime.now().strftime("%a"))
+dirname = datetime.now().strftime("%a")
+dirpath = "%s/%s" % (BACKUP_PATH, dirname)
 filename = "%s.tar.gz" % dirname
 
-subprocess.Popen(["mongodump --out %s" % dirname],shell=True).wait()
-subprocess.Popen(["tar cvzf %s %s" % (filename, dirname)], shell=True).wait()
-subprocess.Popen(["rm -rf %s" % dirname],shell=True).wait()
+subprocess.Popen(["mongodump --out %s" % dirpath],shell=True).wait()
+subprocess.Popen(["cd %s;tar cvzf %s %s" % (BACKUP_PATH, filename, dirname)], shell=True).wait()
+subprocess.Popen(["rm -rf %s" % dirpath],shell=True).wait()
