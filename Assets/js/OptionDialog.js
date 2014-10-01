@@ -6,7 +6,10 @@ var description : String;
 var titleText : Text;
 var descriptionText : Text;
 var numOptions : int = 0;
-
+var descriptionPanel : RectTransform;
+var windowPadding = 60;
+var buttonPadding = 30;
+	
 function HandleOkayButtonClick() {
 	Destroy(this.gameObject);
 }
@@ -31,7 +34,10 @@ function SetTitle(_title : String) {
 function SetDescription(_description : String) {
 	descriptionText.text = _description;
 	description = _description;
-	Debug.Log("Set description = " + _description);
+	if (description == "") {
+		GetComponent(RectTransform).sizeDelta.y -= (descriptionPanel.sizeDelta.y + buttonPadding);
+		descriptionPanel.sizeDelta.y = 0;
+	}
 }
 
 function CloseDialog() {
@@ -48,8 +54,7 @@ function AddOption(label : String, handler : Function) {
 	button.onClick.AddListener(function() {handler();});
 	button.onClick.AddListener(CloseDialog);
 	var rt : RectTransform = optButton.GetComponent(RectTransform);
-	var windowPadding = 60;
-	var buttonPadding = 30;
+	
 	var height = (rt.sizeDelta.y + buttonPadding);
 	rt.anchoredPosition.y = windowPadding + height * (numOptions - 1);
 	GetComponent(RectTransform).sizeDelta.y += height;

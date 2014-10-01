@@ -120,9 +120,7 @@ function ShowEndOfGameOptions() {
 }
 
 function ShowRestartVerse() {
-	var description = String.Format(gt("You scored {0}"), scoreManager.score);
-
-	var optionDialog : OptionDialog = DialogManager.CreateOptionDialog(gt("Game Over"),description);
+	var optionDialog : OptionDialog = DialogManager.CreateOptionDialog(gt("Game Over"),"");
 	optionDialog.AddOption(gt("Try Again"), 
 		function() {
 			ReloadGame(false);
