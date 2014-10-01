@@ -1,7 +1,7 @@
 ﻿#pragma strict
 
 var options : Hashtable;
-static var started : boolean = true;
+static var started : boolean = false;
 
 static function GetUserSession() {
 	
