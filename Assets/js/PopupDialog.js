@@ -10,6 +10,21 @@ function HandleOkayButtonClick() {
 	Destroy(this.gameObject);
 }
 
+function SetParent(prt : RectTransform) {
+	var rt : RectTransform = GetComponent(RectTransform);
+	var oldPosition = rt.anchoredPosition;
+	var oldScale = rt.localScale;
+	
+	rt.SetParent(prt);
+	
+	rt.anchoredPosition = oldPosition;
+	rt.localScale = oldScale;
+	
+	SetTitle("TITLE");
+	SetDescription("DESCRIPTION");
+	
+}
+
 function SetTitle(_title : String) {
 	titleText.text = TextManager.GetText(_title);
 	title = _title;

@@ -108,6 +108,7 @@ function Start () {
 			navButton.HandleOnClick();
 		}
 	}
+	
 }
 
 function Update () {
