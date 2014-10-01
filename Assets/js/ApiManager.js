@@ -76,6 +76,7 @@ class ApiManager extends MonoBehaviour {
 			if (resultData != null) {
 				handler(resultData);
 			} else {
+				
 				Debug.Log("API failed");
 				
 			}
