@@ -1,23 +1,41 @@
 ﻿#pragma strict
 
 var popupDialog : PopupDialog;
+var optionDialog : OptionDialog;
 
-static function CreatePopupDialog(title : String, description : String) {
+static function GetInstance() : DialogManager {
 	var instance : DialogManager = GameObject.Find("DialogManager").GetComponent(DialogManager);
-	instance._CreatePopupDialog(title, description);
+	return instance;
 }
 
-function _CreatePopupDialog(title : String, description : String) {
-	var clone : PopupDialog = Instantiate(popupDialog, Vector3.zero, Quaternion.identity);
-	
+static function CreatePopupDialog(title : String, description : String) : PopupDialog {
+	return GetInstance()._CreatePopupDialog(title, description);
+}
+
+static function CreateOptionDialog(title : String, description : String) : OptionDialog {
+	return GetInstance()._CreateOptionDialog(title, description);
+}
+
+function GetParent() : RectTransform {
 	var canvas = GameObject.Find("Canvas");
-	var rt : RectTransform = clone.GetComponent(RectTransform);
-	var sizeDelta : Vector2 = rt.sizeDelta;
-	var offsetMin : Vector2 = rt.offsetMin;
-	
-	clone.SetParent(canvas.GetComponent(RectTransform));	
+	return canvas.GetComponent(RectTransform);
+}
+
+function _CreateOptionDialog(title : String, description : String) : OptionDialog {
+	var clone : OptionDialog = Instantiate(optionDialog, Vector3.zero, Quaternion.identity);
+	clone.SetParent(GetParent());	
 	clone.SetTitle(title);
 	clone.SetDescription(description);
+	return clone;
+}
+
+function _CreatePopupDialog(title : String, description : String) : PopupDialog {
+	var clone : PopupDialog = Instantiate(popupDialog, Vector3.zero, Quaternion.identity);
+	var canvas = GameObject.Find("Canvas");
+	clone.SetParent(GetParent());	
+	clone.SetTitle(title);
+	clone.SetDescription(description);
+	return clone;
 }
 
 function Start () {

@@ -42,11 +42,13 @@ function CloseDialog() {
 
 function AddOption(label : String, handler : Function) {
 	numOptions += 1;
-	var optButton = Instantiate(optionButton, Vector2.zero, Quaternion.identity);
+	var optButton : OptionButton = Instantiate(optionButton, Vector3.zero, Quaternion.identity);
 	optButton.SetParent(GetComponent(RectTransform));
 	optButton.SetLabel(label);
-	optButton.GetComponent(Button).onClick.AddListener(handler);
-	optButton.GetComponent(Button).onClick.AddListener(CloseDialog);
+	
+	var button : Button = optButton.GetComponent(Button);
+	button.onClick.AddListener(function() {handler();});
+	button.onClick.AddListener(CloseDialog);
 	var rt : RectTransform = optButton.GetComponent(RectTransform);
 	var windowPadding = 60;
 	var buttonPadding = 30;
