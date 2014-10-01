@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/python
 from verserain.verse.models import *
 
 def update_hotness():

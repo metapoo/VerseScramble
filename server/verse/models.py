@@ -27,12 +27,15 @@ class VerseSet(BaseModel):
         indices = (
             Index("name",unique=False),
             Index("language",unique=False),
-            Index("user_id",unique=False)
+            Index("user_id",unique=False),
+            Index("hotness",unique=False)
         )
 
     def calculate_hotness(self):
         age = self.age().total_seconds()
         days = (age / 86400.0)
+        if days < 1:
+            days = 1
         hotness = self.play_count() / days
         self["hotness"] = hotness
             
