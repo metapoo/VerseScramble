@@ -591,6 +591,9 @@ function LoadVerses() {
     
 	if (verseText != null) {
 		LoadVersesLocally();
+	} else {
+		offlineVersesLoaded = true;
+		loaded = true;
 	}
 }
 
@@ -650,11 +653,11 @@ static function GetVerseSets(view : String) : Array {
 function Awake() {
 }
 
-function Load () {
+function Load() {
 	verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);
 }
 
-function Start () {
+function Start() {
 	if (currentView == null) {
 		SetCurrentView("history");
 	}
