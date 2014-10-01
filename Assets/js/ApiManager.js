@@ -1,6 +1,7 @@
 import System.IO;//using System.IO;
 import UnityEngine;
 import System.Collections;
+import JSONUtils;
 
 class ApiManager extends MonoBehaviour {
  
@@ -35,7 +36,7 @@ class ApiManager extends MonoBehaviour {
     	
     	for (var key:String in arguments.Keys) {
     		i += 1;
-    		var val : String = arguments[key];
+    		var val = arguments[key];
     		serializedArguments += (key+"="+val);
     		if (i < arguments.Count) {
     			serializedArguments += "&";
@@ -45,21 +46,57 @@ class ApiManager extends MonoBehaviour {
 		CallApi(apiName, serializedArguments, handler);
     }
     
+    public function SetApiCache(url : String, resultData : Hashtable) {
+    	var json : String = HashtableToJSON(resultData);
+    	PlayerPrefs.SetString(url, json);
+    }
+
+    public function GetApiCache(url : String) {
+    	var json : String = PlayerPrefs.GetString(url);
+    	if (json == null) return null;
+    	var resultData : Hashtable = ParseJSON(json);
+    	return resultData;
+    }
+    
     public function CallApi(apiName : String, arguments : String, handler : Function) {
     	var url : String = "http://"+GetApiDomain()+"/api/"+apiName+"?"+arguments;
 		Debug.Log("API request " + url);
 		
 		var www : WWW = new WWW(url);
 		yield www;	
+		var resultData : Hashtable = null;
+		
+		var handleError : Function = function() {
+			var gt : Function = TextManager.GetText;
+			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error."));
+		};
+
+		if (www.error != null) {
+				
+			try {
+				resultData = GetApiCache(url);
+			} catch (err) {
+				
+			}
+			
+			if (resultData != null) {
+				handler(resultData);
+			} else {
+				handleError();
+			}
+			return;
+		}
+		
 		var data = www.text;
 		var apiData : Hashtable = JSONUtils.ParseJSON(data);
 		var status = apiData["status"];
 		if (status == "OK") {
-			var resultData = apiData["result"];
+			resultData = apiData["result"];
+			SetApiCache(url, resultData);
 			handler(resultData);
 		} else {
 			Debug.Log("API error: " + url);
-			// TODO: handle error
+			handleError();
 		}
     }
     
@@ -67,11 +104,11 @@ class ApiManager extends MonoBehaviour {
     	if (apiDomain != null) return apiDomain;
     	
 		var us : UserSession = UserSession.GetUserSession();
-		if (us) {
+		if (us && us.options.ContainsKey("api_domain")) {
 			apiDomain = us.ApiDomain();
 			return apiDomain;
 		} else {
-			apiDomain = "dev.verserain.com";
+			apiDomain = "www.verserain.com";
 			return apiDomain;
 		}
 	}

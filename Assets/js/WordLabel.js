@@ -21,7 +21,7 @@ var scoreCredited : float;
 var exploding : boolean = false;
 var totalSize : Vector3;
 var nonEdgeSize : Vector3;
-var shrinkEdgeFactor : float = 0.5f;
+var shrinkEdgeFactor : float;
 var wordIndex : int;
 var isFirstInLine : boolean;
 var isLastInLine : boolean;
@@ -115,7 +115,7 @@ function SetBlockLength(l : float, h : float) {
 	var sl = bgRight.renderer.bounds.size;
 	var f = shrinkEdgeFactor;
 	totalSize = new Vector3(sl.x+sm.x+sr.x, sm.y, sm.z);
-	nonEdgeSize = new Vector3(totalSize.x-f*sl.x-f*sr.x,sm.y,sm.z);
+	nonEdgeSize = new Vector3(totalSize.x-(f)*sl.x-(f)*sr.x,sm.y,sm.z);
 	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
 	
 }
@@ -131,9 +131,9 @@ function ShrinkLeftEdge(duration : float) {
 	
 	var f = shrinkEdgeFactor;
 	
-	// move right edge to the right and shrink
+	// move left edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgLeft.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw*f,0,0), duration);
+	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw*.99,0,0), duration);
 	
 	var oldW = bgMiddle.renderer.bounds.size.x;
 	var newW = oldW+dw;
@@ -142,7 +142,7 @@ function ShrinkLeftEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1.0f*dw*f,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1.0f*dw*.99,0,0), duration);
 		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
@@ -161,7 +161,7 @@ function ShrinkRightEdge(duration : float) {
 	
 	// move right edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgRight.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw*f,0,0), duration);
+	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw*0.99,0,0), duration);
 	
 
 	var oldW = bgMiddle.renderer.bounds.size.x;
@@ -171,7 +171,7 @@ function ShrinkRightEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*1.0f*f,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*0.99,0,0), duration);
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;

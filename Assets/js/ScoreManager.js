@@ -25,20 +25,8 @@ var startingHealth : float = 0.5f;
 var healthBarUnits : float = startingHealth;
 
 function HandleWordCorrect(elapsedTime : float) {
-	var dHealth = 0.04f;
-	var difficulty = gameManager.difficulty;
-
-	switch (difficulty) {
-		case Difficulty.Easy:
-			dHealth = 0.05f;
-			break;
-		case Difficulty.Medium:
-			dHealth = 0.04f;
-			break;
-		case Difficulty.Hard:
-			dHealth = 0.03f;
-			break;
-	}	
+	var dHealth = (2.0f-healthBarUnits)*0.025f;
+	if (dHealth < 0.01) dHealth = 0.01f;
 	
 	UpdateHealthBar(healthBarUnits + dHealth);
 	
@@ -59,7 +47,7 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
-	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits);
+	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits );
 	score += dScore;
 	
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
@@ -110,7 +98,13 @@ function updateScoreLabel() {
 	scoreLabel.text = score.ToString("000000");
 	if (timeLeft < 0) timeLeft = 0;
 	
-	timeLabel.text = timeLeft.ToString("00");
+	var digits = "00";
+	
+	if (gameManager.GetChallengeModeEnabled()) {
+		digits = "000";
+	}
+	
+	timeLabel.text = timeLeft.ToString(digits);
 	
 	/*
 	var hundredths : int = 100*(totalElapsedTime - parseInt(totalElapsedTime));
@@ -127,9 +121,9 @@ function CalculateMaxTime() {
 	if (n == 0) return 0;
 	
 	if (GameManager.GetChallengeModeEnabled()) {
-		return 2+n*2;
+		return 10+n*2;
 	} else {
-		return 2+n*4;
+		return 10+n*4;
 	}
 	
 }
@@ -137,6 +131,7 @@ function CalculateMaxTime() {
 function resetStatsForChallenge() {
 	moves = 0;
 	streak = 0;
+	maxTime = timeLeft;
 	updateScoreLabel();
 	UpdateHealthBar(healthBarUnits);
 }
@@ -175,7 +170,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(1*difficultyMultiplier(gameManager.difficulty)*healthBarUnits);
+		score += Mathf.RoundToInt(1*difficultyMultiplier(gameManager.difficulty));
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
@@ -239,8 +234,10 @@ function reset() {
 		highScore = verseMetadata["high_score"];
 	} else {
 		var verseset : VerseSet = verseManager.GetCurrentVerseSet();
-		versesetMetadata = verseset.GetMetadata();
-		highScore = versesetMetadata["high_score"];
+		if (!Object.ReferenceEquals(verseset, null)) {
+			versesetMetadata = verseset.GetMetadata();
+			highScore = versesetMetadata["high_score"];
+		}
 	}
 	updateHighScoreLabel();
 	resetTime();	

@@ -91,6 +91,10 @@ function ShowVerses() {
 	
 }
 
+function GoBack () {
+	Application.LoadLevel("title");
+}
+
 function Awake () {
 	TextManager.LoadLanguage(VerseManager.GetLanguage());
 }

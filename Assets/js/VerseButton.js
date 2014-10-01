@@ -16,7 +16,7 @@ function Awake() {
 function GetColorForDifficulty(difficultyInt : int) {
 	switch(difficultyInt) {
 		case 1:
-			return new Color(0.5f,1.0f,0.5f,1.0f);
+			return Color(0.5f,1.0f,0.5f,1.0f);
 		case 2:
 			return Color(1.0f,1.0f,0.5f);
 		case 3:

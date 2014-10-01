@@ -54,7 +54,7 @@ function SetProgress(p : float) {
 }
 
 function SetPercentage(p : float) {
-	Debug.Log("set healthbar pct = " + p);
+	//Debug.Log("set healthbar pct = " + p);
 	targetPercentage = p;
 	var endPercentage = targetPercentage;
 	var startPercentage = currentPercentage;

@@ -3,20 +3,14 @@
 import JSONUtils;
 
 var verseText : TextAsset;
-var verseTextEN : TextAsset;
-var verseTextZH : TextAsset;
-var verseTextHE : TextAsset;
-var verseTextKO : TextAsset;
-var verseTextMN : TextAsset;
-var verseTextRU : TextAsset;
-
 var versesetLanguage : String;
 var numVerses = 0;
 var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
+static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
-static var currentView : String = "history";
+static var currentView : String = null;
 static var currentVerseSet : VerseSet = null;
 static var verseIndex = 0;
 static var rightToLeft : boolean = false;
@@ -39,15 +33,36 @@ static function Unload() {
 
 }
 
+static function SwitchLanguage(language : String) {
+	languageChosen = true;
+	SetLanguage(language);
+	SetCurrentView("history");
+	var versesets = GetCurrentVerseSets();
+	offlineVersesLoaded = (versesets.length > 0);
+}
+
 function Reload() {
 	Unload();
 	Start();
 }
 
 static function SetCurrentView(view : String) {
+	view = view+"_"+GetLanguage();
+	
 	currentView = view;
 	verseIndex = 0;
 	var versesets : Array = GetCurrentVerseSets();
+	
+	if (!Object.ReferenceEquals(currentVerseSet, null)) {
+		for (var i=0;i<versesets.length;i++) {
+			var verseset : VerseSet = versesets[i];
+			if (verseset.SaveKey() == currentVerseSet.SaveKey()) {
+				// current verse set is in view so leave it alone
+				return;
+			}
+		}
+	}
+	
 	if (versesets.length > 0) {
 		currentVerseSet = versesets[0];
 	} else {
@@ -80,6 +95,7 @@ static function GetCurrentVerseSet() : VerseSet {
 }
 
 static function SetCurrentVerseSet(verseset : VerseSet) {
+Debug.Log("current verse set = " + verseset.SaveKey());
 	currentVerseSet = verseset;
 	var language = GetLanguage();
 	if (verseset.language != null) {
@@ -87,7 +103,7 @@ static function SetCurrentVerseSet(verseset : VerseSet) {
 	} else {
 		SetVerseLanguage(language);
 	}
-	Debug.Log("verseset set to " + verseset.SaveKey());
+	//Debug.Log("verseset set to " + verseset.SaveKey());
 	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
@@ -189,7 +205,8 @@ static function SetVerseLanguage(language : String) {
 	var gameLanguage = GetLanguage();
 	var defaultLanguage = "en";
 	// try to load game language as verse language if available
-	if (gameLanguage != language) {
+	// and user never "set the language" 
+	if ((gameLanguage != language) && (!languageChosen)) {
 		var success = TextManager.LoadLanguage(language);
 		if (!success) {
 			TextManager.LoadLanguage(defaultLanguage);
@@ -428,7 +445,7 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 	SetMasteredVerses(difficulty, masteredVerses);
 }
 
-function AddOnlineVerseSet(verseset : VerseSet) {
+static function AddOnlineVerseSet(verseset : VerseSet) {
 	var versesets : Array = GetCurrentVerseSets();
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.length;i++) {
@@ -436,7 +453,9 @@ function AddOnlineVerseSet(verseset : VerseSet) {
 		
 		if (verseset.isOnline && (vs.onlineId == verseset.onlineId)) {
 			versesets[i] = verseset;
-			Destroy(vs);
+			if (!(Object.ReferenceEquals(vs, verseset))) {
+				Destroy(vs);
+			}
 			return verseset;
 		}
 	}
@@ -446,7 +465,7 @@ function AddOnlineVerseSet(verseset : VerseSet) {
 
 function CreateVerseSet(name : String) {
 	var versesets : Array = GetCurrentVerseSets();
-	var vs : VerseSet = new VerseSet(name);
+	var vs : VerseSet = VerseSet(name);
 	vs.language = GetLanguage();
 	versesets.push(vs);
 	return vs;
@@ -460,16 +479,6 @@ static function CheckRightToLeft(language : String) {
 		}
 	}
 	rightToLeft = false;
-}
-
-function GetApiDomain() {
-	var us : UserSession = UserSession.GetUserSession();
-	if (us) {
-		apiDomain = us.ApiDomain();
-		return apiDomain;
-	} else {
-		return "dev.verserain.com";
-	}
 }
 
 function LoadOnlineVerse(verseId : String) {
@@ -496,10 +505,10 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		var version = verseData["version"];
 		var versesetName = verseData["verseset_name"];
 	
-		var verseset : VerseSet = new VerseSet(versesetId, versesetName, language, version);
+		var verseset : VerseSet = VerseSet.GetVerseSet(versesetId, versesetName, language, version);
 		AddOnlineVerseSet(verseset);
 	
-		var verse : Verse = new Verse(verseId, reference, text, version, verseset);
+		var verse : Verse = Verse(verseId, reference, text, version, verseset);
 		verseset.AddVerse(verse);
 	
 		SetCurrentVerseSet(verseset);
@@ -516,19 +525,27 @@ function LoadOnlineVerseSet(versesetId : String) {
 	LoadOnlineVerseSet(versesetId, null);
 }
 
+static function LoadVerseSetData(versesetData : Hashtable) : VerseSet {
+	var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
+	var language : String = versesetData["language"];
+	var version : String = versesetData["version"];
+	var setname : String = versesetData["name"];
+	var versesetId : String = versesetData["_id"];
+	var verseCount = versesetData["verse_count"];
+	//Debug.Log("setname = " + setname + " verse count = " + verseCount);
+	var verseset : VerseSet = VerseSet.GetVerseSet(versesetId, setname, language, version);
+	verseset.verseCount = verseCount;
+	AddOnlineVerseSet(verseset);
+	return verseset;
+}
+
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	var handleApi : Function = function(resultData : Hashtable) {
 		var versesetData : Hashtable = resultData["verseset"];
-		var versesetJson : String = JSONUtils.HashtableToJSON(versesetData);
-		var language = versesetData["language"];
-		var version = versesetData["version"];
-		var setname = versesetData["name"];
 		var versesData : Array = resultData["verses"];
-		var verseset : VerseSet = new VerseSet(versesetId, setname, language, version);
-		AddOnlineVerseSet(verseset);
+		var verseset : VerseSet = LoadVerseSetData(versesetData);
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
-	
 		verseset.LoadVersesData(versesData);
 		verseIndex = verseset.IndexOfVerseId(verseId);
 		if (verseIndex < 0) verseIndex = 0;
@@ -561,24 +578,22 @@ function LoadVerses() {
 	
 	var language = GetLanguage();
 	
-	verseText = null;
+	var filename = String.Format("verses_{0}", language.ToLower());
 	
-	if (language == "en") {
-		verseText = verseTextEN;
-	} else if (language == "zh-hant") {
-		verseText = verseTextZH;
-	} else if (language == "he") {
-		verseText = verseTextHE;
-	} else if (language == "ko") {
-		verseText = verseTextKO;
-	} else if (language == "mn") {
-		verseText = verseTextMN;
-	} else if (language == "ru") {
-		verseText = verseTextRU;
-	}
-	
+	var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
+ 
+ 	Debug.Log(fullpath);
+ 	
+ 	
+    verseText =  Resources.Load(fullpath, typeof(TextAsset));
+    
+    Debug.Log(verseText);
+    
 	if (verseText != null) {
 		LoadVersesLocally();
+	} else {
+		offlineVersesLoaded = true;
+		loaded = true;
 	}
 }
 
@@ -615,7 +630,7 @@ function LoadVersesLocally() {
 	  	}
 	  	
   		var reference = parts[0];
-  		verse = new Verse(reference, text, verseset);
+  		verse = Verse(reference, text, verseset);
   		
   		verseset.AddVerse(verse);  	
   	}
@@ -636,16 +651,20 @@ static function GetVerseSets(view : String) : Array {
 }
 
 function Awake() {
-	
 }
 
-function Load () {
+function Load() {
 	verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);
 }
 
-function Start () {
+function Start() {
+	if (currentView == null) {
+		SetCurrentView("history");
+	}
+	
 	LoadVerses();
 	Load();
+	
 }
 
 function Update () {

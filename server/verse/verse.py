@@ -297,7 +297,7 @@ class ListVerseSetHandler(BaseHandler):
             versesets = user.versesets()
         elif (option in ("new","popular")):
             selected_nav = "verse sets"
-            if language_code == "ALL":
+            if language_code != "ALL":
                 args.update({"language":language_code})
 
             versesets = VerseSet.collection.find(args)
