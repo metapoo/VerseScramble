@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 var options : Hashtable;
+static var started : boolean = false;
 
 static function GetUserSession() {
 	
@@ -96,12 +97,13 @@ function SetApiDomain(api_domain : String) {
 
 function Start () {
     // we're ready to pass in parameters from web client to user session
-	if (Application.isWebPlayer) {
+	if (Application.isWebPlayer && !started) {
 		Application.ExternalEval(
     	"u.start_verserain();"
 		);
+		started = true;
 	}
-	/*
+/*
 	SetApiDomain("www.verserain.com");
 	SetVerseSetId("540a149f3f7ab072f26e3489");
     SetVerseId("540a180c3f7ab072f26e3495");
