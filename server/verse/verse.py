@@ -305,7 +305,7 @@ class ListVerseSetHandler(BaseHandler):
             if option == "new":
                 versesets = versesets.sort("_id",-1)
             elif option == "popular":
-                versesets = versesets.sort("play_count",-1)
+                versesets = versesets.sort("hotness",-1)
             
             versesets = list(versesets)
         else:

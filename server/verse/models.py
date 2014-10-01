@@ -27,7 +27,8 @@ class VerseSet(BaseModel):
         indices = (
             Index("name",unique=False),
             Index("language",unique=False),
-            Index("user_id",unique=False)
+            Index("user_id",unique=False),
+            Index("hotness",unique=False)
         )
 
     def calculate_hotness(self):

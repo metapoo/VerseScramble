@@ -28,7 +28,7 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         if order_by == "new":
             versesets = versesets.sort("_id",-1)
         elif order_by == "popular":
-            versesets = versesets.sort("play_count",-1)
+            versesets = versesets.sort("hotness",-1)
 
         versesets = versesets[(page-1)*per_page:page*per_page]
 
