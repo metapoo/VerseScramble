@@ -12,6 +12,12 @@ class BaseModel(Model):
     def created_at(self):
         return self._id.generation_time
 
+    def age(self):
+        created_at = self.created_at()
+        tz = created_at.tzinfo
+        now = datetime.now().replace(tzinfo=tz)
+        return now - created_at
+
     def json(self):
         d = dict(self)
         okeys = []

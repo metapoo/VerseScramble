@@ -30,6 +30,14 @@ class VerseSet(BaseModel):
             Index("user_id",unique=False)
         )
 
+    def calculate_hotness(self):
+        age = self.age().total_seconds()
+        days = (age / 86400.0)
+        hotness = self.play_count() / days
+        if hotness != self.get("hotness"):
+            self["hotness"] = hotness
+            self.save()
+
     def json(self):
         j = super(VerseSet, self).json()
         j["verse_count"] = self.verse_count()
