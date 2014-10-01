@@ -21,19 +21,17 @@ function SetParent(prt : RectTransform) {
 	rt.anchoredPosition = oldPosition;
 	rt.localScale = oldScale;
 	
-	SetTitle("TITLE");
-	SetDescription("DESCRIPTION");
-	
 }
 
 function SetTitle(_title : String) {
-	titleText.text = TextManager.GetText(_title);
+	titleText.text = _title;
 	title = _title;
 }
 
 function SetDescription(_description : String) {
-	descriptionText.text = TextManager.GetText(_description);
+	descriptionText.text = _description;
 	description = _description;
+	Debug.Log("Set description = " + _description);
 }
 
 function CloseDialog() {
@@ -58,8 +56,6 @@ function AddOption(label : String, handler : Function) {
 }
 
 function Start () {
-	SetTitle(title);
-	SetDescription(description);
 }
 
 function Update () {

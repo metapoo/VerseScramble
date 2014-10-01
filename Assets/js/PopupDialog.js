@@ -18,27 +18,21 @@ function SetParent(prt : RectTransform) {
 	rt.SetParent(prt);
 	
 	rt.anchoredPosition = oldPosition;
-	rt.localScale = oldScale;
-	
-	SetTitle("TITLE");
-	SetDescription("DESCRIPTION");
-	
+	rt.localScale = oldScale;	
 }
 
 function SetTitle(_title : String) {
-	titleText.text = TextManager.GetText(_title);
+	titleText.text = _title;
 	title = _title;
 }
 
 function SetDescription(_description : String) {
-	descriptionText.text = TextManager.GetText(_description);
+	descriptionText.text = _description;
 	description = _description;
 }
 
 function Start () {
 	okayButton.onClick.AddListener(HandleOkayButtonClick);
-	SetTitle(title);
-	SetDescription(description);
 }
 
 function Update () {
