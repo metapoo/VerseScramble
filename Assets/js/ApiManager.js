@@ -29,6 +29,11 @@ class ApiManager extends MonoBehaviour {
         return Instance();
     }
 
+	public function CallApi(apiName : String, arguments : Hashtable) {
+		var handler : Function = function() {};
+		CallApi(apiName, arguments, handler);
+	}
+	
     public function CallApi(apiName : String, arguments : Hashtable, handler : Function) {
 
     	var serializedArguments : String = "";

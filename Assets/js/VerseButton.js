@@ -64,15 +64,22 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 }
 
 function  HandleOnClick() {
+	var versesetId = verseManager.currentVerseSet.onlineId;
+	if (versesetId != null) {
+		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}));
+	}
+	
 	if (Object.ReferenceEquals(verse,null)) {
 		StartChallenge();
 		return;
 	}
+	
 	verseManager.verseIndex = verseIndex;
 	verseManager.Save();
 	GameManager.SetChallengeModeEnabled(false);
 	PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
 						parentScrollContent.anchoredPosition.y);
+	
 	Application.LoadLevel("scramble");
 }
 
