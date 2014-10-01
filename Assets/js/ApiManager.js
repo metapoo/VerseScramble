@@ -103,7 +103,7 @@ class ApiManager extends MonoBehaviour {
 			apiDomain = us.ApiDomain();
 			return apiDomain;
 		} else {
-			apiDomain = "dev.verserain.com";
+			apiDomain = "www.verserain.com";
 			return apiDomain;
 		}
 	}
