@@ -3,12 +3,6 @@
 import JSONUtils;
 
 var verseText : TextAsset;
-var verseTextEN : TextAsset;
-var verseTextZH : TextAsset;
-var verseTextHE : TextAsset;
-var verseTextKO : TextAsset;
-var verseTextMN : TextAsset;
-var verseTextRU : TextAsset;
 var versesetLanguage : String;
 var numVerses = 0;
 var apiDomain = "dev.verserain.com";
@@ -584,22 +578,17 @@ function LoadVerses() {
 	
 	var language = GetLanguage();
 	
-	verseText = null;
+	var filename = String.Format("verses_{0}", language.ToLower());
 	
-	if (language == "en") {
-		verseText = verseTextEN;
-	} else if (language == "zh-hant") {
-		verseText = verseTextZH;
-	} else if (language == "he") {
-		verseText = verseTextHE;
-	} else if (language == "ko") {
-		verseText = verseTextKO;
-	} else if (language == "mn") {
-		verseText = verseTextMN;
-	} else if (language == "ru") {
-		verseText = verseTextRU;
-	}
-	
+	var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
+ 
+ 	Debug.Log(fullpath);
+ 	
+ 	
+    verseText =  Resources.Load(fullpath, typeof(TextAsset));
+    
+    Debug.Log(verseText);
+    
 	if (verseText != null) {
 		LoadVersesLocally();
 	}
