@@ -34,14 +34,16 @@ class VerseSet(BaseModel):
         age = self.age().total_seconds()
         days = (age / 86400.0)
         hotness = self.play_count() / days
-        if hotness != self.get("hotness"):
-            self["hotness"] = hotness
-            self.save()
-
+        self["hotness"] = hotness
+            
     def json(self):
         j = super(VerseSet, self).json()
         j["verse_count"] = self.verse_count()
         return j
+
+    def save(self, *args, **kwargs):
+        self.calculate_hotness()
+        super(VerseSet, self).save(*args, **kwargs)
 
     def __new__(cls, *args, **kwargs):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
