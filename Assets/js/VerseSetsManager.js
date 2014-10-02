@@ -102,9 +102,11 @@ function Awake () {
 function Start () {
 	verseManager.LoadVerses();
 	var navButtons : Array = GameObject.FindObjectsOfType(NavigationButton);
+	Debug.Log("current view = " +verseManager.GetCurrentView(false));
+	var currentViewNoLanguage = VerseManager.GetCurrentView(false);
 	for (var i=0;i<navButtons.length;i++) {
 		var navButton : NavigationButton = navButtons[i];
-		if (navButton.view == "history") {
+		if (navButton.view == currentViewNoLanguage) {
 			navButton.HandleOnClick();
 		}
 	}

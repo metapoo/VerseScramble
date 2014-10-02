@@ -48,6 +48,7 @@ public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
+static var needToRecordPlay : boolean = false;
 static var currentWord : String;
 static var words : Array = new Array();
 static var wordLabels : Array = new Array();
@@ -284,6 +285,13 @@ function AnimateIntro() {
 }
 
 function Start() {
+	if (needToRecordPlay) {
+		var versesetId = verseManager.currentVerseSet.onlineId;
+		if (versesetId != null) {
+			ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
+		}
+		needToRecordPlay = false;
+	}
 	SetupWalls();
 	SetupUI();	
 	DidRanOutOfTime = false;

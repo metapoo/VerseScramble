@@ -64,16 +64,25 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 }
 
 function  HandleOnClick() {
-	if (Object.ReferenceEquals(verse,null)) {
-		StartChallenge();
-		return;
-	}
-	verseManager.verseIndex = verseIndex;
-	verseManager.Save();
-	GameManager.SetChallengeModeEnabled(false);
-	PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
+	var versesetId = verseManager.currentVerseSet.onlineId;
+	GameManager.needToRecordPlay = true;
+	
+	var playVerse : Function = function() {
+		if (Object.ReferenceEquals(verse,null)) {
+			StartChallenge();
+			return;
+		}
+	
+		verseManager.verseIndex = verseIndex;
+		verseManager.Save();
+		GameManager.SetChallengeModeEnabled(false);
+		PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
 						parentScrollContent.anchoredPosition.y);
-	Application.LoadLevel("scramble");
+	
+		Application.LoadLevel("scramble");
+	};
+
+	playVerse();
 }
 
 
