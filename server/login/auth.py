@@ -41,7 +41,7 @@ def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=
         u["name"] = name
 
     if email:
-        u["email"] = email
+        u["email"] = email.lower()
 
         if User.collection.find_one({'email':email}):
             raise Exception("A user already exists with the given email.")
@@ -60,7 +60,7 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
     user = None
     if email:
         # find a registered user based on email                                                                                                                     
-        user = User.collection.find_one({'email':email})
+        user = User.collection.find_one({'email':email.lower()})
         if user is None:
             return None
     elif username:
