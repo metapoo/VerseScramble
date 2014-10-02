@@ -46,6 +46,12 @@ function Reload() {
 	Start();
 }
 
+static function GetCurrentView(withLanguage : boolean) {
+	var parts = currentView.Split("_"[0]);
+	if (withLanguage) return currentView;
+	return parts[0];
+}
+
 static function SetCurrentView(view : String) {
 	view = view+"_"+GetLanguage();
 	
