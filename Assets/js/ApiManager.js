@@ -33,8 +33,16 @@ class ApiManager extends MonoBehaviour {
 		var handler : Function = function() {};
 		CallApi(apiName, arguments, handler);
 	}
+
+	public function CallApi(apiName : String, arguments : Hashtable, handler : Function) {
+		var errorHandler : Function = function() {
+			var gt : Function = TextManager.GetText;
+			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error."));
+		};
+		CallApi(apiName, arguments, handler, errorHandler);
+	}	
 	
-    public function CallApi(apiName : String, arguments : Hashtable, handler : Function) {
+    public function CallApi(apiName : String, arguments : Hashtable, handler : Function, errorHandler : Function) {
 
     	var serializedArguments : String = "";
     	var i = 0;
@@ -48,7 +56,7 @@ class ApiManager extends MonoBehaviour {
     		}
     	}
 
-		CallApi(apiName, serializedArguments, handler);
+		CallApi(apiName, serializedArguments, handler, errorHandler);
     }
     
     public function SetApiCache(url : String, resultData : Hashtable) {
@@ -63,18 +71,13 @@ class ApiManager extends MonoBehaviour {
     	return resultData;
     }
     
-    public function CallApi(apiName : String, arguments : String, handler : Function) {
+    public function CallApi(apiName : String, arguments : String, handler : Function, errorHandler : Function) {
     	var url : String = "http://"+GetApiDomain()+"/api/"+apiName+"?"+arguments;
 		Debug.Log("API request " + url);
 		
 		var www : WWW = new WWW(url);
 		yield www;	
 		var resultData : Hashtable = null;
-		
-		var handleError : Function = function() {
-			var gt : Function = TextManager.GetText;
-			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error."));
-		};
 
 		if (www.error != null) {
 				
@@ -87,7 +90,7 @@ class ApiManager extends MonoBehaviour {
 			if (resultData != null) {
 				handler(resultData);
 			} else {
-				handleError();
+				errorHandler();
 			}
 			return;
 		}
@@ -98,14 +101,16 @@ class ApiManager extends MonoBehaviour {
 		if (status == "OK") {
 			resultData = apiData["result"];
 			SetApiCache(url, resultData);
-			handler(resultData);
+			if (handler != null) {
+				handler(resultData);
+			}
 		} else {
 			Debug.Log("API error: " + url);
-			handleError();
+			errorHandler();
 		}
     }
     
-    public static function GetApiDomain() {
+    public static function GetApiDomain() : String {
     	if (apiDomain != null) return apiDomain;
     	
 		var us : UserSession = UserSession.GetUserSession();

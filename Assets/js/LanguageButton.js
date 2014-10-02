@@ -25,8 +25,8 @@ function SetParent(prt : RectTransform) {
 	var oldMin = rt.offsetMin;
 	var oldMax = rt.offsetMax;
 	
-	Debug.Log("offset min = " + oldMin);
-	Debug.Log("offset max = " + oldMax);
+//	Debug.Log("offset min = " + oldMin);
+//	Debug.Log("offset max = " + oldMax);
 	
 	rt.SetParent(prt);
 	
