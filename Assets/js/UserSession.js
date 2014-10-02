@@ -1,12 +1,23 @@
 ﻿#pragma strict
 
-var options : Hashtable;
+var verseId : String = null;
+var versesetId : String = null;
+var apiDomain : String = null;
+var userId : String = null;
+var sessionKey : String = null;
+var username : String = null;
+var email : String = null;
+var isLoggedIn : boolean = false;
+
 static var started : boolean = false;
 
 static function GetUserSession() {
 	
 	var usGO : GameObject = GameObject.Find("UserSession");
-	if (usGO == null) return null;
+	if (usGO == null) {
+		usGO = new GameObject("UserSession");
+		usGO.AddComponent(typeof(UserSession));
+	}
 	
 	var us : UserSession = usGO.GetComponent("UserSession");
 	if (us) {
@@ -17,26 +28,26 @@ static function GetUserSession() {
 
 function Awake() {
 	DontDestroyOnLoad(this.gameObject);
-	options = new Hashtable();
+	LoadUserLogin();
 }
 
 // example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
 function HandleURL(url : String) {
-	ClearOption("verse_id");
-	ClearOption("verseset_id");
+	verseId = null;
+	versesetId = null;
 	
 	var parts = url.Split("/"[0]);
 	var subject = parts[3];
 	var idstr = parts[4];
-	var apiDomain = parts[5];
+	var apiDom = parts[5];
 	
 	if (subject == "verse") {
-		SetVerseId(idstr);
+		verseId = idstr;
 	} else if (subject == "verseset") {
-		SetVerseSetId(idstr);
+		versesetId = idstr;
 	}
-	
-	SetApiDomain(apiDomain);
+
+	apiDomain = apiDom;	
 	
 	var gmObject = GameObject.Find("GameManager");	
 	
@@ -49,50 +60,65 @@ function HandleURL(url : String) {
 	Application.LoadLevel("scramble");
 }
 
-function SetOption(key : String, value : String) {
-	options[key] = value;
+function SetVerseId(verseId_ : String) {
+	verseId = verseId_;
 }
 
-function ClearOption(key : String) {
-	options.Remove(key);
+function SetVerseSetId(versesetId_ : String) {
+	versesetId = versesetId_;
 }
 
-function SetVerseId(verse_id : String) {
-	SetOption("verse_id", verse_id);
-}
-
-function SetVerseSetId(verseset_id : String) {
-	SetOption("verseset_id", verseset_id);
-}
-
-function ClearOptions() {
-	options.Clear();
-}
-
-function VerseId() : String {
-	if (options.ContainsKey("verse_id")) {
-		return options["verse_id"];
-	}
-	return null;
-}
-
-function VerseSetId() : String {
-	if (options.ContainsKey("verseset_id")) {
-		return options["verseset_id"];
-	}
-	return null;
+function SetApiDomain(apiDomain_ : String) {
+	apiDomain = apiDomain_;
 }
 
 function ApiDomain() : String {
-	if (options.ContainsKey("api_domain")) {
-		return options["api_domain"];
+	if (apiDomain) {
+		return apiDomain;
 	} else {
 		return ApiManager.GetApiDomain();
 	}
 }
 
-function SetApiDomain(api_domain : String) {
-	SetOption("api_domain", api_domain);
+function ClearUrlOptions() {
+	verseId = null;
+	versesetId = null;
+}
+
+function HandleLogin(userData : Hashtable) {
+	userId = userData["_id"];
+	sessionKey = userData["session_key"];
+	username = userData["username"];
+	email = userData["email"];
+	isLoggedIn = true;
+	
+	var json : String = HashtableToJSON(userData);
+	PlayerPrefs.SetString("user_data", json);
+}
+
+function LoadUserLogin() {
+	if (sessionKey && userId) return;
+	var json : String = PlayerPrefs.GetString("user_data");
+	if (json) {
+		Debug.Log("loaded user json = " + json);
+		var userData : Hashtable = ParseJSON(json);
+		HandleLogin(userData);
+	}
+}
+
+static function IsLoggedIn() {
+	var us : UserSession = GetUserSession();
+	Debug.Log("user logged in: " + us.isLoggedIn);
+	return (us.isLoggedIn);
+}
+
+function Logout() {
+	isLoggedIn = false;
+	userId = null;
+	sessionKey = null;
+	username = null;
+	email = null;
+	PlayerPrefs.DeleteKey("user_data");
 }
 
 function Start () {
@@ -103,11 +129,11 @@ function Start () {
 		);
 		started = true;
 	}
-/*
-	SetApiDomain("www.verserain.com");
-	SetVerseSetId("540a149f3f7ab072f26e3489");
-    SetVerseId("540a180c3f7ab072f26e3495");
-*/
+
+//	SetApiDomain("www.verserain.com");
+	//SetVerseSetId("542af9923f7ab0224bd53e2f");
+//    SetVerseId("542afb763f7ab0224bd53e33");
+
 }
 
 function Update () {

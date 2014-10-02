@@ -520,7 +520,7 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
 		loaded = true;
-		UserSession.GetUserSession().ClearOptions();
+		UserSession.GetUserSession().ClearUrlOptions();
 	};
 	
 	ApiManager.GetInstance().CallApi("verse/show", new Hashtable({"verse_id":verseId}), handleApi);
@@ -558,7 +558,7 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		
 		GameManager.SetChallengeModeEnabled((verseId == null));
 		loaded = true;
-		UserSession.GetUserSession().ClearOptions();
+		UserSession.GetUserSession().ClearUrlOptions();
 		Debug.Log("finished loading verse set");
 	};
 	
@@ -570,14 +570,12 @@ function LoadVerses() {
 	var us : UserSession = UserSession.GetUserSession();
 	
 	if (us) {
-		var verseId = us.VerseId();
-		if (verseId) {
-			LoadOnlineVerse(verseId);
+		if (us.verseId) {
+			LoadOnlineVerse(us.verseId);
 			return;
 		}
-		var versesetId = us.VerseSetId();
-		if (versesetId) {
-			LoadOnlineVerseSet(versesetId);
+		if (us.versesetId) {
+			LoadOnlineVerseSet(us.versesetId);
 			return;
 		}
 	}

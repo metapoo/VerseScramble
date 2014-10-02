@@ -13,8 +13,8 @@ function CheckOption() {
 	var us : UserSession = UserSession.GetUserSession();
 	
 	if (us) {
-		var verseId = us.VerseId();
-		var versesetId = us.VerseSetId();
+		var verseId = us.verseId;
+		var versesetId = us.versesetId;
 		if (verseId || versesetId) {
 			Application.LoadLevel("scramble");
 			return true;
