@@ -1,4 +1,4 @@
-B1;2cfrom verserain.base.handler import BaseHandler
+from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.api.api import *
 from bson.objectid import ObjectId
