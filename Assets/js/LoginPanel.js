@@ -1,11 +1,23 @@
 var usernameField : InputField;
 var passwordField : InputField;
 var feedback : Text;
+var loginButton : LoginButton;
 
 function Start() {
 }
 
 function Update() {
+}
+
+function SetParent(prt : RectTransform) {
+	var rt : RectTransform = GetComponent(RectTransform);
+	var oldPosition = rt.anchoredPosition;
+	var oldScale = rt.localScale;
+	
+	rt.SetParent(prt);
+	
+	rt.anchoredPosition = oldPosition;
+	rt.localScale = oldScale;	
 }
 
 function HandleLogin(resultData : Hashtable) {
@@ -18,7 +30,14 @@ function HandleLogin(resultData : Hashtable) {
 	var userSession : UserSession = UserSession.GetUserSession();
 	
 	userSession.HandleLogin(resultData);
+	ClosePanel();
+	
+}
+
+function ClosePanel() {
+	loginButton.SyncLabel();
 	Destroy(this.gameObject);
+	loginButton.curPanel = null;
 }
 
 function SubmitLogin() {

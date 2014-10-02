@@ -7,6 +7,7 @@ var userId : String = null;
 var sessionKey : String = null;
 var username : String = null;
 var email : String = null;
+var isLoggedIn : boolean = false;
 
 static var started : boolean = false;
 
@@ -27,6 +28,7 @@ static function GetUserSession() {
 
 function Awake() {
 	DontDestroyOnLoad(this.gameObject);
+	LoadUserLogin();
 }
 
 // example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
@@ -88,20 +90,30 @@ function HandleLogin(userData : Hashtable) {
 	sessionKey = userData["session_key"];
 	username = userData["username"];
 	email = userData["email"];
+	isLoggedIn = true;
 	
 	var json : String = HashtableToJSON(userData);
 	PlayerPrefs.SetString("user_data", json);
 }
 
 function LoadUserLogin() {
+	if (sessionKey && userId) return;
 	var json : String = PlayerPrefs.GetString("user_data");
-	if (json != null) {
+	if (json) {
+		Debug.Log("loaded user json = " + json);
 		var userData : Hashtable = ParseJSON(json);
 		HandleLogin(userData);
 	}
 }
 
+static function IsLoggedIn() {
+	var us : UserSession = GetUserSession();
+	Debug.Log("user logged in: " + us.isLoggedIn);
+	return (us.isLoggedIn);
+}
+
 function Logout() {
+	isLoggedIn = false;
 	userId = null;
 	sessionKey = null;
 	username = null;
@@ -117,7 +129,6 @@ function Start () {
 		);
 		started = true;
 	}
-	LoadUserLogin();
 
 //	SetApiDomain("www.verserain.com");
 	//SetVerseSetId("542af9923f7ab0224bd53e2f");
