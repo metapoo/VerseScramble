@@ -570,14 +570,12 @@ function LoadVerses() {
 	var us : UserSession = UserSession.GetUserSession();
 	
 	if (us) {
-		var verseId = us.VerseId();
-		if (verseId) {
-			LoadOnlineVerse(verseId);
+		if (us.verseId) {
+			LoadOnlineVerse(us.verseId);
 			return;
 		}
-		var versesetId = us.VerseSetId();
-		if (versesetId) {
-			LoadOnlineVerseSet(versesetId);
+		if (us.versesetId) {
+			LoadOnlineVerseSet(us.versesetId);
 			return;
 		}
 	}
