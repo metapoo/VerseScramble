@@ -81,6 +81,17 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
     else:
         return None
 
+def require_api_login(method):
+    """Decorate methods with this to require that the user be logged in                                                             
+    and a superuser."""
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        user = self.current_user
+        if (user is None):
+            self.return_error("authentication failed")
+        return method(self, *args, **kwargs)
+    return wrapper
+
 def require_login(method):
     """Decorate methods with this to require that the user be logged in                                                                                             
     and a superuser."""
