@@ -1,6 +1,7 @@
 from verserain.mongo.models import BaseModel
 from minimongo import Index
 from verserain.user.models import User
+from verserain import settings
 
 class Version(BaseModel):
     class Meta:
@@ -30,6 +31,9 @@ class VerseSet(BaseModel):
             Index("user_id",unique=False),
             Index("hotness",unique=False)
         )
+
+    def device_url(self, *args, **kwargs):
+        url = "verserain://com.hopeofglory.verserain/verseset/%s/%s" % (self._id, settings.SITE_DOMAIN)
 
     def calculate_hotness(self):
         age = self.age().total_seconds()
@@ -114,6 +118,9 @@ class Verse(BaseModel):
             Index("verseset_id",unique=False),
             Index("user_id",unique=False)
         )
+
+    def device_url(self, *args, **kwargs):
+        url = "verserain://com.hopeofglory.verserain/verse/%s/%s" % (self._id, settings.SITE_DOMAIN)
 
     def remove(self, *args, **kwargs):
         super(Verse, self).remove(*args, **kwargs)

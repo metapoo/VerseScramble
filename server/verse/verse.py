@@ -22,7 +22,6 @@ def get_handlers():
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
             (r"/verse/play/([^/]+)/?", PlayVerseHandler),
             (r"/verseset/play/([^/]+)/?", PlayVerseSetHandler),
-
             )
 
 class PlayVerseHandler(BaseHandler):
@@ -34,9 +33,8 @@ class PlayVerseHandler(BaseHandler):
             vs.save()
 
         if self.isIOS() or self.isAndroid():
-            return self.redirect("verserain://com.hopeofglory.verserain/verse/%s/%s" % (verse_id, settings.SITE_DOMAIN))
-            
-        self.render("webplayer.html",verse_id=verse_id, verseset_id=None)
+            return verse.device_url()
+        self.render("webplayer.html",verse_id=verse_id, verseset_id=None,device_url=verse.device_url())
 
 class PlayVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
@@ -45,8 +43,8 @@ class PlayVerseSetHandler(BaseHandler):
             vs["play_count"] = vs.play_count() + 1
             vs.save()
         if self.isIOS() or self.isAndroid():
-            return self.redirect("verserain://com.hopeofglory.verserain/verseset/%s/%s" % (verseset_id, settings.SITE_DOMAIN))
-        self.render("webplayer.html",verse_id=None, verseset_id=verseset_id)
+            return vs.device_url()
+        self.render("webplayer.html",verse_id=None, verseset_id=verseset_id,device_url=vs.device_url())
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):
