@@ -649,9 +649,6 @@ function SetupVerse() {
 	
 	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
 		var extraTime = scoreManager.CalculateMaxTime();
-		if (scoreManager.timeLeft > 100) {
-			extraTime *= 0.5f;
-		}
 		var newTime = extraTime + scoreManager.timeLeft;		
 		
 		var duration = 0.1f*(newTime-scoreManager.timeLeft);
