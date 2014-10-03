@@ -34,6 +34,7 @@ class VerseSet(BaseModel):
 
     def device_url(self, *args, **kwargs):
         url = "verserain://com.hopeofglory.verserain/verseset/%s/%s" % (self._id, settings.SITE_DOMAIN)
+        return url
 
     def calculate_hotness(self):
         age = self.age().total_seconds()
@@ -121,6 +122,7 @@ class Verse(BaseModel):
 
     def device_url(self, *args, **kwargs):
         url = "verserain://com.hopeofglory.verserain/verse/%s/%s" % (self._id, settings.SITE_DOMAIN)
+        return url
 
     def remove(self, *args, **kwargs):
         super(Verse, self).remove(*args, **kwargs)

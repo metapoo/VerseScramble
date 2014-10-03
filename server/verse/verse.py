@@ -32,9 +32,12 @@ class PlayVerseHandler(BaseHandler):
             vs["play_count"] = vs.play_count() + 1
             vs.save()
 
+        device_url = verse.device_url()
+
         if self.isIOS() or self.isAndroid():
-            return verse.device_url()
-        self.render("webplayer.html",verse_id=verse_id, verseset_id=None,device_url=verse.device_url())
+            return device_url
+
+        self.render("webplayer.html",verse_id=verse_id, verseset_id=None,device_url=device_url)
 
 class PlayVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
@@ -42,9 +45,10 @@ class PlayVerseSetHandler(BaseHandler):
         if vs:
             vs["play_count"] = vs.play_count() + 1
             vs.save()
+        device_url = vs.device_url()
         if self.isIOS() or self.isAndroid():
-            return vs.device_url()
-        self.render("webplayer.html",verse_id=None, verseset_id=verseset_id,device_url=vs.device_url())
+            return device_url
+        self.render("webplayer.html",verse_id=None, verseset_id=verseset_id,device_url=device_url)
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):
