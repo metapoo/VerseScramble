@@ -56,7 +56,7 @@ def create_new_user(fb_uid=None, email=None, password=None, user_obj=None, name=
 
     return u
 
-def authenticate_login(fb_uid=None, email=None, password=None, username=None, device_id=None):
+def authenticate_login(fb_uid=None, email=None, password=None, username=None, device_id=None, session_key=None):
     user = None
     if email:
         # find a registered user based on email                                                                                                                     
@@ -73,10 +73,12 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
     elif device_id:
         user = User.collection.find_one({'device_id':device_id})
         return user
-    else:
-        pass
+    elif session_key:
+        user_id = authenticate_session_key(session_key)
+        if user_id:
+            user = User.by_id(user_id)
 
-    if user and user.check_password(password):
+    if user and (user.check_password(password) or session_key):
         return user
     else:
         return None

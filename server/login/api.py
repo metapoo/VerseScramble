@@ -71,15 +71,16 @@ class LoginApiHandler(BaseHandler, ApiMixin):
         try:
             password = self.get_argument("password", None)
             username = self.get_argument("username", None)
+            session_key = self.get_argument("session_key", None)
         except tornado.web.HTTPError, e:
             return self.return_error(e.log_message)
 
         email = None
 
-        if ("@" in username) and ("." in username):
+        if username and ("@" in username) and ("." in username):
             email = username
 
-        user = authenticate_login(username=username, email=email, password=password)
+        user = authenticate_login(username=username, email=email, password=password, session_key=session_key)
 
         response = {}
 
@@ -93,7 +94,7 @@ class LoginApiHandler(BaseHandler, ApiMixin):
                 del response["password"]
         else:
             response["logged_in"] = False
-
+            
         return self.return_success(response)
 
 
