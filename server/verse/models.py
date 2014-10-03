@@ -32,8 +32,8 @@ class VerseSet(BaseModel):
             Index("hotness",unique=False)
         )
 
-    def device_url(self, *args, **kwargs):
-        url = "verserain://com.hopeofglory.verserain/verseset/%s/%s" % (self._id, settings.SITE_DOMAIN)
+    def device_url(self, session_key=None):
+        url = "verserain://com.hopeofglory.verserain/verseset/%s/%s/%s" % (self._id, settings.SITE_DOMAIN, session_key)
         return url
 
     def calculate_hotness(self):
@@ -120,8 +120,8 @@ class Verse(BaseModel):
             Index("user_id",unique=False)
         )
 
-    def device_url(self, *args, **kwargs):
-        url = "verserain://com.hopeofglory.verserain/verse/%s/%s" % (self._id, settings.SITE_DOMAIN)
+    def device_url(self, session_key=None):
+        url = "verserain://com.hopeofglory.verserain/verse/%s/%s/%s" % (self._id, settings.SITE_DOMAIN, session_key)
         return url
 
     def remove(self, *args, **kwargs):

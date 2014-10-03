@@ -32,7 +32,11 @@ class PlayVerseHandler(BaseHandler):
             vs["play_count"] = vs.play_count() + 1
             vs.save()
 
-        device_url = verse.device_url()
+        session_key = None
+        if self.current_user:
+            session_key = self.current_user.session_key
+
+        device_url = verse.device_url(session_key=session_key)
 
         if self.isIOS() or self.isAndroid():
             return device_url
@@ -45,7 +49,13 @@ class PlayVerseSetHandler(BaseHandler):
         if vs:
             vs["play_count"] = vs.play_count() + 1
             vs.save()
-        device_url = vs.device_url()
+
+        session_key = None
+        if self.current_user:
+            session_key = self.current_user.session_key
+
+        device_url = vs.device_url(session_key=session_key)
+
         if self.isIOS() or self.isAndroid():
             return device_url
         self.render("webplayer.html",verse_id=None, verseset_id=verseset_id,device_url=device_url)
