@@ -40,6 +40,7 @@ function HandleURL(url : String) {
 	var subject = parts[3];
 	var idstr = parts[4];
 	var apiDom = parts[5];
+	var sessionKey = parts[6];
 	
 	if (subject == "verse") {
 		verseId = idstr;
@@ -48,16 +49,30 @@ function HandleURL(url : String) {
 	}
 
 	apiDomain = apiDom;	
+
+	var startGame = function() {
+		var gmObject = GameObject.Find("GameManager");	
 	
-	var gmObject = GameObject.Find("GameManager");	
+		if (gmObject) {
+			var gameManager : GameManager = gmObject.GetComponent("GameManager");
+			gameManager.Cleanup();
+		}
 	
-	if (gmObject) {
-		var gameManager : GameManager = gmObject.GetComponent("GameManager");
-		gameManager.Cleanup();
+		VerseManager.loaded = false;
+		Application.LoadLevel("scramble");
+	};
+	
+	var onLogin = function(userData:Hashtable) {
+		HandleLogin(userData);
+		startGame();
+	};
+	
+	if (!IsLoggedIn() && (sessionKey != "None")) {
+		ApiManager.GetInstance().CallApi("login/login",
+				new Hashtable({"session_key":sessionKey}), onLogin);
 	}
 	
-	VerseManager.loaded = false;
-	Application.LoadLevel("scramble");
+
 }
 
 function SetVerseId(verseId_ : String) {
@@ -86,6 +101,10 @@ function ClearUrlOptions() {
 }
 
 function HandleLogin(userData : Hashtable) {
+	if (!userData["logged_in"]) {
+		return;
+	}
+	
 	userId = userData["_id"];
 	sessionKey = userData["session_key"];
 	username = userData["username"];
@@ -129,11 +148,12 @@ function Start () {
 		);
 		started = true;
 	}
-
-//	SetApiDomain("www.verserain.com");
-	//SetVerseSetId("542af9923f7ab0224bd53e2f");
-//    SetVerseId("542afb763f7ab0224bd53e33");
-
+/*
+	SetApiDomain("www.verserain.com");
+	SetVerseSetId("542af9923f7ab0224bd53e2f");
+    SetVerseId("542afb763f7ab0224bd53e33");
+*/
+ //   HandleURL("verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 }
 
 function Update () {
