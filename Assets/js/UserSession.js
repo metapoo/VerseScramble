@@ -51,6 +51,7 @@ function HandleURL(url : String) {
 	apiDomain = apiDom;	
 
 	var startGame = function() {
+		Debug.Log("Start game");
 		var gmObject = GameObject.Find("GameManager");	
 	
 		if (gmObject) {
@@ -70,6 +71,8 @@ function HandleURL(url : String) {
 	if (!IsLoggedIn() && (sessionKey != "None")) {
 		ApiManager.GetInstance().CallApi("login/login",
 				new Hashtable({"session_key":sessionKey}), onLogin);
+	} else {
+		startGame();
 	}
 	
 
@@ -152,8 +155,8 @@ function Start () {
 	SetApiDomain("www.verserain.com");
 	SetVerseSetId("542af9923f7ab0224bd53e2f");
     SetVerseId("542afb763f7ab0224bd53e33");
+    HandleURL("verserain://com.hopeofglory.verserain/verseset/542af9923f7ab0224bd53e2f/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 */
- //   HandleURL("verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 }
 
 function Update () {
