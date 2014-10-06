@@ -95,7 +95,7 @@ function updateScoreLabel() {
 	var gt = TextManager.GetText;
 	
 	//scoreLabel.text = String.Format("{0}: {1}",gt("Score"), score.ToString());
-	scoreLabel.text = score.ToString("000000");
+	scoreLabel.text = score.ToString("00000000");
 	if (timeLeft < 0) timeLeft = 0;
 	
 	var digits = "00";
