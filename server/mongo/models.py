@@ -10,7 +10,10 @@ class BaseModel(Model):
     _metadata = {}
 
     def created_at(self):
-        return self._id.generation_time
+        if hasattr(self, "_id"):
+            return self._id.generation_time
+        else:
+            return datetime.now()
 
     def age(self):
         created_at = self.created_at()
