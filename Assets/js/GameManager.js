@@ -37,6 +37,7 @@ var introReferenceLabel : Text;
 var panelReferenceLabel : Text;
 var difficultyLabel : Text;
 var healthBar : HealthBar;
+var wordScale : float;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -368,6 +369,7 @@ function SplitVerse(verse : String) {
 	verse = Regex.Replace(verse, "\\[.*\\]","");
 	verse = Regex.Replace(verse, "」|「|『|』","");
 	verse = Regex.Replace(verse, "\n|\t|\r", " ");
+	verse = Regex.Replace(verse, "\\s+", " ");
 	
 	var processClause = function(clause : String) {
 		var combined : boolean = false;
@@ -418,7 +420,7 @@ function SplitVerse(verse : String) {
 		return false;
 	};
 	
-	Debug.Log("clause array = " + clauseArray);
+	//Debug.Log("clause array = " + clauseArray);
 	
 	for (clause in clauseArray) {
 		// check for special '\' marker which we cannot split on
@@ -431,7 +433,7 @@ function SplitVerse(verse : String) {
 		
 		nobreakMarkers.Add(clause.Length-1);
 		
-		Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " >" + phraseLength + "*"+ clauseBreakMultiplier);
+		//Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " >" + phraseLength + "*"+ clauseBreakMultiplier);
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
 			
 			var divisor = Mathf.RoundToInt(1.0f*clause.Length/phraseLength);
@@ -643,6 +645,15 @@ function SetupVerse() {
 		//difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	}
 	
+	// calculate word size based on length of text
+	Debug.Log("verse length = " + verse.text.length);
+	
+	wordScale = 1.0f;
+	
+	if (verse.text.length > 300) {
+		wordScale = 0.5f + 0.5f*(300.0f / verse.text.length);
+	}
+	
 	words = SplitVerse(verse.text);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
@@ -813,23 +824,6 @@ function ShowHint() {
 			wObject.HintAt();
 		}
 	}
-}
-
-
-function increaseSize() {
-	var wObject : WordLabel;
-	
-	for (wObject in wordLabels) {
-			wObject.setFontSize(wObject.getFontSize() + 5);
-		}
-}
-
-function decreaseSize() {
-	var wObject : WordLabel;
-	
-	for (wObject in wordLabels) {
-			wObject.setFontSize(wObject.getFontSize() - 5);
-		}
 }
 
 function Update () {

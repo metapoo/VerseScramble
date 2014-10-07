@@ -194,7 +194,7 @@ function setWord(w : String) {
 	label.color = Color.black;
 	label.font = sceneSetup.GetCurrentFont();
 	label.renderer.material = label.font.material;
-	label.fontSize = 80;	
+	label.fontSize = 80.0f*gameManager.wordScale;
 	
 	if (rightToLeft) {
 		label.text = reverseString(w);
@@ -204,15 +204,6 @@ function setWord(w : String) {
 	word = w;
 	
 	ResetBubble();
-}
-
-function setFontSize(s: int){
-  label.fontSize = s;
-  ResetBubble();
-}
-
-function getFontSize(){
-  return label.fontSize;
 }
 
 function ResetBubble() {
