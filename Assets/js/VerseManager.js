@@ -589,10 +589,7 @@ function LoadVerses() {
  
  	Debug.Log(fullpath);
  	
- 	
     verseText =  Resources.Load(fullpath, typeof(TextAsset));
-    
-    Debug.Log(verseText);
     
 	if (verseText != null) {
 		LoadVersesLocally();
@@ -606,6 +603,10 @@ function LoadVersesLocally() {
 	if (offlineVersesLoaded) {
 		return;
 	}
+	 	
+ 	var previousView : String = currentView;
+ 	SetCurrentView("local");
+
 	offlineVersesLoaded = true;
 	var language = GetLanguage();
 	SetVerseLanguage(language);
@@ -641,6 +642,9 @@ function LoadVersesLocally() {
   	}
   	Load();
   	loaded = true;
+  	if (previousView != null) {
+  		SetCurrentView(previousView);
+  	}
 }
 
 static function GetCurrentVerseSets() : Array {
@@ -663,10 +667,6 @@ function Load() {
 }
 
 function Start() {
-	if (currentView == null) {
-		SetCurrentView("local");
-	}
-	
 	LoadVerses();
 	Load();
 	SetCurrentView(defaultView);
