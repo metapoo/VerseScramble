@@ -80,6 +80,7 @@ function HandleWordWrong() {
 	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
+	maxTime -= 1;
 	return dScore;
 }
 
