@@ -84,11 +84,19 @@ a {
   font-weight: bold;
 }
 
-a, a:visited, a:link, a:hover, a:active {
+a.link, a.link:visited, a.link:link{
+  color: #0078e7;
+}
+
+a.link:hover, a.link:active {
+  color: #2289f8;
+}
+
+a, a:visited, a:link {
   text-decoration: none;
-  color: #000;
+  color: #444;
 }
 
 a:hover, a:active {
-  color: #666;
+  color: #999;
 }

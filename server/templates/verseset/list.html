@@ -35,7 +35,7 @@ B1;2c{% extends "../base.html" %}
 <tbody>
 {% for verseset in versesets %}
 <tr>
-  <td><a href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a>
+  <td><a class="link" href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a>
   </td>
 
   </td>
@@ -45,7 +45,7 @@ B1;2c{% extends "../base.html" %}
   {% set vuser = verseset.user() %}
   <td>{{verseset.verse_count()}}</td>
   <td>{{verseset.play_count()}}</td>
-  <td><a href="/{{vuser['username']}}/versesets/">{{vuser.display_name()}}</a></td>
+  <td><a class="link" href="/{{vuser['username']}}/versesets/">{{vuser.display_name()}}</a></td>
 </tr>
 {% end %}
 </tbody>
