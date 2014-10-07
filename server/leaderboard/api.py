@@ -45,7 +45,9 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         VersesetScore.submit_score(user_id=self.current_user._id,
                                    username=self.current_user.display_name(),
                                    score=score,
-                                   verseset_id=verseset_id)
+                                   verseset_id=verseset_id,
+                                   user = self.current_user)
+
         response = get_scores_json(verseset_id)
         response["is_logged_in"] = True
         return self.return_success(response)
