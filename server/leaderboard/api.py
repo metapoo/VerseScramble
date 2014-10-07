@@ -14,13 +14,17 @@ def get_handlers():
 
 )
 
+def get_scores_json(verseset_id):
+    vsss = VersesetScore.collection.find({"verseset_id":verseset_id}).sort("score",pymongo.DESCENDING)
+    json = [vss.json() for vss in vsss]
+    response = {"scores":json}
+    return response
+
 class LeaderboardVersesetScoresHandler(BaseHandler, ApiMixin):
     api_name="leaderboard/verseset/list"
     def get(self):
         verseset_id = ObjectId(self.get_argument("verseset_id"))
-        vsss = VersesetScore.collection.find({"verseset_id":verseset_id}).sort("score",pymongo.DESCENDING)
-        json = [vss.json() for vss in vsss]
-        response = {"scores":json}
+        response = get_scores_json(verseset_id)
         return self.return_success(response)
 
 class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
@@ -37,10 +41,10 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         score = self.get_int_argument("score")
         verseset_id = ObjectId(self.get_argument("verseset_id"))
 
-        response["is_logged_in"] = True
         VersesetScore.submit_score(user_id=self.current_user._id,
                                    username=self.current_user.display_name(),
                                    score=score,
                                    verseset_id=verseset_id)
-
+        response = get_scores_json(verseset_id)
+        response["is_logged_in"] = True
         return self.return_success(response)
