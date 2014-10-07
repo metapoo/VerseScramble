@@ -9,6 +9,8 @@ class User(BaseModel, PasswordMixin):
         indices = (
             Index("email",unique=True),
             Index("fb_uid",unique=True,sparse=True),
+            Index("username",unique=True),
+            Index("total_score"),
         )
 
     def is_admin(self):

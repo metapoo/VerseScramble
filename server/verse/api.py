@@ -4,6 +4,7 @@ from verserain.verse.language import *
 from verserain.verse.models import *
 from verserain.api.api import *
 from bson.objectid import ObjectId
+import pymongo 
 
 def get_handlers():
     return ((r"/api/verse/show", ShowVerseApiHandler),
@@ -40,9 +41,9 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         versesets = VerseSet.collection.find(args)
 
         if order_by == "new":
-            versesets = versesets.sort("_id",-1)
+            versesets = versesets.sort("_id",pymongo.DESCENDING)
         elif order_by == "popular":
-            versesets = versesets.sort("hotness",-1)
+            versesets = versesets.sort("hotness",pymongo.DESCENDING)
 
         versesets = versesets[(page-1)*per_page:page*per_page]
 
