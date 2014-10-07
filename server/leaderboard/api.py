@@ -34,11 +34,12 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         if self.current_user is None:
             return self.return_success(response)
 
-        score = ObjectId(self.get_argument("score"))
+        score = self.get_int_argument("score")
         verseset_id = ObjectId(self.get_argument("verseset_id"))
 
         response["is_logged_in"] = True
         VersesetScore.submit_score(user_id=self.current_user._id,
+                                   username=self.current_user.display_name(),
                                    score=score,
                                    verseset_id=verseset_id)
 

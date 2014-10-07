@@ -20,14 +20,20 @@ class VersesetScore(BaseModel):
         cls.register_foreign_key(User)
         return new_instance
 
-    def submit_score(cls, user_id, verseset_id):
-        score = VersesetScore.collection.find_one(user_id=user_id, verseset_id=verseset_id)
+    @classmethod
+    def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None):
+        vs_score = VersesetScore.collection.find_one(user_id=user_id, verseset_id=verseset_id)
         params = {'user_id':user_id,
-                  'verseset_id':verseset_id}
-        if score:
-            score.update(params)
+                  'verseset_id':verseset_id,
+                  'score':score,
+                  'username':username}
+        if vs_score:
+            if score > vs_score.get('score',0):
+                vs_score.update(params)
+            else:
+                vs_score['username'] = username
         else:
-            score = VersesetScore()
-            score.update(params)
+            vs_score = VersesetScore()
+            vs_score.update(params)
 
-        score.save()
+        vs_score.save()
