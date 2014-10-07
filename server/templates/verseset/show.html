@@ -15,7 +15,7 @@
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
 <a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
-<a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a>
+<a class="button-xsmall pure-button" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">x</a>
 {% end %}
 </div>
 
@@ -44,7 +44,7 @@
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
  <a class="button-xsmall pure-button" href="/verse/edit/{{v._id}}">edit</a> 
- <a class="button-xsmall pure-button" href="/verse/remove/{{v._id}}">x</a>
+ <a class="button-xsmall pure-button" onclick="return vr.confirm_delete();" href="/verse/remove/{{v._id}}">x</a>
 {% end %}
 </td></tr>
 
