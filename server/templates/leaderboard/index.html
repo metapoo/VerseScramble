@@ -25,9 +25,8 @@
 <tbody>
 {% set i = 1 %}
 {% for vs in highest_vs_scores %}
-{% set verseset = vs.verseset() %}
 <tr><td>{{i}}</td><td><a class="link" href="/{{vs['username']}}/versesets/">{{vs['username']}}</a></td><td>{{vs['score']}}</td>
-<td><a class="link" href="{{verseset.url()}}">{{verseset['name']}}</a></td><td>{{pretty_date(vs.date())}}</td>
+<td><a class="link" href="/verseset/show/{{str(vs['verseset_id'])}}">{{vs['verseset_name']}}</a></td><td>{{pretty_date(vs.date())}}</td>
 </tr>
 {% set i = i + 1 %}
 {% end %}
@@ -42,9 +41,8 @@
 <tbody>
 {% set i = 1 %}
 {% for vs in recent_vs_scores %}
-{% set verseset = vs.verseset() %}
 <tr><td>{{i}}</td><td><a class="link" href="/{{vs['username']}}/versesets/">{{vs['username']}}</a></td><td>{{vs['score']}}</td>
-<td><a class="link" href="{{verseset.url()}}">{{verseset['name']}}</a></td><td>{{pretty_date(vs.date())}}</td>
+<td><a class="link" href="/verseset/show/{{str(vs['verseset_id'])}}">{{vs['verseset_name']}}</a></td><td>{{pretty_date(vs.date())}}</td>
 </tr>
 {% set i = i + 1 %}
 {% end %}
