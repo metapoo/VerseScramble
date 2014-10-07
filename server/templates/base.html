@@ -51,6 +51,7 @@
   {% if user %}
   <li {% if selected_nav == "my sets" %}class="active"{% end %}><a href="/profile/versesets" ><span>my sets</span></a></li>
   {% end %}
+  <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>leaderboard</span></a></li>
   {% if not user %}
   <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>login</span></a></li>
   <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>register</span></a></li>
