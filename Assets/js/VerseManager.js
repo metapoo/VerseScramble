@@ -75,6 +75,7 @@ static function SetCurrentView(view : String) {
 	} else {
 		currentVerseSet = null;
 	}
+	Debug.Log("current view = " + currentView);
 }
 
 static function GetCurrentVerseSet() : VerseSet {
@@ -547,6 +548,7 @@ static function LoadVerseSetData(versesetData : Hashtable) : VerseSet {
 }
 
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
+	SetCurrentView("local");
 	var handleApi : Function = function(resultData : Hashtable) {
 		var versesetData : Hashtable = resultData["verseset"];
 		var versesData : Array = resultData["verses"];
@@ -667,9 +669,9 @@ function Load() {
 }
 
 function Start() {
+	SetCurrentView(defaultView);
 	LoadVerses();
 	Load();
-	SetCurrentView(defaultView);
 }
 
 function Update () {

@@ -10,7 +10,7 @@ function Awake() {
 
 function Start () {
 	text.text = TextManager.GetText(originalText);
-	Debug.Log(originalText + " -> " + text.text);
+	//Debug.Log(originalText + " -> " + text.text);
 }
 
 function Update () {
