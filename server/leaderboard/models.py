@@ -21,15 +21,18 @@ class VersesetScore(BaseModel):
         return new_instance
 
     @classmethod
-    def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None):
+    def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None):
         vs_score = VersesetScore.collection.find_one(user_id=user_id, verseset_id=verseset_id)
         params = {'user_id':user_id,
                   'verseset_id':verseset_id,
                   'score':score,
                   'username':username}
+        high_score = False
+
         if vs_score:
             if score > vs_score.get('score',0):
                 vs_score.update(params)
+                high_score = True
             else:
                 vs_score['username'] = username
         else:
@@ -37,3 +40,5 @@ class VersesetScore(BaseModel):
             vs_score.update(params)
 
         vs_score.save()
+        if high_score and user:
+            user.compute_total_score()
