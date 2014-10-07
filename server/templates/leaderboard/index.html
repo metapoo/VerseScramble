@@ -11,7 +11,7 @@
 <tbody>
 {% set i = 1 %}
 {% for u in users %}
-<tr><td>{{i}}</td><td><a class="link" href="/{{user['username']}}/versesets/">{{u.display_name()}}</a></td><td>{{u['total_score']}}</td></tr>
+<tr><td>{{i}}</td><td><a class="link" href="/{{u['username']}}/versesets/">{{u.display_name()}}</a></td><td>{{u['total_score']}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>
