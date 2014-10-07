@@ -54,9 +54,11 @@ class VerseSet(BaseModel):
         super(VerseSet, self).save(*args, **kwargs)
 
     def __new__(cls, *args, **kwargs):
+        from verserain.leaderboard.models import VersesetScore
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(User)
         cls.register_foreign_key(Verse,one_to_many=True)
+        cls.register_foreign_key(VersesetScore,one_to_many=True)
         cls.register_foreign_key(Commentary)
         return new_instance
 
@@ -102,7 +104,10 @@ class VerseSet(BaseModel):
     def remove(self, *args, **kwargs):
         for verse in self.verses():
             verse.remove()
-        
+
+        for score in self.versesetscores():
+            score.remove()
+
         commentary = self.commentary()
         if commentary:
             commentary.remove()

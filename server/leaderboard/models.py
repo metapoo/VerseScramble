@@ -42,3 +42,5 @@ class VersesetScore(BaseModel):
         vs_score.save()
         if high_score and user:
             user.compute_total_score()
+
+        
