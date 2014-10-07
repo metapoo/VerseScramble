@@ -21,10 +21,13 @@
 
 </div>
 
-<div class="pad_bottom">
-{% raw verseset.get_commentary_text() %}
+{% set commentary_text = verseset.get_commentary_text() %}
+{% if commentary_text %}
+<div class="commentary_text">
+{% raw commentary_text %}
 </div>
-
+{% end %}
+<br/>
 <table>
 
 <tbody>
