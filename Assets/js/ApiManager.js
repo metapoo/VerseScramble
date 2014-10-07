@@ -123,7 +123,7 @@ class ApiManager extends MonoBehaviour {
 			apiDomain = us.apiDomain;
 			return apiDomain;
 		} else {
-			apiDomain = "dev.verserain.com";
+			apiDomain = "www.verserain.com";
 			return apiDomain;
 		}
 	}

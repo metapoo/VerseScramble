@@ -5,7 +5,6 @@ import JSONUtils;
 var verseText : TextAsset;
 var versesetLanguage : String;
 var numVerses = 0;
-var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
 static var defaultView : String = "popular";
