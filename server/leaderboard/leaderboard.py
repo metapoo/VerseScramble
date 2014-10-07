@@ -15,5 +15,9 @@ def get_handlers():
 
 class LeaderboardUserListHandler(BaseHandler, ApiMixin):
     def get(self):
-        users = User.collection.find({'total_score':{'$gt':0}}).sort("total_score",pymongo.DESCENDING)
-        self.render("leaderboard/index.html", users=users, selected_nav="leaderboard")
+        limit = 20
+        users = User.collection.find({'total_score':{'$gt':0}}).sort("total_score",pymongo.DESCENDING)[0:limit]
+        highest_vs_scores = VersesetScore.collection.find({'score':{'$gt':0}}).sort("score",pymongo.DESCENDING)[0:limit]
+
+        self.render("leaderboard/index.html", users=users, selected_nav="leaderboard", 
+                    highest_vs_scores=highest_vs_scores)

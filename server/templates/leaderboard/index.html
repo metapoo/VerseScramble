@@ -4,10 +4,9 @@
 {% end %}
 
 {% block page_content %}
-<h2>Highest Scorers</h2>
+<h2>Highest Total Scores</h2>
 <table class="pure-table pure-table-bordered">
 <thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>
-
 <tbody>
 {% set i = 1 %}
 {% for u in users %}
@@ -16,4 +15,25 @@
 {% end %}
 </tbody>
 </table>
+
+<br/>
+
+<h2>Highest Challenge Score</h2>
+<table class="pure-table pure-table-bordered">
+<thead><tr><th>#</th><th>User</th><th>Score</th><th>Verse Set</th><th>Date</th></tr></thead>
+<tbody>
+{% set i = 1 %}
+{% for vs in highest_vs_scores %}
+{% set verseset = vs.verseset() %}
+<tr><td>{{i}}</td><td><a class="link" href="/{{vs['username']}}/versesets/">{{vs['username']}}</a></td><td>{{vs['score']}}</td>
+<td><a class="link" href="{{verseset.url()}}">{{verseset['name']}}</a></td><td>{{vs.created_at()}}</td>
+</tr>
+{% set i = i + 1 %}
 {% end %}
+</tbody>
+</table>
+
+<br/>
+
+{% end %}
+
