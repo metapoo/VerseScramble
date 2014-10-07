@@ -22,6 +22,12 @@ class VersesetScore(BaseModel):
         cls.register_foreign_key(User)
         return new_instance
 
+    def json(self):
+        json = super(self, VersesetScore).json()
+        if json.has_key("date"):
+            json["date"] = json["date"].strftime('%s')
+        return json
+
     def date(self):
         if self.has_key('date'):
             return self["date"]
