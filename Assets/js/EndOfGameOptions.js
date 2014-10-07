@@ -14,12 +14,12 @@ function BackToMenu() {
 	Application.LoadLevel("versesets");
 }
 
-function SubmitScore() {
+function SubmitScore(showPopup: boolean) {
 
 	var score = scoreManager.score;
 	var versesetId = verseManager.currentVerseSet.onlineId;
 	var handler : Function = function(resultData : Hashtable) {
-	Debug.Log("scores = " + resultData["scores"]);
+		if (!showPopup) return;
 		var text : String = "";
 		var scores : Array = resultData["scores"];
 		var i : int = 1;
@@ -69,15 +69,17 @@ function EndGameWindowForChallenge () {
 		});
 
 	if (verseManager.currentVerseSet.onlineId == null) return;
-	
+
+	SubmitScore(false);
+		
 	optionDialog.AddOption(gt("Submit score"),
 		function() {
 			if (UserSession.IsLoggedIn()) {
-				SubmitScore();
+				SubmitScore(true);
 			} else {
 				var clone : LoginPanel = loginPanel.ShowLoginPanel(loginPanel, null);
 				clone.onLogin = function() {
-					SubmitScore();
+					SubmitScore(true);
 				};
 			}
 		});
