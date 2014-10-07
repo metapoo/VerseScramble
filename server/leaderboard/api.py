@@ -5,24 +5,26 @@ from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 from verserain.api.api import *
+from bson.objectid import ObjectId
+import pymongo
 
 def get_handlers():
-    return ((r"/api/leaderboard/submit_score", LeaderboardSubmitScoreHandler),
-            (r"/api/leaderboard/verseset_scores", LeaderboardVersesetScoresHandler),
+    return ((r"/api/leaderboard/verseset/submit_score", LeaderboardSubmitScoreHandler),
+            (r"/api/leaderboard/verseset/list", LeaderboardVersesetScoresHandler),
 
 )
 
 class LeaderboardVersesetScoresHandler(BaseHandler, ApiMixin):
-    api_name="leaderboard/verseset_scores"
+    api_name="leaderboard/verseset/list"
     def get(self):
-        verseset_id = self.get_argument("verseset_id")
-        vsss = VersesetScore.collection.find({"verseset_id":verseset_id})
+        verseset_id = ObjectId(self.get_argument("verseset_id"))
+        vsss = VersesetScore.collection.find({"verseset_id":verseset_id}).sort("score",pymongo.DESCENDING)
         json = [vss.json() for vss in vsss]
         response = {"verseset_scores":json}
         return self.return_success(response)
 
 class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
-    api_name="leaderboard/submit_score"
+    api_name="leaderboard/verseset/submit_score"
     def get(self):
         return self.post()
 
@@ -32,8 +34,8 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         if self.current_user is None:
             return self.return_success(response)
 
-        score = self.get_argument("score")
-        verseset_id = self.get_argument("verseset_id")
+        score = ObjectId(self.get_argument("score"))
+        verseset_id = ObjectId(self.get_argument("verseset_id"))
 
         response["is_logged_in"] = True
         VersesetScore.submit_score(user_id=self.current_user._id,
