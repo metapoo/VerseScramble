@@ -2,6 +2,7 @@ from verserain.mongo.models import BaseModel
 from minimongo import Index
 from verserain.user.models import User
 from verserain import settings
+import pymongo
 
 class Version(BaseModel):
     class Meta:
@@ -88,6 +89,10 @@ class VerseSet(BaseModel):
 
     def play_count(self):
         return self.get("play_count",0)
+
+    def sorted_verses(self):
+        verses = self.verses()
+        return verses.sort("_id", pymongo.ASCENDING)
 
     def update_verse_count(self, count=None):
         old_count = self.verse_count()

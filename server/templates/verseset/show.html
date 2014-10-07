@@ -7,10 +7,17 @@
 
 <div>
 <div class="heading">{{verseset.get('name')}}</div>
-<div class="pad_bottom">by {{verseset.user().display_name()}}</div>
+{% set author = verseset.user() %}
+<div class="pad_bottom">by <a href="/{{author['username']}}/versesets/">{{author.display_name()}}</a></div>
+
+{% set commentary_text = verseset.get_commentary_text() %}
+{% if commentary_text %}
+<div class="commentary_text pad_bottom paragraph">
+{% raw commentary_text %}
+</div>
+{% end %}
 
 <div class="pad_bottom">
-
 <a class="link" href="/verseset/play/{{verseset._id}}">play challenge</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
@@ -21,23 +28,21 @@
 
 </div>
 
-<div class="pad_bottom">
-{% raw verseset.get_commentary_text() %}
-</div>
-
+<br/>
 <table>
 
 <tbody>
+{% set i = 1 %}
 {% for v in verses %}
 <tr><td class="verseset_show">
-<div ><span style="font-weight:bold;">{{v['reference'] }}</span>
+<div ><span style="font-weight:bold;">{{i}}. {{v['reference'] }}</span>
 
 {% if v.has_key('version') %}
 ({{v['version']}})
 {% end %}
 </div>
 
-<div class="paragraph">{{v['text']}}</div>
+<div class="">{{v['text']}}</div>
 <div class="links">
 
 <a class="link" href="/verse/play/{{v._id}}">play verse</a> &nbsp;
@@ -48,26 +53,26 @@
 {% end %}
 
 </td></tr>
-
+{% set i += 1 %}
 {% end %}
 </tbody>
 
 </table>
 
-<br/>
+{% from verserain.utils.date import pretty_date %}
 
 <h3>High Scores (Challenge Mode)</h3>
 <table class="pure-table pure-table-bordered">
-<thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>
+<thead><tr><th>#</th><th>User</th><th>Score</th><th>Date</th></tr></thead>
 
 <tbody>
 {% if len(scores) == 0 %}
-<tr><td colspan="3">No one has submitted scores for challenge mode yet.</td></tr>
+<tr><td colspan="4">No one has submitted scores for challenge mode yet.</td></tr>
 {% end %}
 
 {% set i = 1 %}
 {% for score in scores %}
-<tr><td>{{i}}</td><td>{{score['username']}}</td><td>{{score['score']}}</td></tr>
+<tr><td>{{i}}</td><td>{{score['username']}}</td><td>{{score['score']}}</td><td>{{pretty_date(score['date'])}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>

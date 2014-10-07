@@ -4,6 +4,7 @@ from verserain.verse.models import *
 from verserain.utils.encoding import *
 from verserain import settings
 from bson.objectid import ObjectId
+import pymongo 
 
 def get_handlers():
     return ((r"/verseset/create", CreateVerseSetHandler),
@@ -91,7 +92,7 @@ class RemoveVerseHandler(BaseHandler):
             return
         verseset_id = verse['verseset_id']
         verse.remove()
-        self.redirect("/verseset/show/%s" % verseset_id)
+        self.redirect(verseset.url())
 
 class UpdateVerseHandler(BaseHandler):
     def get(self, verse_id):
@@ -139,7 +140,7 @@ class UpdateVerseHandler(BaseHandler):
                       "reference":reference})
         verse.save()
         
-        self.redirect("/verseset/show/%s" % str(verseset._id))
+        self.redirect(verseset.url())
 
 class CreateVerseHandler(BaseHandler):
     def post(self):
@@ -171,7 +172,7 @@ class CreateVerseHandler(BaseHandler):
                    })
         verse.save()
         verseset.update_verse_count()
-        self.redirect("/verseset/show/%s" % str(verseset_id))
+        self.redirect(verseset.url())
         
 class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
@@ -182,7 +183,7 @@ class ShowVerseSetHandler(BaseHandler):
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language,[])
         version = verseset.get("version","")
-        verses = list(verseset.verses())
+        verses = list(verseset.sorted_verses())
         verseset.update_verse_count(len(verses))
         user = self.current_user
 
@@ -191,8 +192,10 @@ class ShowVerseSetHandler(BaseHandler):
         else:
             selected_nav = "verse sets"
 
-        from verserain.leaderboard.api import get_scores_json
-        scores = get_scores_json(verseset_id)["scores"]
+        from verserain.leaderboard.models import VersesetScore
+        limit = 20
+        scores = VersesetScore.collection.find({'verseset_id':verseset_id}).sort('score', pymongo.DESCENDING)[0:limit]
+        scores = list(scores)
 
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,

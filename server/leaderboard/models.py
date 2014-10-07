@@ -1,6 +1,7 @@
 from verserain.mongo.models import BaseModel
 from minimongo import Index
 import pymongo
+from datetime import datetime
 
 class VersesetScore(BaseModel):
     class Meta:
@@ -10,6 +11,7 @@ class VersesetScore(BaseModel):
             Index("score"),
             Index("verseset_id"),
             Index("user_id"),
+            Index("date"),
         )
 
     def __new__(cls, *args, **kwargs):
@@ -20,14 +22,35 @@ class VersesetScore(BaseModel):
         cls.register_foreign_key(User)
         return new_instance
 
+    def json(self):
+        json = super(VersesetScore, self).json()
+        if json.has_key("date"):
+            json["date"] = json["date"].strftime('%s')
+        return json
+
+    def date(self):
+        if self.has_key('date'):
+            return self["date"]
+        else:
+            return self.created_at()
+
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None):
+        from verserain.verse.models import VerseSet
         vs_score = VersesetScore.collection.find_one({'user_id':user_id, 'verseset_id':verseset_id})
+
+        verseset = VerseSet.by_id(verseset_id)
+        if verseset:
+            verseset_name = verseset['name']
+        else:
+            return
 
         params = {'user_id':user_id,
                   'verseset_id':verseset_id,
                   'score':score,
-                  'username':username}
+                  'username':username,
+                  'verseset_name':verseset_name,
+                  'date':datetime.utcnow()}
         high_score = False
 
         if vs_score:

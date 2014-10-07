@@ -15,7 +15,7 @@ class User(BaseModel, PasswordMixin):
 
     def compute_total_score(self):
         from verserain.leaderboard.models import VersesetScore
-        vss = VersesetScore.collection.find(user_id=self._id)
+        vss = VersesetScore.collection.find({'user_id':self._id})
         total_score = 0
         for vs in vss:
             total_score += vs["score"]

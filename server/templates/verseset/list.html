@@ -1,5 +1,6 @@
-B1;2c{% extends "../base.html" %}
+{% extends "../base.html" %}
 {% block page_content %}
+{% from verserain.utils.date import pretty_date %}
 {% from verserain.verse import language %}
 
 {% if user and (selected_nav == "my sets") %}
@@ -31,7 +32,8 @@ B1;2c{% extends "../base.html" %}
 {% end %}
 <th>Verses</th>
 <th>Plays</th>
-<th>Creator</th></thead>
+<th>Created</th>
+<th>Author</th></thead>
 <tbody>
 {% for verseset in versesets %}
 <tr>
@@ -45,6 +47,7 @@ B1;2c{% extends "../base.html" %}
   {% set vuser = verseset.user() %}
   <td>{{verseset.verse_count()}}</td>
   <td>{{verseset.play_count()}}</td>
+  <td>{{pretty_date(verseset.created_at())}}</td>
   <td><a class="link" href="/{{vuser['username']}}/versesets/">{{vuser.display_name()}}</a></td>
 </tr>
 {% end %}
