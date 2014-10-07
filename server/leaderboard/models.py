@@ -30,12 +30,20 @@ class VersesetScore(BaseModel):
 
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None):
+        from verserain.verse.models import VerseSet
         vs_score = VersesetScore.collection.find_one({'user_id':user_id, 'verseset_id':verseset_id})
+
+        verseset = VerseSet.by_id(verseset_id)
+        if verseset:
+            verseset_name = verseset['name']
+        else:
+            return
 
         params = {'user_id':user_id,
                   'verseset_id':verseset_id,
                   'score':score,
                   'username':username,
+                  'verseset_name':verseset_name,
                   'date':datetime.utcnow()}
         high_score = False
 
