@@ -4,8 +4,25 @@ import TextManager;
 public var scoreManager : ScoreManager;
 public var gameManager : GameManager;
 public var verseManager : VerseManager;
+public var loginPanel : LoginPanel;
 
 private var gt = TextManager.GetText;
+
+function BackToMenu() {
+	gameManager.Cleanup();
+	Destroy(this.gameObject);
+	Application.LoadLevel("versesets");
+}
+
+function SubmitScore() {
+	var score = scoreManager.score;
+	var versesetId = verseManager.currentVerseSet.onlineId;
+	var handler : Function = function(resultData) {
+		BackToMenu();
+	};
+	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
+	new Hashtable({"score":score, "verseset_id":versesetId}), handler);
+}
 
 function EndGameWindowForChallenge () {
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
@@ -26,13 +43,10 @@ function EndGameWindowForChallenge () {
 	var optionDialog = DialogManager.CreateOptionDialog(title,text);
 	
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
-	
-	
+		
 	optionDialog.AddOption(gt("Back to menu"),
 		function() {
-			gameManager.Cleanup();
-			Destroy(this.gameObject);
-			Application.LoadLevel("versesets");
+			BackToMenu();
 		});
 		
 	optionDialog.AddOption(gt("Try again"),
@@ -40,6 +54,20 @@ function EndGameWindowForChallenge () {
 			needToSelectDifficulty = false;
 			verseManager.verseIndex = 0;
 			ReloadGame(needToSelectDifficulty);
+		});
+
+	if (verseManager.currentVerseSet.onlineId == null) return;
+	
+	optionDialog.AddOption(gt("Submit score"),
+		function() {
+			if (UserSession.IsLoggedIn()) {
+				SubmitScore();
+			} else {
+				var clone : LoginPanel = loginPanel.ShowLoginPanel(loginPanel, null);
+				clone.onLogin = function() {
+					SubmitScore();
+				};
+			}
 		});
 
 

@@ -15,10 +15,7 @@ function ShowLogin() {
 		return;
 	}
 	
-	var clone : LoginPanel = Instantiate(loginPanel, Vector3.zero, Quaternion.identity);
-	var canvas : RectTransform = GameObject.Find("Canvas").GetComponent(RectTransform);
-	clone.SetParent(canvas);
-	clone.loginButton = this;
+	var clone : LoginPanel = LoginPanel.ShowLoginPanel(loginPanel, this);
 	curPanel = clone;
 }
 

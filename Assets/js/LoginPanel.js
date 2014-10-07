@@ -2,6 +2,7 @@ var usernameField : InputField;
 var passwordField : InputField;
 var feedback : Text;
 var loginButton : LoginButton;
+var onLogin : Function;
 
 function Start() {
 }
@@ -30,14 +31,30 @@ function HandleLogin(resultData : Hashtable) {
 	var userSession : UserSession = UserSession.GetUserSession();
 	
 	userSession.HandleLogin(resultData);
+	
+	if (onLogin != null) {
+		onLogin();
+	}
+	
 	ClosePanel();
 	
 }
 
+static function ShowLoginPanel(prefab : LoginPanel, loginButton : LoginButton) : LoginPanel {
+	var clone : LoginPanel = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+	var canvas : RectTransform = GameObject.Find("Canvas").GetComponent(RectTransform);
+	clone.SetParent(canvas);
+	clone.loginButton = loginButton;
+	return clone;
+}
+
 function ClosePanel() {
-	loginButton.SyncLabel();
+	if (loginButton != null) {
+		loginButton.SyncLabel();
+		loginButton.curPanel = null;
+	}
 	Destroy(this.gameObject);
-	loginButton.curPanel = null;
+	
 }
 
 function SubmitLogin() {

@@ -43,7 +43,12 @@ class ApiManager extends MonoBehaviour {
 	}	
 	
     public function CallApi(apiName : String, arguments : Hashtable, handler : Function, errorHandler : Function) {
-
+		if (UserSession.IsLoggedIn()) {
+			var sessionKey : String = UserSession.GetUserSession().sessionKey;
+			if (sessionKey != null) {
+				arguments["session_key"] = sessionKey;
+			}
+		}
     	var serializedArguments : String = "";
     	var i = 0;
     	
@@ -118,7 +123,7 @@ class ApiManager extends MonoBehaviour {
 			apiDomain = us.apiDomain;
 			return apiDomain;
 		} else {
-			apiDomain = "www.verserain.com";
+			apiDomain = "dev.verserain.com";
 			return apiDomain;
 		}
 	}

@@ -8,6 +8,7 @@ var numVerses = 0;
 var apiDomain = "dev.verserain.com";
 var totalScore : int = -1;
 
+static var defaultView : String = "popular";
 static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
 static var currentView : String = null;
@@ -36,7 +37,7 @@ static function Unload() {
 static function SwitchLanguage(language : String) {
 	languageChosen = true;
 	SetLanguage(language);
-	SetCurrentView("history");
+	SetCurrentView(defaultView);
 	var versesets = GetCurrentVerseSets();
 	offlineVersesLoaded = (versesets.length > 0);
 }
@@ -668,7 +669,7 @@ function Start() {
 	
 	LoadVerses();
 	Load();
-	
+	SetCurrentView(defaultView);
 }
 
 function Update () {
