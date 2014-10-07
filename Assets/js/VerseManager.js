@@ -664,7 +664,7 @@ function Load() {
 
 function Start() {
 	if (currentView == null) {
-		SetCurrentView("history");
+		SetCurrentView("local");
 	}
 	
 	LoadVerses();
