@@ -55,6 +55,26 @@
 
 <br/>
 
+<h3>High Scores</h3>
+<table class="pure-table pure-table-bordered">
+<thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>
+
+<tbody>
+{% if len(scores) == 0 %}
+<tr><td colspan="3">No one has submitted scores for challenge mode yet.</td></tr>
+{% end %}
+
+{% set i = 1 %}
+{% for score in scores %}
+<tr><td>{{i}}</td><td>{{score['username']}}</td><td>{{score['score']}}</td></tr>
+{% set i = i + 1 %}
+{% end %}
+</tbody>
+</table>
+
+<br/>
+
+
 {% if user and (verseset['user_id'] == user._id) %}
 {% include "../verse/_form.html" %}
 {% end %}

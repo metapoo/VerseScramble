@@ -190,10 +190,13 @@ class ShowVerseSetHandler(BaseHandler):
             selected_nav = "my sets"
         else:
             selected_nav = "verse sets"
-        
+
+        from verserain.leaderboard.api import get_scores_json
+        scores = get_scores_json(verseset_id)["scores"]
+
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
-                           versions=versions, selected_nav=selected_nav)
+                           versions=versions, selected_nav=selected_nav, scores=scores)
 
 
 class UpdateVerseSetHandler(BaseHandler):

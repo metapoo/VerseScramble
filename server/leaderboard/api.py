@@ -15,7 +15,8 @@ def get_handlers():
 )
 
 def get_scores_json(verseset_id):
-    vsss = VersesetScore.collection.find({"verseset_id":verseset_id}).sort("score",pymongo.DESCENDING)
+    limit = 20
+    vsss = VersesetScore.collection.find({"verseset_id":verseset_id}).sort("score",pymongo.DESCENDING)[0:limit]
     json = [vss.json() for vss in vsss]
     response = {"scores":json}
     return response
