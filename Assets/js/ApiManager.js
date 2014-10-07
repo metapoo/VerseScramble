@@ -116,10 +116,9 @@ class ApiManager extends MonoBehaviour {
     }
     
     public static function GetApiDomain() : String {
-    	if (apiDomain != null) return apiDomain;
     	
 		var us : UserSession = UserSession.GetUserSession();
-		if (us && (us.apiDomain)) {
+		if (us && (us.apiDomain != null)) {
 			apiDomain = us.apiDomain;
 			return apiDomain;
 		} else {
