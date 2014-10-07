@@ -9,8 +9,14 @@
 <div class="heading">{{verseset.get('name')}}</div>
 <div class="pad_bottom">by {{verseset.user().display_name()}}</div>
 
-<div class="pad_bottom">
+{% set commentary_text = verseset.get_commentary_text() %}
+{% if commentary_text %}
+<div class="commentary_text pad_bottom">
+{% raw commentary_text %}
+</div>
+{% end %}
 
+<div class="pad_bottom">
 <a class="link" href="/verseset/play/{{verseset._id}}">play challenge</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
@@ -21,12 +27,6 @@
 
 </div>
 
-{% set commentary_text = verseset.get_commentary_text() %}
-{% if commentary_text %}
-<div class="commentary_text">
-{% raw commentary_text %}
-</div>
-{% end %}
 <br/>
 <table>
 
