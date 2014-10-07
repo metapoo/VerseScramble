@@ -7,7 +7,8 @@
 
 <div>
 <div class="heading">{{verseset.get('name')}}</div>
-<div class="pad_bottom">by {{verseset.user().display_name()}}</div>
+{% set author = verseset.user() %}
+<div class="pad_bottom">by <a href="/{{author['username']}}/versesets/">{{author.display_name()}}</a></div>
 
 {% set commentary_text = verseset.get_commentary_text() %}
 {% if commentary_text %}
