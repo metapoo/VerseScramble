@@ -9,13 +9,13 @@
 <div class="heading">{{verseset.get('name')}}</div>
 <div class="pad_bottom">by {{verseset.user().display_name()}}</div>
 
-<div class="pad_bottom">
+<div class="pad_bottom" style="font-size:0.9em;">
 
-<a class="button-xsmall pure-button" href="/verseset/play/{{verseset._id}}">play challenge (all verses)</a>
+<a class="link" href="/verseset/play/{{verseset._id}}">play challenge (all verses)</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
-<a class="button-xsmall pure-button" href="/verseset/edit/{{verseset._id}}">edit set</a>
-<a class="button-xsmall pure-button" href="/verseset/remove/{{verseset._id}}">x</a>
+<a class="link" href="/verseset/edit/{{verseset._id}}">edit set</a> &nbsp;
+<a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">remove</a>
 {% end %}
 </div>
 
@@ -25,12 +25,12 @@
 {% raw verseset.get_commentary_text() %}
 </div>
 
-<table class="pure-table pure-table-bordered">
+<table>
 
 <tbody>
 {% for v in verses %}
-<tr><td>
-<div>{{v['reference'] }}
+<tr><td class="pad_bottom">
+<div><span style="font-weight:bold;">{{v['reference'] }}</span>
 
 {% if v.has_key('version') %}
 ({{v['version']}})
@@ -38,14 +38,15 @@
 </div>
 
 <div class="paragraph">{{v['text']}}</div>
-<div>
+<div style="font-size:0.8em;" class="pad_bottom">
 
-<a class="button-xsmall pure-button" href="/verse/play/{{v._id}}">play verse</a> 
+<a class="link" href="/verse/play/{{v._id}}">play verse</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
- <a class="button-xsmall pure-button" href="/verse/edit/{{v._id}}">edit</a> 
- <a class="button-xsmall pure-button" href="/verse/remove/{{v._id}}">x</a>
+ <a class="link" href="/verse/edit/{{v._id}}">edit</a>  &nbsp;
+ <a class="link" onclick="return vr.confirm_delete();" href="/verse/remove/{{v._id}}">remove</a>
 {% end %}
+
 </td></tr>
 
 {% end %}

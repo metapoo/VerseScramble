@@ -9,3 +9,6 @@ vr.update_version_select = function(language, version) {
       });
 }
 
+vr.confirm_delete = function() {
+    return confirm("Are you sure you want to delete this?");
+}
