@@ -10,6 +10,14 @@ body h1,body h2,body h3,body h4 {
   display: none;
 }
 
+.verseset_show {
+  padding-bottom: 20px;
+}
+
+.verseset_show .links {
+  font-size: 0.85em;
+}
+
 .heading {
   font-size: 2.0em;
 }
@@ -86,10 +94,12 @@ a {
 
 a.link, a.link:visited, a.link:link{
   color: #0078e7;
+  font-weight: normal;
 }
 
 a.link:hover, a.link:active {
   color: #2289f8;
+  font-weight: normal;
 }
 
 a, a:visited, a:link {
