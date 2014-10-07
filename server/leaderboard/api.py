@@ -20,7 +20,7 @@ class LeaderboardVersesetScoresHandler(BaseHandler, ApiMixin):
         verseset_id = ObjectId(self.get_argument("verseset_id"))
         vsss = VersesetScore.collection.find({"verseset_id":verseset_id}).sort("score",pymongo.DESCENDING)
         json = [vss.json() for vss in vsss]
-        response = {"verseset_scores":json}
+        response = {"scores":json}
         return self.return_success(response)
 
 class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
