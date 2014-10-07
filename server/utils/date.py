@@ -9,6 +9,8 @@ def pretty_date(time=False):
     if type(time) is int:
         diff = now - datetime.fromtimestamp(time)
     elif isinstance(time,datetime):
+        tz = time.tzinfo
+        now = now.replace(tzinfo=tz)
         diff = now - time
     elif not time:
         diff = now - now
