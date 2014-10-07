@@ -5,8 +5,12 @@ var title : String;
 var description : String;
 var titleText : Text;
 var descriptionText : Text;
+var OnClose : Function = null;
 
 function HandleOkayButtonClick() {
+	if (OnClose != null) {
+		OnClose();
+	}
 	Destroy(this.gameObject);
 }
 
@@ -31,8 +35,20 @@ function SetDescription(_description : String) {
 	description = _description;
 }
 
+function SetHeight(height : float) {
+	var rt : RectTransform = GetComponent(RectTransform);
+	rt.sizeDelta.y = height;
+}
+
+function CenterOnScreen() {
+	var rt : RectTransform = GetComponent(RectTransform);
+	rt.anchorMax.y = 0.5f;
+	rt.anchorMin.y = 0.5f;
+}
+
 function Start () {
 	okayButton.onClick.AddListener(HandleOkayButtonClick);
+	CenterOnScreen();
 }
 
 function Update () {

@@ -15,10 +15,22 @@ function BackToMenu() {
 }
 
 function SubmitScore() {
+
 	var score = scoreManager.score;
 	var versesetId = verseManager.currentVerseSet.onlineId;
-	var handler : Function = function(resultData) {
-		BackToMenu();
+	var handler : Function = function(resultData : Hashtable) {
+	Debug.Log("scores = " + resultData["scores"]);
+		var text : String = "";
+		var scores : Array = resultData["scores"];
+		var i : int = 1;
+		for (var score : Hashtable in scores) {
+			text += i + ". " + score["username"] + " - " + score["score"] + "\n";
+			i += 1;
+		}
+		var popupDialog : PopupDialog = DialogManager.CreatePopupDialog(gt("High Scores"), text);
+		popupDialog.SetHeight(1200);
+		popupDialog.CenterOnScreen();
+		popupDialog.OnClose = BackToMenu;
 	};
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
 	new Hashtable({"score":score, "verseset_id":versesetId}), handler);
