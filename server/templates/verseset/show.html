@@ -59,18 +59,20 @@
 
 </table>
 
+{% from verserain.utils.date import pretty_date %}
+
 <h3>High Scores (Challenge Mode)</h3>
 <table class="pure-table pure-table-bordered">
-<thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>
+<thead><tr><th>#</th><th>User</th><th>Score</th><th>Date</th></tr></thead>
 
 <tbody>
 {% if len(scores) == 0 %}
-<tr><td colspan="3">No one has submitted scores for challenge mode yet.</td></tr>
+<tr><td colspan="4">No one has submitted scores for challenge mode yet.</td></tr>
 {% end %}
 
 {% set i = 1 %}
 {% for score in scores %}
-<tr><td>{{i}}</td><td>{{score['username']}}</td><td>{{score['score']}}</td></tr>
+<tr><td>{{i}}</td><td>{{score['username']}}</td><td>{{score['score']}}</td><td>{{pretty_date(score['date'])}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>

@@ -192,8 +192,10 @@ class ShowVerseSetHandler(BaseHandler):
         else:
             selected_nav = "verse sets"
 
-        from verserain.leaderboard.api import get_scores_json
-        scores = get_scores_json(verseset_id)["scores"]
+        from verserain.leaderboard.models import VersesetScore
+        limit = 20
+        scores = VersesetScore.collection.find({'verseset_id':verseset_id}).sort('score', pymongo.DESCENDING)[0:limit]
+        scores = list(scores)
 
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
