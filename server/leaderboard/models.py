@@ -36,6 +36,9 @@ class VersesetScore(BaseModel):
 
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None):
+        if score == 0:
+            return
+
         from verserain.verse.models import VerseSet
         vs_score = VersesetScore.collection.find_one({'user_id':user_id, 'verseset_id':verseset_id})
 
