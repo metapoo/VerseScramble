@@ -22,12 +22,6 @@ class VersesetScore(BaseModel):
         cls.register_foreign_key(User)
         return new_instance
 
-    def date(self):
-        if self.has_key('date'):
-            return self["date"]
-        else:
-            return self.created_at()
-
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None):
         if score == 0:

@@ -2,6 +2,7 @@
 
 {% block profile_content %}
 
-{% module VerseSetsTable(versesets=versesets,paginator=paginator,language_code=language_code,base_url=base_url) %}
+{% module VerseSetsTable(versesets=versesets,paginator=paginator,language_code=language_code) %}
+{% module Paginator(paginator=paginator, base_url=base_url) %}
 
 {% end %}

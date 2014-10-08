@@ -9,6 +9,12 @@ configure(settings)
 class BaseModel(Model):
     _metadata = {}
 
+    def date(self):
+        if self.has_key('date'):
+            return self["date"]
+        else:
+            return self.created_at()
+
     def created_at(self):
         if hasattr(self, "_id"):
             return self._id.generation_time

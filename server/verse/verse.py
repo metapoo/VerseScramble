@@ -359,6 +359,6 @@ class ListVerseSetHandler(BaseHandler):
 
         return self.render(template_name, user=user, versesets=versesets, selected_nav=selected_nav,
                            selected_subnav=selected_subnav,language_code=language_code, paginator=paginator,
-                           base_url=base_url, viewed_user=viewed_user,
+                           base_url=base_url, viewed_user=viewed_user,page=page,
         )
 

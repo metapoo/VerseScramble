@@ -2,5 +2,6 @@
 
 {% block profile_content %}
 {% module ScoresTable(scores) %}
-
+<br/>
+{% module Paginator(paginator=paginator, base_url=base_url) %}
 {% end %}
