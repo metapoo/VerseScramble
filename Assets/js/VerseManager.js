@@ -131,7 +131,14 @@ static function GetCurrentVerse() : Verse {
 	}
 
 	if (verses.length == 0) {
-		return null;
+		SetCurrentView("local");
+		verses = GetCurrentVerses();
+		if (verses.length > 0) {
+			verseIndex = 0;
+			return verses[verseIndex];
+		} else {
+			return null;
+		}
 	}
 	
 	return verses[verseIndex];
