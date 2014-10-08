@@ -303,7 +303,7 @@ class CreateVerseSetHandler(BaseHandler):
                            selected_nav=selected_nav, error_message=error_message)
 
 class ListVerseSetHandler(BaseHandler):
-    def get(self, option="popular", language_code="all", page=1):
+    def get(self, option="popular", language_code=None, page=1):
         per_page = 15
         page = int(page)
         start_index = (page-1)*per_page
@@ -313,7 +313,7 @@ class ListVerseSetHandler(BaseHandler):
         versesets = []
 
         from verserain.verse.language import LANGUAGE_CODES
-        if (language_code.lower() != "all") and (not language_code in LANGUAGE_CODES):
+        if (language_code is None) or ((language_code.lower() != "all") and (not language_code in LANGUAGE_CODES)):
             language_code = self.get_cookie("language_code","en")
 
         args = {"verse_count":{"$gt":0}}
