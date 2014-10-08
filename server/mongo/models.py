@@ -9,6 +9,12 @@ configure(settings)
 class BaseModel(Model):
     _metadata = {}
 
+    def date(self):
+        if self.has_key('date'):
+            return self["date"]
+        else:
+            return self.created_at()
+
     def created_at(self):
         if hasattr(self, "_id"):
             return self._id.generation_time
@@ -23,14 +29,12 @@ class BaseModel(Model):
 
     def json(self):
         d = dict(self)
-        okeys = []
 
         for k,v in d.iteritems():
-            if type(v) is ObjectId:
-                okeys.append(k)
-
-        for k in okeys:
-            d[k] = str(d[k])
+            if type(d[k]) == datetime:
+                d[k] = d[k].strftime('%s')
+            elif type(d[k]) == ObjectId:
+                d[k] = str(d[k])
 
         return d
 

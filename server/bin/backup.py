@@ -17,3 +17,4 @@ filename = "%s.tar.gz" % dirname
 subprocess.Popen(["mongodump --out %s" % dirpath],shell=True).wait()
 subprocess.Popen(["cd %s;tar cvzf %s %s" % (BACKUP_PATH, filename, dirname)], shell=True).wait()
 subprocess.Popen(["rm -rf %s" % dirpath],shell=True).wait()
+subprocess.Popen(["scp %s/%s hsiung@dev.verserain.com:/home/hsiung/backup" % (BACKUP_PATH, filename)], shell=True).wait()

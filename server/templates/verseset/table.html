@@ -1,0 +1,34 @@
+{% from verserain.utils.date import pretty_date %}
+{% from verserain.verse import language %}
+
+<table class="pure-table pure-table-bordered pad_bottom" style="width:100%;">
+
+<thead><tr><th>Verse Set</th>
+{% if language_code == "all" %}
+<th>Language</th>
+{% end %}
+<th>Verses</th>
+<th>Plays</th>
+<th>Created</th>
+<th>Author</th></thead>
+<tbody>
+{% for verseset in versesets %}
+<tr>
+  <td>{% module VerseSetLink(verseset) %} <a style="float:right;" class="pure-button button-xsmall next" href="/verseset/play/{{verseset._id}}" >&#9658</a>
+  </td>
+
+  </td>
+{% if language_code == "all" %}
+  <td>{{language.language_by_code(verseset['language'])}}</td>
+{% end %}
+  {% set vuser = verseset.user() %}
+  <td>{{verseset.verse_count()}}</td>
+  <td>{{verseset.play_count()}}</td>
+  <td>{{pretty_date(verseset.created_at())}}</td>
+  <td>{% module UserLink(user=vuser) %}</td>
+</tr>
+{% end %}
+</tbody>
+</table>
+<br/>
+

@@ -43,12 +43,16 @@
 <div id="page_layout_wrapper">
 <div id="page_layout">
 
+<div id="profile_status">
+{% if user %}{% end %}
+</div>
+
 <div id="cssmenu">
 <div id="bg-one"></div><div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
 <ul>
   <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>verse sets</span></a></li>
   {% if user %}
-  <li {% if selected_nav == "my sets" %}class="active"{% end %}><a href="/profile/versesets" ><span>my sets</span></a></li>
+  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>profile</span></a></li>
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>leaderboard</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>about</span></a></li>

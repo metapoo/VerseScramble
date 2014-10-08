@@ -23,6 +23,10 @@ body h1, body h2,body h3,body h4 {
   font-size: 2.0em;
 }
 
+.pad_top {
+  padding-top: 8px;
+}
+
 .pad_bottom {
   padding-bottom: 8px;
 }

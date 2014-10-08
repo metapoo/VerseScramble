@@ -17,8 +17,9 @@ def get_handlers():
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/?", ListVerseSetHandler),
-            (r"/([^/]+)/versesets/?", ListVerseSetHandler),
-            (r"/([^/]+)/versesets/()(\d+)/?", ListVerseSetHandler),
+            (r"/profile/?", ListVerseSetHandler),
+            (r"/u/([^/]+)/?", ListVerseSetHandler),
+            (r"/u/([^/]+)/()(\d+)/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
@@ -70,14 +71,12 @@ class UpdateVersionSelectorHandler(BaseHandler):
         version = self.get_argument("version")
         language = self.get_argument("language")
         versions = VERSION_BY_LANGUAGE_CODE[language]
-        selected_nav = "my sets"
         
         self.render("version_select.html",
                     version=version,
                     language=language,
                     versions=versions,
-                    selected_nav=selected_nav)
-
+                    )
     def post(self):
         return self.get()
 
@@ -117,7 +116,7 @@ class UpdateVerseHandler(BaseHandler):
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
         version = verse.get('version')
-        selected_nav = "my sets"
+        selected_nav = "profile"
         
         self.render("verse/edit.html", verse=verse, verseset=verseset,
                     user=user, versions=versions, version=version, selected_nav=selected_nav)
@@ -191,7 +190,7 @@ class ShowVerseSetHandler(BaseHandler):
         user = self.current_user
 
         if user and (verseset["user_id"] == user._id):
-            selected_nav = "my sets"
+            selected_nav = "profile"
         else:
             selected_nav = "verse sets"
 
@@ -219,7 +218,7 @@ class UpdateVerseSetHandler(BaseHandler):
         version = verseset.get("version")
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE[language]
-        selected_nav = "my sets"
+        selected_nav = "profile"
         return self.render("verseset/edit.html",
                            user=user, language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            verseset=verseset,versions=versions, language=language,
@@ -264,7 +263,7 @@ class RemoveVerseSetHandler(BaseHandler):
             return
 
         verseset.remove()
-        self.redirect("/%s/versesets" % user['username'])
+        self.redirect("/u/%s" % user['username'])
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -295,12 +294,13 @@ class CreateVerseSetHandler(BaseHandler):
         version = "NIV"
         language = 'en'
         versions = VERSION_BY_LANGUAGE_CODE[language]
-        selected_nav = "my sets"
+        selected_nav = "profile"
         
-        return self.render("verseset/create.html", user=user,
+        return self.render("profile/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            version=version,verseset=None,language=language,versions=versions,
-                           selected_nav=selected_nav, error_message=error_message)
+                           selected_nav=selected_nav, error_message=error_message,
+                           selected_subnav="create", viewed_user=user)
 
 class ListVerseSetHandler(BaseHandler):
     def get(self, option="popular", language_code=None, page=1):
@@ -311,6 +311,7 @@ class ListVerseSetHandler(BaseHandler):
         user = self.current_user
         selected_subnav = option
         versesets = []
+        viewed_user = None
 
         from verserain.verse.language import LANGUAGE_CODES
         if (language_code is None) or ((language_code.lower() != "all") and (not language_code in LANGUAGE_CODES)):
@@ -318,13 +319,8 @@ class ListVerseSetHandler(BaseHandler):
 
         args = {"verse_count":{"$gt":0}}
 
-        if user and (option == "profile"):            
-            selected_nav = "my sets"
-            versesets = user.versesets().sort("_id",pymongo.DESCENDING)
-            cursor = versesets
-            
-            base_url = "/profile/versesets"
-        elif (option in ("new","popular")):
+        if (option in ("new","popular")):
+            template_name = "verseset/list.html"
             selected_nav = "verse sets"
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
@@ -338,12 +334,17 @@ class ListVerseSetHandler(BaseHandler):
             
             base_url = "/versesets/%s/%s" % (option, language_code)
         else:
+            template_name = "profile/versesets.html"
             selected_nav = "verse sets"
+            if self.current_user and (self.current_user['username'] == option):
+                selected_nav = "profile"
             viewed_user = User.collection.find_one({'username':option})
+            selected_subnav = "versesets"
             if viewed_user:
                 versesets = viewed_user.versesets()
                 cursor = versesets
-                base_url = "/%s/versesets" % viewed_user['username']
+                versesets = versesets.sort("_id", pymongo.DESCENDING)
+                base_url = "/u/%s" % viewed_user['username']
             else:
                 self.write("user not found")
                 return
@@ -355,8 +356,9 @@ class ListVerseSetHandler(BaseHandler):
         versesets = list(versesets[start_index:end_index])
         paginator = Pagination(page,per_page,total_count)
 
-        return self.render("verseset/list.html", user=user, versesets=versesets, selected_nav=selected_nav,
-                           selected_subnav=option,language_code=language_code, paginator=paginator,
-                           base_url=base_url,
+
+        return self.render(template_name, user=user, versesets=versesets, selected_nav=selected_nav,
+                           selected_subnav=selected_subnav,language_code=language_code, paginator=paginator,
+                           base_url=base_url, viewed_user=viewed_user,page=page,
         )
 

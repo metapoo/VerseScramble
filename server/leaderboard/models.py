@@ -22,20 +22,11 @@ class VersesetScore(BaseModel):
         cls.register_foreign_key(User)
         return new_instance
 
-    def json(self):
-        json = super(VersesetScore, self).json()
-        if json.has_key("date"):
-            json["date"] = json["date"].strftime('%s')
-        return json
-
-    def date(self):
-        if self.has_key('date'):
-            return self["date"]
-        else:
-            return self.created_at()
-
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None):
+        if score == 0:
+            return
+
         from verserain.verse.models import VerseSet
         vs_score = VersesetScore.collection.find_one({'user_id':user_id, 'verseset_id':verseset_id})
 

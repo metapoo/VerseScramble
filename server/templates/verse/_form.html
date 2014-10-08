@@ -8,20 +8,14 @@
 <fieldset>
 <label for="reference">Verse Reference</label>
 <input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference"/> 
-</fieldset>
-
-<fieldset>
-<div>
+<div class="pad_top">
 {% if verse %}
   {% include "../version_select.html" %}
 {% else %}
   <input type="hidden" name="version" value="{{version}}" />
 {% end %}
 </div>
-</fieldset>
-
-<fieldset>
-<label for="text">Verse Text</label>
+<label class="pad_top" for="text">Verse Text</label>
 
 <textarea name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
 </fieldset>
