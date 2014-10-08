@@ -319,6 +319,7 @@ class ListVerseSetHandler(BaseHandler):
         args = {"verse_count":{"$gt":0}}
 
         if (option in ("new","popular")):
+            template_name = "verseset/list.html"
             selected_nav = "verse sets"
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
@@ -332,6 +333,7 @@ class ListVerseSetHandler(BaseHandler):
             
             base_url = "/versesets/%s/%s" % (option, language_code)
         else:
+            template_name = "profile/versesets.html"
             selected_nav = "verse sets"
             if self.current_user and (self.current_user['username'] == option):
                 selected_nav = "profile"
@@ -352,7 +354,8 @@ class ListVerseSetHandler(BaseHandler):
         versesets = list(versesets[start_index:end_index])
         paginator = Pagination(page,per_page,total_count)
 
-        return self.render("verseset/list.html", user=user, versesets=versesets, selected_nav=selected_nav,
+
+        return self.render(template_name, user=user, versesets=versesets, selected_nav=selected_nav,
                            selected_subnav=option,language_code=language_code, paginator=paginator,
                            base_url=base_url, viewed_user=viewed_user,
         )
