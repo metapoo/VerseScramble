@@ -7,6 +7,7 @@ public var verseManager : VerseManager;
 public var verseSetButton : VerseSetButton;
 public var verseButton : VerseButton;
 public var rowPadding : float = 15;
+public var verseHeaderLabel : Text;
 
 
 function ShowVerseSets() {
@@ -48,8 +49,7 @@ function ShowVerseSets() {
 		// maintain scroll position from previous when loading menu again from beginning
 		var y : float = PlayerPrefs.GetInt("verse_scroll_content_anchored_y",0);
 		verseScrollContent.anchoredPosition.y = y;
-
-	}
+	}	
 }
 
 function ShowVerses() {
@@ -90,6 +90,8 @@ function ShowVerses() {
 	yield WaitForSeconds(0);
 	verseScrollContent.anchoredPosition.y = 0;
 	
+	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
+	verseHeaderLabel.text = currentVerseSet.setname;
 }
 
 function GoBack () {
