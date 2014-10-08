@@ -63,12 +63,15 @@ class RegisterHandler(BaseHandler):
 
 class LoginHandler(BaseHandler):
     def get(self):
+        login = self.get_argument("next",None)
         user = self.current_user
         error_message = None
         email = self.get_secure_cookie("email")
         if email is None:
             email = ""
         selected_nav = "login"
+        if login:
+            self.set_cookie("next_url",login)
         self.render("login/login.html",user=user,error_message=error_message,email=email,
                     selected_nav=selected_nav)
 
@@ -96,7 +99,10 @@ class LoginHandler(BaseHandler):
         session_key = user.session_key()
         self.set_secure_cookie("session_key",session_key)
         self.set_secure_cookie("email",login_subject)
-        self.redirect("/")
+
+        next_url = self.get_cookie("next_url","/")
+        self.redirect(next_url)
+        self.clear_cookie("next_url")
 
 class LogoutHandler(BaseHandler):
     def get(self):
