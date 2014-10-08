@@ -23,14 +23,12 @@ class BaseModel(Model):
 
     def json(self):
         d = dict(self)
-        okeys = []
 
         for k,v in d.iteritems():
-            if type(v) is ObjectId:
-                okeys.append(k)
-
-        for k in okeys:
-            d[k] = str(d[k])
+            if type(d[k]) == datetime:
+                d[k] = d[k].strftime('%s')
+            elif type(d[k]) == ObjectId:
+                d[k] = str(d[k])
 
         return d
 
