@@ -133,9 +133,9 @@ class UpdateVerseHandler(BaseHandler):
         if (verseset['user_id'] != user._id) and (not user.is_admin()):
             self.write("not authorized")
             return
-        reference = self.get_argument("reference")
+        reference = self.get_argument("reference").strip()
         version = self.get_argument("version")
-        text = self.get_argument("text")
+        text = self.get_argument("text").strip()
 
         text = text.replace("\n","")
         verse.update({"version":version,
@@ -148,9 +148,9 @@ class UpdateVerseHandler(BaseHandler):
 class CreateVerseHandler(BaseHandler):
     def post(self):
         user = self.current_user
-        reference = self.get_argument("reference")
+        reference = self.get_argument("reference").strip()
         version = self.get_argument("version")
-        text = self.get_argument("text")
+        text = self.get_argument("text").strip()
         verseset_id = self.get_argument("verseset_id")
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
