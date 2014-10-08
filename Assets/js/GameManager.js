@@ -835,3 +835,11 @@ function Update () {
 	refreshButton.active = CanShowSolution();
 	hintButton.active = !GetChallengeModeEnabled();
 }
+
+static function StartChallenge() {
+	var vm : VerseManager = GameObject.FindObjectOfType(VerseManager);
+	vm.verseIndex = 0;
+	vm.Save();
+	SetChallengeModeEnabled(true);
+	Application.LoadLevel("scramble");
+}

@@ -72,7 +72,7 @@ function EndGameWindowForChallenge () {
 
 	SubmitScore(false);
 		
-	optionDialog.AddOption(gt("Submit score"),
+	optionDialog.AddOption(gt("View High Scores"),
 		function() {
 			if (UserSession.IsLoggedIn()) {
 				SubmitScore(true);
@@ -112,7 +112,13 @@ function EndGameWindow () {
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime) && 
 	(scoreManager.WasVerseMastered());
 	
+	optionDialog.AddOption(String.Format(gt("Play Challenge (All Verses)"), nextDifficultyString),
+				function() {
+					GameManager.StartChallenge();
+				});
+				
 	var tryAgain = function() {
+
 		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
 			optionDialog.AddOption(gt("Try again"),
 			  	function() {
@@ -138,7 +144,7 @@ function EndGameWindow () {
 			verseManager.GotoNextVerse();
 			ReloadGame(false);
 		});
-	
+					
 	if (!mastered) {
 		tryAgain();
 	}

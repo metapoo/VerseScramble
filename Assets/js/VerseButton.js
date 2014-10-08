@@ -87,10 +87,7 @@ function  HandleOnClick() {
 
 
 function StartChallenge() {
-	verseManager.verseIndex = 0;
-	verseManager.Save();
-	GameManager.SetChallengeModeEnabled(true);
-	Application.LoadLevel("scramble");
+	GameManager.StartChallenge();
 }
 
 function Update () {
