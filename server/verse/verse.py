@@ -71,14 +71,12 @@ class UpdateVersionSelectorHandler(BaseHandler):
         version = self.get_argument("version")
         language = self.get_argument("language")
         versions = VERSION_BY_LANGUAGE_CODE[language]
-        selected_nav = "my sets"
         
         self.render("version_select.html",
                     version=version,
                     language=language,
                     versions=versions,
-                    selected_nav=selected_nav)
-
+                    )
     def post(self):
         return self.get()
 
@@ -118,7 +116,7 @@ class UpdateVerseHandler(BaseHandler):
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language, [])
         version = verse.get('version')
-        selected_nav = "my sets"
+        selected_nav = "profile"
         
         self.render("verse/edit.html", verse=verse, verseset=verseset,
                     user=user, versions=versions, version=version, selected_nav=selected_nav)
@@ -192,7 +190,7 @@ class ShowVerseSetHandler(BaseHandler):
         user = self.current_user
 
         if user and (verseset["user_id"] == user._id):
-            selected_nav = "my sets"
+            selected_nav = "profile"
         else:
             selected_nav = "verse sets"
 
@@ -220,7 +218,7 @@ class UpdateVerseSetHandler(BaseHandler):
         version = verseset.get("version")
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE[language]
-        selected_nav = "my sets"
+        selected_nav = "profile"
         return self.render("verseset/edit.html",
                            user=user, language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            verseset=verseset,versions=versions, language=language,
@@ -265,7 +263,7 @@ class RemoveVerseSetHandler(BaseHandler):
             return
 
         verseset.remove()
-        self.redirect("/%s" % user['username'])
+        self.redirect("/u/%s" % user['username'])
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -296,7 +294,7 @@ class CreateVerseSetHandler(BaseHandler):
         version = "NIV"
         language = 'en'
         versions = VERSION_BY_LANGUAGE_CODE[language]
-        selected_nav = "my sets"
+        selected_nav = "profile"
         
         return self.render("verseset/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
@@ -335,11 +333,12 @@ class ListVerseSetHandler(BaseHandler):
         else:
             selected_nav = "verse sets"
             if self.current_user and (self.current_user['username'] == option):
-                selected_nav = "my sets"
+                selected_nav = "profile"
             viewed_user = User.collection.find_one({'username':option})
             if viewed_user:
                 versesets = viewed_user.versesets()
                 cursor = versesets
+                versesets = versesets.sort("_id", pymongo.DESCENDING)
                 base_url = "/u/%s" % viewed_user['username']
             else:
                 self.write("user not found")
