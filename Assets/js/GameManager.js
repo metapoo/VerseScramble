@@ -646,7 +646,7 @@ function SetupVerse() {
 	}
 	
 	// calculate word size based on length of text
-	Debug.Log("verse length = " + verse.text.length);
+	//Debug.Log("verse length = " + verse.text.length);
 	
 	wordScale = 1.0f;
 	

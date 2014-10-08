@@ -675,7 +675,9 @@ function Load() {
 }
 
 function Start() {
-	SetCurrentView(defaultView);
+	if (!offlineVersesLoaded) {
+		SetCurrentView(defaultView);
+	}
 	LoadVerses();
 	Load();
 }
