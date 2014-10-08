@@ -296,10 +296,11 @@ class CreateVerseSetHandler(BaseHandler):
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "profile"
         
-        return self.render("verseset/create.html", user=user,
+        return self.render("profile/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            version=version,verseset=None,language=language,versions=versions,
-                           selected_nav=selected_nav, error_message=error_message)
+                           selected_nav=selected_nav, error_message=error_message,
+                           selected_subnav="create", viewed_user=user)
 
 class ListVerseSetHandler(BaseHandler):
     def get(self, option="popular", language_code=None, page=1):

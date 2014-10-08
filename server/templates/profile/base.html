@@ -9,7 +9,7 @@
   <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}">Verse Sets</a>
   <a class="pure-button {% if selected_subnav=='scores'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/scores">Recent Scores</a>
 {% if user and (selected_nav == "profile") %}
-  <a  class="pure-button" href="/verseset/create">Create</a>
+  <a  class="pure-button {% if selected_subnav=='create'%}pure-button-primary{% end %}" href="/verseset/create">Create</a>
 {% end %}
 </div>
 
