@@ -40,7 +40,7 @@
 <tbody>
 {% for verseset in versesets %}
 <tr>
-  <td><a class="link" href="/verseset/show/{{verseset._id}}">{{verseset['name']}}</a> <a style="float:right;" class="pure-button button-xsmall next" href="/verseset/play/{{verseset._id}}" >&#9658</a>
+  <td>{% module VerseSetLink(verseset) %} <a style="float:right;" class="pure-button button-xsmall next" href="/verseset/play/{{verseset._id}}" >&#9658</a>
   </td>
 
   </td>
