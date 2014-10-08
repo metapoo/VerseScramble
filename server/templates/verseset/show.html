@@ -1,4 +1,4 @@
-{% extends "../base.html" %}
+B1;2c{% extends "../base.html" %}
 
 {% block script_content %}
 {% end %}
@@ -10,7 +10,7 @@
 <div>
 <div class="heading">{{verseset.get('name')}}</div>
 {% set author = verseset.user() %}
-<div class="pad_bottom">by <a href="/{{author['username']}}/versesets/">{{author.display_name()}}</a></div>
+<div class="pad_bottom">by {% module UserLink(user=author) %}</div>
 
 {% set commentary_text = verseset.get_commentary_text() %}
 {% if commentary_text %}

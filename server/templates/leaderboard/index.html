@@ -12,7 +12,7 @@
 <tbody>
 {% set i = 1 %}
 {% for u in users %}
-<tr><td>{{i}}</td><td><a class="link" href="/{{u['username']}}/versesets/">{{u.display_name()}}</a></td><td>{{u['total_score']}}</td></tr>
+<tr><td>{{i}}</td><td>{% module UserLink(user=u) %}</td><td>{{u['total_score']}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>
@@ -26,7 +26,7 @@
 <tbody>
 {% set i = 1 %}
 {% for vs in highest_vs_scores %}
-<tr><td>{{i}}</td><td><a class="link" href="/{{vs['username']}}/versesets/">{{vs['username']}}</a></td><td>{{vs['score']}}</td>
+<tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td>
 <td><a class="link" href="/verseset/show/{{str(vs['verseset_id'])}}">{{vs['verseset_name']}}</a></td><td>{{pretty_date(vs.date())}}</td>
 </tr>
 {% set i = i + 1 %}
@@ -42,7 +42,7 @@
 <tbody>
 {% set i = 1 %}
 {% for vs in recent_vs_scores %}
-<tr><td>{{i}}</td><td><a class="link" href="/{{vs['username']}}/versesets/">{{vs['username']}}</a></td><td>{{vs['score']}}</td>
+<tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td>
 <td><a class="link" href="/verseset/show/{{str(vs['verseset_id'])}}">{{vs['verseset_name']}}</a></td><td>{{pretty_date(vs.date())}}</td>
 </tr>
 {% set i = i + 1 %}

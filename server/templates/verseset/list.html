@@ -51,7 +51,7 @@
   <td>{{verseset.verse_count()}}</td>
   <td>{{verseset.play_count()}}</td>
   <td>{{pretty_date(verseset.created_at())}}</td>
-  <td><a class="link" href="/{{vuser['username']}}/versesets/">{{vuser.display_name()}}</a></td>
+  <td>{% module UserLink(user=vuser) %}</td>
 </tr>
 {% end %}
 </tbody>

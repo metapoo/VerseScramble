@@ -17,8 +17,9 @@ def get_handlers():
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/?", ListVerseSetHandler),
-            (r"/([^/]+)/versesets/?", ListVerseSetHandler),
-            (r"/([^/]+)/versesets/()(\d+)/?", ListVerseSetHandler),
+            (r"/profile/?", ListVerseSetHandler),
+            (r"/u/([^/]+)/?", ListVerseSetHandler),
+            (r"/u/([^/]+)/()(\d+)/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
@@ -264,7 +265,7 @@ class RemoveVerseSetHandler(BaseHandler):
             return
 
         verseset.remove()
-        self.redirect("/%s/versesets" % user['username'])
+        self.redirect("/%s" % user['username'])
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -318,13 +319,7 @@ class ListVerseSetHandler(BaseHandler):
 
         args = {"verse_count":{"$gt":0}}
 
-        if user and (option == "profile"):            
-            selected_nav = "my sets"
-            versesets = user.versesets().sort("_id",pymongo.DESCENDING)
-            cursor = versesets
-            
-            base_url = "/profile/versesets"
-        elif (option in ("new","popular")):
+        if (option in ("new","popular")):
             selected_nav = "verse sets"
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
@@ -339,11 +334,13 @@ class ListVerseSetHandler(BaseHandler):
             base_url = "/versesets/%s/%s" % (option, language_code)
         else:
             selected_nav = "verse sets"
+            if self.current_user and (self.current_user['username'] == option):
+                selected_nav = "my sets"
             viewed_user = User.collection.find_one({'username':option})
             if viewed_user:
                 versesets = viewed_user.versesets()
                 cursor = versesets
-                base_url = "/%s/versesets" % viewed_user['username']
+                base_url = "/u/%s" % viewed_user['username']
             else:
                 self.write("user not found")
                 return
