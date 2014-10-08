@@ -26,8 +26,6 @@ class User(BaseModel, PasswordMixin):
         return self.get("is_admin", True)
 
     def display_name(self):
-        if self.has_key("name"):
-            return self["name"]
         if self.has_key("username"):
             return self["username"]
         return "anonymous"
