@@ -5,11 +5,7 @@
 {% from verserain.utils.date import pretty_date %}
 {% from verserain.verse import language %}
 
-{% if user and (selected_nav == "profile") %}
-<div class="pad_bottom">
-  <a  class="pure-button" href="/verseset/create">create a verse set</a>
-</div>
-{% elif selected_subnav in ("popular", "hot", "new") %}
+{% if selected_subnav in ("popular", "hot", "new") %}
 <div class="pad_bottom">
         <a class="pure-button {% if selected_subnav=="popular" %}pure-button-primary{% end %}" href="/versesets/popular/{{language_code}}">Popular</a>
         <a class="pure-button {% if selected_subnav=="new" %}pure-button-primary{% end %}" href="/versesets/new/{{language_code}}">New</a>
@@ -24,7 +20,15 @@
 </form>
 </div>
 {% else %}
-<h3>{{selected_subnav}}'s Verse Sets</h3>
+
+<h2 >{% module UserLink(user=viewed_user) %} ({{user.get('total_score',0)}} points)</h2>
+<div class="pad_bottom">
+  <a class="pure-button pure-button-primary" href="/u/{{viewed_user['username']}}">Verse Sets</a>
+{% if user and (selected_nav == "profile") %}
+  <a  class="pure-button" href="/verseset/create">Create</a>
+{% end %}
+</div>
+
 {% end %}
 
 <table class="pure-table pure-table-bordered pad_bottom" style="width:100%;">

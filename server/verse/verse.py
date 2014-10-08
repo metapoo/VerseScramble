@@ -310,6 +310,7 @@ class ListVerseSetHandler(BaseHandler):
         user = self.current_user
         selected_subnav = option
         versesets = []
+        viewed_user = None
 
         from verserain.verse.language import LANGUAGE_CODES
         if (language_code is None) or ((language_code.lower() != "all") and (not language_code in LANGUAGE_CODES)):
@@ -353,6 +354,6 @@ class ListVerseSetHandler(BaseHandler):
 
         return self.render("verseset/list.html", user=user, versesets=versesets, selected_nav=selected_nav,
                            selected_subnav=option,language_code=language_code, paginator=paginator,
-                           base_url=base_url,
+                           base_url=base_url, viewed_user=viewed_user,
         )
 
