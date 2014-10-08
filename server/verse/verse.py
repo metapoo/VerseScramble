@@ -2,6 +2,7 @@ from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.verse.models import *
 from verserain.utils.encoding import *
+from verserain.utils.paging import *
 from verserain import settings
 from bson.objectid import ObjectId
 import pymongo 
@@ -12,10 +13,12 @@ def get_handlers():
             (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
+            (r"/versesets/([^/]+)/([^/]+)/(\d+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/?", ListVerseSetHandler),
             (r"/([^/]+)/versesets/?", ListVerseSetHandler),
+            (r"/([^/]+)/versesets/()(\d+)/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
@@ -261,7 +264,7 @@ class RemoveVerseSetHandler(BaseHandler):
             return
 
         verseset.remove()
-        self.redirect("/profile/versesets")
+        self.redirect("/%s/versesets" % user['username'])
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -300,41 +303,60 @@ class CreateVerseSetHandler(BaseHandler):
                            selected_nav=selected_nav, error_message=error_message)
 
 class ListVerseSetHandler(BaseHandler):
-    def get(self, option="popular", language_code=None):
+    def get(self, option="popular", language_code="all", page=1):
+        per_page = 15
+        page = int(page)
+        start_index = (page-1)*per_page
+        end_index = start_index + per_page
         user = self.current_user
         selected_subnav = option
         versesets = []
 
-        if language_code is None:
+        from verserain.verse.language import LANGUAGE_CODES
+        if (language_code.lower() != "all") and (not language_code in LANGUAGE_CODES):
             language_code = self.get_cookie("language_code","en")
 
         args = {"verse_count":{"$gt":0}}
 
         if user and (option == "profile"):            
             selected_nav = "my sets"
-            versesets = user.versesets()
+            versesets = user.versesets().sort("_id",pymongo.DESCENDING)
+            cursor = versesets
+            
+            base_url = "/profile/versesets"
         elif (option in ("new","popular")):
             selected_nav = "verse sets"
-            if language_code != "ALL":
+            if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
 
             versesets = VerseSet.collection.find(args)
-
+            cursor = versesets
             if option == "new":
-                versesets = versesets.sort("_id",-1)
+                versesets = versesets.sort("_id",pymongo.DESCENDING)
             elif option == "popular":
-                versesets = versesets.sort("hotness",-1)
+                versesets = versesets.sort("hotness",pymongo.DESCENDING)
             
-            versesets = list(versesets)
+            base_url = "/versesets/%s/%s" % (option, language_code)
         else:
             selected_nav = "verse sets"
             viewed_user = User.collection.find_one({'username':option})
             if viewed_user:
                 versesets = viewed_user.versesets()
+                cursor = versesets
+                base_url = "/%s/versesets" % viewed_user['username']
+            else:
+                self.write("user not found")
+                return
 
-        self.set_cookie("language_code", language_code)
+        if language_code:
+            self.set_cookie("language_code", language_code)
+        
+        total_count = cursor.count()
+        versesets = list(versesets[start_index:end_index])
+        paginator = Pagination(page,per_page,total_count)
 
         return self.render("verseset/list.html", user=user, versesets=versesets, selected_nav=selected_nav,
-                           selected_subnav=option,language_code=language_code
+                           selected_subnav=option,language_code=language_code, paginator=paginator,
+                           base_url=base_url,
         )
 

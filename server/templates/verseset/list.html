@@ -13,7 +13,7 @@
         <a class="pure-button {% if selected_subnav=="new" %}pure-button-primary{% end %}" href="/versesets/new/{{language_code}}">New</a>
 <form style="display:inline;float:right;padding-top:7px;">
 &nbsp; Language: &nbsp; <select name="language" onchange="location.href='/versesets/{{selected_subnav}}/'+this.value;">
-<option value="ALL" {% if language_code == "ALL" %}selected {% end %}>All Languages</option>
+<option value="all" {% if language_code.lower() == "all" %}selected {% end %}>All Languages</option>
 {% for lang_code in language.LANGUAGE_CODES %}
 <option value="{{lang_code}}" {% if lang_code == language_code %}selected{% end %} >{{language.LANGUAGE_BY_CODE[lang_code]}}</option>
 {% end %}
@@ -53,6 +53,21 @@
 {% end %}
 </tbody>
 </table>
+<br/>
 
-
+{% if paginator.has_prev or paginator.has_next %}
+<ul class="pure-paginator">
+  {% if paginator.has_prev %}
+  <li><a class="pure-button button-xsmall prev" href="{{base_url}}/{{paginator.page-1}}">&#171;</a></li>
+  {% end %}
+{% for page in paginator.iter_pages() %}
+  {% if page %}
+  <li><a class="pure-button button-xsmall {% if page == paginator.page %}pure-button-active{% end %}" href="{{base_url}}/{{page}}">{{page}}</a></li>
+  {% end %}
+{% end %}
+  {% if paginator.has_next %}
+  <li><a class="pure-button button-xsmall next" href="{{base_url}}/{{paginator.page+1}}">&#187;</a></li>
+  {% end %}
+</ul>
+{% end %}
 {% end %}
