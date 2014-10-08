@@ -21,34 +21,12 @@
 <br/>
 
 <h2>Highest Challenge Scores</h2>
-<table class="pure-table pure-table-bordered">
-<thead><tr><th>#</th><th>User</th><th>Score</th><th>Verse Set</th><th>Date</th></tr></thead>
-<tbody>
-{% set i = 1 %}
-{% for vs in highest_vs_scores %}
-<tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td>
-<td>{% module VerseSetLink(verseset_id=vs['verseset_id'],verseset_name=vs['verseset_name']) %}</td><td>{{pretty_date(vs.date())}}</td>
-</tr>
-{% set i = i + 1 %}
-{% end %}
-</tbody>
-</table>
+{% module ScoresTable(highest_vs_scores) %}
 
 <br/>
 
 <h2>Recent Challenge Scores</h2>
-<table class="pure-table pure-table-bordered">
-<thead><tr><th>#</th><th>User</th><th>Score</th><th>Verse Set</th><th>Date</th></tr></thead>
-<tbody>
-{% set i = 1 %}
-{% for vs in recent_vs_scores %}
-<tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td>
-<td>{% module VerseSetLink(verseset_id=vs['verseset_id'],verseset_name=vs['verseset_name']) %}</td><td>{{pretty_date(vs.date())}}</td>
-</tr>
-{% set i = i + 1 %}
-{% end %}
-</tbody>
-</table>
+{% module ScoresTable(recent_vs_scores) %}
 
 <br/>
 

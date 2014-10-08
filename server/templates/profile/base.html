@@ -6,7 +6,8 @@
 
 <h2>{% module UserLink(user=viewed_user) %} ({{viewed_user.get('total_score',0)}} points)</h2>
 <div class="pad_bottom">
-  <a class="pure-button pure-button-primary" href="/u/{{viewed_user['username']}}">Verse Sets</a>
+  <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}">Verse Sets</a>
+  <a class="pure-button {% if selected_subnav=='scores'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/scores">Recent Scores</a>
 {% if user and (selected_nav == "profile") %}
   <a  class="pure-button" href="/verseset/create">Create</a>
 {% end %}

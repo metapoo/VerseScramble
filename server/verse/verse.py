@@ -338,6 +338,7 @@ class ListVerseSetHandler(BaseHandler):
             if self.current_user and (self.current_user['username'] == option):
                 selected_nav = "profile"
             viewed_user = User.collection.find_one({'username':option})
+            selected_subnav = "versesets"
             if viewed_user:
                 versesets = viewed_user.versesets()
                 cursor = versesets
@@ -356,7 +357,7 @@ class ListVerseSetHandler(BaseHandler):
 
 
         return self.render(template_name, user=user, versesets=versesets, selected_nav=selected_nav,
-                           selected_subnav=option,language_code=language_code, paginator=paginator,
+                           selected_subnav=selected_subnav,language_code=language_code, paginator=paginator,
                            base_url=base_url, viewed_user=viewed_user,
         )
 
