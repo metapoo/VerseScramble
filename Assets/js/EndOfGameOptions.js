@@ -114,6 +114,8 @@ function EndGameWindow () {
 	
 	optionDialog.AddOption(String.Format(gt("Play Challenge (All Verses)"), nextDifficultyString),
 				function() {
+					gameManager.Cleanup();
+					Destroy(this.gameObject);
 					GameManager.StartChallenge();
 				});
 				
