@@ -1,0 +1,20 @@
+{% extends "../base.html" %}
+
+{% block title %}{{viewed_user['username']}}'s Verserain Profile{% end %}
+{% block page_content %}
+{% from verserain.utils.date import pretty_date %}
+{% from verserain.verse import language %}
+
+
+<h2 >{% module UserLink(user=viewed_user) %} ({{viewed_user.get('total_score',0)}} points)</h2>
+<div class="pad_bottom">
+  <a class="pure-button pure-button-primary" href="/u/{{viewed_user['username']}}">Verse Sets</a>
+{% if user and (selected_nav == "profile") %}
+  <a  class="pure-button" href="/verseset/create">Create</a>
+{% end %}
+</div>
+
+{% block profile_content %}
+{% end %}
+
+{% end %}

@@ -1,0 +1,48 @@
+{% from verserain.utils.date import pretty_date %}
+
+<table class="pure-table pure-table-bordered pad_bottom" style="width:100%;">
+
+<thead><tr><th>Verse Set</th>
+{% if language_code == "all" %}
+<th>Language</th>
+{% end %}
+<th>Verses</th>
+<th>Plays</th>
+<th>Created</th>
+<th>Author</th></thead>
+<tbody>
+{% for verseset in versesets %}
+<tr>
+  <td>{% module VerseSetLink(verseset) %} <a style="float:right;" class="pure-button button-xsmall next" href="/verseset/play/{{verseset._id}}" >&#9658</a>
+  </td>
+
+  </td>
+{% if language_code == "all" %}
+  <td>{{language.language_by_code(verseset['language'])}}</td>
+{% end %}
+  {% set vuser = verseset.user() %}
+  <td>{{verseset.verse_count()}}</td>
+  <td>{{verseset.play_count()}}</td>
+  <td>{{pretty_date(verseset.created_at())}}</td>
+  <td>{% module UserLink(user=vuser) %}</td>
+</tr>
+{% end %}
+</tbody>
+</table>
+<br/>
+
+{% if paginator.has_prev or paginator.has_next %}
+<ul class="pure-paginator">
+  {% if paginator.has_prev %}
+  <li><a class="pure-button button-xsmall prev" href="{{base_url}}/{{paginator.page-1}}">&#171;</a></li>
+  {% end %}
+{% for page in paginator.iter_pages() %}
+  {% if page %}
+  <li><a class="pure-button button-xsmall {% if page == paginator.page %}pure-button-active{% end %}" href="{{base_url}}/{{page}}">{{page}}</a></li>
+  {% end %}
+{% end %}
+  {% if paginator.has_next %}
+  <li><a class="pure-button button-xsmall next" href="{{base_url}}/{{paginator.page+1}}">&#187;</a></li>
+  {% end %}
+</ul>
+{% end %}

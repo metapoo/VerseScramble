@@ -13,3 +13,11 @@ class VerseSetLink(tornado.web.UIModule):
         if verseset_name is None:
             verseset_name = verseset['name']
         return "<a class='link' href='/verseset/show/%s'>%s</a>" % (verseset_id, verseset_name)
+
+class VerseSetsTable(tornado.web.UIModule):
+    def render(self, versesets=None, paginator=None, language_code=None,base_url=None):
+        return self.render_string("verseset/table.html",
+                                  versesets=versesets,
+                                  paginator=paginator,
+                                  language_code=language_code,
+                                  base_url=base_url)
