@@ -43,7 +43,7 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         verseset_id = ObjectId(self.get_argument("verseset_id"))
 
         VersesetScore.submit_score(user_id=self.current_user._id,
-                                   username=self.current_user.display_name(),
+                                   username=self.current_user['username'],
                                    score=score,
                                    verseset_id=verseset_id,
                                    user = self.current_user)

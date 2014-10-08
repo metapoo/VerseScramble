@@ -74,7 +74,7 @@
 
 {% set i = 1 %}
 {% for score in scores %}
-<tr><td>{{i}}</td><td>{{score['username']}}</td><td>{{score['score']}}</td><td>{{pretty_date(score['date'])}}</td></tr>
+<tr><td>{{i}}</td><td><a class="link" href="/{{score['username']}}/versesets">{{score['username']}}</a></td><td>{{score['score']}}</td><td>{{pretty_date(score['date'])}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>
