@@ -8,5 +8,5 @@ def get_handlers():
 
 class FrontPageHandler(BaseHandler):
     def get(self, path=None):
-        self.redirect("/home")
+        self.redirect("/versesets")
         
