@@ -4,6 +4,8 @@ from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 
+import re
+
 def get_handlers():
     return ((r"/login/fb", FacebookGraphLoginHandler),
             (r"/login/logout", LogoutHandler),
@@ -24,7 +26,7 @@ class RegisterHandler(BaseHandler):
         confirm_password = self.get_argument("confirm_password")
         password = self.get_argument("password")
         email = self.get_argument("email")
-        username = self.get_argument("username")
+        username = self.get_argument("username").strip()
         error_message = None
 
         user = User.collection.find_one({'email':email})
@@ -32,24 +34,24 @@ class RegisterHandler(BaseHandler):
             error_message = "An account is already registered with that email."
 
         user = User.collection.find_one({'username':username})
-        if user:
-            error_message = "An account is already registered with that username."
-        
-        if not confirm_password:
+
+        if len(username) < 4:
+            error_message = "Username must be at least four characters."
+        elif not re.match("^[a-zA-Z0-9_.-]+$",username):
+            error_message = "Username contains invalid characters(s)."
+        elif user:
+            error_message = "An account is already registered with that username."        
+        elif not confirm_password:
             error_message = "Password confirmation is required"
-
-        if not password:
+        elif not password:
             error_message = "Password is required."
-
-        if password != confirm_password:
+        elif password != confirm_password:
             error_message = "Password does not match with confirmation"
-
-        if not email:
+        elif not email:
             error_message = "Email is required."
-
-        if not username:
+        elif not username:
             error_message = "Username is required."
-
+        
         if error_message:
             self.render("login/register.html",user=None,error_message=error_message,
                         email=email,username=username)
@@ -77,7 +79,7 @@ class LoginHandler(BaseHandler):
 
     def post(self):
         password = self.get_argument("password")
-        login_subject = self.get_argument("email")
+        login_subject = self.get_argument("email").strip()
         username = None
         email = login_subject
         login_subject_desc = "email"
