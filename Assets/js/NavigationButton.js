@@ -41,14 +41,16 @@ function HandleOnClick() {
 	
 	var versesets : Array = VerseManager.GetCurrentVerseSets();
 	
+	var apiManager : ApiManager = ApiManager.GetInstance();
 	if ((view == "popular") || (view == "new")) {
-		var apiManager : ApiManager = ApiManager.GetInstance();
 		apiManager.CallApi("verseset/list",
 		new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()}),
 		HandleApiVerseSetList);
 	} else if (view == "history") {
-		if (UserSession.IsLoggedIn()) {
-		
+		if (UserSession.IsLoggedIn() && (versesets.length == 0)) {
+			apiManager.CallApi("profile/versesets/history",
+			new Hashtable({}),
+			HandleApiVerseSetList);
 		}
 	}
 	verseSetsManager.ShowVerseSets();

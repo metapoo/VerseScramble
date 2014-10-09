@@ -477,11 +477,14 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 	for (var i=0;i<versesets.length;i++) {
 		var vs : VerseSet = versesets[i];
 		if (verseset.isOnline && (vs.onlineId == verseset.onlineId)) {
-			versesets[i] = verseset;
+			versesets.RemoveAt(i);
+			
 			if (!(Object.ReferenceEquals(vs, verseset))) {
 				Destroy(vs);
 			}
+			
 			versesets.push(verseset);
+			
 			return verseset;
 		}
 	}

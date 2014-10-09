@@ -131,7 +131,7 @@ function LoadUserLogin() {
 
 static function IsLoggedIn() {
 	var us : UserSession = GetUserSession();
-	Debug.Log("user logged in: " + us.isLoggedIn);
+	//Debug.Log("user logged in: " + us.isLoggedIn);
 	return (us.isLoggedIn);
 }
 
