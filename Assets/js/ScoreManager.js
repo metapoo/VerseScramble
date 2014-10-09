@@ -21,7 +21,7 @@ var timeLeft : int = 0;
 var startTime : int;
 var sndSelect : AudioClip;
 var healthBar : HealthBar;
-var startingHealth : float = 0.5f;
+var startingHealth : float = 0.0f;
 var healthBarUnits : float = startingHealth;
 
 function HandleWordCorrect(elapsedTime : float) {
@@ -47,7 +47,7 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
-	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits );
+	var dScore = Mathf.RoundToInt(100.0f * healthBarUnits );
 	score += dScore;
 	
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
@@ -68,20 +68,19 @@ function HandleWordWrong() {
 
 	switch (difficulty) {
 		case Difficulty.Easy:
-			dHealth = -0.25f*healthBarUnits;
+			dHealth = -0.33f*healthBarUnits;
 			break;
 		case Difficulty.Medium:
-			dHealth = -0.35f*healthBarUnits;
+			dHealth = -0.33f*healthBarUnits;
 			break;
 		case Difficulty.Hard:
-			dHealth = -0.45f*healthBarUnits;
+			dHealth = -0.33f*healthBarUnits;
 			break;
 	}	
-	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
-	maxTime -= 1;
-	return dScore;
+	maxTime -= mistakes;
+	return String.Format("-{0}s", mistakes);
 }
 
 
@@ -122,7 +121,7 @@ function CalculateMaxTime() {
 	if (n == 0) return 0;
 	
 	if (GameManager.GetChallengeModeEnabled()) {
-		return 10+n*2;
+		return 10+n*4;
 	} else {
 		return 10+n*4;
 	}
@@ -171,7 +170,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(1*difficultyMultiplier(gameManager.difficulty));
+		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty));
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
@@ -247,15 +246,15 @@ function reset() {
 function difficultyMultiplier(difficulty : Difficulty) {
 	var m : float = 1.0f;
 	if (GameManager.GetChallengeModeEnabled()) {
-		m *= 3.0f;
+		m *= 2.5f;
 	}
 	switch(difficulty) {
 		case Difficulty.Easy:
-			return 2*m;
+			return 0.5*m;
 		case Difficulty.Medium:
-			return 6*m;
+			return 1*m;
 		case Difficulty.Hard:
-			return 14*m;
+			return 2*m;
 		default:
 			return 1;
 	}

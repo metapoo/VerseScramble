@@ -231,6 +231,11 @@ static function IsLanguageChinese(language : String) : boolean {
 	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant') || (language == 'zh-CN') || (language == 'zh-TW');
 }
 
+static function IsLanguageWestern(language : String) : boolean {
+	return (language == 'en') || (language == 'de') || (language == 'fr') || (language == 'es') ||
+			(language == 'it');
+}
+
 static function SetVerseLanguage(language : String) {
 	PlayerPrefs.SetString("verse_language", language);
 	CheckRightToLeft(language);
@@ -610,10 +615,16 @@ function LoadVerses() {
 			return;
 		}
 	}
+
+	LoadVersesLocally();
+}
+
+static function LoadVersesLocally() {
+	if (offlineVersesLoaded) {
+		return;
+	}
+	Debug.Log("Loading verses locally..");
 	
-	loaded = true;
-	
-	/*
 	var language = GetLanguage();
 	
 	var filename = String.Format("verses_{0}", language.ToLower());
@@ -624,28 +635,12 @@ function LoadVerses() {
  	
     verseText =  Resources.Load(fullpath, typeof(TextAsset));
     
-	if (verseText != null) {
-		LoadVersesLocally();
-	} else {
+    if (verseText == null) {
+    	Debug.Log(fullpath + " not found");
 		offlineVersesLoaded = true;
 		loaded = true;
-	}*/
-}
-
-static function LoadVersesLocally() {
-	if (offlineVersesLoaded) {
 		return;
-	}
-	
-	var language = GetLanguage();
-	
-	var filename = String.Format("verses_{0}", language.ToLower());
-	
-	var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
- 
- 	Debug.Log(fullpath);
- 	
-    verseText =  Resources.Load(fullpath, typeof(TextAsset));
+    }
     
  	var previousView : String = currentView;
  	SetCurrentView("history");
@@ -695,7 +690,9 @@ static function GetCurrentVerseSets() : Array {
 }
 
 static function ClearVerseSets(view : String) {
-	view = view + "_" + GetLanguage();
+	if (view != "history") {
+		view = view + "_" + GetLanguage();
+	}
 	var vs : Array = versesetsByView[view];
 	if (vs != null) {
 		vs.Clear();
