@@ -57,6 +57,7 @@ function UnHighlight() {
 }
 
 function HandleApiVerseSetShow(resultData : Hashtable) {
+	if (this == null) return;
 	var versesetData : Hashtable = resultData["verseset"];
 	var versesData : Array = resultData["verses"];
 	VerseManager.LoadVerseSetData(versesetData);

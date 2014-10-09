@@ -52,6 +52,7 @@ function EndGameWindowForChallenge () {
 	} else if (scoreManager.highScore == scoreManager.score) {
 		text = String.Format(gt("New high score {0}!"), scoreManager.score);
 	}	
+	
 	var optionDialog = DialogManager.CreateOptionDialog(title,text);
 	
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
@@ -89,6 +90,8 @@ function EndGameWindowForChallenge () {
 
 // Make the contents of the window
 function EndGameWindow () {
+	SubmitScore(false);
+	
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);

@@ -16,6 +16,7 @@ static var verseIndex = 0;
 static var rightToLeft : boolean = false;
 static var loaded : boolean = false;
 static var offlineVersesLoaded : boolean = false;
+static var started : boolean = false;
 
 private static var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 
@@ -77,6 +78,17 @@ static function SetCurrentView(view : String) {
 	Debug.Log("current view = " + currentView);
 }
 
+static function AddOnlineVerseSetToHistory(verseset : VerseSet) {
+	var oldView = GetCurrentView(false);
+	SetCurrentView("history");
+	var versesets : Array = GetCurrentVerseSets();
+	AddOnlineVerseSet(verseset);
+	var vs : VerseSet = versesets.Pop();
+	versesets.Unshift(vs);
+	SetCurrentView(oldView);
+	Debug.Log("Add " + verseset.setname + " to verseset history");
+}
+
 static function GetCurrentVerseSet() : VerseSet {
 
 	if (!Object.ReferenceEquals(currentVerseSet, null)) {
@@ -131,7 +143,7 @@ static function GetCurrentVerse() : Verse {
 	}
 
 	if (verses.length == 0) {
-		SetCurrentView("local");
+		SetCurrentView("history");
 		verses = GetCurrentVerses();
 		if (verses.length > 0) {
 			verseIndex = 0;
@@ -464,12 +476,12 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.length;i++) {
 		var vs : VerseSet = versesets[i];
-		
 		if (verseset.isOnline && (vs.onlineId == verseset.onlineId)) {
 			versesets[i] = verseset;
 			if (!(Object.ReferenceEquals(vs, verseset))) {
 				Destroy(vs);
 			}
+			versesets.push(verseset);
 			return verseset;
 		}
 	}
@@ -554,7 +566,7 @@ static function LoadVerseSetData(versesetData : Hashtable) : VerseSet {
 }
 
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
-	SetCurrentView("local");
+	SetCurrentView("history");
 	var handleApi : Function = function(resultData : Hashtable) {
 		var versesetData : Hashtable = resultData["verseset"];
 		var versesData : Array = resultData["verses"];
@@ -589,6 +601,9 @@ function LoadVerses() {
 		}
 	}
 	
+	loaded = true;
+	
+	/*
 	var language = GetLanguage();
 	
 	var filename = String.Format("verses_{0}", language.ToLower());
@@ -604,7 +619,7 @@ function LoadVerses() {
 	} else {
 		offlineVersesLoaded = true;
 		loaded = true;
-	}
+	}*/
 }
 
 function LoadVersesLocally() {
@@ -613,7 +628,7 @@ function LoadVersesLocally() {
 	}
 	 	
  	var previousView : String = currentView;
- 	SetCurrentView("local");
+ 	SetCurrentView("history");
 
 	offlineVersesLoaded = true;
 	var language = GetLanguage();
@@ -659,6 +674,14 @@ static function GetCurrentVerseSets() : Array {
 	return GetVerseSets(currentView);
 }
 
+static function ClearVerseSets(view : String) {
+	view = view + "_" + GetLanguage();
+	var vs : Array = versesetsByView[view];
+	if (vs != null) {
+		vs.Clear();
+	}
+}
+
 static function GetVerseSets(view : String) : Array {
 	if (versesetsByView.ContainsKey(view)) {
 		return versesetsByView[view];
@@ -675,11 +698,12 @@ function Load() {
 }
 
 function Start() {
-	if (!offlineVersesLoaded) {
+	if (!started) {
 		SetCurrentView(defaultView);
 	}
 	LoadVerses();
 	Load();
+	started = true;
 }
 
 function Update () {

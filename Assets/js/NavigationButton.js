@@ -22,6 +22,11 @@ function Start () {
 }
 
 function HandleApiVerseSetList(resultData : Hashtable) {
+	var currentView = VerseManager.GetCurrentView(false);
+	if (currentView != view) return;
+	
+	VerseManager.ClearVerseSets(view);
+
 	var versesetsData : Array = resultData["versesets"];
 	for (var i=0;i<versesetsData.length;i++) {
 		var versesetData = versesetsData[i];
@@ -36,15 +41,18 @@ function HandleOnClick() {
 	
 	var versesets : Array = VerseManager.GetCurrentVerseSets();
 	
-	if ((versesets.length == 0) && ((view == "popular") || (view == "new"))) {
+	if ((view == "popular") || (view == "new")) {
 		var apiManager : ApiManager = ApiManager.GetInstance();
 		apiManager.CallApi("verseset/list",
 		new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()}),
 		HandleApiVerseSetList);
-	} else {
-		verseSetsManager.ShowVerseSets();
-		verseSetsManager.ShowVerses();
+	} else if (view == "history") {
+		if (UserSession.IsLoggedIn()) {
+		
+		}
 	}
+	verseSetsManager.ShowVerseSets();
+	verseSetsManager.ShowVerses();
 }
 
 function Highlight() {
