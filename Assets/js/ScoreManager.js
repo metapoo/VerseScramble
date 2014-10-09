@@ -247,7 +247,7 @@ function reset() {
 function difficultyMultiplier(difficulty : Difficulty) {
 	var m : float = 1.0f;
 	if (GameManager.GetChallengeModeEnabled()) {
-		m *= 5.0f;
+		m *= 2.5f;
 	}
 	switch(difficulty) {
 		case Difficulty.Easy:
