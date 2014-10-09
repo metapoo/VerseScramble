@@ -231,6 +231,11 @@ static function IsLanguageChinese(language : String) : boolean {
 	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant') || (language == 'zh-CN') || (language == 'zh-TW');
 }
 
+static function IsLanguageWestern(language : String) : boolean {
+	return (language == 'en') || (language == 'de') || (language == 'fr') || (language == 'es') ||
+			(language == 'it');
+}
+
 static function SetVerseLanguage(language : String) {
 	PlayerPrefs.SetString("verse_language", language);
 	CheckRightToLeft(language);

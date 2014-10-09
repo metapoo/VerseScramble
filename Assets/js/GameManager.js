@@ -392,16 +392,37 @@ function SplitVerse(verse : String) {
 		}
 	};
 	
-	for (var c in verse) {
+	var i = 0;
+	var languageIsWestern : boolean = VerseManager.IsLanguageWestern(language);
+	
+	var isSeparator : Function = function(s : String, c : char, n : char ) {
+		
+		if (s[0] != c) return false;
+		
+		if (languageIsWestern) {
+			// make sure space is after separator
+			return (n == " ");
+		} else {
+			return true;
+		}
+	};
+	
+	for (var c : char in verse) {	
+		
 		clause = clause + c;
-		for (var s in seps) {
-			if (s == c) {
-				if ((clause != "") && (clause != " ") && (clause != "  ")) {
+		var n : char = " "[0];
+		if (i < (verse.Length-1)) {
+			n = verse[i+1];
+		}
+		for (var s : String in seps) {
+			if (isSeparator(s,c,n)	) {
+				if ((clause != "") && (clause != " ")) {
 					processClause(clause);
 				}
 				clause = "";
 			}
 		}
+		i += 1;
 	}
 	
 	
@@ -429,7 +450,7 @@ function SplitVerse(verse : String) {
 	for (clause in clauseArray) {
 		// check for special '\' marker which we cannot split on
 		var nobreakMarkers = new Array();
-		for (var i=0;i<clause.Length;i++) {
+		for (i=0;i<clause.Length;i++) {
 			if ((clause[i] == "／"[0]) || (clause[i] == "/"[0]) || (clause[i] == " "[0])) {
 				nobreakMarkers.Add(i);
 			}
@@ -520,7 +541,7 @@ function SplitVerse(verse : String) {
 function SplitVerseWordByWord(verse : String) {
 
 	var phraseLength = 5;
-	var language = verseManager.GetLanguage();
+	var language = verseManager.GetVerseLanguage();
 	
 	switch (difficulty) {
 		case Difficulty.Easy:
