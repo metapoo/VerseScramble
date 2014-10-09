@@ -2,11 +2,11 @@
 
 import JSONUtils;
 
-var verseText : TextAsset;
 var versesetLanguage : String;
 var numVerses = 0;
 var totalScore : int = -1;
 
+static var verseText : TextAsset;
 static var defaultView : String = "popular";
 static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
@@ -54,8 +54,9 @@ static function GetCurrentView(withLanguage : boolean) {
 }
 
 static function SetCurrentView(view : String) {
-	view = view+"_"+GetLanguage();
-	
+	if (view != "history") {
+		view = view+"_"+GetLanguage();
+	}
 	currentView = view;
 	verseIndex = 0;
 	var versesets : Array = GetCurrentVerseSets();
@@ -80,12 +81,16 @@ static function SetCurrentView(view : String) {
 
 static function AddOnlineVerseSetToHistory(verseset : VerseSet) {
 	var oldView = GetCurrentView(false);
+	var oldIndex : int = verseIndex;
+	var oldVerseSet : VerseSet = currentVerseSet;
 	SetCurrentView("history");
 	var versesets : Array = GetCurrentVerseSets();
 	AddOnlineVerseSet(verseset);
 	var vs : VerseSet = versesets.Pop();
 	versesets.Unshift(vs);
 	SetCurrentView(oldView);
+	verseIndex = oldIndex;
+	currentVerseSet = oldVerseSet;
 	Debug.Log("Add " + verseset.setname + " to verseset history");
 }
 
@@ -144,6 +149,7 @@ static function GetCurrentVerse() : Verse {
 
 	if (verses.length == 0) {
 		SetCurrentView("history");
+		LoadVersesLocally();
 		verses = GetCurrentVerses();
 		if (verses.length > 0) {
 			verseIndex = 0;
@@ -476,7 +482,7 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.length;i++) {
 		var vs : VerseSet = versesets[i];
-		if (verseset.isOnline && (vs.onlineId == verseset.onlineId)) {
+		if (verseset.SaveKey() == vs.SaveKey()) {
 			versesets.RemoveAt(i);
 			
 			if (!(Object.ReferenceEquals(vs, verseset))) {
@@ -492,7 +498,7 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 	return verseset;
 }
 
-function CreateVerseSet(name : String) {
+static function CreateVerseSet(name : String) {
 	var versesets : Array = GetCurrentVerseSets();
 	var vs : VerseSet = VerseSet(name);
 	vs.language = GetLanguage();
@@ -625,17 +631,27 @@ function LoadVerses() {
 	}*/
 }
 
-function LoadVersesLocally() {
+static function LoadVersesLocally() {
 	if (offlineVersesLoaded) {
 		return;
 	}
-	 	
+	
+	var language = GetLanguage();
+	
+	var filename = String.Format("verses_{0}", language.ToLower());
+	
+	var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
+ 
+ 	Debug.Log(fullpath);
+ 	
+    verseText =  Resources.Load(fullpath, typeof(TextAsset));
+    
  	var previousView : String = currentView;
  	SetCurrentView("history");
 
 	offlineVersesLoaded = true;
-	var language = GetLanguage();
-	SetVerseLanguage(language);
+	var lang = GetLanguage();
+	SetVerseLanguage(lang);
   	var lines = verseText.text.Split("\n"[0]);
   	var line : String;
   	var sep : String = "|";
@@ -696,7 +712,7 @@ static function GetVerseSets(view : String) : Array {
 function Awake() {
 }
 
-function Load() {
+static function Load() {
 	verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);
 }
 
