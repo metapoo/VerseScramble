@@ -245,13 +245,17 @@ function reset() {
 }
 
 function difficultyMultiplier(difficulty : Difficulty) {
+	var m : float = 1.0f;
+	if (GameManager.GetChallengeModeEnabled()) {
+		m *= 3.0f;
+	}
 	switch(difficulty) {
 		case Difficulty.Easy:
-			return 1;
+			return 2*m;
 		case Difficulty.Medium:
-			return 5;
+			return 6*m;
 		case Difficulty.Hard:
-			return 15;
+			return 14*m;
 		default:
 			return 1;
 	}
