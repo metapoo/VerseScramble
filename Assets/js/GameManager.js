@@ -148,9 +148,6 @@ function HandleWordWrong() {
 	
 	if (finished) return;
 	
-//	if (GetChallengeModeEnabled()) {
-//		ExplodeWords();
-//	}
 }
 	
 function ExplodeWords() {
@@ -210,10 +207,7 @@ function SetupUI() {
 	panelReferenceLabel.text = "";
 	difficultyLabel.text = "";
 	feedbackLabel.enabled = false;
-	healthBar.SetPercentage(healthBar.targetPercentage);
-	
-	var verse : Verse = verseManager.GetCurrentVerse();
-	SetVerseReference(verse.reference);
+	healthBar.SetPercentage(healthBar.targetPercentage);	
 }
 
 function showFeedback(feedbackText : String, time : float) {
@@ -305,6 +299,9 @@ function Start() {
 		yield WaitForSeconds(0.1);
 	}
 	Debug.Log("VerseManager.loaded, GameManager starting");
+	
+	var verse : Verse = VerseManager.GetCurrentVerse();
+	panelReferenceLabel.text = verse.reference;
 	
 	difficulty = verseManager.GetCurrentDifficulty();
 	
@@ -642,13 +639,6 @@ function scrambleWordLabels() {
     	scrambledWordLabels[currentIndex] = scrambledWordLabels[randomIndex];
     	scrambledWordLabels[randomIndex] = temporaryValue;
   	}
-}
-
-function UpdateVerseReference() {
-	var verse : Verse = VerseManager.GetCurrentVerse();
-	if (!Object.ReferenceEquals(verse, null)) {
-		SetVerseReference(verse.reference);
-	}
 }
 
 function SetupVerse() {

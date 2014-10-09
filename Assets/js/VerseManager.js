@@ -555,8 +555,6 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
 		loaded = true;
-		var gameManager : GameManager = GameObject.FindObjectOfType(GameManager);
-		gameManager.UpdateVerseReference();
 		UserSession.GetUserSession().ClearUrlOptions();
 	};
 	
@@ -617,7 +615,7 @@ function LoadVerses() {
 			return;
 		}
 	}
-    
+
 	LoadVersesLocally();
 }
 
@@ -625,6 +623,7 @@ static function LoadVersesLocally() {
 	if (offlineVersesLoaded) {
 		return;
 	}
+	Debug.Log("Loading verses locally..");
 	
 	var language = GetLanguage();
 	
