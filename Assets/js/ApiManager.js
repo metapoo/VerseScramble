@@ -87,17 +87,22 @@ class ApiManager extends MonoBehaviour {
 		if (www.error != null) {
 				
 			try {
+				Debug.Log("Got error, trying cache..");
 				resultData = GetApiCache(url);
 			} catch (err) {
-				
+				Debug.Log("Cache miss");
 			}
 			
 			if (resultData != null) {
 				if (handler != null) {
+					Debug.Log("Cache hit, calling handler");
 					handler(resultData);
 				}
 			} else {
-				errorHandler();
+				Debug.Log("Cache result was null, calling error handler");
+				if (errorHandler != null) {
+					errorHandler();
+				}
 			}
 			return;
 		}
@@ -113,7 +118,9 @@ class ApiManager extends MonoBehaviour {
 			}
 		} else {
 			Debug.Log("API error: " + url);
-			errorHandler();
+			if (errorHandler != null) {
+				errorHandler();
+			}
 		}
     }
     
