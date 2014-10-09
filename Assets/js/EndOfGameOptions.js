@@ -32,8 +32,10 @@ function SubmitScore(showPopup: boolean) {
 		popupDialog.CenterOnScreen();
 		popupDialog.OnClose = BackToMenu;
 	};
+	var hashTarget = versesetId+"_"+score+"_"+ApiManager.secretKey;
+	var hash = ApiManager.Md5(hashTarget);
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
-	new Hashtable({"score":score, "verseset_id":versesetId}), handler);
+	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash}), handler);
 }
 
 function EndGameWindowForChallenge () {
