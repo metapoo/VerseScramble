@@ -35,6 +35,7 @@ function HandleApiVerseSetList(resultData : Hashtable) {
 		VerseManager.LoadVerseSetData(versesetData);
 	}
 	verseSetsManager.ShowVerseSets();
+	
 }
 
 function HandleOnClick() {

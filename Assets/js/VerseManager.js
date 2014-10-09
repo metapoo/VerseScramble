@@ -618,7 +618,6 @@ function LoadVerses() {
 	
 	loaded = true;
 	
-	/*
 	var language = GetLanguage();
 	
 	var filename = String.Format("verses_{0}", language.ToLower());
@@ -634,7 +633,7 @@ function LoadVerses() {
 	} else {
 		offlineVersesLoaded = true;
 		loaded = true;
-	}*/
+	}
 }
 
 static function LoadVersesLocally() {
@@ -700,7 +699,9 @@ static function GetCurrentVerseSets() : Array {
 }
 
 static function ClearVerseSets(view : String) {
-	view = view + "_" + GetLanguage();
+	if (view != "history") {
+		view = view + "_" + GetLanguage();
+	}
 	var vs : Array = versesetsByView[view];
 	if (vs != null) {
 		vs.Clear();
