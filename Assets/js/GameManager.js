@@ -208,8 +208,12 @@ function SetupUI() {
 	feedbackLabel.text = "";
 	introReferenceLabel.text = "";
 	panelReferenceLabel.text = "";
+	difficultyLabel.text = "";
 	feedbackLabel.enabled = false;
 	healthBar.SetPercentage(healthBar.targetPercentage);
+	
+	var verse : Verse = verseManager.GetCurrentVerse();
+	SetVerseReference(verse.reference);
 }
 
 function showFeedback(feedbackText : String, time : float) {
