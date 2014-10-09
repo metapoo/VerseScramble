@@ -555,6 +555,8 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;
 		loaded = true;
+		var gameManager : GameManager = GameObject.FindObjectOfType(GameManager);
+		gameManager.UpdateVerseReference();
 		UserSession.GetUserSession().ClearUrlOptions();
 	};
 	
@@ -615,25 +617,8 @@ function LoadVerses() {
 			return;
 		}
 	}
-	
-	loaded = true;
-	
-	var language = GetLanguage();
-	
-	var filename = String.Format("verses_{0}", language.ToLower());
-	
-	var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
- 
- 	Debug.Log(fullpath);
- 	
-    verseText =  Resources.Load(fullpath, typeof(TextAsset));
     
-	if (verseText != null) {
-		LoadVersesLocally();
-	} else {
-		offlineVersesLoaded = true;
-		loaded = true;
-	}
+	LoadVersesLocally();
 }
 
 static function LoadVersesLocally() {
@@ -650,6 +635,13 @@ static function LoadVersesLocally() {
  	Debug.Log(fullpath);
  	
     verseText =  Resources.Load(fullpath, typeof(TextAsset));
+    
+    if (verseText == null) {
+    	Debug.Log(fullpath + " not found");
+		offlineVersesLoaded = true;
+		loaded = true;
+		return;
+    }
     
  	var previousView : String = currentView;
  	SetCurrentView("history");

@@ -644,6 +644,13 @@ function scrambleWordLabels() {
   	}
 }
 
+function UpdateVerseReference() {
+	var verse : Verse = VerseManager.GetCurrentVerse();
+	if (!Object.ReferenceEquals(verse, null)) {
+		SetVerseReference(verse.reference);
+	}
+}
+
 function SetupVerse() {
 	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
 

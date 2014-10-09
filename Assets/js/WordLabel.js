@@ -413,7 +413,7 @@ function OnMouseDown() {
 		VerseManager.SpeakUtterance(word, language);
 		scoreCredited = dScore;
 	} else {
-		dScore = scoreManager.HandleWordWrong();
+		str = scoreManager.HandleWordWrong();
 		gameManager.HandleWordWrong();
 		SetColor(Color(0.8,0.3,0.3,1.0));
 		yield WaitForSeconds(0.1);

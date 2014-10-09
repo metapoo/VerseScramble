@@ -77,11 +77,10 @@ function HandleWordWrong() {
 			dHealth = -0.33f*healthBarUnits;
 			break;
 	}	
-	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
 	maxTime -= mistakes;
-	return dScore;
+	return String.Format("-{0}s", mistakes);
 }
 
 
