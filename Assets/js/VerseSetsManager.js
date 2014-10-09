@@ -9,6 +9,11 @@ public var verseButton : VerseButton;
 public var rowPadding : float = 15;
 public var verseHeaderLabel : Text;
 
+function HandleRegisterClick() {
+	var url : String = String.Format("http://{0}/login/register",ApiManager.GetApiDomain());
+	Debug.Log("open url: " + url);
+	Application.OpenURL(url);
+}
 
 function ShowVerseSets() {
 	var children : Array = verseSetScrollContent.GetComponentsInChildren(VerseSetButton);
