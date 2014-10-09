@@ -93,7 +93,9 @@ class ApiManager extends MonoBehaviour {
 			}
 			
 			if (resultData != null) {
-				handler(resultData);
+				if (handler != null) {
+					handler(resultData);
+				}
 			} else {
 				errorHandler();
 			}
