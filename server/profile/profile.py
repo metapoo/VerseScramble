@@ -23,9 +23,11 @@ class ProfileListScoresHandler(BaseHandler):
         base_url = "/u/%s/scores" % username
 
         viewed_user = User.collection.find_one({'username':username})
+
         if viewed_user is None:
             return self.write("user not found")
-        scores = VersesetScore.collection.find({'user_id':viewed_user._id}).sort("date",pymongo.DESCENDING)
+
+        scores = VersesetScore.collection.find({'user_id':viewed_user._id}).sort("last_played_date",pymongo.DESCENDING)
         total_count = scores.count()
         scores = scores[start_index:end_index]
         paginator = Pagination(page,per_page,total_count)

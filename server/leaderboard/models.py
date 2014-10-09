@@ -12,6 +12,7 @@ class VersesetScore(BaseModel):
             Index("verseset_id"),
             Index("user_id"),
             Index("date"),
+            Index("last_played_date"),
         )
 
     def __new__(cls, *args, **kwargs):
@@ -54,6 +55,8 @@ class VersesetScore(BaseModel):
             vs_score = VersesetScore()
             vs_score.update(params)
             high_score = True
+
+        vs_score['last_played_date'] = datetime.utcnow()
 
         vs_score.save()
         if high_score and user:
