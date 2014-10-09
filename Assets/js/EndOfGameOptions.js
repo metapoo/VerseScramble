@@ -75,8 +75,13 @@ function EndGameWindowForChallenge () {
 	if (verseManager.currentVerseSet.onlineId == null) return;
 
 	SubmitScore(false);
-		
-	optionDialog.AddOption(gt("View High Scores"),
+	
+	var scoreText : String = gt("Submit Score");
+	if (UserSession.IsLoggedIn()) {
+		scoreText = gt("View High Scores");
+	}
+	
+	optionDialog.AddOption(scoreText,
 		function() {
 			if (UserSession.IsLoggedIn()) {
 				SubmitScore(true);
