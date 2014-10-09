@@ -29,7 +29,7 @@ public class UnityPlayerNativeActivity extends NativeActivity
 		}
 	}
 	
-	protected void onNewIntent(Intent intent)
+	@Override protected void onNewIntent(Intent intent)
 	{
 		setIntent(intent);
 		checkIntent();

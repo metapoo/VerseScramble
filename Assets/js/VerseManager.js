@@ -17,6 +17,7 @@ static var rightToLeft : boolean = false;
 static var loaded : boolean = false;
 static var offlineVersesLoaded : boolean = false;
 static var started : boolean = false;
+static var historyLoaded : boolean = false;
 
 private static var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
 

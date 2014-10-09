@@ -24,7 +24,9 @@ function Start () {
 function HandleApiVerseSetList(resultData : Hashtable) {
 	var currentView = VerseManager.GetCurrentView(false);
 	if (currentView != view) return;
-	
+	if (view == "history") {
+		VerseManager.historyLoaded = true;
+	}
 	VerseManager.ClearVerseSets(view);
 
 	var versesetsData : Array = resultData["versesets"];
@@ -47,7 +49,7 @@ function HandleOnClick() {
 		new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()}),
 		HandleApiVerseSetList);
 	} else if (view == "history") {
-		if (UserSession.IsLoggedIn() && (versesets.length == 0)) {
+		if (UserSession.IsLoggedIn() && (!VerseManager.historyLoaded)) {
 			apiManager.CallApi("profile/versesets/history",
 			new Hashtable({}),
 			HandleApiVerseSetList);
