@@ -11,10 +11,10 @@ from bson.objectid import ObjectId
 import pymongo
 
 def get_handlers():
-    return ((r"/api/profile/versesets/recent", ProfileListRecentVerseSetsHandler),
+    return ((r"/api/profile/versesets/history", ProfileListHistoryVerseSetsHandler),
     )
 
-class ProfileListRecentVerseSetsHandler(BaseHandler, ApiMixin):
+class ProfileListHistoryVerseSetsHandler(BaseHandler, ApiMixin):
     def get(self):
         if not self.current_user:
             return self.return_success({"logged_in":False})
