@@ -32,7 +32,7 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         order_by = self.get_argument("order_by", "popular")
         language_code = self.get_argument("language_code", "ALL")
         page = self.get_int_argument("page",1)
-        per_page = 20
+        per_page = 30
         args = {"verse_count":{"$gt":0}}
 
         if language_code != "ALL":

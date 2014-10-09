@@ -7,7 +7,8 @@
 <div class="error">{{error_message}}</div>
 {% end %}
 
-<form class="pure-form pure-form-stacked" action="/login/register" method="POST" class="login">
+<div class="centered_wrapper">
+<form class="pure-form pure-form-stacked login centered" action="/login/register" method="POST">
 <fieldset>
 <label for="email">Email</label><input type="text" name="email" value="{{email}}" placeholder="Email" />
 <label for="username">Username</label><input type="text" name="username" value="{{username}}" placeholder="Username" />
@@ -16,4 +17,6 @@
 </fieldset>
 <input class="pure-button pure-button-primary" type="submit" value="register" />
 </form>
+</div>
+
 {% end %}

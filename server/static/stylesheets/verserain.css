@@ -4,6 +4,16 @@ body h1, body h2,body h3,body h4 {
   margin: 0.5em 0em 0.5em 0em;
 }
 
+.centered_wrapper {
+  text-align:center;
+}
+
+form.centered {
+  margin:auto;
+  text-align:left;
+  width:250px;
+}
+
 .play_button {
   float:right;
   margin-left:8px;
