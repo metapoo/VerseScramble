@@ -91,7 +91,11 @@ function ShowVerses() {
 	verseScrollContent.anchoredPosition.y = 0;
 	
 	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
-	verseHeaderLabel.text = currentVerseSet.setname;
+	if (!Object.ReferenceEquals(currentVerseSet, null)) {
+		verseHeaderLabel.text = currentVerseSet.setname;
+	} else {
+		verseHeaderLabel.text = TextManager.GetText("Verses");
+	}
 }
 
 function GoBack () {

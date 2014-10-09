@@ -620,6 +620,8 @@ function scrambleWordLabels() {
 }
 
 function SetupVerse() {
+	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
+
 	gameStarted = false;
 	showingSolution = false;
 
@@ -841,5 +843,6 @@ static function StartChallenge() {
 	vm.verseIndex = 0;
 	vm.Save();
 	SetChallengeModeEnabled(true);
+	
 	Application.LoadLevel("scramble");
 }
