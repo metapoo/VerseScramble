@@ -47,7 +47,7 @@ function HandleWordCorrect(elapsedTime : float) {
 		}
 	}
 	moves = moves + 1;
-	var dScore = Mathf.RoundToInt(timeLeft * healthBarUnits );
+	var dScore = Mathf.RoundToInt(100.0f * healthBarUnits );
 	score += dScore;
 	
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
@@ -68,19 +68,19 @@ function HandleWordWrong() {
 
 	switch (difficulty) {
 		case Difficulty.Easy:
-			dHealth = -0.25f*healthBarUnits;
+			dHealth = -0.33f*healthBarUnits;
 			break;
 		case Difficulty.Medium:
-			dHealth = -0.35f*healthBarUnits;
+			dHealth = -0.33f*healthBarUnits;
 			break;
 		case Difficulty.Hard:
-			dHealth = -0.45f*healthBarUnits;
+			dHealth = -0.33f*healthBarUnits;
 			break;
 	}	
 	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
-	maxTime -= 1;
+	maxTime -= mistakes;
 	return dScore;
 }
 
@@ -122,7 +122,7 @@ function CalculateMaxTime() {
 	if (n == 0) return 0;
 	
 	if (GameManager.GetChallengeModeEnabled()) {
-		return 10+n*2;
+		return 10+n*4;
 	} else {
 		return 10+n*4;
 	}
@@ -171,7 +171,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(0.1*timeLeft*difficultyMultiplier(gameManager.difficulty));
+		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty));
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
