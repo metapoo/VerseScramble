@@ -1,5 +1,12 @@
 import tornado.web
 
+class PlayButton(tornado.web.UIModule):
+    def render(self, verseset=None, verseset_id=None):
+        if verseset_id is None:
+            verseset_id = verseset._id
+
+        return """<a class="play_button pure-button button-xsmall next" href="/verseset/play/%s" >&#9658</a>""" % verseset_id
+
 class UserLink(tornado.web.UIModule):
     def render(self, user=None, username=None):
         if username is None:

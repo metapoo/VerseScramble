@@ -1,11 +1,11 @@
 {% from verserain.utils.date import pretty_date %}
-<table class="pure-table pure-table-bordered">
+<table class="pure-table pure-table-bordered" style="width:100%;">
 <thead><tr><th>#</th><th>User</th><th>Score</th><th>Verse Set</th><th>Date</th></tr></thead>
 <tbody>
 {% set i = 1 %}
 {% for vs in scores %}
 <tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td>
-<td>{% module VerseSetLink(verseset_id=vs['verseset_id'],verseset_name=vs['verseset_name']) %}</td><td>{{pretty_date(vs['last_played_date'])}}</td>
+<td>{% module VerseSetLink(verseset_id=vs['verseset_id'],verseset_name=vs['verseset_name']) %} {% module PlayButton(verseset_id=vs['verseset_id']) %}</td><td>{{pretty_date(vs['last_played_date'])}}</td>
 </tr>
 {% set i = i + 1 %}
 {% end %}
