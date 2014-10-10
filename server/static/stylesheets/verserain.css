@@ -112,6 +112,11 @@ body {
   text-align: center;
 }
 
+#logo img {
+  margin-top: 3px;
+  height: 22px;
+}
+
 #logo {
   z-index: 1;
   position: relative;
