@@ -10,6 +10,13 @@ function Start() {
 function Update() {
 }
 
+
+function HandleRegisterClick() {
+	var url : String = String.Format("http://{0}/login/register",ApiManager.GetApiDomain());
+	Debug.Log("open url: " + url);
+	Application.OpenURL(url);
+}
+
 function SetParent(prt : RectTransform) {
 	var rt : RectTransform = GetComponent(RectTransform);
 	var oldPosition = rt.anchoredPosition;
