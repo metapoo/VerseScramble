@@ -80,15 +80,22 @@ class ShowVerseSetApiHandler(BaseHandler, ApiMixin):
         verses_json = [verse.json() for verse in verseset.sorted_verses()]
 
         high_score = 0
+        difficulty = 0
+        mastered = False
+
         if self.current_user:
             vss = VersesetScore.collection.find_one({"user_id":self.current_user._id,
                                                      "verseset_id":verseset_id})
             if vss:
                 high_score = vss['score']
-
+                difficulty = vss.get('difficulty',0)
+                mastered = vss.get('mastered',False)
+            
         result = {"verseset":verseset.json(),
                   "verses":verses_json,
                   "high_score":high_score,
+                  "difficulty":difficulty,
+                  "mastered":mastered,
         }
 
         return self.return_success(result)
