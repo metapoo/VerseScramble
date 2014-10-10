@@ -44,6 +44,10 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
 
         score = self.get_int_argument("score")
         verseset_id = ObjectId(self.get_argument("verseset_id"))
+        mistakes = self.get_int_argument("mistakes",0)
+        mastered = self.get_argument("mastered","False")
+        mastered = (mastered.lower() == "true")
+        elapsed_time = self.get_int_argument("elapsed_time",-1)
 
         hash_target = "%s-%s-%s-%s" % (str(self.current_user._id),
                                        str(verseset_id),
@@ -58,10 +62,15 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
                                    username=self.current_user['username'],
                                    score=score,
                                    verseset_id=verseset_id,
-                                   user = self.current_user)
+                                   user = self.current_user,
+                                   mistakes = mistakes,
+                                   mastered = mastered,
+                                   elapsed_time = elapsed_time
+        )
 
         response = get_scores_json(verseset_id)
         response["is_logged_in"] = True
         response["validated"] = validated
         response["total_score"] = self.current_user.get("total_score",0)
+
         return self.return_success(response)
