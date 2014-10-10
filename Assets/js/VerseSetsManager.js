@@ -68,7 +68,7 @@ function ShowVerses() {
 	var addVerseButton = function(verse : Verse, index: int) {
 		clone = Instantiate(verseButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerse(verse);
-		clone.verseIndex = index;
+		clone.verseIndex = index-1;
 		clone.AddToScrollView(verseScrollContent, index);
 		
 		var rt = clone.GetComponent(RectTransform);
