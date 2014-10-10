@@ -63,5 +63,5 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         response = get_scores_json(verseset_id)
         response["is_logged_in"] = True
         response["validated"] = validated
-
+        response["total_score"] = self.current_user.get("total_score",0)
         return self.return_success(response)
