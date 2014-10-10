@@ -192,6 +192,7 @@ function ShowEndOfGameOptions() {
 
 function ShowRestartVerse() {
 	var optionDialog : OptionDialog = DialogManager.CreateOptionDialog(gt("Game Over"),"");
+	optionDialog.PlaceBottom();
 	optionDialog.AddOption(gt("Try Again"), 
 		function() {
 			ReloadGame(false);

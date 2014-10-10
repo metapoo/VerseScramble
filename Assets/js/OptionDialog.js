@@ -14,6 +14,13 @@ function HandleOkayButtonClick() {
 	Destroy(this.gameObject);
 }
 
+function PlaceBottom() {
+	var rt: RectTransform = GetComponent(RectTransform);
+	rt.anchorMax.y = 0.05f;
+	rt.anchorMin.y = 0.05f;
+	rt.pivot.y = 0.0f;
+}
+
 function SetParent(prt : RectTransform) {
 	var rt : RectTransform = GetComponent(RectTransform);
 	var oldPosition = rt.anchoredPosition;
