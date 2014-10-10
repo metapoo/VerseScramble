@@ -2,11 +2,12 @@ public var loginPanel : LoginPanel;
 public var curPanel : LoginPanel;
 public var loginLabel : Text;
 public var loginMode : boolean = true;
+var userPanel : UserPanel;
 
 function ShowLogin() {
 	if (!loginMode) {
 		UserSession.GetUserSession().Logout();
-		SyncLabel();
+		SyncLoginStatus();
 		return;
 	}
 	
@@ -19,7 +20,7 @@ function ShowLogin() {
 	curPanel = clone;
 }
 
-function SyncLabel() {
+function SyncLoginStatus() {
 
 	if (UserSession.IsLoggedIn()) {
 		loginMode = false;
@@ -28,8 +29,12 @@ function SyncLabel() {
 		loginMode = true;
 		loginLabel.text = TextManager.GetText("Login");
 	}
+	
+	if (userPanel != null) {
+		userPanel.SyncLoginStatus();
+	}
 }
 
 function Start() {
-	SyncLabel();
+	SyncLoginStatus();
 }

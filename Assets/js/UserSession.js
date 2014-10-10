@@ -7,6 +7,7 @@ var userId : String = null;
 var sessionKey : String = null;
 var username : String = null;
 var email : String = null;
+var totalScore : int = 0;
 var isLoggedIn : boolean = false;
 
 static var started : boolean = false;
@@ -112,6 +113,11 @@ function HandleLogin(userData : Hashtable) {
 	sessionKey = userData["session_key"];
 	username = userData["username"];
 	email = userData["email"];
+	if (userData.ContainsKey("total_score")) {
+		totalScore = userData["total_score"];
+	} else {
+		totalScore = 0;
+	}
 	isLoggedIn = true;
 	
 	var json : String = HashtableToJSON(userData);
@@ -140,6 +146,7 @@ function Logout() {
 	sessionKey = null;
 	username = null;
 	email = null;
+	totalScore = 0;
 	PlayerPrefs.DeleteKey("user_data");
 }
 

@@ -57,7 +57,7 @@ static function ShowLoginPanel(prefab : LoginPanel, loginButton : LoginButton) :
 
 function ClosePanel() {
 	if (loginButton != null) {
-		loginButton.SyncLabel();
+		loginButton.SyncLoginStatus();
 		loginButton.curPanel = null;
 	}
 	Destroy(this.gameObject);
