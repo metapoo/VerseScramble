@@ -9,13 +9,13 @@ body h1, body h2,body h3,body h4 {
 }
 
 form.centered {
-  border: 1px solid #ddd; 
-  background:#eee;
+  border: 1px solid #d9d9d9; 
+  background:#f3f3f3;
   padding:10px 30px 25px 30px;
   margin:auto;
   margin-top:20px;
   text-align:left;
-  width:200px;
+  display: inline-block;
 }
 
 .play_button {
