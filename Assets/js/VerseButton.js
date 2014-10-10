@@ -37,7 +37,7 @@ function SetVerse(v : Verse) {
 		highScore = verseset.GetMetadata()["high_score"];
 		label.text = String.Format("{0} - {1}: {2}",
 			TextManager.GetText("Play Challenge (All Verses)"),
-			TextManager.GetText("high"),
+			TextManager.GetText("High"),
 			highScore); //this is what will be written in the rows
 		var versesetDifficulty : int = verseset.GetMetadata()["difficulty"];
 		button.colors.normalColor = GetColorForDifficulty(versesetDifficulty);
