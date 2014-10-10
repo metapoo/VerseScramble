@@ -63,12 +63,26 @@ function HandleApiVerseSetShow(resultData : Hashtable) {
 	var highScore : int = resultData["high_score"];
 	var metadata : Hashtable = verseset.GetMetadata();
 	var currentHighScore : int = metadata["high_score"];
+	var currentDifficulty : int = metadata["difficulty"];
 	var difficulty : int = resultData["difficulty"];
+	var mastered : boolean = resultData["mastered"];
+	if (mastered) difficulty += 1;
 	
-	if (highScore > currentHighScore) {
+	var changed : boolean = false;
+	
+	if (highScore >= currentHighScore) {
 		metadata["high_score"] = highScore;
+		changed = true;
 	}
-	verseset.SaveMetadata(metadata);
+	
+	if (difficulty > currentDifficulty) {
+		metadata["difficulty"] = difficulty;
+		changed = true;
+	}
+	
+	if (changed) {
+		verseset.SaveMetadata(metadata);
+	}
 	
 	VerseManager.LoadVerseSetData(versesetData);
 	verseset.LoadVersesData(versesData);
