@@ -283,13 +283,17 @@ function AnimateIntro() {
 	
 }
 
+static function RecordPlay() {
+	var versesetId = VerseManager.currentVerseSet.onlineId;
+	if (versesetId != null) {
+		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
+	}
+	needToRecordPlay = false;
+}
+
 function Start() {
 	if (needToRecordPlay) {
-		var versesetId = verseManager.currentVerseSet.onlineId;
-		if (versesetId != null) {
-			ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
-		}
-		needToRecordPlay = false;
+		RecordPlay();
 	}
 	SetupWalls();
 	SetupUI();	
@@ -377,8 +381,9 @@ function SplitVerse(verse : String) {
 		if (clauseArray.length > 0) {
 			// combine with previous clause if too small
 			var previousClause : String = clauseArray[clauseArray.length-1];
+			Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
 			// subtract 2 to account for separators
-			if (((clause.Length + previousClause.Length - 2) < phraseLength) ||
+			if (((clause.Length + previousClause.Length - 2) < phraseLength*1.5) ||
 				(clause.Length == 1)) {
 				clauseArray[clauseArray.length-1] += clause;
 				combined = true;
@@ -414,6 +419,7 @@ function SplitVerse(verse : String) {
 		for (var s : String in seps) {
 			if (isSeparator(s,c,n)	) {
 				if ((clause != "") && (clause != " ")) {
+					Debug.Log("process " + clause);
 					processClause(clause);
 				}
 				clause = "";
@@ -591,7 +597,7 @@ function Cleanup () {
 		Destroy(wObject.gameObject);
 	}
 	wordLabels.Clear();
-	
+	needToRecordPlay = true;
 }
 
 function BeginGame() {

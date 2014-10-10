@@ -39,11 +39,13 @@ function HandleApiVerseSetList(resultData : Hashtable) {
 }
 
 function HandleOnClick() {
-	Highlight();
-	VerseManager.SetCurrentView(view);
+	if ((view == "popular") || (view == "new") || (view == "history")) {
+		Highlight();
+		VerseManager.SetCurrentView(view);
+	}
 	
 	var versesets : Array = VerseManager.GetCurrentVerseSets();
-	
+	var apiDomain : String = ApiManager.GetApiDomain();
 	var apiManager : ApiManager = ApiManager.GetInstance();
 	if ((view == "popular") || (view == "new")) {
 		apiManager.CallApi("verseset/list",
@@ -55,7 +57,12 @@ function HandleOnClick() {
 			new Hashtable({}),
 			HandleApiVerseSetList);
 		}
+	} else if (view == "profile") {
+		Application.OpenURL(String.Format("http://{0}/profile", apiDomain));
+	} else if (view == "leaderboard") {
+		Application.OpenURL(String.Format("http://{0}/leaderboard", apiDomain));
 	}
+	
 	verseSetsManager.ShowVerseSets();
 	verseSetsManager.ShowVerses();
 }
