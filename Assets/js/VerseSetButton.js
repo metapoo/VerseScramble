@@ -60,9 +60,20 @@ function HandleApiVerseSetShow(resultData : Hashtable) {
 	if (this == null) return;
 	var versesetData : Hashtable = resultData["verseset"];
 	var versesData : Array = resultData["verses"];
+	var highScore : int = resultData["high_score"];
+	var metadata : Hashtable = verseset.GetMetadata();
+	var currentHighScore : int = metadata["high_score"];
+	var difficulty : int = resultData["difficulty"];
+	
+	if (highScore > currentHighScore) {
+		metadata["high_score"] = highScore;
+	}
+	verseset.SaveMetadata(metadata);
+	
 	VerseManager.LoadVerseSetData(versesetData);
 	verseset.LoadVersesData(versesData);
 	verseSetsManager.ShowVerses();
+	
 }
 
 function HandleOnClick() {

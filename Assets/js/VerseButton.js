@@ -39,12 +39,15 @@ function SetVerse(v : Verse) {
 			TextManager.GetText("Play Challenge (All Verses)"),
 			TextManager.GetText("high"),
 			highScore); //this is what will be written in the rows
+		var versesetDifficulty : int = verseset.GetMetadata()["difficulty"];
+		button.colors.normalColor = GetColorForDifficulty(versesetDifficulty);
 		
 	} else {
 		highScore = verse.GetMetadata()["high_score"];
 	
-		label.text = String.Format("{0} (high: {1})", verse.reference, 
-		highScore);
+//		label.text = String.Format("{0} (high: {1})", verse.reference, 
+//		highScore);
+		label.text = verse.reference;
 		var verseDifficulty : int = v.GetMetadata()["difficulty"];
 		button.colors.normalColor = GetColorForDifficulty(verseDifficulty);
 	}

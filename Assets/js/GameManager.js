@@ -379,7 +379,7 @@ function SplitVerse(verse : String) {
 			var previousClause : String = clauseArray[clauseArray.length-1];
 			Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
 			// subtract 2 to account for separators
-			if (((clause.Length + previousClause.Length - 2) < phraseLength*1.25) ||
+			if (((clause.Length + previousClause.Length - 2) < phraseLength*1.5) ||
 				(clause.Length == 1)) {
 				clauseArray[clauseArray.length-1] += clause;
 				combined = true;

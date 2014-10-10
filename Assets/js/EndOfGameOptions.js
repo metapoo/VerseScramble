@@ -15,7 +15,7 @@ function BackToMenu() {
 }
 
 function SubmitScore(showPopup: boolean) {
-
+	
 	var score = scoreManager.score;
 	var versesetId = verseManager.currentVerseSet.onlineId;
 	var handler : Function = function(resultData : Hashtable) {
@@ -40,11 +40,19 @@ function SubmitScore(showPopup: boolean) {
 		popupDialog.CenterOnScreen();
 		popupDialog.OnClose = BackToMenu;
 	};
-	var userId = UserSession.GetUserSession().userId;
-	var hashTarget = String.Format("{0}-{1}-{2}-{3}",userId,versesetId,score,ApiManager.secretKey);
-	var hash = ApiManager.Md5(hashTarget);
+	
+	var userId : String = UserSession.GetUserSession().userId;
+	var hashTarget : String = String.Format("{0}-{1}-{2}-{3}",userId,versesetId,score,ApiManager.secretKey);
+	var hash : String = ApiManager.Md5(hashTarget);
+	var mistakes : int = scoreManager.mistakes;
+	var mastered : boolean = scoreManager.WasVerseMastered();
+	var difficulty : int = VerseManager.GetDifficultyFromInt(gameManager.difficulty);
+	var elapsedTime : int = scoreManager.totalElapsedTime;
+	
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
-	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash}), handler);
+	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash, "mistakes":mistakes,
+	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime
+	}), handler);
 }
 
 function EndGameWindowForChallenge () {
@@ -82,7 +90,9 @@ function EndGameWindowForChallenge () {
 
 	if (verseManager.currentVerseSet.onlineId == null) return;
 
-	SubmitScore(false);
+	if (UserSession.IsLoggedIn()) {
+		SubmitScore(false);
+	}
 	
 	var scoreText : String = gt("Submit Score");
 	if (UserSession.IsLoggedIn()) {
@@ -106,7 +116,6 @@ function EndGameWindowForChallenge () {
 
 // Make the contents of the window
 function EndGameWindow () {
-	SubmitScore(false);
 	
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();

@@ -76,15 +76,15 @@ function ShowVerses() {
 		rt.anchoredPosition.y = -index*(rowHeight + rowPadding) - rowPadding;	
 	};
 	
+	if (verses.length > 0) {
+		addVerseButton(null,0);
+	}
+
 	for ( i=0;i<verses.length;i++) {
 		var verse : Verse = verses[i];
-		addVerseButton(verse,i);
+		addVerseButton(verse,i+1);
 	}
-	
-	if (verses.length > 0) {
-		addVerseButton(null,i);
-	}
-	
+		
 	verseScrollContent.sizeDelta.y = (verses.length+1)*(rowHeight+rowPadding);
 	
 	yield WaitForSeconds(0);
