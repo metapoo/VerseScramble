@@ -98,6 +98,20 @@ function ShowVerses() {
 	}
 }
 
+function OnGlobeClick() {
+	var verseset : VerseSet = VerseManager.currentVerseSet;
+	var apiDomain : String = ApiManager.GetApiDomain();
+	if (Object.ReferenceEquals(verseset, null)) {
+		return;
+	}
+	if (verseset.onlineId == null) {
+		Application.OpenURL(String.Format("http://{0}/",apiDomain));
+	}
+	var url : String = String.Format("http://{0}/verseset/show/{1}",
+	apiDomain, verseset.onlineId);
+	Application.OpenURL(url);
+}
+
 function GoBack () {
 	Application.LoadLevel("title");
 }
@@ -120,5 +134,5 @@ function Start () {
 }
 
 function Update () {
-
+	
 }
