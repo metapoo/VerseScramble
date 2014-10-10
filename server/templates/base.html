@@ -40,8 +40,24 @@
 
 <body class="pure-skin-blue">
 
-<div id="logo_wrapper">
-  <div id="logo"><img src="/images/logo.png"></img></div>
+<div class="logo_wrapper">
+  <div class="logo">
+  <table>
+  <tr>
+{% if user %}
+  <td class="left"><span class="username">{{user['username']}}</span></td>
+{% end %}
+  <td>
+    <img src="/images/logo.png"></img>
+  </td> 
+{% if user %}
+  <td class="right"><span class="points">{{user.get('total_score')}} points</span></span>
+  </td>
+{% end %}
+  </tr>
+  </table>
+
+  </div>
 </div>
 
 <div id="cssmenu">

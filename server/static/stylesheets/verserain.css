@@ -111,25 +111,53 @@ body {
   background-image:url('/images/header_sky.png');
 }
 
-#logo_wrapper {
-  height:45px;
-  text-align: center;
+.logo table {
+  width:100%;
+  height:53px;
+  padding: 0px
 }
 
-#logo img {
-  margin-top: 6px;
+.logo table td.left {
+  width:250px;
+  text-align:left;
+}
+
+.logo table td.right {
+  width:250px;
+  text-align:right;
+}
+
+.logo span.username {
+  font-size:1.4em;
+  overflow:hidden;
+}
+
+.logo span.points {
+  font-size:1.4em;
+}
+
+.logo_wrapper {
+  height:48px;
+  text-align: center;
+  background-color: rgba(0,0,0,.2);
+  position: relative;
+  z-index: 1;
+}
+
+.logo img {
   height: 25px;
 }
 
-#logo {
-  z-index: 1;
-  position: relative;
-  display:inline-block;
+.logo {
+  width: 800px;
   height: 40px;
-  text-align:left;
+  text-align:center;
   margin:auto;
-  margin-top:5px;
   color: #fff;
+}
+
+#cssmenu {
+  top: -4px;
 }
 
 #cssmenu ul.cssmenu {
