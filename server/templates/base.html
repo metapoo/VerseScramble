@@ -57,9 +57,9 @@
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>About</span></a></li>
   {% if not user %}
   <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>Login</span></a></li>
-  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>Register</span></a></li>
+  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>Sign Up</span></a></li>
   {% else %}
-  <li class="last"><a href="/login/logout"><span>logout</span></a></li>
+  <li class="last"><a href="/login/logout"><span>Logout</span></a></li>
   {% end %}
 
 </ul>
