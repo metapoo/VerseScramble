@@ -48,10 +48,11 @@ function SubmitScore(showPopup: boolean) {
 	var mastered : boolean = scoreManager.WasVerseMastered();
 	var difficulty : int = VerseManager.GetDifficultyFromInt(gameManager.difficulty);
 	var elapsedTime : int = scoreManager.totalElapsedTime;
+	var correct : int = scoreManager.correct;
 	
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
 	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash, "mistakes":mistakes,
-	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime
+	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime, "correct":correct
 	}), handler);
 }
 

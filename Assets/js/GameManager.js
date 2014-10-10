@@ -49,7 +49,7 @@ public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
-static var needToRecordPlay : boolean = false;
+static var needToRecordPlay : boolean = true;
 static var currentWord : String;
 static var words : Array = new Array();
 static var wordLabels : Array = new Array();

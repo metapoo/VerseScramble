@@ -10,6 +10,7 @@ var streak : int = 0;
 var moves : int = 0;
 var maxTime : int = 0;
 var mistakes : int = 0;
+var correct : int = 0;
 var mainCamera : Camera;
 var gameManager : GameManager;
 var verseManager : VerseManager;
@@ -49,7 +50,7 @@ function HandleWordCorrect(elapsedTime : float) {
 	moves = moves + 1;
 	var dScore = Mathf.RoundToInt(100.0f * healthBarUnits );
 	score += dScore;
-	
+	correct += 1;
 	//Debug.Log("dScore = " + dScore + " " + maxTime + " " + totalElapsedTime);
 	return dScore;
 }
@@ -142,6 +143,7 @@ function resetStats() {
 	streak = 0;
 	score = 0;
 	mistakes = 0;
+	correct = 0;
 	maxTime = CalculateMaxTime();
 	updateScoreLabel();
 	
