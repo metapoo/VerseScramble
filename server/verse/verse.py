@@ -17,7 +17,6 @@ def get_handlers():
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/?", ListVerseSetHandler),
-            (r"/profile/?", ListVerseSetHandler),
             (r"/u/([^/]+)/?", ListVerseSetHandler),
             (r"/u/([^/]+)/()(\d+)/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
