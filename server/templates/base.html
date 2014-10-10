@@ -40,16 +40,15 @@
 
 <body class="pure-skin-blue">
 
-<div id="page_layout_wrapper">
-<div id="page_layout">
-
-<div id="profile_status">
-{% if user %}{% end %}
+<div id="logo_wrapper">
+  <div id="logo"><img src="/images/logo.png"></img></div>
 </div>
 
 <div id="cssmenu">
-<div id="bg-one"></div><div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
-<ul>
+<div id="logo_bg"></div>
+<div id="bg-one"></div>
+<div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
+<ul class="cssmenu">
   <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>verse sets</span></a></li>
   {% if user %}
   <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>profile</span></a></li>
@@ -64,8 +63,15 @@
   {% end %}
 
 </ul>
-
 </div>
+
+<div id="page_layout_wrapper">
+<div id="page_layout">
+
+<div id="profile_status">
+{% if user %}{% end %}
+</div>
+
 
 <div id="page_content">
 {% block page_content %}

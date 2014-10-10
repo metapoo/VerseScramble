@@ -91,7 +91,42 @@ body {
   text-align: left;
   width: 900px;
   margin: auto;
-  padding: 20px 0px 20px 0px;
+  padding: 0px 0px 20px 0px;
+}
+
+#cssmenu {
+  text-align:center;
+  clear:both;
+}
+
+#logo_bg {
+  position:absolute;
+  bottom:0px;
+  width:100%;
+  height:150px;
+  background-image:url('/images/header_sky.png');
+}
+
+#logo_wrapper {
+  height:35px;
+  text-align: center;
+}
+
+#logo {
+  z-index: 1;
+  position: relative;
+  width:900px;
+  height: 40px;
+  text-align:left;
+  margin:auto;
+  margin-top:10px;
+  color: #fff;
+}
+
+#cssmenu ul.cssmenu {
+  text-align:left;
+  margin:auto;
+  width:900px;
 }
 
 form.login input[type="text"], form.login input[type="password"] {
@@ -102,6 +137,7 @@ form textarea[name="text"] {
   width: 400px;
   height: 100px;
 }
+
 
 #page_content {
   padding-top: 10px;
