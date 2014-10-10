@@ -12,7 +12,13 @@ import pymongo
 def get_handlers():
     return ((r"/u/([^/]+)/scores?", ProfileListScoresHandler),
             (r"/u/([^/]+)/scores/(\d+)/?", ProfileListScoresHandler),
+            (r"/profile/?", ProfileIndexHandler),
     )
+
+class ProfileIndexHandler(BaseHandler):
+    @require_login
+    def get(self):
+        self.redirect("/u/%s" % self.current_user['username'])
 
 class ProfileListScoresHandler(BaseHandler):
     def get(self, username=None, page=1):
