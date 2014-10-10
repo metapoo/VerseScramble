@@ -69,14 +69,33 @@ class ShowVerseApiHandler(BaseHandler, ApiMixin):
 class ShowVerseSetApiHandler(BaseHandler, ApiMixin):
     api_name = "verseset/show"
     def get(self):
+        from verserain.leaderboard.models import VersesetScore
         verseset_id = self.get_argument("verseset_id")
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+
         if verseset is None:
             self.return_error("verse set is not found")
         
         verses_json = [verse.json() for verse in verseset.sorted_verses()]
 
+        high_score = 0
+        difficulty = 0
+        mastered = False
+
+        if self.current_user:
+            vss = VersesetScore.collection.find_one({"user_id":self.current_user._id,
+                                                     "verseset_id":verseset_id})
+            if vss:
+                high_score = vss['score']
+                difficulty = vss.get('difficulty',0)
+                mastered = vss.get('mastered',False)
+            
         result = {"verseset":verseset.json(),
-                  "verses":verses_json}
+                  "verses":verses_json,
+                  "high_score":high_score,
+                  "difficulty":difficulty,
+                  "mastered":mastered,
+        }
+
         return self.return_success(result)
