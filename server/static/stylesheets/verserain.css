@@ -9,9 +9,13 @@ body h1, body h2,body h3,body h4 {
 }
 
 form.centered {
+  border: 1px solid #d9d9d9; 
+  background:#f3f3f3;
+  padding:10px 30px 25px 30px;
   margin:auto;
+  margin-top:20px;
   text-align:left;
-  width:250px;
+  display: inline-block;
 }
 
 .play_button {
@@ -89,7 +93,7 @@ body {
 
 #page_layout {
   text-align: left;
-  width: 900px;
+  width: 800px;
   margin: auto;
   padding: 0px 0px 20px 0px;
 }
@@ -107,26 +111,59 @@ body {
   background-image:url('/images/header_sky.png');
 }
 
-#logo_wrapper {
-  height:35px;
-  text-align: center;
+.logo table {
+  width:100%;
+  height:53px;
+  padding: 0px
 }
 
-#logo {
-  z-index: 1;
-  position: relative;
-  width:900px;
-  height: 40px;
+.logo table td.left {
+  width:250px;
   text-align:left;
+}
+
+.logo table td.right {
+  width:250px;
+  text-align:right;
+}
+
+.logo span.username {
+  font-size:1.4em;
+  overflow:hidden;
+}
+
+.logo span.points {
+  font-size:1.4em;
+}
+
+.logo_wrapper {
+  height:48px;
+  text-align: center;
+  background-color: rgba(0,0,0,.2);
+  position: relative;
+  z-index: 1;
+}
+
+.logo img {
+  height: 25px;
+}
+
+.logo {
+  width: 800px;
+  height: 40px;
+  text-align:center;
   margin:auto;
-  margin-top:10px;
   color: #fff;
+}
+
+#cssmenu {
+  top: -4px;
 }
 
 #cssmenu ul.cssmenu {
   text-align:left;
   margin:auto;
-  width:900px;
+  display: inline-block;
 }
 
 form.login input[type="text"], form.login input[type="password"] {

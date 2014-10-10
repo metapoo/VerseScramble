@@ -40,8 +40,24 @@
 
 <body class="pure-skin-blue">
 
-<div id="logo_wrapper">
-  <div id="logo"><img src="/images/logo.png"></img></div>
+<div class="logo_wrapper">
+  <div class="logo">
+  <table>
+  <tr>
+{% if user %}
+  <td class="left"><span class="username">{{user['username']}}</span></td>
+{% end %}
+  <td>
+    <img src="/images/logo.png"></img>
+  </td> 
+{% if user %}
+  <td class="right"><span class="points">{{user.get('total_score')}} points</span></span>
+  </td>
+{% end %}
+  </tr>
+  </table>
+
+  </div>
 </div>
 
 <div id="cssmenu">
@@ -49,17 +65,17 @@
 <div id="bg-one"></div>
 <div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
 <ul class="cssmenu">
-  <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>verse sets</span></a></li>
+  <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>Verse Sets</span></a></li>
   {% if user %}
-  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>profile</span></a></li>
+  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>Profile</span></a></li>
   {% end %}
-  <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>leaderboard</span></a></li>
-  <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>about</span></a></li>
+  <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>Leaderboard</span></a></li>
+  <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>About</span></a></li>
   {% if not user %}
-  <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>login</span></a></li>
-  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>register</span></a></li>
+  <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>Login</span></a></li>
+  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>Sign Up</span></a></li>
   {% else %}
-  <li class="last"><a href="/login/logout"><span>logout</span></a></li>
+  <li class="last"><a href="/login/logout"><span>Logout</span></a></li>
   {% end %}
 
 </ul>
