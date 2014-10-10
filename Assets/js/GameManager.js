@@ -283,13 +283,17 @@ function AnimateIntro() {
 	
 }
 
+static function RecordPlay() {
+	var versesetId = VerseManager.currentVerseSet.onlineId;
+	if (versesetId != null) {
+		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
+	}
+	needToRecordPlay = false;
+}
+
 function Start() {
 	if (needToRecordPlay) {
-		var versesetId = verseManager.currentVerseSet.onlineId;
-		if (versesetId != null) {
-			ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
-		}
-		needToRecordPlay = false;
+		RecordPlay();
 	}
 	SetupWalls();
 	SetupUI();	
@@ -593,7 +597,7 @@ function Cleanup () {
 		Destroy(wObject.gameObject);
 	}
 	wordLabels.Clear();
-	
+	needToRecordPlay = true;
 }
 
 function BeginGame() {
