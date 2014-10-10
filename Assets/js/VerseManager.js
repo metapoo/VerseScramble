@@ -159,6 +159,7 @@ static function GetCurrentVerse() : Verse {
 			return null;
 		}
 	}
+
 	
 	return verses[verseIndex];
 }

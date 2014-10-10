@@ -80,8 +80,9 @@ function HandleWordWrong() {
 	}	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
-	maxTime -= mistakes;
-	return String.Format("-{0}s", mistakes);
+	var dTime : int = -1*mistakes - 4;
+	maxTime += dTime;
+	return String.Format("{0}s", dTime);
 }
 
 

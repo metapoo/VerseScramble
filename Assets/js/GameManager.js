@@ -284,7 +284,14 @@ function AnimateIntro() {
 }
 
 static function RecordPlay() {
-	var versesetId = VerseManager.currentVerseSet.onlineId;
+	while (!VerseManager.loaded) {
+		yield WaitForSeconds(1);
+	}
+	var verseset : VerseSet = VerseManager.currentVerseSet;
+	if (Object.ReferenceEquals(verseset, null)) {
+		return;
+	}
+	var versesetId = verseset.onlineId;
 	if (versesetId != null) {
 		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
 	}
