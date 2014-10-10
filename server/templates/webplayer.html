@@ -1,4 +1,16 @@
 {% extends "base.html" %}
+{% block init_js %}
+{% if isIOS or isAndroid %}
+  {% if isIOS %}
+    setTimeout( function() { document.location = 'http://itunes.apple.com/us'; }, 300);
+    setTimeout( function() {
+      window.history.back()
+    }, 400);
+  {% end %}
+  document.location = '{{device_url}}';
+{% end %}
+{% end %}
+
 {% block extra_js %}
 <script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
 <script type='text/javascript'>
@@ -9,6 +21,7 @@
 </script>
 
 <script type='text/javascript'>
+
 			var config = {
 				width: 900, 
 				height: 600,
@@ -61,6 +74,13 @@
 </script>
 {% end %}
 {% block page_content %}
+
+{% if isIOS or isAndroid %}
+<div class="centered_wrapper">
+  <form style="padding-top:30px;" class="centered"><h2>Download verserain on {% if isIOS %}the App Store{% else %}Google Play{% end %} to play.</h2></form>
+</div>
+{% end %}
+
 <div id="unity_player_content" >
 		<div class="content">
 			<div id="unityPlayer">
