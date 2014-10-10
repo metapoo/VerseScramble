@@ -19,6 +19,14 @@ function SubmitScore(showPopup: boolean) {
 	var score = scoreManager.score;
 	var versesetId = verseManager.currentVerseSet.onlineId;
 	var handler : Function = function(resultData : Hashtable) {
+		if (UserSession.IsLoggedIn()) {
+			var us : UserSession = UserSession.GetUserSession();
+			if (resultData.ContainsKey("total_score")) {
+				us.totalScore = resultData["total_score"];
+				us.Save();
+			}
+		}
+			
 		if (!showPopup) return;
 		var text : String = "";
 		var scores : Array = resultData["scores"];

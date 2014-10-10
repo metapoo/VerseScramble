@@ -124,6 +124,13 @@ function HandleLogin(userData : Hashtable) {
 	PlayerPrefs.SetString("user_data", json);
 }
 
+function Save() {
+	var userData : Hashtable = new Hashtable({"email":email,"username":username,
+	"_id":userId,"session_key":sessionKey,"total_score":totalScore});
+	var json : String = HashtableToJSON(userData);
+	PlayerPrefs.SetString("user_data", json);
+}
+
 function LoadUserLogin() {
 	if (sessionKey && userId) return;
 	var json : String = PlayerPrefs.GetString("user_data");
