@@ -41,6 +41,8 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
         
         total_count = cursor.count()
         paginator = Pagination(page,per_page,total_count)
+        base_url = "/leaderboard/%s" % selected_subnav
 
         self.render("leaderboard/index.html", users=users, selected_nav="leaderboard", 
-                    scores=scores, paginator=paginator, selected_subnav=selected_subnav)
+                    scores=scores, paginator=paginator, selected_subnav=selected_subnav,
+                    base_url=base_url)
