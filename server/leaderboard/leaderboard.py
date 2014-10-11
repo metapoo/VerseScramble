@@ -45,4 +45,4 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
 
         self.render("leaderboard/index.html", users=users, selected_nav="leaderboard", 
                     scores=scores, paginator=paginator, selected_subnav=selected_subnav,
-                    base_url=base_url)
+                    base_url=base_url, start_index=start_index)
