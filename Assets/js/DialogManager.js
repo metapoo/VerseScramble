@@ -4,7 +4,14 @@ var popupDialog : PopupDialog;
 var optionDialog : OptionDialog;
 
 static function GetInstance() : DialogManager {
-	var instance : DialogManager = GameObject.Find("DialogManager").GetComponent(DialogManager);
+	var go : GameObject = GameObject.Find("DialogManager");
+	var instance : DialogManager;
+	if (go == null) {
+		go = new GameObject("DialogManager");
+    	instance = go.AddComponent(typeof(DialogManager));
+	} else {
+	 	instance = go.GetComponent(DialogManager);
+	}
 	return instance;
 }
 

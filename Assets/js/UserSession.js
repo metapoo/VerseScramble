@@ -70,7 +70,9 @@ function HandleURL(url : String) {
 	};
 	
 	if (!IsLoggedIn() && (sessionKey != "None")) {
-		ApiManager.GetInstance().CallApi("login/login",
+		var apiManager : ApiManager = ApiManager.GetInstance();
+		apiManager.cacheEnabled = false;
+		apiManager.CallApi("login/login",
 				new Hashtable({"session_key":sessionKey}), onLogin);
 	} else {
 		startGame();
