@@ -42,8 +42,10 @@ class PlayVerseHandler(BaseHandler):
 
         device_url = verse.device_url(session_key=session_key)
 
-#        if self.isIOS() or self.isAndroid():
-#            return self.redirect(device_url)
+        template_name = "webplayer.html"
+
+        if self.isIOS() or self.isAndroid():
+            template_name = "device_player.html"
 
         self.render("webplayer.html",verse_id=verse_id, verseset_id=None,device_url=device_url)
 
@@ -60,10 +62,12 @@ class PlayVerseSetHandler(BaseHandler):
 
         device_url = vs.device_url(session_key=session_key)
 
-#        if self.isIOS() or self.isAndroid():
-#            return self.redirect(device_url)
+        template_name = "webplayer.html"
 
-        self.render("webplayer.html",verse_id=None, verseset_id=verseset_id,device_url=device_url)
+        if self.isIOS() or self.isAndroid():
+            template_name = "device_player.html"
+
+        self.render(template_name,verse_id=None, verseset_id=verseset_id,device_url=device_url)
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):
