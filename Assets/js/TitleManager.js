@@ -8,12 +8,12 @@ public var background : Transform;
 
 private	var selectedDifficulty : Difficulty;
 
-
-function Start () {
-
-	
+function Awake() {
 	Application.targetFrameRate = 60;
 	TextManager.LoadLanguage(VerseManager.GetLanguage());
+}
+
+function Start () {
 }
 
 function Update () {

@@ -263,8 +263,25 @@ static function GetVerseLanguage() : String{
 }
 
 
+static function GetSystemLanguage() : String {
+	var sl : SystemLanguage = Application.systemLanguage;
+	var fullLang : String = sl.ToString();
+	switch(fullLang) {
+		case "English": return "en";
+		case "Chinese": return "zh-hans";
+		case "Korean": return "ko";
+		case "Russian": return "ru";
+		case "Mongolian": return "mn";
+		case "French": return "fr";
+		case "Spanish": return "es";
+		case "Italian": return "it";
+		case "German": return "de";
+		default: return "en";
+	}
+}
+
 static function GetLanguage() : String {
-	return PlayerPrefs.GetString("language", "en");
+	return PlayerPrefs.GetString("language", GetSystemLanguage());
 }
 
 static function SetLanguage(language : String) : String {
