@@ -67,7 +67,9 @@ function ClosePanel() {
 function SubmitLogin() {
 	var username = usernameField.value;
 	var password = passwordField.value;
-	ApiManager.GetInstance().CallApi("login/login",
+	var apiManager : ApiManager = ApiManager.GetInstance();
+	apiManager.cacheEnabled = false;
+	apiManager.CallApi("login/login",
 	new Hashtable({"username":username,"password":password}),HandleLogin);
 }
 

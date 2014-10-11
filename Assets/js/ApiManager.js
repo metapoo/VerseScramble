@@ -8,7 +8,8 @@ class ApiManager extends MonoBehaviour {
     static var instance:ApiManager;
  	static var apiDomain:String = null;
  	static var secretKey:String = "0>a-q,wYTmq%<,h$OXYg<js:h([TR/:4hSVh.vEJhq4RvWIx@_|^B|]z`b<d~kI@";
-
+	static var cacheEnabled:boolean = true;
+	
 	static function Md5(strToEncrypt: String)
 	{
 		var encoding = System.Text.UTF8Encoding();
@@ -58,7 +59,7 @@ class ApiManager extends MonoBehaviour {
 	public function CallApi(apiName : String, arguments : Hashtable, handler : Function) {
 		var errorHandler : Function = function() {
 			var gt : Function = TextManager.GetText;
-			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error."));
+			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error. Is your network connection enabled?"));
 		};
 		CallApi(apiName, arguments, handler, errorHandler);
 	}	
@@ -100,16 +101,21 @@ class ApiManager extends MonoBehaviour {
     public function CallApi(apiName : String, arguments : String, handler : Function, errorHandler : Function) {
     	var url : String = "http://"+GetApiDomain()+"/api/"+apiName+"?"+arguments;
 		Debug.Log("API request " + url);
-		
+		var _cacheEnabled : boolean = cacheEnabled;
 		var www : WWW = new WWW(url);
-		yield www;	
+		yield www;
+		// restore cache enabled flag for next call
+		cacheEnabled = true;
+			
 		var resultData : Hashtable = null;
 
 		if (www.error != null) {
 				
 			try {
-				Debug.Log("Got error, trying cache..");
-				resultData = GetApiCache(url);
+				if (_cacheEnabled) {
+					Debug.Log("Got error, trying cache..");
+					resultData = GetApiCache(url);
+				}
 			} catch (err) {
 				Debug.Log("Cache miss");
 			}
@@ -143,6 +149,7 @@ class ApiManager extends MonoBehaviour {
 				errorHandler();
 			}
 		}
+	
     }
     
     public static function GetApiDomain() : String {
