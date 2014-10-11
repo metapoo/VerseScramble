@@ -56,7 +56,7 @@
     <img src="/images/logo.png"></img>
   </td> 
 {% if user %}
-  <td class="right"><span class="points">{{user.get('total_score')}} points</span></span>
+  <td class="right"><span class="points">{{user.get('total_score',0)}} points</span></span>
   </td>
 {% end %}
   </tr>
