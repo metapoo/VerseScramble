@@ -6,7 +6,14 @@
 
 {% block page_content %}
 {% from verserain.utils.date import pretty_date %}
-<h2>Highest Total Scores</h2>
+
+<div class="pad_bottom">
+        <a class="pure-button {% if selected_subnav=="total" %}pure-button-primary{% end %}" href="/leaderboard/total">Total Points</a>
+        <a class="pure-button {% if selected_subnav=="high" %}pure-button-primary{% end %}" href="/leaderboard/high">High Scores</a>
+        <a class="pure-button {% if selected_subnav=="recent" %}pure-button-primary{% end %}" href="/leaderboard/recent">Recent Scores</a>
+</div>
+
+{% if selected_subnav == "total" %}
 <table class="pure-table pure-table-bordered" style="width:100%;">
 <thead><tr><th>#</th><th>User</th><th>Score</th></tr></thead>
 <tbody>
@@ -17,18 +24,11 @@
 {% end %}
 </tbody>
 </table>
+{% elif (selected_subnav == "high") or (selected_subnav == "recent") %}
 
-<br/>
+{% module ScoresTable(scores) %}
 
-<h2>Highest Scores</h2>
-{% module ScoresTable(highest_vs_scores) %}
-
-<br/>
-
-<h2>Recent Scores</h2>
-{% module ScoresTable(recent_vs_scores) %}
-
-<br/>
+{% end %}
 
 {% end %}
 
