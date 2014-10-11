@@ -77,7 +77,7 @@ class ApiManager extends MonoBehaviour {
     	for (var key:String in arguments.Keys) {
     		i += 1;
     		var val = arguments[key];
-    		serializedArguments += (key+"="+val);
+    		serializedArguments += (key+"="+WWW.EscapeURL(val.ToString()));
     		if (i < arguments.Count) {
     			serializedArguments += "&";
     		}
@@ -110,7 +110,7 @@ class ApiManager extends MonoBehaviour {
 		var resultData : Hashtable = null;
 
 		if (www.error != null) {
-				
+			Debug.Log("www.error = " + www.error);
 			try {
 				if (_cacheEnabled) {
 					Debug.Log("Got error, trying cache..");
@@ -125,7 +125,7 @@ class ApiManager extends MonoBehaviour {
 					Debug.Log("Cache hit, calling handler");
 					handler(resultData);
 				}
-			} else {
+			} else if (cacheEnabled) {
 				Debug.Log("Cache result was null, calling error handler");
 				if (errorHandler != null) {
 					errorHandler();
