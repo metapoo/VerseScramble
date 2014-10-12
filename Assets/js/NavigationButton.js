@@ -4,6 +4,7 @@ public var button : Button;
 public var label : Text;
 public var view : String;
 public var verseSetsManager : VerseSetsManager;
+public var loginPanel : LoginPanel;
 
 private var normalColor : Color;
 static var selectedButton : NavigationButton = null;
@@ -39,7 +40,7 @@ function HandleApiVerseSetList(resultData : Hashtable) {
 }
 
 function HandleOnClick() {
-	if ((view == "popular") || (view == "new") || (view == "history")) {
+	if ((view == "popular") || (view == "new") || (view == "history") || (view == "mysets")) {
 		Highlight();
 		VerseManager.SetCurrentView(view);
 	}
@@ -47,6 +48,8 @@ function HandleOnClick() {
 	var versesets : Array = VerseManager.GetCurrentVerseSets();
 	var apiDomain : String = ApiManager.GetApiDomain();
 	var apiManager : ApiManager = ApiManager.GetInstance();
+	var us : UserSession = UserSession.GetUserSession();
+	
 	if ((view == "popular") || (view == "new")) {
 		apiManager.CallApi("verseset/list",
 		new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()}),
@@ -56,6 +59,21 @@ function HandleOnClick() {
 			apiManager.CallApi("profile/versesets/history",
 			new Hashtable({}),
 			HandleApiVerseSetList);
+		}
+	} else if (view == "mysets") {
+		var showMySets : Function = function() {
+			apiManager.CallApi("verseset/list",
+			new Hashtable({"user_id":us.userId,"page":1,"language_code":VerseManager.GetLanguage()}),
+			HandleApiVerseSetList);
+		};
+		
+		if (!UserSession.IsLoggedIn()) {
+			var clone : LoginPanel = LoginPanel.ShowLoginPanel(loginPanel, null);
+				clone.onLogin = function() {
+					showMySets();
+				};
+		} else {	
+			showMySets();
 		}
 	} else if (view == "profile") {
 		Application.OpenURL(String.Format("http://{0}/profile", apiDomain));

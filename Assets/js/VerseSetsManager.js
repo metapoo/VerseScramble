@@ -9,7 +9,6 @@ public var verseButton : VerseButton;
 public var rowPadding : float = 15;
 public var verseHeaderLabel : Text;
 
-
 function ShowVerseSets() {
 	var children : Array = verseSetScrollContent.GetComponentsInChildren(VerseSetButton);
 	for (var i=0;i<children.length;i++) {
