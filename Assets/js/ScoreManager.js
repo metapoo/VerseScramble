@@ -26,7 +26,7 @@ var startingHealth : float = 0.0f;
 var healthBarUnits : float = startingHealth;
 
 function HandleWordCorrect(elapsedTime : float) {
-	var dHealth = (2.0f-healthBarUnits)*0.025f;
+	var dHealth = (5.0f-healthBarUnits)*0.01f;
 	if (dHealth < 0.01) dHealth = 0.01f;
 	
 	UpdateHealthBar(healthBarUnits + dHealth);
@@ -173,7 +173,7 @@ function CountTimeLeft() {
 	if (dt > 0.1f) dt = 0.1f;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty));
+		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty)*healthBarUnits);
 		timeLeft -= 1;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
@@ -248,16 +248,14 @@ function reset() {
 
 function difficultyMultiplier(difficulty : Difficulty) {
 	var m : float = 1.0f;
-	if (GameManager.GetChallengeModeEnabled()) {
-		m *= 2.5f;
-	}
+	
 	switch(difficulty) {
 		case Difficulty.Easy:
-			return 0.5*m;
+			return 1.0*m;
 		case Difficulty.Medium:
-			return 1*m;
+			return 2.0*m;
 		case Difficulty.Hard:
-			return 2*m;
+			return 3.0*m;
 		default:
 			return 1;
 	}
