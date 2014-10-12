@@ -6,6 +6,7 @@ public var verseset : VerseSet;
 public var label : Text;
 public var normalColor : Color;
 public var verseSetsManager : VerseSetsManager;
+public var createVerseSet : boolean;
 static var selectedButton : VerseSetButton = null;
 
 function Awake() {
@@ -91,6 +92,12 @@ function HandleApiVerseSetShow(resultData : Hashtable) {
 }
 
 function HandleOnClick() {
+	if (createVerseSet) {
+		var url : String = String.Format("http://{0}/verseset/create",ApiManager.GetApiDomain());
+		Application.OpenURL(url);
+		return;
+	}
+	
 	VerseManager.verseIndex = 0;
 	VerseManager.SetCurrentVerseSet(verseset);
 	Highlight();
