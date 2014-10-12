@@ -45,8 +45,8 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         score = self.get_int_argument("score")
         verseset_id = ObjectId(self.get_argument("verseset_id"))
         mistakes = self.get_int_argument("mistakes",0)
-        mastered = self.get_argument("mastered","False")
-        mastered = (mastered.lower() == "true")
+        mastered = self.get_boolean_argument("mastered",False)
+        is_challenge = self.get_boolean_argument("is_challenge",False)
         elapsed_time = self.get_int_argument("elapsed_time",-1)
         correct = self.get_int_argument("correct",0)
 
@@ -67,7 +67,8 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
                                    mistakes = mistakes,
                                    mastered = mastered,
                                    elapsed_time = elapsed_time,
-                                   correct = correct
+                                   correct = correct,
+                                   is_challenge = is_challenge,
         )
 
         response = get_scores_json(verseset_id)

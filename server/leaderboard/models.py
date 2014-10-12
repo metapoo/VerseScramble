@@ -25,7 +25,7 @@ class VersesetScore(BaseModel):
 
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None,
-                     mastered=False, elapsed_time=-1,difficulty=0,mistakes=0,correct=0):
+                     mastered=False, elapsed_time=-1,difficulty=0,mistakes=0,correct=0,is_challenge=True):
         if score == 0:
             return
 
@@ -49,6 +49,7 @@ class VersesetScore(BaseModel):
                   'elapsed_time':elapsed_time,
                   'difficulty':difficulty,
                   'correct':correct,
+                  'is_challenge':is_challenge,
         }
         high_score = False
 

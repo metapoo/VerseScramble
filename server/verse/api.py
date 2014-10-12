@@ -94,7 +94,7 @@ class ShowVerseSetApiHandler(BaseHandler, ApiMixin):
         if self.current_user:
             vss = VersesetScore.collection.find_one({"user_id":self.current_user._id,
                                                      "verseset_id":verseset_id})
-            if vss:
+            if vss and vss.get('is_challenge',True):
                 high_score = vss['score']
                 difficulty = vss.get('difficulty',0)
                 mastered = vss.get('mastered',False)
