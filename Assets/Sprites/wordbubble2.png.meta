@@ -10,7 +10,7 @@ TextureImporter:
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -30,7 +30,7 @@ TextureImporter:
   maxTextureSize: 1024
   textureSettings:
     filterMode: 1
-    aniso: 1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -52,29 +52,29 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 80
         width: 52
-        height: 114
+        height: 95
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: wordbubble2_middle
       rect:
         serializedVersion: 2
-        x: 94
-        y: 0
-        width: 107
-        height: 114
+        x: 52
+        y: 80
+        width: 152
+        height: 95
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 0, y: 7, z: 0, w: 7}
+      border: {x: 0, y: 1, z: 0, w: 0}
     - name: wordbubble2_right
       rect:
         serializedVersion: 2
-        x: 249
-        y: 1
-        width: 51
-        height: 113
+        x: 204
+        y: 81
+        width: 52
+        height: 95
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -82,11 +82,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 300
-        height: 114
+        y: 80
+        width: 256
+        height: 95
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 41, y: 41, z: 41, w: 41}
+      border: {x: 44, y: 41, z: 41, w: 41}
   spritePackingTag: 1001
   userData: 
