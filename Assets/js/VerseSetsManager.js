@@ -24,22 +24,40 @@ function ShowVerseSets() {
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
 	var rowHeight = vsButtonTransform.sizeDelta.y;
 	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
-
-	for (i=0;i<versesets.length;i++) {
-		var verseset : VerseSet = versesets[i];
+	var currentView = VerseManager.GetCurrentView(false);
+	var numRows = versesets.length;
+	var startIndex : int = 0;
+	var rt : RectTransform;
+	
+	i = 0;
+	if (currentView == "mysets") {
+		numRows += 1;
+		startIndex = 1;
+		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
+		clone.AddToScrollView(verseSetScrollContent, i);
+		clone.createVerseSet = true;
+		clone.label.text = TextManager.GetText("Create Verse Set");
+		rt = clone.GetComponent(RectTransform);		
+		rt.anchoredPosition.x = 0;
+		rt.anchoredPosition.y = -(i)*(rowHeight + rowPadding) - rowPadding;	
+	}
+	
+	for (i=startIndex;i<versesets.length+startIndex;i++) {
+		var verseset : VerseSet = versesets[i-startIndex];
 		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerseSet(verseset);
 		clone.AddToScrollView(verseSetScrollContent, i);
 		
 		if (Object.ReferenceEquals(verseset, currentVerseSet)) currentButton = clone;
 		
-		var rt = clone.GetComponent(RectTransform);
+		rt = clone.GetComponent(RectTransform);
 		
 		rt.anchoredPosition.x = 0;
-		rt.anchoredPosition.y = -i*(rowHeight + rowPadding) - rowPadding;	
+		rt.anchoredPosition.y = -(i)*(rowHeight + rowPadding) - rowPadding;	
 	}
-	
-	verseSetScrollContent.sizeDelta.y = versesets.length*(rowHeight+rowPadding);
+	Debug.Log(currentView);
+
+	verseSetScrollContent.sizeDelta.y = numRows*(rowHeight+rowPadding);
 	
 	if (currentButton != null) {
 		currentButton.HandleOnClick();
