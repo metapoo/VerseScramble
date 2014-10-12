@@ -29,14 +29,20 @@ class RecordPlayVerseSetApiHandler(BaseHandler, ApiMixin):
 class ListVerseSetApiHandler(BaseHandler, ApiMixin):
     api_name = "verseset/list"
     def get(self):
-        order_by = self.get_argument("order_by", "popular")
+        order_by = self.get_argument("order_by", None)
+        user_id = self.get_argument("user_id", None)
         language_code = self.get_argument("language_code", "ALL")
+
         page = self.get_int_argument("page",1)
-        per_page = 30
+        per_page = 100
         args = {"verse_count":{"$gt":0}}
 
         if language_code != "ALL":
             args.update({"language":language_code})
+
+        if user_id:
+            user_id = ObjectId(user_id)
+            args.update({"user_id":user_id})
 
         versesets = VerseSet.collection.find(args)
 
@@ -44,6 +50,8 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
             versesets = versesets.sort("_id",pymongo.DESCENDING)
         elif order_by == "popular":
             versesets = versesets.sort("hotness",pymongo.DESCENDING)
+        else:
+            versesets = versesets.sort("_id", pymongo.DESCENDING)
 
         versesets = versesets[(page-1)*per_page:page*per_page]
 
