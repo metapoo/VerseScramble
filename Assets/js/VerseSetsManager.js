@@ -55,7 +55,6 @@ function ShowVerseSets() {
 		rt.anchoredPosition.x = 0;
 		rt.anchoredPosition.y = -(i)*(rowHeight + rowPadding) - rowPadding;	
 	}
-	Debug.Log(currentView);
 
 	verseSetScrollContent.sizeDelta.y = numRows*(rowHeight+rowPadding);
 	
