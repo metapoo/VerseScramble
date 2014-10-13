@@ -36,6 +36,7 @@ class ContactHandler(BaseHandler):
         to_email = ["sam@%s" % settings.SITE_DOMAIN] # must be a list
         subject = self.get_argument('subject')
         message = self.get_argument('message')
+
         # Prepare actual message
         message = """From: %s
 To: %s
@@ -44,7 +45,7 @@ Reply-To: %s
 %s
 """ % (from_email, ", ".join(to_email), subject, reply_to_email, message)
         # Send the mail
-        server = smtplib.SMTP('eternityinourheart.com',port=25)
+        server = smtplib.SMTP(settings.SITE_DOMAIN,port=25)
         server.sendmail(from_email, to_email, message)
         server.quit()
 
