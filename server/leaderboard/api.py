@@ -49,6 +49,7 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         is_challenge = self.get_boolean_argument("is_challenge",False)
         elapsed_time = self.get_float_argument("elapsed_time",-1)
         correct = self.get_int_argument("correct",0)
+        difficulty = self.get_int_argument("difficulty",0)
 
         hash_target = "%s-%s-%s-%s" % (str(self.current_user._id),
                                        str(verseset_id),
@@ -69,6 +70,7 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
                                    elapsed_time = elapsed_time,
                                    correct = correct,
                                    is_challenge = is_challenge,
+                                   difficulty = difficulty,
         )
 
         response = get_scores_json(verseset_id)

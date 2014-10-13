@@ -32,7 +32,7 @@ class VersesetScore(BaseModel):
     def accuracy(self):
         total = self.mistakes() + self.correct()
         if (total == 0):
-            total = 1
+            return 100.0
         pct =  self.correct()*1.0/total
         pct_rounded = int(1000*pct)*1.0/10.0
         return pct_rounded
@@ -44,6 +44,15 @@ class VersesetScore(BaseModel):
             t = self["elapsed_time"]
             t_rounded = int(1000*t)*1.0/1000.0
             return t_rounded
+
+    def difficulty(self):
+        diff = self.get('difficulty',0)
+        if diff == 0:
+            return "Easy"
+        elif diff == 1:
+            return "Medium"
+        elif diff == 2:
+            return "Hard"
 
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None,
