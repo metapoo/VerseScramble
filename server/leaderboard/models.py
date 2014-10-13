@@ -37,6 +37,14 @@ class VersesetScore(BaseModel):
         pct_rounded = int(1000*pct)*1.0/10.0
         return pct_rounded
 
+    def elapsed_time(self):
+        if not self.has_key("elapsed_time"):
+            return "?"
+        else:
+            t = self["elapsed_time"]
+            t_rounded = int(1000*t)*1.0/1000.0
+            return t_rounded
+
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None,
                      mastered=False, elapsed_time=-1,difficulty=0,mistakes=0,correct=0,is_challenge=True):
