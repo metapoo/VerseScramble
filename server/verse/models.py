@@ -92,7 +92,7 @@ class VerseSet(BaseModel):
 
     def sorted_verses(self):
         verses = self.verses()
-        return verses.sort("_id", pymongo.ASCENDING)
+        return verses.sort("order", pymongo.ASCENDING)
 
     def update_verse_count(self, count=None):
         old_count = self.verse_count()

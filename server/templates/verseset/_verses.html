@@ -1,0 +1,36 @@
+<table>
+<tbody>
+{% set i = 1 %}
+{% for v in verses %}
+<tr><td class="verseset_show">
+<div ><span style="font-weight:bold;">{{i}}. {{v['reference'] }}</span>
+
+{% if v.has_key('version') %}
+({{v['version']}})
+{% end %}
+</div>
+
+<div class="">{{v['text']}}</div>
+<div class="links">
+
+<a class="link" href="/verse/play/{{v._id}}">play verse</a> &nbsp;
+
+{% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
+ <a class="link" href="/verse/edit/{{v._id}}">edit</a>  &nbsp;
+ <a class="link" onclick="return vr.confirm_delete();" href="/verse/remove/{{v._id}}">remove</a> &nbsp;
+
+{% if i > 1 %}
+ <a class="pure-button button-xsmall" onclick="vr.move_verse('up','{{v._id}}'); return false;" href="/verse/moveup/{{v._id}}">↑<a> &nbsp;
+{% end %}
+
+{% if i < (len(verses)) %}
+ <a class="pure-button button-xsmall" onclick="vr.move_verse('down','{{v._id}}'); return false;" href="/verse/movedown/{{v._id}}">↓<a> &nbsp;
+{% end %}
+
+{% end %}
+
+</td></tr>
+{% set i += 1 %}
+{% end %}
+</tbody>
+</table>
