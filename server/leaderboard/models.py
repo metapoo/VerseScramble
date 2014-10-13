@@ -32,7 +32,7 @@ class VersesetScore(BaseModel):
     def accuracy(self):
         total = self.mistakes() + self.correct()
         if (total == 0):
-            total = 1
+            return 100.0
         pct =  self.correct()*1.0/total
         pct_rounded = int(1000*pct)*1.0/10.0
         return pct_rounded
