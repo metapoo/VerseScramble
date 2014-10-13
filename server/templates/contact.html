@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% end %}
+
+{% block page_content %}
+<div class="centered_wrapper">
+{% if message_sent %}
+<div>Thanks for your feedback! We'll get back to you as soon as we can.</div>
+{% end %}
+
+<form class="centered pure-form pure-form-stacked" action="/contact/submit" method="post" onsubmit="if (document.getElementById('email').value == '') { alert('email required'); return false; } if (document.getElementById('message').value == '') { alert('message required'); return false; } this.submit(); return false;" >
+<h2>Questions? Feedback?</h2>
+<fieldset>
+<label for="email">Email</label> <input type="text" name="email" id="email" {% if user %}value="{{user['email']}}"{% end %}/>
+<label for="subject">Subject</label> <input type="text" name="subject" />
+<label for="message">Message</label>
+<textarea name="message" id="message">
+</textarea>
+</fieldset>
+<input class="pure-button" type="submit" />
+</form>
+</div>
+
+{% end %}
