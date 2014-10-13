@@ -316,22 +316,15 @@ function Start() {
 	
 	difficulty = verseManager.GetCurrentDifficulty();
 	
-	if (GetChallengeModeEnabled()) {
-		if (verseManager.verseIndex == 0) {
+	if (needToSelectDifficulty && 
+	   (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
 			ShowDifficultyOptions();
-		} else {
-			BeginGame();
-		}
 	} else {
-		if (needToSelectDifficulty && 
-		    (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
-			ShowDifficultyOptions();
-		} else {
-			BeginGame();
-		}
-	
-		needToSelectDifficulty = true;
+		BeginGame();
 	}
+	
+	needToSelectDifficulty = true;
+	
 }
 
 function SetVerseReference (reference : String) {

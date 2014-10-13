@@ -52,7 +52,8 @@ function SubmitScore(showPopup: boolean) {
 	
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
 	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash, "mistakes":mistakes,
-	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime, "correct":correct
+	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime, "correct":correct,
+	"is_challenge":GameManager.GetChallengeModeEnabled()
 	}), handler);
 }
 
@@ -178,6 +179,10 @@ function EndGameWindow () {
 					
 	if (!mastered) {
 		tryAgain();
+	}
+	
+	if (UserSession.IsLoggedIn()) {
+		SubmitScore(false);
 	}
 	
 }

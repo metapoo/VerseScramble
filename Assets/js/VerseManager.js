@@ -427,9 +427,16 @@ function IsDifficultyAllowed(difficulty : Difficulty) {
 }
 
 function GetCurrentDifficultyAllowed() {
-	var verse = GetCurrentVerse();
-	var verseMetadata =	verse.GetMetadata();
-	var maxDifficultyInt : int = verseMetadata["difficulty"];
+	var metadata : Hashtable;
+
+	if (GameManager.GetChallengeModeEnabled()) {
+		metadata = currentVerseSet.GetMetadata();
+	} else {
+		var verse : Verse = GetCurrentVerse();
+		metadata =	verse.GetMetadata();
+	}
+	var maxDifficultyInt : int = metadata["difficulty"];
+	Debug.Log("diff allowed = " + maxDifficultyInt);
 	return GetDifficultyFromInt(maxDifficultyInt);
 }
 

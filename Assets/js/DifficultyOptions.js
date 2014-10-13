@@ -21,8 +21,7 @@ function DifficultyWindow() {
 		Destroy(this.gameObject);
 	};
 
-	if (verseManager.IsDifficultyAllowed(difficulty.Hard) ||
-		GameManager.GetChallengeModeEnabled()) {
+	if (verseManager.IsDifficultyAllowed(difficulty.Hard) ) {
 		optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Hard),
 		function() {
 			difficulty = difficulty.Hard;
@@ -30,8 +29,7 @@ function DifficultyWindow() {
 		});
 	}
 
-	if (verseManager.IsDifficultyAllowed(difficulty.Medium) || 
-	    GameManager.GetChallengeModeEnabled()) {
+	if (verseManager.IsDifficultyAllowed(difficulty.Medium) ) {
 		optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Medium),
 		function() {
 			difficulty = difficulty.Medium;
