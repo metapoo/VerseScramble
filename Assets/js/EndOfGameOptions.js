@@ -47,7 +47,7 @@ function SubmitScore(showPopup: boolean) {
 	var mistakes : int = scoreManager.mistakes;
 	var mastered : boolean = scoreManager.WasVerseMastered();
 	var difficulty : int = VerseManager.GetDifficultyFromInt(gameManager.difficulty);
-	var elapsedTime : int = scoreManager.totalElapsedTime;
+	var elapsedTime : float = scoreManager.totalElapsedTime;
 	var correct : int = scoreManager.correct;
 	
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",

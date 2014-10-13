@@ -64,23 +64,24 @@ function UpdateHealthBar(newHealth : float) {
 function HandleWordWrong() {
 	streak = 0;
 	var dScore = 0;
-	var dHealth = -0.3f;
 	var difficulty = gameManager.difficulty;
 
-	switch (difficulty) {
-		case Difficulty.Easy:
-			dHealth = -0.33f*healthBarUnits;
-			break;
-		case Difficulty.Medium:
-			dHealth = -0.33f*healthBarUnits;
-			break;
-		case Difficulty.Hard:
-			dHealth = -0.33f*healthBarUnits;
-			break;
-	}	
+	var dHealth = 0.2f*healthBarUnits;
+	if (dHealth < 0.05f) dHealth = 0.05f;
+	if (dHealth > 0.30f) dHealth = 0.30f;
+	dHealth *= -1;
+	
 	mistakes += 1;
 	UpdateHealthBar(healthBarUnits + dHealth);
-	var dTime : int = -1*mistakes - 4;
+	
+	var baseDTime = 4;
+	
+	if (difficulty == Difficulty.Easy) {
+		baseDTime = 0;
+	} else if (difficulty == Difficulty.Medium) {
+		baseDTime = 2;
+	}
+	var dTime : int = -1*mistakes - baseDTime;
 	maxTime += dTime;
 	return String.Format("{0}s", dTime);
 }
