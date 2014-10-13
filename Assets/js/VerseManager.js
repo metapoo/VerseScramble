@@ -436,7 +436,6 @@ function GetCurrentDifficultyAllowed() {
 		metadata =	verse.GetMetadata();
 	}
 	var maxDifficultyInt : int = metadata["difficulty"];
-	Debug.Log("diff allowed = " + maxDifficultyInt);
 	return GetDifficultyFromInt(maxDifficultyInt);
 }
 

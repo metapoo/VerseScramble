@@ -122,11 +122,15 @@ function CalculateMaxTime() {
 	var n = gameManager.words.length;
 	if (n == 0) return 0;
 	
-	if (GameManager.GetChallengeModeEnabled()) {
-		return 10+n*4;
-	} else {
-		return 10+n*4;
+	var secondsPerBlock : int = 3.0f;
+	if (gameManager.difficulty == Difficulty.Medium) {
+		secondsPerBlock = 4.5f;
+	} else if (gameManager.difficulty == Difficulty.Easy) {
+		secondsPerBlock = 6.0f;
 	}
+	Debug.Log("seconds per block = " + secondsPerBlock);
+	
+	return Mathf.RoundToInt(10+n*secondsPerBlock);
 	
 }
 
