@@ -168,10 +168,10 @@ function ExplodeWords() {
 
 function HandleWordCorrect() {
 
-	var elapsedTime : float = Time.time - lastWordTime;
+	var timeSinceLastWord : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
 	
-	if (elapsedTime < 5) {
+	if (timeSinceLastWord < 5) {
 		streak += 1;
 	}
 	
@@ -199,7 +199,7 @@ function HandleWordCorrect() {
 	}
 	
 	audio.PlayOneShot(snd, 0.25f);
-	return scoreManager.HandleWordCorrect(elapsedTime);
+	return scoreManager.HandleWordCorrect(timeSinceLastWord);
 }
 
 function SetupUI() {
@@ -865,9 +865,9 @@ function ShowHint() {
 }
 
 function Update () {
-	var elapsedTime : float = Time.time - lastWordTime;
+	var timeSinceLastWord : float = Time.time - lastWordTime;
 	
-	if (!wordHinted && !finished && (elapsedTime > timeUntilHint)) {
+	if (!wordHinted && !finished && (timeSinceLastWord > timeUntilHint)) {
 		ShowHint();
 	}
 	refreshButton.active = CanShowSolution();

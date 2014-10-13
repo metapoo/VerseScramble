@@ -18,14 +18,16 @@ var verseMetadata : Hashtable;
 var versesetMetadata : Hashtable;
 var highScore : int;
 var totalElapsedTime : float = 0;
+var elapsedTime : float = 0;
 var timeLeft : int = 0;
 var startTime : int;
+var challengeStartTime : int;
 var sndSelect : AudioClip;
 var healthBar : HealthBar;
 var startingHealth : float = 0.0f;
 var healthBarUnits : float = startingHealth;
 
-function HandleWordCorrect(elapsedTime : float) {
+function HandleWordCorrect(timeSinceLast : float) {
 	var dHealth = (5.0f-healthBarUnits)*0.01f;
 	if (dHealth < 0.01) dHealth = 0.01f;
 	
@@ -37,7 +39,7 @@ function HandleWordCorrect(elapsedTime : float) {
 	}
 	var gt = TextManager.GetText;
 	
-	if (elapsedTime < 3) {
+	if (timeSinceLast < 3) {
 		streak += 1;
 		if (streak == 5) {
 			gameManager.showFeedback(gt("Nice Streak!"), 1);
@@ -84,11 +86,6 @@ function HandleWordWrong() {
 	var dTime : int = -1*mistakes - baseDTime;
 	maxTime += dTime;
 	return String.Format("{0}s", dTime);
-}
-
-
-function calculatedTime() {
- 	return totalElapsedTime;
 }
 
 function updateHighScoreLabel() {
@@ -231,8 +228,17 @@ function HandleCountTimeLeftFinished() {
 	
 }
 
+function resetTimeForChallenge() {
+	challengeStartTime = Time.time;
+}
+
 function resetTime() {
 	startTime = Time.time;
+	if (GameManager.GetChallengeModeEnabled()) {
+		if (verseManager.verseIndex == 0) {
+			resetTimeForChallenge();
+		}
+	}
 }
 
 function reset() {
@@ -279,15 +285,22 @@ function Update () {
 	if (!gameManager.finished && !gameManager.showingSolution) {
 		
 		if (gameManager.gameStarted) {
-			totalElapsedTime = Time.time - startTime;
+			var newTime = Time.time - startTime;
+			var dt = newTime - elapsedTime;
+			elapsedTime += dt;
+			if (GameManager.GetChallengeModeEnabled()) {
+				totalElapsedTime += dt;
+			} else {
+				totalElapsedTime = elapsedTime;
+			}
 			if (!gameManager.DidRanOutOfTime && (timeLeft <= 0)) {
 				gameManager.HandleRanOutOfTime();
 				
 			}
 		} else {
-			totalElapsedTime = 0;
+			elapsedTime = 0;
 		}
-		timeLeft = maxTime - totalElapsedTime;
+		timeLeft = maxTime - elapsedTime;
 	}
 	updateScoreLabel();
 }
