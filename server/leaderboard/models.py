@@ -45,6 +45,15 @@ class VersesetScore(BaseModel):
             t_rounded = int(1000*t)*1.0/1000.0
             return t_rounded
 
+    def difficulty(self):
+        diff = self.get('difficulty',0)
+        if diff == 0:
+            return "Easy"
+        elif diff == 1:
+            return "Medium"
+        elif diff == 2:
+            return "Hard"
+
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None,
                      mastered=False, elapsed_time=-1,difficulty=0,mistakes=0,correct=0,is_challenge=True):

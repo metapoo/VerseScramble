@@ -39,7 +39,7 @@
 
 <h3>High Scores</h3>
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>User</th><th>Score</th><th>Accuracy</th><th># Blocks</th><th>Time</th><th>Date</th></tr></thead>
+<thead><tr><th>#</th><th>User</th><th>Score</th><th>Accuracy</th><th># Blocks</th><th>Time</th><th>Level</th><th>Date</th></tr></thead>
 
 <tbody>
 {% if len(scores) == 0 %}
@@ -48,7 +48,7 @@
 
 {% set i = 1 %}
 {% for score in scores %}
-<tr><td>{{i}}</td><td>{% module UserLink(username=score['username']) %}</a></td><td>{{score['score']}}</td><td>{{score.accuracy()}}%</td><td>{{score.correct()}}</td><td>{{score.elapsed_time()}}s</td><td>{{pretty_date(score['date'])}}</td></tr>
+<tr><td>{{i}}</td><td>{% module UserLink(username=score['username']) %}</a></td><td>{{score['score']}}</td><td>{{score.accuracy()}}%</td><td>{{score.correct()}}</td><td>{{score.elapsed_time()}}s</td><td>{{score.difficulty()}}</td><td>{{pretty_date(score['date'])}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>
