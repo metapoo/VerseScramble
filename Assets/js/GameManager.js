@@ -38,6 +38,7 @@ var panelReferenceLabel : Text;
 var difficultyLabel : Text;
 var healthBar : HealthBar;
 var wordScale : float;
+var setProgressLabel : Text;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -208,6 +209,12 @@ function SetupUI() {
 	difficultyLabel.text = "";
 	feedbackLabel.enabled = false;
 	healthBar.SetPercentage(healthBar.targetPercentage);	
+	SyncSetProgressLabel();
+}
+
+function SyncSetProgressLabel() {
+	setProgressLabel.active = GetChallengeModeEnabled();
+	setProgressLabel.text = String.Format("{0}/{1}", verseManager.verseIndex+1, verseManager.GetCurrentVerses().length);
 }
 
 function showFeedback(feedbackText : String, time : float) {
@@ -602,7 +609,6 @@ function Cleanup () {
 }
 
 function BeginGame() {
-
 	SetupVerse();
 	AnimateIntro();
 }
@@ -649,6 +655,7 @@ function scrambleWordLabels() {
 }
 
 function SetupVerse() {
+	SyncSetProgressLabel();
 	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
 
 	gameStarted = false;

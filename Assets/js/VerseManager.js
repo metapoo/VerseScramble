@@ -302,7 +302,8 @@ function GotoNextVerse() {
 
 	if (verseIndex >= verses.length) {
 		verseIndex = 0;
-	}	
+	}
+	
 	Debug.Log("going to verse " + verseIndex);
 	Save();
 }
