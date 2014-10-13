@@ -178,8 +178,8 @@ function SayVerseReference() {
 	var refParts = reference.Split(":"[0]);
 	
 	var language = GetVerseLanguage();
-	language = GetVoiceLanguage(language);
-	
+	var countryCode = GetCountryCodeFromLanguage(language);
+		
 	if (language == null) return;
 	
 	if (IsLanguageChinese(language)) {
@@ -193,20 +193,21 @@ function SayVerseReference() {
 	}
 		
 	for (var refPart in refParts) {
-		SpeakUtterance(refPart, language);
+		SpeakUtterance(refPart, language, countryCode);
 		yield WaitForSeconds(1);
 	}
 }
 
 static function SpeakUtterance(word : String) {
-	var language = GetLanguage();
-	SpeakUtterance(word, language);
+	var language = GetVerseLanguage();
+	var countryCode = GetCountryCodeFromLanguage(language);
+	SpeakUtterance(word, language, countryCode);
 }
 
-static function SpeakUtterance(word : String, language: String) {
+static function SpeakUtterance(word : String, language: String, countryCode : String) {
 	if (language == null) return;
-	VoiceSynth.SpeakUtterance(word,language);
-	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
+	VoiceSynth.SpeakUtterance(word,language,countryCode);
+	Debug.Log(String.Format("Speak utterance: {0} in language {1}-{2}", word, language,countryCode));
 }
 
 static function GetVoiceLanguage() {
@@ -214,17 +215,23 @@ static function GetVoiceLanguage() {
 	return GetVoiceLanguage(language);
 }
 
-static function GetVoiceLanguage(language : String) {
-	var voiceConfig : Hashtable = new Hashtable({"en":"en-US","zh-hant":"zh-TW","zh":"zh-TW","zh-hans":"zh-CN",
-	"he":"he-IL","ur":"ur-PK","ja":"ja-JP","ko":"ko-KR","th":"th-TH","vi":"vi-VN","mn":"mn-MN",
-	"ar":"ar-SA","cs":"cs-CZ","da":"da-DK","de":"de-DE","nl":"nl-NL","fi":"fi-FI","fr":"fr-FR","hi":"hi-IN",
-	"hu":"hu-HU","id":"id-ID","it":"it-IT","no":"no-NO","pl":"pl-PL","pt":"pt-BR","ro":"ro-RO",
-	"ru":"ru-RU","sk":"sk-SK","es":"es-MX","es-ES":"es-ES","sv":"sv-SE","tr":"tr-TR"});
-	
-	if (voiceConfig.ContainsKey(language)) {
-		return voiceConfig[language];
+static function GetCountryCodeFromLanguage(language : String) {
+	var countries : Hashtable = new Hashtable({"en":"US","zh-hant":"TW","zh":"TW","zh-hans":"CN",
+	"he":"IL","ur":"PK","ja":"JP","ko":"KR","th":"TH","vi":"VN","mn":"MN",
+	"ar":"SA","cs":"CZ","da":"DK","de":"DE","nl":"NL","fi":"FI","fr":"FR","hi":"IN",
+	"hu":"HU","id":"ID","it":"IT","no":"NO","pl":"PL","pt":"BR","ro":"RO",
+	"ru":"RU","sk":"SK","es":"MX","es-ES":"ES","sv":"SE","tr":"TR"});
+	if (countries.ContainsKey(language)) {
+		return countries[language];
 	}
-	
+	return null;
+}
+
+static function GetVoiceLanguage(language : String) {
+	var country = GetCountryCodeFromLanguage(language);
+	if (country != null) {
+		return String.Format("{0}-{1}", language, country);
+	}
 	return null;
 }
 

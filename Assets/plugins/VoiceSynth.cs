@@ -10,8 +10,9 @@ private	static AndroidJavaObject androidPluginObject;
 private static extern void _SpeakUtterance(string text,string language);
 
 //Startslookupforsomebonjourregisteredserviceinsidespecifieddomain
-public static void SpeakUtterance(string text,string language)
+public static void SpeakUtterance(string text,string language, string countryCode)
 {
+
 		//Callpluginonlywhenrunningonrealdevice
 		if (Application.platform == RuntimePlatform.Android) {
 			androidPluginObject = new AndroidJavaObject("com.hopeofglory.verserain.VoiceSynthClient");
@@ -24,7 +25,8 @@ public static void SpeakUtterance(string text,string language)
 		if((Application.platform!=RuntimePlatform.OSXEditor)&&
 		   (Application.platform!=RuntimePlatform.OSXWebPlayer)&&
 		   (Application.platform!=RuntimePlatform.WindowsWebPlayer)&&(Application.platform!=RuntimePlatform.Android)){
-			_SpeakUtterance(text,language);
+			var voiceLanguage = language + "_" + countryCode;
+			_SpeakUtterance(text,voiceLanguage);
 		}
 }
 }

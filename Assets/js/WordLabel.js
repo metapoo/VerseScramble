@@ -398,9 +398,10 @@ function OnMouseDown() {
 	var right = false;
 	hinting = false;
 	var language = VerseManager.GetVerseLanguage();
-	language = VerseManager.GetVoiceLanguage(language);
+	var countryCode = VerseManager.GetCountryCodeFromLanguage(language);
+	
 	if (returnedToVerse) {
-		VerseManager.SpeakUtterance(word, language);
+		VerseManager.SpeakUtterance(word, language, countryCode);
 		Blink();
 		return;
 	}
@@ -410,7 +411,7 @@ function OnMouseDown() {
 		returnToVerse();
 		dScore = gameManager.HandleWordCorrect();
 		right = true;
-		VerseManager.SpeakUtterance(word, language);
+		VerseManager.SpeakUtterance(word, language, countryCode);
 		scoreCredited = dScore;
 	} else {
 		str = scoreManager.HandleWordWrong();
