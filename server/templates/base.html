@@ -76,6 +76,7 @@
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>Leaderboard</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>About</span></a></li>
+  <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>Search</span></a></li>
   {% if not user %}
   <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>Login</span></a></li>
   <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>Sign Up</span></a></li>
@@ -99,21 +100,6 @@
 {% end %}
 </div>
 
-<div id="search">
-<script>
-  (function() {
-    var cx = '009990472617002299375:wvbkkwwgd6c';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//www.google.com/cse/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search></gcse:search>
-</div>
 
 </div>
 
