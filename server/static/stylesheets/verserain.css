@@ -29,6 +29,10 @@ form.centered {
   display: none;
 }
 
+#search {
+  padding-top:20px;
+}
+
 .verseset_show {
   padding-bottom: 20px;
 }
@@ -99,8 +103,9 @@ body {
 }
 
 #cssmenu {
-  text-align:center;
-  clear:both;
+  text-align: center;
+  clear: both;
+  top: -4px;
 }
 
 #logo_bg {
@@ -156,14 +161,9 @@ body {
   color: #fff;
 }
 
-#cssmenu {
-  top: -4px;
-}
-
 #cssmenu ul.cssmenu {
-  text-align:left;
-  margin:auto;
   display: inline-block;
+  margin: auto;
 }
 
 form.login input[type="text"], form.login input[type="password"] {
