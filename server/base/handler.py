@@ -105,3 +105,8 @@ class BaseHandler(tornado.web.RequestHandler):
         arg = self.get_argument(key, default)
         arg = int(arg)
         return arg
+
+    def get_float_argument(self, key, default=0):
+        arg = self.get_argument(key, default)
+        arg = float(arg)
+        return arg

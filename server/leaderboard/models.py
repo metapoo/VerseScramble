@@ -23,6 +23,20 @@ class VersesetScore(BaseModel):
         cls.register_foreign_key(User)
         return new_instance
 
+    def mistakes(self):
+        return self.get("mistakes",0)
+
+    def correct(self):
+        return self.get("correct",0)
+
+    def accuracy(self):
+        total = self.mistakes() + self.correct()
+        if (total == 0):
+            total = 1
+        pct =  self.correct()*1.0/total
+        pct_rounded = int(1000*pct)*1.0/10.0
+        return pct_rounded
+
     @classmethod
     def submit_score(cls, user_id=None, score=None, verseset_id=None, username=None, user=None,
                      mastered=False, elapsed_time=-1,difficulty=0,mistakes=0,correct=0,is_challenge=True):

@@ -47,7 +47,7 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         mistakes = self.get_int_argument("mistakes",0)
         mastered = self.get_boolean_argument("mastered",False)
         is_challenge = self.get_boolean_argument("is_challenge",False)
-        elapsed_time = self.get_int_argument("elapsed_time",-1)
+        elapsed_time = self.get_float_argument("elapsed_time",-1)
         correct = self.get_int_argument("correct",0)
 
         hash_target = "%s-%s-%s-%s" % (str(self.current_user._id),
