@@ -176,12 +176,8 @@ function SayVerseReference() {
 	var verse : Verse = GetCurrentVerse();
 	var reference : String = verse.reference;
 	var refParts = reference.Split(":"[0]);
-	
-	var language = GetVerseLanguage();
-	var countryCode = GetCountryCodeFromLanguage(language);
-		
-	if (language == null) return;
-	
+
+	var language = GetVoiceLanguage();	
 	if (IsLanguageChinese(language)) {
 		if (refParts.Length < 2) {
 			refParts = reference.Split("："[0]);
@@ -193,15 +189,16 @@ function SayVerseReference() {
 	}
 		
 	for (var refPart in refParts) {
-		SpeakUtterance(refPart, language, countryCode);
+		SpeakUtterance(refPart);
 		yield WaitForSeconds(1);
 	}
 }
 
 static function SpeakUtterance(word : String) {
-	var language = GetVerseLanguage();
-	var countryCode = GetCountryCodeFromLanguage(language);
-	SpeakUtterance(word, language, countryCode);
+	var voiceLanguage = GetVoiceLanguage();
+	var verseLanguage = GetVerseLanguage();
+	var countryCode = GetCountryCodeFromLanguage(verseLanguage);
+	SpeakUtterance(word, voiceLanguage, countryCode);
 }
 
 static function SpeakUtterance(word : String, language: String, countryCode : String) {
@@ -211,8 +208,9 @@ static function SpeakUtterance(word : String, language: String, countryCode : St
 }
 
 static function GetVoiceLanguage() {
-	var language = GetLanguage();
-	return GetVoiceLanguage(language);
+	var language : String = GetVerseLanguage();
+	var parts : Array = language.Split("-"[0]);
+	return parts[0];
 }
 
 static function GetCountryCodeFromLanguage(language : String) {
