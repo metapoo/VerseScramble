@@ -320,6 +320,7 @@ function Start() {
 	   (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
 			ShowDifficultyOptions();
 	} else {
+		verseManager.SetDifficulty(Difficulty.Easy);
 		BeginGame();
 	}
 	
