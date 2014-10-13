@@ -31,9 +31,9 @@ class ContactPageHandler(BaseHandler):
 class ContactHandler(BaseHandler):
     def post(self):
         import smtplib
-        from_email = "admin@%s" % settings.SITE_DOMAIN
+        from_email = "admin@%s" % settings.MAIL_DOMAIN
         reply_to_email = self.get_argument("email")
-        to_email = ["sam@%s" % settings.SITE_DOMAIN] # must be a list
+        to_email = ["help@%s" % settings.MAIL_DOMAIN] # must be a list
         subject = self.get_argument('subject')
         message = self.get_argument('message')
 
