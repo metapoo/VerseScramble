@@ -2,11 +2,19 @@ if (!this["vr"]) var vr = {};
 vr.global_scope = this;
 
 vr.update_version_select = function(language, version) {
-    $.ajax({ url: "/version/update_selector",
-             data: {language:language, version:version}}).
-      done(function(data) {
-	  $("#version_select_parent").html(data);
-      });
+    vr.ajax_request("/version/update_selector", {language:language, version:version}, "#version_select_parent");
+
+}
+
+vr.move_verse = function(direction, verse_id) {
+    vr.ajax_request("/verse/move"+direction+"/"+verse_id, {}, "#verses");
+}
+
+vr.ajax_request = function(url, args, html_id) {
+    $.ajax({ url: url, data: args}).done(
+	function(data) {
+	    $(html_id).html(data);
+    });
 }
 
 vr.confirm_delete = function() {

@@ -92,7 +92,14 @@ class VerseSet(BaseModel):
 
     def sorted_verses(self):
         verses = self.verses()
-        return verses.sort("_id", pymongo.ASCENDING)
+        verses = list(verses.sort("order", pymongo.ASCENDING))
+        i = 1
+        for v in verses:
+            if i != v.order():
+                v["order"] = i
+                v.save()
+            i += 1
+        return verses
 
     def update_verse_count(self, count=None):
         old_count = self.verse_count()
@@ -129,6 +136,9 @@ class Verse(BaseModel):
             Index("verseset_id",unique=False),
             Index("user_id",unique=False)
         )
+
+    def order(self):
+        return self.get("order",-1)
 
     def device_url(self, session_key=None):
         url = "verserain://com.hopeofglory.verserain/verse/%s/%s/%s" % (self._id, settings.SITE_DOMAIN, session_key)

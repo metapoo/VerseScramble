@@ -1,4 +1,4 @@
-B1;2c{% extends "../base.html" %}
+{% extends "../base.html" %}
 
 {% block script_content %}
 {% end %}
@@ -29,37 +29,11 @@ B1;2c{% extends "../base.html" %}
 </div>
 
 </div>
-
 <br/>
-<table>
 
-<tbody>
-{% set i = 1 %}
-{% for v in verses %}
-<tr><td class="verseset_show">
-<div ><span style="font-weight:bold;">{{i}}. {{v['reference'] }}</span>
-
-{% if v.has_key('version') %}
-({{v['version']}})
-{% end %}
+<div id="verses">
+{% include "_verses.html" %}
 </div>
-
-<div class="">{{v['text']}}</div>
-<div class="links">
-
-<a class="link" href="/verse/play/{{v._id}}">play verse</a> &nbsp;
-
-{% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
- <a class="link" href="/verse/edit/{{v._id}}">edit</a>  &nbsp;
- <a class="link" onclick="return vr.confirm_delete();" href="/verse/remove/{{v._id}}">remove</a>
-{% end %}
-
-</td></tr>
-{% set i += 1 %}
-{% end %}
-</tbody>
-
-</table>
 
 {% from verserain.utils.date import pretty_date %}
 

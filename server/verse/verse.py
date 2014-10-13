@@ -23,10 +23,33 @@ def get_handlers():
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
+            (r"/verse/move(up|down)/([^/]+)/?", MoveVerseHandler),
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
             (r"/verse/play/([^/]+)/?", PlayVerseHandler),
             (r"/verseset/play/([^/]+)/?", PlayVerseSetHandler),
             )
+
+class MoveVerseHandler(BaseHandler):
+    def get(self, direction, verse_id):
+        verse = Verse.by_id(verse_id)
+        verseset = verse.verseset()
+        order = verse["order"]
+
+        if direction == "up":
+            index = order-1
+        else:
+            index = order+1
+
+        other_verse = Verse.collection.find_one({"order":index,
+                                                 "verseset_id":verseset._id})
+        if other_verse:
+            other_verse["order"] = order
+            other_verse.save()
+            verse["order"] = index
+            verse.save()
+            
+        verses = list(verseset.sorted_verses())
+        self.render("verseset/_verses.html", verses=verses, verseset=verseset)
 
 class PlayVerseHandler(BaseHandler):
     def get(self, verse_id):
@@ -174,7 +197,8 @@ class CreateVerseHandler(BaseHandler):
                        'version':version,
                        'text':text,
                        'verseset_id':verseset_id,
-                       'user_id':user._id
+                       'user_id':user._id,
+                       'order':verseset.verse_count()+1,
                    })
         verse.save()
         verseset.update_verse_count()
