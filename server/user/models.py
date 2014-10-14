@@ -16,6 +16,9 @@ class User(BaseModel, PasswordMixin):
     def total_score(self):
         return self.get("total_score", 0)
 
+    def total_blocks(self):
+        return self.get("total_blocks", 0)
+
     def compute_total_score(self):
         from verserain.leaderboard.models import VersesetScore
         vss = VersesetScore.collection.find({'user_id':self._id})
@@ -31,6 +34,7 @@ class User(BaseModel, PasswordMixin):
         self["total_score"] = total_score
         if total_correct > 0:
             self["accuracy"] = int(1000*total_accuracy / total_correct)/1000.0
+            self["total_blocks"] = total_correct
 
         self.save()
 

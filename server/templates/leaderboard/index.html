@@ -16,11 +16,11 @@
 {% if selected_subnav == "total" %}
 
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>User</th><th>Score</th><th>Accuracy</th></tr></thead>
+<thead><tr><th>#</th><th>User</th><th>Score</th><th>Accuracy</th><th># Blocks</th></tr></thead>
 <tbody>
 {% set i = 1 +start_index %}
 {% for u in users %}
-<tr><td>{{i}}</td><td>{% module UserLink(user=u) %}</td><td>{{u.total_score()}}</td><td>{{u.accuracy()}}%</td></tr>
+<tr><td>{{i}}</td><td>{% module UserLink(user=u) %}</td><td>{{u.total_score()}}</td><td>{{u.accuracy()}}%</td><td>{{u.total_blocks()}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>
