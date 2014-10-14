@@ -20,7 +20,7 @@
 <fieldset>
 <label for="tran_{{i}}">{{tran["msgid"]}}</label>
 
-<input type="text" value="{{tran["msgstr"]}}" style="width:500px;" onblur="$('#status_{{i}}').html('Saving..'); vr.ajax_request('/translation/save', {language:'{{language_code}}', msgid:'{{tran["msgid"]}}', msgstr:this.value}, '#status_{{i}}');"/>
+<input type="text" value="{% raw tran["msgstr"] %}" style="width:500px;" onblur="$('#status_{{i}}').html('Saving..'); var msgid='{% raw tran["msgid"].replace("'","\\'")%}'; vr.ajax_request('/translation/save', {language:'{{language_code}}', msgid:msgid, msgstr:this.value}, '#status_{{i}}');"/>
 <span id="status_{{i}}"></span>
 </fieldset>
 
