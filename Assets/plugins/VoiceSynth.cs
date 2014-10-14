@@ -18,8 +18,10 @@ public static void SpeakUtterance(string text,string language, string countryCod
 #if UNITY_ANDROID
 		//Callpluginonlywhenrunningonrealdevice
 		if (Application.platform == RuntimePlatform.Android) {
-			androidPluginObject = new AndroidJavaObject("com.hopeofglory.verserain.VoiceSynthClient");
-			androidPluginObject.Call("Init");
+			if (androidPluginObject == null) {
+				androidPluginObject = new AndroidJavaObject("com.hopeofglory.verserain.VoiceSynthClient");
+				androidPluginObject.Call("Init");
+			}
 			androidPluginObject.Call("Speak", text);
 		//	Debug.Log("************************** it works");	
 		}

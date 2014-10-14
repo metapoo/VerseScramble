@@ -411,13 +411,21 @@ static function GetChallengeModeEnabled() {
 
 function GetCurrentDifficulty() {
 	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
+	var verseset : VerseSet = currentVerseSet;
 	var verses : Array = GetCurrentVerses();
 	var verse : Verse = GetCurrentVerse();
 	if (Object.ReferenceEquals(verse, null)) {
 		return Difficulty.Easy;
 	}
-	var verseMetadata =	verse.GetMetadata();
-	var maxDifficultyInt : int = verseMetadata["difficulty"];
+
+	var metadata : Hashtable =	verse.GetMetadata();
+	
+	if (GetChallengeModeEnabled()) {
+		metadata = verseset.GetMetadata();
+	}
+
+	var maxDifficultyInt : int = metadata["difficulty"];	
+	
 	if ((maxDifficultyInt < parseInt(selectedDifficulty)) &&
 	    !GetChallengeModeEnabled()) {
 		var cappedDifficulty : Difficulty = GetDifficultyFromInt(maxDifficultyInt);
@@ -457,7 +465,7 @@ static function GetDifficultyFromInt(difficultyInt : int) {
 }
 
 function SetDifficulty(difficulty:Difficulty) {
-	PlayerPrefs.SetInt("selected_difficulty_"+GetLanguage(),parseInt(difficulty));
+	PlayerPrefs.SetInt("selected_difficulty_"+GetLanguage(),parseInt(difficulty));	
 }
 
 function GetSelectedDifficulty() {

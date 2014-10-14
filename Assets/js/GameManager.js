@@ -327,7 +327,7 @@ function Start() {
 	   (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
 			ShowDifficultyOptions();
 	} else {
-		verseManager.SetDifficulty(Difficulty.Easy);
+		verseManager.SetDifficulty(difficulty);
 		BeginGame();
 	}
 	
@@ -624,6 +624,18 @@ function GetMaxWordsActive() {
 			return 10;
 	}
 	return 10;
+}
+
+function SwapWords(index1:int, index2:int) {
+	Debug.Log("Swap " + index1 + " with " + index2);
+	var word1 : WordLabel = wordLabels[index1];
+	var word2 : WordLabel = wordLabels[index2];
+	
+	word1.wordIndex = index2;
+	word2.wordIndex = index1;
+	
+	wordLabels[index1] = word2;
+	wordLabels[index2] = word1;
 }
 
 function scrambleWordLabels() {
