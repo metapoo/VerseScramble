@@ -77,13 +77,22 @@ function EndGameWindowForChallenge () {
 	
 	var optionDialog = DialogManager.CreateOptionDialog(title,text);
 	
-	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
-		
-	optionDialog.AddOption(gt("Back to menu"),
+	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime)
+	&& scoreManager.WasVerseMastered();
+	
+	if (scoreManager.WasVerseMastered()) {
+		optionDialog.AddOption(gt("Review verserain!"),
+			function() {
+				Application.OpenURL("https://itunes.apple.com/us/app/verse-rain-fun-bible-verse/id928732025?ls=1&mt=8");
+			});
+	} else {
+		optionDialog.AddOption(gt("Back to menu"),
 		function() {
 			BackToMenu();
 		});
-		
+	}
+
+
 	var tryAgain = function() {
 
 		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
@@ -126,7 +135,6 @@ function EndGameWindowForChallenge () {
 				};
 			}
 		});
-
 
 }
 
