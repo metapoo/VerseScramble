@@ -25,10 +25,8 @@ public static void SpeakUtterance(string text,string language)
 		}
 #endif
 
-		if((Application.platform!=RuntimePlatform.OSXEditor)&&
-		   (Application.platform!=RuntimePlatform.OSXWebPlayer)&&
-		   (Application.platform!=RuntimePlatform.WindowsWebPlayer)&&(Application.platform!=RuntimePlatform.Android)){
+		if(Application.platform==RuntimePlatform.IPhonePlayer){
 			_SpeakUtterance(text,language);
-		}
+		} 
 }
 }

@@ -194,14 +194,24 @@ function SayVerseReference() {
 	}
 }
 
-static function SpeakUtterance(word : String) {
+function SpeakUtterance(word : String) {
 	var voiceLanguage : String = GetVoiceLanguage();
 	SpeakUtterance(word, voiceLanguage);
 }
 
-static function SpeakUtterance(word : String, language: String) {
+function SpeakUtteranceViaWeb(word : String, language: String) {
+	// nothing for now
+	yield;
+}
+
+function SpeakUtterance(word : String, language: String) {
 	if (language == null) return;
-	VoiceSynth.SpeakUtterance(word,language);
+	if ((Application.platform!=RuntimePlatform.Android) &&
+	    (Application.platform!=RuntimePlatform.IPhonePlayer)) {
+	    StartCoroutine(GetInstance().SpeakUtteranceViaWeb(word, language));
+	} else {
+		VoiceSynth.SpeakUtterance(word,language);
+	}
 	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
 
