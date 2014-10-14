@@ -195,22 +195,20 @@ function SayVerseReference() {
 }
 
 static function SpeakUtterance(word : String) {
-	var voiceLanguage = GetVoiceLanguage();
-	var verseLanguage = GetVerseLanguage();
-	var countryCode = GetCountryCodeFromLanguage(verseLanguage);
-	SpeakUtterance(word, voiceLanguage, countryCode);
+	var voiceLanguage : String = GetVoiceLanguage();
+	SpeakUtterance(word, voiceLanguage);
 }
 
-static function SpeakUtterance(word : String, language: String, countryCode : String) {
+static function SpeakUtterance(word : String, language: String) {
 	if (language == null) return;
-	VoiceSynth.SpeakUtterance(word,language,countryCode);
-	Debug.Log(String.Format("Speak utterance: {0} in language {1}-{2}", word, language,countryCode));
+	VoiceSynth.SpeakUtterance(word,language);
+	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
 
+// get language localized with region
 static function GetVoiceLanguage() {
 	var language : String = GetVerseLanguage();
-	var parts : Array = language.Split("-"[0]);
-	return parts[0];
+	return GetVoiceLanguage(language);
 }
 
 static function GetCountryCodeFromLanguage(language : String) {
@@ -225,6 +223,7 @@ static function GetCountryCodeFromLanguage(language : String) {
 	return null;
 }
 
+// get language localized with region
 static function GetVoiceLanguage(language : String) {
 	var country = GetCountryCodeFromLanguage(language);
 	if (country != null) {
