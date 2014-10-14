@@ -60,8 +60,6 @@ function SubmitScore(showPopup: boolean) {
 function EndGameWindowForChallenge () {
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
-	Debug.Log("difficulty = " + difficulty);
-	Debug.Log("next difficulty = " + nextDifficulty);
 	
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
