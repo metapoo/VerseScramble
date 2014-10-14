@@ -60,6 +60,9 @@ function SubmitScore(showPopup: boolean) {
 function EndGameWindowForChallenge () {
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
+	Debug.Log("difficulty = " + difficulty);
+	Debug.Log("next difficulty = " + nextDifficulty);
+	
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
 	var needToSelectDifficulty : boolean = true;
@@ -83,13 +86,26 @@ function EndGameWindowForChallenge () {
 			BackToMenu();
 		});
 		
-	optionDialog.AddOption(gt("Try again"),
-		function() {
-			needToSelectDifficulty = false;
-			verseManager.verseIndex = 0;
-			ReloadGame(needToSelectDifficulty);
-		});
+	var tryAgain = function() {
 
+		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
+			optionDialog.AddOption(gt("Try again"),
+			  	function() {
+					needToSelectDifficulty = false;
+					ReloadGame(needToSelectDifficulty);
+			  	});
+		} else {
+			optionDialog.AddOption(String.Format(gt("Next level"), nextDifficultyString),
+				function() {
+					verseManager.SetDifficulty(nextDifficulty);
+					needToSelectDifficulty = false;
+					ReloadGame(needToSelectDifficulty);
+				});
+		}
+	};
+
+	tryAgain();
+	
 	if (verseManager.currentVerseSet.onlineId == null) return;
 
 	if (UserSession.IsLoggedIn()) {
