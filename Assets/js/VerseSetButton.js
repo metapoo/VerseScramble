@@ -59,14 +59,27 @@ function UnHighlight() {
 
 function HandleApiVerseSetShow(resultData : Hashtable) {
 	if (this == null) return;
+	
 	var versesetData : Hashtable = resultData["verseset"];
 	var versesData : Array = resultData["verses"];
-	var highScore : int = resultData["high_score"];
+	var highScore : int = 0;
+	var difficulty : int = 0;
+	var mastered : boolean = false;
+
+	if (resultData.ContainsKey("high_score")) {
+		highScore = resultData["high_score"];
+	}
+	if (resultData.ContainsKey("difficulty")) {
+		difficulty = resultData["difficulty"];
+	}
+	if (resultData.ContainsKey("mastered")) {
+		mastered = resultData["mastered"];
+	}
+	
 	var metadata : Hashtable = verseset.GetMetadata();
 	var currentHighScore : int = metadata["high_score"];
 	var currentDifficulty : int = metadata["difficulty"];
-	var difficulty : int = resultData["difficulty"];
-	var mastered : boolean = resultData["mastered"];
+	
 	if (mastered) difficulty += 1;
 	
 	var changed : boolean = false;
