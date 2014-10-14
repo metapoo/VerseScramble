@@ -22,23 +22,13 @@ class SaveTranslationHandler(BaseHandler):
         if msgstr == "":
             return self.write("Can't save empty string")
 
-        tran = Translation.collection.find_one({"language":language,"msgid":msgid})
-        if tran is None:
-            tran = Translation({"language":language,"msgid":msgid})
+        tran = Translation.collection.find_one({"language":language, "msgid":msgid})
 
-        if tran.has_key("msgstr") and (tran.get("msgstr",None) != msgstr):
-            i = 1
-            while tran.has_key("msgstr%s" % i):
-                i += 1
-            # backup old message str
-            tran["msgstr%s" % i] = tran["msgstr"]
-        elif tran.has_key("msgstr") and tran["msgstr"] == msgstr:
-            self.write("")
-            return
+        if tran:
+            if msgstr == tran.msgstr():
+                return self.write("No changes.")
 
-        tran["msgstr"] = msgstr
-        tran["user_id"] = self.current_user._id
-        tran.save()
+        tran = Translation.translate(language, msgid, msgstr)
 
         return self.write("Saved.")
 
