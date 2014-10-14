@@ -4,6 +4,11 @@ body h1, body h2,body h3,body h4 {
   margin: 0.0em 0em 0.5em 0em;
 }
 
+textarea#message {
+  width: 400px;
+  height: 200px;
+}
+
 .centered_wrapper {
   text-align:center;
 }
@@ -21,6 +26,12 @@ form.centered {
 .play_button {
   float:right;
   margin-left:8px;
+}
+
+#footer {
+  padding-top:30px;
+  text-align:center;
+  font-size:0.8em;
 }
 
 #unity_player_content {

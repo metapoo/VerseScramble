@@ -6,7 +6,7 @@
 {% end %}
 </script>
 
-<title>{% block title %}Verse Rain{% end %}</title>
+<title>{% block title %}Verse Rain - Bible Verse Memorization Game{% end %}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
@@ -76,6 +76,7 @@
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>Leaderboard</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>About</span></a></li>
+  <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>Search</span></a></li>
   {% if not user %}
   <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>Login</span></a></li>
   <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>Sign Up</span></a></li>
@@ -99,20 +100,8 @@
 {% end %}
 </div>
 
-<div id="search">
-<script>
-  (function() {
-    var cx = '009990472617002299375:wvbkkwwgd6c';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//www.google.com/cse/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
-<gcse:search></gcse:search>
+<div id="footer">
+<a class="link" href="/contact">Contact Us</a> | <a class="link" href="/privacy">Privacy</a> | &copy; 2014 Hope of Glory Publishing LLC
 </div>
 
 </div>

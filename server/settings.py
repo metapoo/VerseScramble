@@ -2,10 +2,12 @@ import os
 
 VERSERAIN_ENV = os.environ.get("VERSERAIN_ENV","development")
 if VERSERAIN_ENV == "development":
-    SITE_DOMAIN = "verserain.eternityinourheart.com"
-#    SITE_DOMAIN = "dev.verserain.com"
+    SITE_DOMAIN = "dev.verserain.com"
+    MAIL_DOMAIN = SITE_DOMAIN
 else:
     SITE_DOMAIN = "www.verserain.com"
+    MAIL_DOMAIN = "verserain.com"
+
 SITE_URL = "http://%s/" % SITE_DOMAIN
 
 MONGODB_HOST = "localhost"

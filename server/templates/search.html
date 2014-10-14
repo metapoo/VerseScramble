@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div id="search">
+<script>
+  (function() {
+    var cx = '009990472617002299375:wvbkkwwgd6c';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<div style="text-align:center;">
+<div style="width:600px;margin:auto;">
+<gcse:searchbox></gcse:searchbox>
+</div>
+</div>
+
+<gcse:searchresults></gcse:searchresults>
+</div>
+{% end %}
+
+{% block extra_js %}
+<script>
+setTimeout(function(){$("#gsc-i-id1").focus();},1000);
+</script>
+{% end %}

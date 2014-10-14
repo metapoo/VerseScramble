@@ -31,9 +31,22 @@ def get_handlers():
 
 class MoveVerseHandler(BaseHandler):
     def get(self, direction, verse_id):
+        if self.current_user is None:
+            self.write("not logged in")
+            return
+
         verse = Verse.by_id(verse_id)
         verseset = verse.verseset()
         order = verse["order"]
+
+        if verseset is None:
+            self.write("verseset not found")
+            return
+
+        if (not self.current_user.is_admin()) or \
+           (self.current_user._id != verseset.user_id):
+            self.write("not authorized")
+            return
 
         if direction == "up":
             index = order-1
