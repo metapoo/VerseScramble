@@ -346,9 +346,15 @@ function calculateVersePosition () {
 	}
 }
 
+function IsAvailable() {
+	return collider2D.enabled;
+}
+
 function returnToVerse () {
 	// sync word index incase there is another word label which is duplicate of this one
-	wordIndex = gameManager.wordIndex;
+	if (wordIndex != gameManager.wordIndex) {
+		gameManager.SwapWords(wordIndex, gameManager.wordIndex);
+	}
 	hinting = false;
 	collider2D.enabled = false;
 	rigidbody2D.fixedAngle = true;

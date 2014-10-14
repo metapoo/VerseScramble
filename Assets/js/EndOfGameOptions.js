@@ -60,6 +60,7 @@ function SubmitScore(showPopup: boolean) {
 function EndGameWindowForChallenge () {
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
+	
 	var diffString = verseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
 	var needToSelectDifficulty : boolean = true;
@@ -76,20 +77,42 @@ function EndGameWindowForChallenge () {
 	
 	var optionDialog = DialogManager.CreateOptionDialog(title,text);
 	
-	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime);
-		
-	optionDialog.AddOption(gt("Back to menu"),
+	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime)
+	&& scoreManager.WasVerseMastered();
+	
+	if (scoreManager.WasVerseMastered()) {
+		optionDialog.AddOption(gt("Review verserain!"),
+			function() {
+				Application.OpenURL("https://itunes.apple.com/us/app/verse-rain-fun-bible-verse/id928732025?ls=1&mt=8");
+			});
+	} else {
+		optionDialog.AddOption(gt("Back to menu"),
 		function() {
 			BackToMenu();
 		});
-		
-	optionDialog.AddOption(gt("Try again"),
-		function() {
-			needToSelectDifficulty = false;
-			verseManager.verseIndex = 0;
-			ReloadGame(needToSelectDifficulty);
-		});
+	}
 
+
+	var tryAgain = function() {
+
+		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
+			optionDialog.AddOption(gt("Try again"),
+			  	function() {
+					needToSelectDifficulty = false;
+					ReloadGame(needToSelectDifficulty);
+			  	});
+		} else {
+			optionDialog.AddOption(String.Format(gt("Next level"), nextDifficultyString),
+				function() {
+					verseManager.SetDifficulty(nextDifficulty);
+					needToSelectDifficulty = false;
+					ReloadGame(needToSelectDifficulty);
+				});
+		}
+	};
+
+	tryAgain();
+	
 	if (verseManager.currentVerseSet.onlineId == null) return;
 
 	if (UserSession.IsLoggedIn()) {
@@ -112,7 +135,6 @@ function EndGameWindowForChallenge () {
 				};
 			}
 		});
-
 
 }
 

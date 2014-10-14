@@ -209,7 +209,10 @@ function HandleCountTimeLeftFinished() {
 			var verseset : VerseSet = verseManager.GetCurrentVerseSet();
 			verseset.SaveMetadata(versesetMetadata);
 		}
-		verseManager.HandleVerseSetMastered(gameManager.difficulty, versesetMetadata);
+		
+		if (WasVerseMastered()) {
+			verseManager.HandleVerseSetMastered(gameManager.difficulty, versesetMetadata);
+		}
 	} else {
 		if (score > highScore) {
 			highScore = score;

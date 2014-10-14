@@ -18,4 +18,4 @@ MONGODB_DATABASE = "verserain"
 SECRET_KEY = "X6yFzlxbSkyB7wjn/dHC49UGP10c7kj0uBj55zORhBw="
 FACEBOOK_API_KEY = "1439577092991935"
 LATEST_VERSION = 1.0
-IOS_APPSTORE_URL = "https://itunes.apple.com/us/app/verserain/id928732025?ls=1&mt=8"
+IOS_APPSTORE_URL = "https://itunes.apple.com/us/app/verse-rain-fun-bible-verse/id928732025?ls=1&mt=8"
