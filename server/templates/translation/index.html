@@ -21,7 +21,7 @@
 <label for="tran_{{i}}">{{tran["msgid"]}}</label>
 
 <input type="text" value="{% raw tran["msgstr"] %}" style="width:500px;" onblur="$('#status_{{i}}').html('Saving..'); var msgid='{% raw tran["msgid"].replace("'","\\'")%}'; vr.ajax_request('/translation/save', {language:'{{language_code}}', msgid:msgid, msgstr:this.value}, '#status_{{i}}');"/>
-<span id="status_{{i}}"></span>
+<span id="status_{{i}}">{% include "history.html" %}</span>
 </fieldset>
 
 {% set i = i + 1 %}
