@@ -17,10 +17,22 @@ class User(BaseModel, PasswordMixin):
         from verserain.leaderboard.models import VersesetScore
         vss = VersesetScore.collection.find({'user_id':self._id})
         total_score = 0
+        total_accuracy = 0
+        total_correct = 0
+
         for vs in vss:
             total_score += vs["score"]
+            total_correct += vs.correct()
+            total_accuracy += vs.accuracy()*vs.correct()
+
         self["total_score"] = total_score
+        if total_correct > 0:
+            self["accuracy"] = total_accuracy / total_correct
+
         self.save()
+
+    def accuracy(self):
+        return self.get("accuracy",0)
 
     def is_admin(self):
         return self.get("is_admin", True)
