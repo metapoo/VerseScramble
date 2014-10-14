@@ -35,7 +35,11 @@ class SaveTranslationHandler(BaseHandler):
 
 class ShowTranslationHandler(BaseHandler):
     @require_login
-    def get(self, language="en"):
+    def get(self, language=None):
+        if language is None:
+            language = self.get_cookie("language_code","en")
+        if language.lower() == "all":
+            language = "en"
 
         msgids  = [x['msgid'] for x in list(Translation.collection.find({"language":"en"}))]
         
