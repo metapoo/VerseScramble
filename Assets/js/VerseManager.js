@@ -237,6 +237,8 @@ static function GetCountryCodeFromLanguage(language : String) {
 static function GetVoiceLanguage(language : String) {
 	var country = GetCountryCodeFromLanguage(language);
 	if (country != null) {
+		var parts : Array = language.Split("-"[0]);
+		language = parts[0];
 		return String.Format("{0}-{1}", language, country);
 	}
 	return null;
