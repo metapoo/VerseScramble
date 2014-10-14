@@ -4,13 +4,14 @@ from verserain.verse.language import *
 from verserain.utils.encoding import *
 import codecs
 import sys
+import pymongo
 
 PATH = "%s/python/verserain/static/languages" % os.environ['HOME']
 
 
 def export_translation(language):
     filename = "%s/%s.txt" % (PATH, language)
-    translations = list(Translation.collection.find({"language":language}))
+    translations = list(Translation.collection.find({"language":language}).sort("_id",pymongo.ASCENDING))
     if len(translations) == 0:
         return
     f = codecs.open(filename,"w","utf-8")
