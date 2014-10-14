@@ -13,7 +13,7 @@ private	static AndroidJavaObject androidPluginObject;
 private static extern void _SpeakUtterance(string text,string language);
 
 //Startslookupforsomebonjourregisteredserviceinsidespecifieddomain
-public static void SpeakUtterance(string text,string language, string countryCode)
+public static void SpeakUtterance(string text,string language)
 {
 #if UNITY_ANDROID
 		//Callpluginonlywhenrunningonrealdevice
@@ -30,8 +30,7 @@ public static void SpeakUtterance(string text,string language, string countryCod
 		if((Application.platform!=RuntimePlatform.OSXEditor)&&
 		   (Application.platform!=RuntimePlatform.OSXWebPlayer)&&
 		   (Application.platform!=RuntimePlatform.WindowsWebPlayer)&&(Application.platform!=RuntimePlatform.Android)){
-			var voiceLanguage = language + "-" + countryCode;
-			_SpeakUtterance(text,voiceLanguage);
+			_SpeakUtterance(text,language);
 		}
 }
 }
