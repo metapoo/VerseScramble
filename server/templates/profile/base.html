@@ -3,9 +3,10 @@
 {% block title %}{{viewed_user['username']}}'s Verserain Profile{% end %}
 {% block page_content %}
 
-{% if selected_nav != "profile" %}
-<h2 style="margin-top:2px;">{% module UserLink(user=viewed_user) %} ({{viewed_user.get('total_score',0)}} points)</h2>
-{% end %}
+<h2 style="margin-top:2px;margin-bottom:0px;">{% module UserLink(user=viewed_user) %} </h2>
+<div class="pad_bottom">
+{{user.total_score()}} points, {{user.accuracy()}}% accuracy, {{user.total_blocks()}} blocks
+</div>
 
 <div class="pad_bottom">
   <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}">Verse Sets</a>
