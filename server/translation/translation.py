@@ -28,9 +28,13 @@ class SaveTranslationHandler(BaseHandler):
             if msgstr == tran.msgstr():
                 return self.write("No changes.")
 
+        if language == "en":
+            if not self.current_user.is_admin():
+                return self.write("Only admin can change english")
+
         tran = Translation.translate(language, msgid, msgstr)
 
-        return self.write("Saved.")
+        return self.render("translation/history.html", tran=tran)
 
 
 class ShowTranslationHandler(BaseHandler):
