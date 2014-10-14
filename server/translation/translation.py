@@ -28,14 +28,22 @@ class SaveTranslationHandler(BaseHandler):
             if msgstr == tran.msgstr():
                 return self.write("No changes.")
 
+        if language == "en":
+            if not self.current_user.is_admin():
+                return self.write("Only admin can change english")
+
         tran = Translation.translate(language, msgid, msgstr)
 
-        return self.write("Saved.")
+        return self.render("translation/history.html", tran=tran)
 
 
 class ShowTranslationHandler(BaseHandler):
     @require_login
-    def get(self, language="en"):
+    def get(self, language=None):
+        if language is None:
+            language = self.get_cookie("language_code","en")
+        if language.lower() == "all":
+            language = "en"
 
         msgids  = [x['msgid'] for x in list(Translation.collection.find({"language":"en"}))]
         
