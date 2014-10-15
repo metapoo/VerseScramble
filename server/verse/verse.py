@@ -356,7 +356,10 @@ class ListVerseSetHandler(BaseHandler):
 
         from verserain.verse.language import LANGUAGE_CODES
         if (language_code is None) or ((language_code.lower() != "all") and (not language_code in LANGUAGE_CODES)):
-            language_code = self.get_cookie("language_code","en")
+            language_code = self.language_code()
+
+        if language_code:
+            self.set_language(language_code)
 
         args = {"verse_count":{"$gt":0}}
 
@@ -389,9 +392,6 @@ class ListVerseSetHandler(BaseHandler):
             else:
                 self.write("user not found")
                 return
-
-        if language_code:
-            self.set_cookie("language_code", language_code)
         
         total_count = cursor.count()
         versesets = list(versesets[start_index:end_index])

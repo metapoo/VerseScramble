@@ -1,4 +1,4 @@
-{% extends "../base.html" %}
+B1;2c{% extends "../base.html" %}
 
 {% block title %}Verserain Leaderboard{% end %}
 {% block script_content %}
@@ -8,9 +8,9 @@
 {% from verserain.utils.date import pretty_date %}
 
 <div class="pad_bottom">
-        <a class="pure-button {% if selected_subnav=="total" %}pure-button-primary{% end %}" href="/leaderboard/total">Total Points</a>
-        <a class="pure-button {% if selected_subnav=="high" %}pure-button-primary{% end %}" href="/leaderboard/high">High Scores</a>
-        <a class="pure-button {% if selected_subnav=="recent" %}pure-button-primary{% end %}" href="/leaderboard/recent">Recent Scores</a>
+        <a class="pure-button {% if selected_subnav=="total" %}pure-button-primary{% end %}" href="/leaderboard/total">{{gt("Total Points")}}</a>
+        <a class="pure-button {% if selected_subnav=="high" %}pure-button-primary{% end %}" href="/leaderboard/high">{{gt("High Scores")}}</a>
+        <a class="pure-button {% if selected_subnav=="recent" %}pure-button-primary{% end %}" href="/leaderboard/recent">{{gt("Recent Scores")}}</a>
 </div>
 
 {% if selected_subnav == "total" %}
