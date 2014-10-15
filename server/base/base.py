@@ -44,6 +44,7 @@ Subject: %s
 Reply-To: %s
 %s
 """ % (from_email, ", ".join(to_email), subject, reply_to_email, message)
+
         # Send the mail
         server = smtplib.SMTP(settings.SITE_DOMAIN,port=25)
         server.sendmail(from_email, to_email, message)
