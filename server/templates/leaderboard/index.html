@@ -28,7 +28,7 @@ B1;2c{% extends "../base.html" %}
 
 {% elif (selected_subnav == "high") or (selected_subnav == "recent") %}
 
-{% module ScoresTable(scores, start_index=start_index) %}
+{% module ScoresTable(scores, start_index=start_index, gt=gt) %}
 
 {% end %}
 <br/>
