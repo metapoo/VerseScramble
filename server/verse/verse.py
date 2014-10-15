@@ -333,7 +333,7 @@ class CreateVerseSetHandler(BaseHandler):
 
         user = self.current_user
         version = "NIV"
-        language = 'en'
+        language = self.language_code()
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "profile"
         
