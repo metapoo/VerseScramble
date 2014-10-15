@@ -27,7 +27,12 @@ class TextManager extends MonoBehaviour {
     static var instance:TextManager ;
     static var textTable:Hashtable ;
  	static var currentFilename : String = "";
- 
+ 	static var loading : boolean = false;
+ 	
+ 	static function IsLoaded() {
+ 		return (textTable != null);
+ 	}
+ 	
     static function Instance() 
     {
  
@@ -51,7 +56,49 @@ class TextManager extends MonoBehaviour {
         return Instance();
     }   
  
-    public static function LoadLanguage (filename:String)
+ 	static public function LoadLanguageOffline(language : String) : boolean {
+ 		var saveKey : String = String.Format("languages/{0}.txt",language);
+ 		var text : String = PlayerPrefs.GetString(saveKey, null);
+ 		
+ 		// try to load it immediately
+ 		if (text != null) {
+ 			Debug.Log("loading language from disk: " + saveKey);
+ 			return LoadLanguageText(text);
+ 		} else {
+ 			Debug.Log("loading language resource file: " + language);
+ 			return LoadLanguageFile(language);
+ 		}
+ 	}
+ 	
+ 	public function LoadLanguage(language : String, finishHandler : Function) : IEnumerator
+ 	{
+ 		var saveKey : String = String.Format("languages/{0}.txt",language);
+ 		var apiDomain : String = ApiManager.GetApiDomain();
+ 		var url = String.Format("http://{0}/languages/{1}.txt", apiDomain, language);
+ 		var text : String = PlayerPrefs.GetString(saveKey, null);
+  		
+  		loading = true;
+  	
+  		Debug.Log("loading " + url);	
+ 		var www : WWW = new WWW(url);
+ 		yield www;
+ 		
+ 		loading = false;
+ 		
+ 		if (www.error != null) {
+ 			Debug.Log("Couldn't load " + url);
+ 		} else {
+	 		Debug.Log("Loaded online translation " + url);
+	 		LoadLanguageText(www.text);
+	 		PlayerPrefs.SetString(saveKey, www.text);
+ 		}	
+ 		
+ 		if (finishHandler != null) {
+ 			finishHandler(language);
+ 		}
+ 	}
+ 	 	
+    public static function LoadLanguageFile (filename:String) : boolean
     {
     	if (filename == currentFilename) return;
     	
@@ -81,8 +128,19 @@ class TextManager extends MonoBehaviour {
         }
  
         textTable.Clear();
+        var success : boolean = LoadLanguageText(textAsset.text);
+        Debug.Log("[TextManager] loaded: "+ fullpath);
+		return success;
+ 	}
  
-        var reader:StringReader  = new StringReader(textAsset.text);
+ 	public static function LoadLanguageText(text : String) : boolean {
+ 	    if (textTable == null) 
+        {
+            textTable = new Hashtable();
+        }
+		textTable.Clear();
+		
+        var reader:StringReader  = new StringReader(text);
         var key:String = null;
         var val:String = null;
         var line:String;
@@ -111,7 +169,6 @@ class TextManager extends MonoBehaviour {
         }
  
         reader.Close();
- 		Debug.Log("[TextManager] loaded: "+ fullpath);
 
         return true;
     }
@@ -136,4 +193,8 @@ class TextManager extends MonoBehaviour {
         }
         return originalKey;
     }
+    
+    function Awake() {
+    	DontDestroyOnLoad(this.gameObject);
+	}
 }

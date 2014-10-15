@@ -133,7 +133,11 @@ function GoBack () {
 }
 
 function Awake () {
-	TextManager.LoadLanguage(VerseManager.GetLanguage());
+	var language : String = VerseManager.GetLanguage();
+	if (!TextManager.IsLoaded()) {
+		TextManager.LoadLanguageOffline(language);
+		TextManager.GetInstance().LoadLanguage(language, null);
+	}
 }
 
 function Start () {

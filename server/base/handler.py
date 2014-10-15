@@ -5,8 +5,9 @@ import tornado.web
 
 from verserain.user.models import User
 from verserain import settings
+from verserain.translation.localization import *
 
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
     def isIOS(self):
@@ -65,13 +66,29 @@ class BaseHandler(tornado.web.RequestHandler):
 
         return user
 
+    def language_code(self):
+        language_code = self.get_cookie("language_code","en")
+        return language_code
+
+    def set_language(self, language_code):
+        self.set_cookie("language_code", language_code)
+        self.set_current_language(self.language_code())
+        
     def render(self, *args, **kwargs):
+        if kwargs.has_key("language_code"):
+            language_code = kwargs["language_code"]
+        else:
+            language_code = self.language_code()
+
+        self.set_current_language(language_code)
+
+        kwargs['gt'] = self.__class__.gt
         kwargs['user'] = self.current_user
         kwargs['isIOS'] = self.isIOS()
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-
+        
         if not kwargs.has_key('error_message'):
             kwargs['error_message'] = None
 

@@ -1,4 +1,5 @@
 import tornado.web
+from verserain.translation.localization import *
 
 class PlayButton(tornado.web.UIModule):
     def render(self, verseset=None, verseset_id=None):

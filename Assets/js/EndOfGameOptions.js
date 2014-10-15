@@ -18,6 +18,9 @@ function SubmitScore(showPopup: boolean) {
 	
 	var score = scoreManager.score;
 	var versesetId = verseManager.currentVerseSet.onlineId;
+	
+	if (versesetId == null) return;
+	
 	var handler : Function = function(resultData : Hashtable) {
 		if (UserSession.IsLoggedIn()) {
 			var us : UserSession = UserSession.GetUserSession();

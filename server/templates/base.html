@@ -6,7 +6,7 @@
 {% end %}
 </script>
 
-<title>{% block title %}Verse Rain - Bible Verse Memorization Game{% end %}</title>
+<title>{% block title %}Verse Rain - {{gt("Bible Verse Memorization Game")}}{% end %}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
@@ -70,18 +70,18 @@
 <div id="bg-one"></div>
 <div id="bg-two"></div><div id="bg-three"></div><div id="bg-four"></div>
 <ul class="cssmenu">
-  <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>Verse Sets</span></a></li>
+  <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>{{gt("Verse Sets")}}</span></a></li>
   {% if user %}
-  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>Profile</span></a></li>
+  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>{{gt("Profile")}}</span></a></li>
   {% end %}
-  <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>Leaderboard</span></a></li>
-  <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>About</span></a></li>
-  <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>Search</span></a></li>
+  <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>{{gt("Leaderboard")}}</span></a></li>
+  <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
+  <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>{{gt("Search")}}</span></a></li>
   {% if not user %}
-  <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>Login</span></a></li>
-  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>Sign Up</span></a></li>
+  <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>{{gt("Login")}}</span></a></li>
+  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>{{gt("Sign Up")}}</span></a></li>
   {% else %}
-  <li class="last"><a href="/login/logout"><span>Logout</span></a></li>
+  <li class="last"><a href="/login/logout"><span>{{gt("Logout")}}</span></a></li>
   {% end %}
 
 </ul>

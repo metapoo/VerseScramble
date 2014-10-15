@@ -14,7 +14,7 @@
 {% end %}
 
 <form class="pure-form pure-form-stacked centered" style="margin-top:6px;" action="/verseset/{% if verseset %}update{% else %}create{% end %}" method="POST">
-  <h2>{% if verseset %}Update Verse Set{% else %}Create a Verse Set{% end %}</h2>
+  <h2>{% if verseset %}{{gt("Update Verse Set")}}{% else %}{{gt("Create a Verse Set")}}{% end %}</h2>
   {% if error_message %}
   <div class="error">{{error_message}}</div>
   {% end %}

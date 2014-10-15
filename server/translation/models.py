@@ -16,6 +16,9 @@ class Translation(BaseModel):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         return new_instance
 
+    def msgid(self):
+        return self.get("msgid",None)
+
     def msgstr(self):
         return self.get("msgstr",None)
 
