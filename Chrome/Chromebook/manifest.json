@@ -1,0 +1,17 @@
+{
+"name": "Verse Rain",
+"description": "Fun game for memorizing bible verses.",
+"version": "1.0.180",
+"manifest_version": 2,
+"icons": {
+"128": "icon_128.png"
+},
+"app": {
+"urls": [
+"http://verserain.com/"
+],
+"launch": {
+"web_url": "http://verserain.com/"
+}
+}
+}
