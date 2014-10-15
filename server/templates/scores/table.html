@@ -1,6 +1,6 @@
 {% from verserain.utils.date import pretty_date %}
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>User</th><th>Score</th><th>Accuracy</th><th>Level</th><th>Verse Set</th><th>Date</th></tr></thead>
+<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("Level")}}</th><th>{{gt("Verse Set")}}</th><th>{{gt("Date")}}</th></tr></thead>
 <tbody>
 {% set i = 1+start_index %}
 {% for vs in scores %}
