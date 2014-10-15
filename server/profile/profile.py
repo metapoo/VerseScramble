@@ -1,3 +1,4 @@
+from verserain.verse.models import *
 from verserain.base.handler import BaseHandler
 from verserain.leaderboard.models import *
 from verserain.login.auth import *
@@ -12,8 +13,18 @@ import pymongo
 def get_handlers():
     return ((r"/u/([^/]+)/scores?", ProfileListScoresHandler),
             (r"/u/([^/]+)/scores/(\d+)/?", ProfileListScoresHandler),
+            (r"/u/([^/]+)/?$", ProfileOtherIndexHandler),
             (r"/profile/?", ProfileIndexHandler),
     )
+
+class ProfileOtherIndexHandler(BaseHandler):
+    def get(self, username=None):
+        user = User.collection.find_one({'username':username})
+        has_versesets = VerseSet.collection.find_one({'user_id':user._id}) is not None
+        if has_versesets:
+            self.redirect("/u/%s/versesets/"%username)
+        else:
+            self.redirect("/u/%s/scores/"%username)
 
 class ProfileIndexHandler(BaseHandler):
     @require_login
