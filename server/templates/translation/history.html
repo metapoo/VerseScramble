@@ -1,5 +1,5 @@
 {% set history = tran.history() %}
-{% if history %}revisions: {% end %}
+{% if history %}revisions: {% else %}{% if tran.username() %}translated by {% module UserLink(username=tran.username()) %}{% end %} {% end %}
 {% for revision in history %}
 {% set msgstr = revision[0] %} {% set username = revision[1] %}
 "{{msgstr}}" {% if username %}({% module UserLink(username=username) %}){% end %}{% if revision != history[-1] %},{% end %}
