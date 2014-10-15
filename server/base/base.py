@@ -9,7 +9,12 @@ def get_handlers():
             (r"/search/?", SearchPageHandler),
             (r"/contact/submit/?", ContactHandler),
             (r"/contact/?", ContactPageHandler),
+            (r"/play/?", PlayHandler),
     )
+
+class PlayHandler(BaseHandler):
+    def get(self):
+        self.render("webplayer.html", device_url=None)
 
 class PrivacyPageHandler(BaseHandler):
     def get(self):
