@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 import pymongo
 
 def get_handlers():
-    return ((r"/u/([^/]+)/scores?", ProfileListScoresHandler),
+    return ((r"/u/([^/]+)/scores/?", ProfileListScoresHandler),
             (r"/u/([^/]+)/scores/(\d+)/?", ProfileListScoresHandler),
             (r"/u/([^/]+)/?$", ProfileOtherIndexHandler),
             (r"/profile/?", ProfileIndexHandler),
