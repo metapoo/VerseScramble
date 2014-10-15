@@ -72,7 +72,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
     def set_language(self, language_code):
         self.set_cookie("language_code", language_code)
-        self.set_current_language(self.language_code())
+        self.set_current_language(language_code)
     
     def default_language(self):
         locale = self.get_browser_locale()
