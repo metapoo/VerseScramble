@@ -17,8 +17,8 @@ def get_handlers():
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/?", ListVerseSetHandler),
-            (r"/u/([^/]+)/?", ListVerseSetHandler),
-            (r"/u/([^/]+)/()(\d+)/?", ListVerseSetHandler),
+            (r"/u/([^/]+)/versesets/?", ListVerseSetHandler),
+            (r"/u/([^/]+)/versesets/()(\d+)/?", ListVerseSetHandler),
             (r"/verse/create",CreateVerseHandler),
             (r"/verse/edit/([^/]+)/?", UpdateVerseHandler),
             (r"/verse/update", UpdateVerseHandler),
@@ -304,7 +304,7 @@ class RemoveVerseSetHandler(BaseHandler):
             return
 
         verseset.remove()
-        self.redirect("/u/%s" % user['username'])
+        self.redirect("/u/versesets/%s" % user['username'])
 
 class CreateVerseSetHandler(BaseHandler):
 
@@ -388,7 +388,7 @@ class ListVerseSetHandler(BaseHandler):
                 versesets = viewed_user.versesets()
                 cursor = versesets
                 versesets = versesets.sort("_id", pymongo.DESCENDING)
-                base_url = "/u/%s" % viewed_user['username']
+                base_url = "/u/%s/versesets" % viewed_user['username']
             else:
                 self.write("user not found")
                 return
