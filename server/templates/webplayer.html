@@ -68,7 +68,9 @@
 
                                 u.start_verserain = function() { 
                                   var unity = u.getUnity();
+{% if device_url %}
                                   unity.SendMessage("UserSession", "HandleURL", "{{device_url}}");
+{% end %}
                                 }
 				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=15");
 			});
