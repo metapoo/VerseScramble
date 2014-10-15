@@ -47,6 +47,8 @@ class Translation(BaseModel):
         return False
 
     def save_to_history(self):
+        if self.msgstr() is None:
+            return
         history = self.history()
 
         for revision in history:
