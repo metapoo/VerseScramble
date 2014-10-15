@@ -3,14 +3,14 @@
 
 <table class="pure-table pure-table-bordered pad_bottom" style="width:100%;">
 
-<thead><tr><th>Verse Set</th>
+<thead><tr><th>{{gt("Verse Sets")}}</th>
 {% if language_code == "all" %}
-<th>Language</th>
+<th>{{gt("Language")}}</th>
 {% end %}
-<th>Verses</th>
-<th>Plays</th>
-<th>Created</th>
-<th>Author</th></thead>
+<th>{{gt("Verses")}}</th>
+<th>{{gt("Plays")}}</th>
+<th>{{gt("Created Date")}}</th>
+<th>{{gt("Author")}}</th></thead>
 <tbody>
 {% for verseset in versesets %}
 <tr>

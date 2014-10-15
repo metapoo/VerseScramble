@@ -35,3 +35,6 @@ class TranslationManager:
     @classmethod
     def gt(cls, str):
         return cls.get_localized_string(str, cls.current_language)
+
+def gt(str):
+    return TranslationManager.gt(str)

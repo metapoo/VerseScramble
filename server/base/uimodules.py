@@ -30,14 +30,15 @@ class VerseSetLink(tornado.web.UIModule):
         return "<a class='link' href='/verseset/show/%s'>%s</a>" % (verseset_id, verseset_name)
 
 class ScoresTable(tornado.web.UIModule):
-    def render(self, scores=None, start_index=0):
-        return self.render_string("scores/table.html",scores=scores, start_index=start_index)
+    def render(self, scores=None, start_index=0, gt=None):
+        return self.render_string("scores/table.html",scores=scores, start_index=start_index, gt=gt)
 
 class VerseSetsTable(tornado.web.UIModule):
-    def render(self, versesets=None, paginator=None, language_code=None, start_index=0):
+    def render(self, versesets=None, paginator=None, language_code=None, start_index=0, gt=None):
         return self.render_string("verseset/table.html",
                                   versesets=versesets,
                                   paginator=paginator,
                                   language_code=language_code,
-                                  start_Index=start_index
+                                  start_index=start_index,
+                                  gt=gt
         )
