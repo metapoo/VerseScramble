@@ -84,9 +84,10 @@ function EndGameWindowForChallenge () {
 	&& scoreManager.WasVerseMastered();
 	
 	if (scoreManager.WasVerseMastered()) {
-		optionDialog.AddOption(gt("Review verserain!"),
+		optionDialog.AddOption(gt("Review Verse Rain!"),
 			function() {
-				Application.OpenURL("https://itunes.apple.com/us/app/verse-rain-fun-bible-verse/id928732025?ls=1&mt=8");
+				var url : String = GameManager.GetReviewURL();
+				Application.OpenURL(url);
 			});
 	} else {
 		optionDialog.AddOption(gt("Back to menu"),

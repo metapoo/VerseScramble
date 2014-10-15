@@ -87,6 +87,15 @@ function OnGUI() {
 
 }
 
+static function GetReviewURL() {
+	var url : String = "https://itunes.apple.com/us/app/verse-rain-fun-bible-verse/id928732025?ls=1&mt=8";
+				
+	if (Application.platform == RuntimePlatform.Android) {
+		url = "https://play.google.com/store/apps/details?id=com.hopeofglory.verserain";
+	}
+	return url;
+}
+
 function ExitToVerseList() {
 	audio.PlayOneShot(sndSelect, 1.0f);
 	Cleanup();
