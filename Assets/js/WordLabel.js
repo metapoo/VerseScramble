@@ -405,7 +405,7 @@ function OnMouseDown() {
 	hinting = false;
 	
 	if (returnedToVerse) {
-		VerseManager.SpeakUtterance(word);
+		verseManager.SpeakUtterance(word);
 		Blink();
 		return;
 	}
@@ -415,7 +415,7 @@ function OnMouseDown() {
 		returnToVerse();
 		dScore = gameManager.HandleWordCorrect();
 		right = true;
-		VerseManager.SpeakUtterance(word);
+		verseManager.SpeakUtterance(word);
 		scoreCredited = dScore;
 	} else {
 		str = scoreManager.HandleWordWrong();

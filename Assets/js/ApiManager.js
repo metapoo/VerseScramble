@@ -77,6 +77,9 @@ class ApiManager extends MonoBehaviour {
     	for (var key:String in arguments.Keys) {
     		i += 1;
     		var val = arguments[key];
+    		if (val == null) {
+    			Debug.Log("key: " + key + " value is null!");
+    		}
     		serializedArguments += (key+"="+WWW.EscapeURL(val.ToString()));
     		if (i < arguments.Count) {
     			serializedArguments += "&";

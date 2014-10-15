@@ -3,8 +3,10 @@ var languageDescription : String;
 var languageCode : String;
 
 function HandleOnClick() {
-	VerseManager.SwitchLanguage(languageCode);
-	Application.LoadLevel("versesets");
+	var onFinish = function(language : String) {
+		Application.LoadLevel("versesets");
+	};
+	VerseManager.GetInstance().SwitchLanguage(languageCode, onFinish);
 }
 
 function SetCodeAndLanguage(code : String, language : String) {

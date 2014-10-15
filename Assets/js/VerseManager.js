@@ -35,9 +35,9 @@ static function Unload() {
 
 }
 
-static function SwitchLanguage(language : String) {
+function SwitchLanguage(language : String, finishHandler : Function) {
 	languageChosen = true;
-	SetLanguage(language);
+	SetLanguage(language, finishHandler);
 	SetCurrentView(defaultView);
 	var versesets = GetCurrentVerseSets();
 	offlineVersesLoaded = (versesets.length > 0);
@@ -120,7 +120,7 @@ static function GetCurrentVerseSet() : VerseSet {
 }
 
 static function SetCurrentVerseSet(verseset : VerseSet) {
-Debug.Log("current verse set = " + verseset.SaveKey());
+	Debug.Log("current verse set = " + verseset.SaveKey());
 	currentVerseSet = verseset;
 	var language = GetLanguage();
 	if (verseset.language != null) {
@@ -194,14 +194,24 @@ function SayVerseReference() {
 	}
 }
 
-static function SpeakUtterance(word : String) {
+function SpeakUtterance(word : String) {
 	var voiceLanguage : String = GetVoiceLanguage();
 	SpeakUtterance(word, voiceLanguage);
 }
 
-static function SpeakUtterance(word : String, language: String) {
+function SpeakUtteranceViaWeb(word : String, language: String) {
+	// nothing for now
+	yield;
+}
+
+function SpeakUtterance(word : String, language: String) {
 	if (language == null) return;
-	VoiceSynth.SpeakUtterance(word,language);
+	if ((Application.platform!=RuntimePlatform.Android) &&
+	    (Application.platform!=RuntimePlatform.IPhonePlayer)) {
+	    StartCoroutine(GetInstance().SpeakUtteranceViaWeb(word, language));
+	} else {
+		VoiceSynth.SpeakUtterance(word,language);
+	}
 	Debug.Log(String.Format("Speak utterance: {0} in language {1}", word, language));
 }
 
@@ -227,6 +237,8 @@ static function GetCountryCodeFromLanguage(language : String) {
 static function GetVoiceLanguage(language : String) {
 	var country = GetCountryCodeFromLanguage(language);
 	if (country != null) {
+		var parts : Array = language.Split("-"[0]);
+		language = parts[0];
 		return String.Format("{0}-{1}", language, country);
 	}
 	return null;
@@ -241,6 +253,10 @@ static function IsLanguageWestern(language : String) : boolean {
 			(language == 'it');
 }
 
+static function GetInstance() : VerseManager {
+	return GameObject.FindObjectOfType(VerseManager);
+}
+
 static function SetVerseLanguage(language : String) {
 	PlayerPrefs.SetString("verse_language", language);
 	CheckRightToLeft(language);
@@ -250,12 +266,11 @@ static function SetVerseLanguage(language : String) {
 	// try to load game language as verse language if available
 	// and user never "set the language" 
 	if ((gameLanguage != language) && (!languageChosen)) {
-		var success = TextManager.LoadLanguage(language);
+		var success = TextManager.LoadLanguageOffline(language);
 		if (!success) {
-			TextManager.LoadLanguage(defaultLanguage);
-			SetLanguage(defaultLanguage);
+			GetInstance().SetLanguage(defaultLanguage, null);
 		} else {
-			SetLanguage(language);
+			GetInstance().SetLanguage(language, null);
 		}
 	}
 }
@@ -288,9 +303,11 @@ static function GetLanguage() : String {
 	return PlayerPrefs.GetString("language", GetSystemLanguage());
 }
 
-static function SetLanguage(language : String) : String {
+function SetLanguage(language : String, finishHandler : Function) : String {
 	PlayerPrefs.SetString("language", language);
-	TextManager.LoadLanguage(language);
+	TextManager.LoadLanguageOffline(language);
+	var tm : TextManager = TextManager.GetInstance();
+	StartCoroutine(tm.LoadLanguage(language, finishHandler));
 }
 
 function IsAtFinalVerseOfChallenge() {
@@ -439,7 +456,7 @@ function IsDifficultyAllowed(difficulty : Difficulty) {
 	return parseInt(difficulty) <= parseInt(GetCurrentDifficultyAllowed());
 }
 
-function GetCurrentDifficultyAllowed() {
+function GetCurrentDifficultyAllowed() : int {
 	var metadata : Hashtable;
 
 	if (GameManager.GetChallengeModeEnabled()) {
