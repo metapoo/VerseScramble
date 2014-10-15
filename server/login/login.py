@@ -37,8 +37,8 @@ class RegisterHandler(BaseHandler):
 
         if len(username) < 4:
             error_message = "Username must be at least four characters."
-        elif not re.match("^[a-zA-Z0-9_.-]+$",username):
-            error_message = "Username contains invalid characters(s)."
+        elif " " in username:
+            error_message = "Username cannot contain spaces."
         elif user:
             error_message = "An account is already registered with that username."        
         elif not confirm_password:
