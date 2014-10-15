@@ -32,7 +32,10 @@ class SaveTranslationHandler(BaseHandler):
             if not self.current_user.is_admin():
                 return self.write("Only admin can change english")
 
-        tran = Translation.translate(language, msgid, msgstr)
+        tran = Translation.translate(language, msgid, msgstr, username=self.current_user['username'])
+
+        self.load_translation(language)
+        self.translations[language][msgid.lower()] = msgstr
 
         return self.render("translation/history.html", tran=tran)
 
