@@ -14,7 +14,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         return settings.VERSERAIN_ENV == "development"
 
     def isSecure(self):
-        return self.request.protocol == "https"
+        return self.request.headers.get('X-Forwarded-Protocol','http') == 'https'
 
     def redirectWithProtocol(self, uri=None, protocol="http"):
         if uri is None:
