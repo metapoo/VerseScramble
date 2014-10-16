@@ -68,9 +68,11 @@
 
                                 u.start_verserain = function() { 
                                   var unity = u.getUnity();
+                                  $("#plugin_block_tip").hide();
 {% if device_url %}
                                   unity.SendMessage("UserSession", "HandleURL", "{{device_url}}");
 {% end %}
+
                                 }
 				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=15");
 			});
@@ -84,7 +86,16 @@
 </div>
 {% end %}
 
-<div id="unity_player_content" >
+<div class="centered_wrapper">
+<div id="plugin_block_tip" class="centered" style="padding-bottom:20px;text-align:center;">
+<p>
+<h3>Verse Rain requires the Unity Player plug-in.</h3>
+ Please allow plug-ins to run on www.verserain.com in order to play. 
+</p>
+</form>
+</div>
+
+<div id="unity_player_content" style="margin: 10px 0px 0px 0px;">
 		<div class="content">
 			<div id="unityPlayer">
 				<div class="missing">

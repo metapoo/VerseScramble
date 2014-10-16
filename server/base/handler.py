@@ -66,8 +66,10 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
         return user
 
-    def language_code(self):
+    def language_code(self, not_all=False):
         language_code = self.get_cookie("language_code",self.default_language())
+        if not_all and (language_code.lower() == "all"):
+            return self.default_language()
         return language_code
 
     def set_language(self, language_code):
