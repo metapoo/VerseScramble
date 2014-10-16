@@ -34,6 +34,11 @@ body h1, body h2,body h3,body h4 {
   margin-bottom: 0.15em;
 }
 
+#device_badges img {
+  height: 45px;
+  padding: 0px 10px 0px 10px;
+}
+
 textarea#message {
   width: 400px;
   height: 200px;
@@ -43,13 +48,16 @@ textarea#message {
   text-align:center;
 }
 
+.centered {
+  margin: auto;
+  text-align:left;
+}
+
 form.centered {
   border: 1px solid #d9d9d9; 
   background:#f3f3f3;
   padding:20px 30px 25px 30px;
-  margin:auto;
   margin-top:20px;
-  text-align:left;
   display: inline-block;
 }
 
