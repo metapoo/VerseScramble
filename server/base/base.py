@@ -9,7 +9,6 @@ def get_handlers():
             (r"/search/?", SearchPageHandler),
             (r"/contact/submit/?", ContactHandler),
             (r"/contact/?", ContactPageHandler),
-            (r"/play/?", PlayHandler),
     )
 
 class PlayHandler(BaseHandler):

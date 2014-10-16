@@ -25,8 +25,6 @@ def get_handlers():
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
             (r"/verse/move(up|down)/([^/]+)/?", MoveVerseHandler),
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
-            (r"/verse/play/([^/]+)/?", PlayVerseHandler),
-            (r"/verseset/play/([^/]+)/?", PlayVerseSetHandler),
             )
 
 class MoveVerseHandler(BaseHandler):
@@ -64,46 +62,6 @@ class MoveVerseHandler(BaseHandler):
         verses = list(verseset.sorted_verses())
         self.render("verseset/_verses.html", verses=verses, verseset=verseset)
 
-class PlayVerseHandler(BaseHandler):
-    def get(self, verse_id):
-        verse = Verse.by_id(verse_id)
-        if verse:
-            vs = verse.verseset()
-            vs["play_count"] = vs.play_count() + 1
-            vs.save()
-
-        session_key = None
-        if self.current_user:
-            session_key = self.current_user.session_key()
-
-        device_url = verse.device_url(session_key=session_key)
-
-        template_name = "webplayer.html"
-
-        if self.isIOS() or self.isAndroid():
-            template_name = "device_player.html"
-
-        self.render("webplayer.html",verse_id=verse_id, verseset_id=None,device_url=device_url)
-
-class PlayVerseSetHandler(BaseHandler):
-    def get(self, verseset_id):
-        vs = VerseSet.by_id(verseset_id)
-        if vs:
-            vs["play_count"] = vs.play_count() + 1
-            vs.save()
-
-        session_key = None
-        if self.current_user:
-            session_key = self.current_user.session_key()
-
-        device_url = vs.device_url(session_key=session_key)
-
-        template_name = "webplayer.html"
-
-        if self.isIOS() or self.isAndroid():
-            template_name = "device_player.html"
-
-        self.render(template_name,verse_id=None, verseset_id=verseset_id,device_url=device_url)
 
 class UpdateVersionSelectorHandler(BaseHandler):
     def get(self):
@@ -369,7 +327,7 @@ class ListVerseSetHandler(BaseHandler):
         if language_code:
             self.set_language(language_code)
 
-        args = {"verse_count":{"$gt":0}}
+        args = {}
 
         if (option in ("new","popular")):
             template_name = "verseset/list.html"
