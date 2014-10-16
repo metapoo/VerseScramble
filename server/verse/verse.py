@@ -296,9 +296,7 @@ class CreateVerseSetHandler(BaseHandler):
 
         user = self.current_user
         version = "NIV"
-        language = self.language_code()
-        if language.lower() == "all":
-            language = self.default_language()
+        language = self.language_code(not_all=True)
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "profile"
 
