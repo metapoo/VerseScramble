@@ -11,7 +11,7 @@
 <div class="pad_bottom">
   <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}">{{gt("Verse Sets")}}</a>
   <a class="pure-button {% if selected_subnav=='scores'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/scores">{{gt("Recently Played")}}</a>
-{% if user and (selected_nav == "profile") %}
+{% if user and (selected_nav == "profile") and (viewed_user == user) %}
   <a  class="pure-button {% if selected_subnav=='create'%}pure-button-primary{% end %}" href="/verseset/create">{{gt("Create")}}</a>
 {% end %}
 </div>

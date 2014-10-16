@@ -110,6 +110,7 @@ class UpdateVersionSelectorHandler(BaseHandler):
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
         version = self.get_argument("version")
         language = self.get_argument("language")
+
         versions = VERSION_BY_LANGUAGE_CODE[language]
         
         self.render("version_select.html",
@@ -338,9 +339,12 @@ class CreateVerseSetHandler(BaseHandler):
         user = self.current_user
         version = "NIV"
         language = self.language_code()
+        if language.lower() == "all":
+            language = self.default_language()
         versions = VERSION_BY_LANGUAGE_CODE[language]
         selected_nav = "profile"
-        
+
+
         return self.render("profile/create.html", user=user,
                            language_codes=LANGUAGE_CODES, language_by_code=LANGUAGE_BY_CODE,
                            version=version,verseset=None,language=language,versions=versions,
