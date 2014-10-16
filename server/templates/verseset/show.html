@@ -20,7 +20,7 @@
 {% end %}
 
 <div class="pad_bottom">
-<a class="link" href="/verseset/play/{{verseset._id}}">play challenge</a> &nbsp;
+<a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> play challenge</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
 <a class="link" href="/verseset/edit/{{verseset._id}}">edit</a> &nbsp;

@@ -116,7 +116,10 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-        
+
+        if not kwargs.has_key('play_url'):
+            kwargs['play_url'] = '/play'
+
         if not kwargs.has_key('error_message'):
             kwargs['error_message'] = None
 

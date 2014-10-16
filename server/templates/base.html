@@ -92,7 +92,7 @@
   <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>{{gt("Profile")}}</span></a></li>
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>{{gt("Leaderboard")}}</span></a></li>
-  <li {% if selected_nav == "play" %}class="active"{% end %}><a href="/play"><span>{{gt("Play")}}</span></a></li>
+  <li {% if selected_nav == "play" %}class="active"{% end %}><a href="{{play_url}}"><span>{{gt("Play")}}</span></a></li>
   <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>{{gt("Search")}}</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
   {% if not user %}
