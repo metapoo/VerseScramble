@@ -41,7 +41,10 @@ class PlayVerseHandler(BaseHandler):
         if self.current_user:
             session_key = self.current_user.session_key()
 
-        device_url = verse.device_url(session_key=session_key)
+        if verse:
+            device_url = verse.device_url(session_key=session_key)
+        else:
+            self.redirect("/play")
 
         template_name = "webplayer.html"
 
