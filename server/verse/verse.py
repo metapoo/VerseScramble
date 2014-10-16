@@ -308,7 +308,7 @@ class RemoveVerseSetHandler(BaseHandler):
             return
 
         verseset.remove()
-        self.redirect("/u/versesets/%s" % user['username'])
+        self.redirect("/u/%s/versesets" % user['username'])
 
 class CreateVerseSetHandler(BaseHandler):
 
