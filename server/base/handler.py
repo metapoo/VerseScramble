@@ -10,6 +10,9 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
+    def isDevelopment(self):
+        return settings.VERSERAIN_ENV == "development"
+
     def isIOS(self):
         user_agent = self.request.headers['User-Agent']
         if ("iPod" in user_agent) or ("iPhone" in user_agent) or ("iPad" in user_agent):
