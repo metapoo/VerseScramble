@@ -5,7 +5,7 @@
 {% block page_content %}
 <div class="centered_wrapper">
 {% if message_sent %}
-<div>Thanks for your feedback! We'll get back to you as soon as we can.</div>
+<div class="form_feedback centered">Thanks for your feedback! We'll get back to you as soon as we can.</div>
 {% end %}
 
 <form class="centered pure-form pure-form-stacked" action="/contact/submit" method="post" onsubmit="if (document.getElementById('email').value == '') { alert('email required'); return false; } if (document.getElementById('message').value == '') { alert('message required'); return false; } this.submit(); return false;" >

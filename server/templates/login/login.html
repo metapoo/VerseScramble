@@ -2,14 +2,11 @@
 
 {% block page_content %}
 
-
 {% if next_url %}
-<div class="centered_wrapper" style="width:100%;">
-  <div class="centered error" style="width:250px;margin:auto;">Please login to continue.</div>
+<div class="centered_wrapper">
+  <div class="centered form_feedback">Please login to continue.</div>
 </div>
 {% end %}
-
-
 
 <div class="centered_wrapper"  ">
 <form class="pure-form pure-form-stacked login centered" action="/login" method="POST">
