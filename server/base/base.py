@@ -14,7 +14,7 @@ def get_handlers():
 
 class PlayHandler(BaseHandler):
     def get(self):
-        self.render("webplayer.html", device_url=None)
+        self.render("webplayer.html", device_url=None, selected_nav="play")
 
 class PrivacyPageHandler(BaseHandler):
     def get(self):

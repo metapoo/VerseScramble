@@ -45,24 +45,41 @@
 
 <body class="pure-skin-blue">
 
+
+<div id="top_buttons_wrapper" >
+  <div id="top_buttons" >
+    <div id="login_buttons">
+{% if not user %}
+    <a class="pure-button pure-button-primary button-small" href="/login">{{gt("Login")}}</a>
+    <a class="pure-button pure-button-primary button-small" href="/login/register">{{gt("Sign Up")}}</a>
+{% end %}
+    </div>
+  </div>
+</div>
+
 <div class="logo_wrapper">
+
   <div class="logo">
+
   <table>
   <tr>
-{% if user %}
-  <td class="left"><span class="username">{{user['username']}}</span></td>
-{% end %}
+  <td class="left">{% if user %}<span class="username">{{user['username']}}</span>{% end %}</td>
   <td>
     <img src="/images/logo.png"></img>
   </td> 
+  <td class="right">
 {% if user %}
-  <td class="right"><span class="points">{{user.get('total_score',0)}} points</span></span>
-  </td>
+  <span class="points">{{user.get('total_score',0)}} points</span></span>
+{% else %}
+  
 {% end %}
+  </td>
   </tr>
   </table>
 
+
   </div>
+
 </div>
 
 <div id="cssmenu">
@@ -75,11 +92,10 @@
   <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>{{gt("Profile")}}</span></a></li>
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>{{gt("Leaderboard")}}</span></a></li>
-  <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
+  <li {% if selected_nav == "play" %}class="active"{% end %}><a href="/play"><span>{{gt("Play")}}</span></a></li>
   <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>{{gt("Search")}}</span></a></li>
+  <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
   {% if not user %}
-  <li {% if selected_nav == "login" %}class="active"{% end %}  ><a href="/login"><span>{{gt("Login")}}</span></a></li>
-  <li {% if selected_nav == "register" %}class="active"{% end %}><a  href="/login/register"><span>{{gt("Sign Up")}}</span></a></li>
   {% else %}
   <li class="last"><a href="/login/logout"><span>{{gt("Logout")}}</span></a></li>
   {% end %}
