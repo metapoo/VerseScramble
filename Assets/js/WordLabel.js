@@ -190,7 +190,7 @@ function setWord(w : String) {
 	var wOriginal : String;
 	wOriginal = w;
 	var language : String = VerseManager.GetVerseLanguage();
-	Debug.Log("+++++++++++++++ ene:" + language);
+	
 	if (Application.platform == RuntimePlatform.Android) {
 	    if(language=="mn")
 	    {
