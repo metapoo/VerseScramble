@@ -58,7 +58,7 @@ class RegisterHandler(BaseHandler):
         
         if error_message:
             self.render("login/register.html",user=None,error_message=error_message,
-                        email=email,username=username)
+                        email=email,username=username, next_url=None)
             return
 
         user = create_new_user(username=username,email=email,password=password)
@@ -70,17 +70,17 @@ class RegisterHandler(BaseHandler):
 class LoginHandler(BaseHandler):
     @require_secure
     def get(self):
-        login = self.get_argument("next",None)
+        next_url = self.get_argument("next",None)
         user = self.current_user
         error_message = None
         email = self.get_secure_cookie("email")
         if email is None:
             email = ""
         selected_nav = "login"
-        if login:
-            self.set_cookie("next_url",login)
+        if next_url:
+            self.set_cookie("next_url",next_url)
         self.render("login/login.html",user=user,error_message=error_message,email=email,
-                    selected_nav=selected_nav)
+                    selected_nav=selected_nav, next_url=next_url)
 
     @require_secure
     def post(self):
@@ -101,7 +101,8 @@ class LoginHandler(BaseHandler):
         if user is None:
             user = User.collection.find_one({'username':username})
             error_message = "Invalid %s or password" % login_subject_desc       
-            self.render("login/login.html",user=user,error_message=error_message,email=login_subject,username=username)
+            self.render("login/login.html",user=user,error_message=error_message,email=login_subject,username=username,
+                        next_url=None)
             return
 
         session_key = user.session_key()
