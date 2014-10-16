@@ -1,7 +1,7 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.verse.models import *
-from verserain.utils.mail import *
+from verserain.email.models import *
 from verserain import settings
 
 def get_handlers():
@@ -37,6 +37,6 @@ class ContactHandler(BaseHandler):
         to_email = ["help@%s" % settings.MAIL_DOMAIN] # must be a list
         subject = self.get_argument('subject')
         message = self.get_argument('message')
-        send_mail(from_email,to_email,subject,message,reply_to=reply_to_email)
+        EmailQueue.queue_mail(from_email,to_email,subject,message,reply_to=reply_to_email)
 
         self.redirect("/contact?message_sent=True")
