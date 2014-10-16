@@ -102,8 +102,12 @@ class ApiManager extends MonoBehaviour {
     }
     
     public function CallApi(apiName : String, arguments : String, handler : Function, errorHandler : Function) {
-    	var url : String = "http://"+GetApiDomain()+"/api/"+apiName+"?"+arguments;
-		Debug.Log("API request " + url);
+    	var protocol : String = "http";
+    	if (apiName.Contains("login")) {
+    		protocol = "https";
+    	}
+    	var url : String = String.Format("{0}://{1}/api/{2}?{3}",protocol,GetApiDomain(),apiName,arguments);
+		Debug.Log("api call: " + url);
 		var _cacheEnabled : boolean = cacheEnabled;
 		var www : WWW = new WWW(url);
 		yield www;
