@@ -12,6 +12,7 @@ else:
 
 SITE_URL = "http://%s/" % SITE_DOMAIN
 
+ADMIN_EMAIL = "admin@%s" % MAIL_DOMAIN
 MONGODB_HOST = "localhost"
 MONGODB_PORT = 27017
 MONGODB_USERNAME = "admin"
