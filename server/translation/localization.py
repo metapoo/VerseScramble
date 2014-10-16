@@ -34,7 +34,10 @@ class TranslationManager:
 
     @classmethod
     def gt(cls, str):
-        return cls.get_localized_string(str, cls.current_language)
+        str = cls.get_localized_string(str, cls.current_language)
+        if "{0}" in str:
+            str = str.replace("{0}","%s")
+        return str
 
 def gt(str):
     return TranslationManager.gt(str)
