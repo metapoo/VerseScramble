@@ -14,16 +14,16 @@
 {% end %}
 
 <form class="pure-form pure-form-stacked centered" style="margin-top:6px;" action="/verseset/{% if verseset %}update{% else %}create{% end %}" method="POST">
-  <h2>{% if verseset %}{{gt("Update Verse Set")}}{% else %}{{gt("Create a Verse Set")}}{% end %}</h2>
+  <h2>{% if verseset %}{{gt("Update Verse Set")}}{% else %}{{gt("Create Verse Set")}}{% end %}</h2>
   {% if error_message %}
   <div class="error">{{error_message}}</div>
   {% end %}
 
   <fieldset>
-  <label for="name">Verse Set Name</label>
+  <label for="name">{{gt("Verse Set Name")}}</label>
   <input type="text" name="name" {% if verseset %}value="{{verseset.get('name')}}"{% end %} placeholder="Verse Set Name"  />
   
-  <label for="language" class="pad_top">Language</label>
+  <label for="language" class="pad_top">{{gt("Language")}}</label>
   <select id="language" name="language" onchange="vr.update_version_select(this.value,'{{version}}');">
 {% for lang_code in language_codes %}
 <option value="{{ lang_code }}"
@@ -37,7 +37,7 @@ selected="selected"
 {% include "../version_select.html" %}
   </div>
 
-  <label class="pad_top" for="commentary">Commentary (Optional)</label>
+  <label class="pad_top" for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
   <textarea id="mark-it-up" name="commentary" cols="80" rows="14">{% if verseset %}{% raw verseset.get_commentary_text() %}{% end %}</textarea>
   </fieldset>
 
