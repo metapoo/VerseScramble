@@ -4,34 +4,46 @@ from verserain.page.models import *
 
 def get_handlers():
     return ((r"/about/?", AboutPageHandler),
-            (r"/page/edit/?", EditPageHandler),
-            (r"/page/about/?", AboutPageHandler),
+            (r"/about/([^/]+)/?", AboutPageHandler),
+            (r"/page/edit/([^/]+)/?", EditPageHandler),
+            (r"/page/about/([^/]+)/?", AboutPageHandler),
             (r"/page/update/?", UpdatePageHandler),
             )
 
 class EditPageHandler(BaseHandler):
-    def get(self):
-        language = self.language_code()
+    def get(self, language=None):
         selected_nav = "about"
-        page = Page.collection.find_one({"name":"about"})
+        page = Page.collection.find_one({"name":"about","language":language})
         name = self.get_argument("name", "about")
-        return self.render("page/edit.html", selected_nav=selected_nav, page=page, name=name)
+        return self.render("page/edit.html", selected_nav=selected_nav, page=page, name=name,
+                           language_code=language)
 
 class UpdatePageHandler(BaseHandler):
-    def get(self):
+    def post(self):
+        language = self.get_argument("language")
         name = self.get_argument("name")
         content = self.get_argument("content")
-        page = Page.collection.find_one({"name":name})
+        page = Page.collection.find_one({"name":name,"language":language})
         if page is None:
-            page = Page(name="about",content=content)
+            page = Page(name="about",content=content,language=language)
         else:
             page["content"] = content
         page.save()
-        return self.redirect("/page/%s" % name)
+        return self.redirect("/page/%s/%s" % (name, language))
 
 class AboutPageHandler(BaseHandler):
-    def get(self):
+    def get(self, language=None):
+        if language is None:
+            self.redirect("/about/en")
+            return
+
         selected_nav = "about"
-        page = Page.collection.find_one({"name":"about"})
-        return self.render("page/about.html", selected_nav=selected_nav, page=page)
+        page = Page.collection.find_one({"name":"about","language":language})
+
+        if language != "en":
+            if page is None:
+                page = Page.collection.find_one({"name":"about","language":"en"})
+
+        return self.render("page/about.html", selected_nav=selected_nav, page=page, language_code=language,
+                           )
 

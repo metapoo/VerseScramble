@@ -6,7 +6,8 @@ class Page(BaseModel):
         collection = "pages"
         
         indices = (
-            Index("name",unique=True),
+            Index("name"),
+            Index("language"),
         )
 
     

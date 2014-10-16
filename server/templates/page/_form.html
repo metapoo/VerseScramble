@@ -19,13 +19,13 @@
   <div class="error">{{error_message}}</div>
   {% end %}
   <input type="hidden" name="name" value="{{name}}" />
-
+  <input type="hidden" name="language" value="{{language_code}}" />
   <fieldset>
   <textarea id="mark-it-up" name="content" cols="80" rows="14">{% if page %}{% raw page.get('content','') %}{% end %}</textarea>
   </fieldset>
 
 
   <input class="pure-button" type="submit" value="{% if page %}update{% else %}create{% end %}" />
-  <input class="pure-button" type="button" value="cancel" onclick="location.href='/page/{{name}}'; return false;" />
+  <input class="pure-button" type="button" value="cancel" onclick="location.href='/page/{{name}}/{{language_code}}'; return false;" />
 </form>
 
