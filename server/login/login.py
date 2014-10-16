@@ -8,11 +8,12 @@ from tornado.gen import coroutine
 import re
 
 def get_handlers():
-    return ((r"/login/fb", FacebookGraphLoginHandler),
-            (r"/login/logout", LogoutHandler),
-            (r"/login/fb", FacebookGraphLoginHandler),
-            (r"/login/register", RegisterHandler),
-            (r"/login", LoginHandler),
+    return ((r"/login/fb/?", FacebookGraphLoginHandler),
+            (r"/login/logout/?", LogoutHandler),
+            (r"/login/fb/?", FacebookGraphLoginHandler),
+            (r"/login/register/?", RegisterHandler),
+            (r"/register/?", RegisterHandler),
+            (r"/login/?", LoginHandler),
 )
 
 class RegisterHandler(BaseHandler):

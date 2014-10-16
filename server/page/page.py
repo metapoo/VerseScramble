@@ -20,6 +20,9 @@ class EditPageHandler(BaseHandler):
 
 class UpdatePageHandler(BaseHandler):
     def post(self):
+        if not self.current_user.is_admin():
+            return self.write("not authorized")
+
         language = self.get_argument("language")
         name = self.get_argument("name")
         content = self.get_argument("content")
