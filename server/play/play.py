@@ -19,7 +19,7 @@ class PlayHandler(BaseHandler):
         language = self.language_code(not_all=True)
         if self.isIOS() or self.isAndroid():
             verseset = list(VerseSet.collection.find(\
-              {"language":language, "play_count":{"$gt":10}, "verse_count":{"$gt":0}}).sort("_id",pymongo.DESCENDING)[0:1])
+                                                     {"language":language, "play_count":{"$gt":10}, "verse_count":{"$gt":1}}).sort("_id",pymongo.DESCENDING)[0:1])
 
             if len(verseset) > 0:
                 verseset = verseset[0]
