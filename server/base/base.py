@@ -11,10 +11,6 @@ def get_handlers():
             (r"/contact/?", ContactPageHandler),
     )
 
-class PlayHandler(BaseHandler):
-    def get(self):
-        self.render("webplayer.html", device_url=None, selected_nav="play")
-
 class PrivacyPageHandler(BaseHandler):
     def get(self):
         self.render("privacy.html", selected_nav="about")

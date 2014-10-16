@@ -13,6 +13,19 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def isDevelopment(self):
         return settings.VERSERAIN_ENV == "development"
 
+    def isSecure(self):
+        return self.request.protocol == "https"
+
+    def redirectWithProtocol(self, uri=None, protocol="http"):
+        if uri is None:
+            uri = self.request.uri
+
+        url = "%s://%s%s" % (protocol,settings.SITE_DOMAIN,uri)
+        self.redirect(url)
+
+    def redirectHttps(self, uri=None):
+        self.redirectWithProtocol(uri=uri,protocol="https")
+
     def isIOS(self):
         user_agent = self.request.headers['User-Agent']
         if ("iPod" in user_agent) or ("iPhone" in user_agent) or ("iPad" in user_agent):

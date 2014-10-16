@@ -83,6 +83,7 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
     else:
         return None
 
+
 def require_api_login(method):
     """Decorate methods with this to require that the user be logged in                                                             
     and a superuser."""
@@ -109,4 +110,15 @@ def require_login(method):
             return
             raise tornado.web.HTTPError(403)
         return method(self, *args, **kwargs)
+    return wrapper
+
+def require_secure(method):
+    """Decorate methods with this to require that the user be logged in                                                                                             
+    and a superuser."""
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if not self.isSecure():
+            return self.redirectHttps()
+        else:
+            return method(self, *args, **kwargs)
     return wrapper

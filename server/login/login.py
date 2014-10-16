@@ -1,5 +1,6 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
+from verserain import settings
 from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
@@ -15,6 +16,7 @@ def get_handlers():
 )
 
 class RegisterHandler(BaseHandler):
+    @require_secure
     def get(self):
         user = self.current_user
         error_message = None
@@ -22,6 +24,7 @@ class RegisterHandler(BaseHandler):
         self.render("login/register.html",user=user,error_message=error_message,
                     email="",username="",selected_nav=selected_nav)
 
+    @require_secure
     def post(self):
         confirm_password = self.get_argument("confirm_password")
         password = self.get_argument("password")
@@ -61,9 +64,10 @@ class RegisterHandler(BaseHandler):
         session_key=user.session_key()
         self.set_secure_cookie("session_key",session_key)
         self.set_secure_cookie("email",email)
-        self.redirect("/")
+        self.redirectWithProtocol(uri="/",protocol="http")
 
 class LoginHandler(BaseHandler):
+    @require_secure
     def get(self):
         login = self.get_argument("next",None)
         user = self.current_user
@@ -77,6 +81,7 @@ class LoginHandler(BaseHandler):
         self.render("login/login.html",user=user,error_message=error_message,email=email,
                     selected_nav=selected_nav)
 
+    @require_secure
     def post(self):
         password = self.get_argument("password")
         login_subject = self.get_argument("email").strip()
@@ -103,7 +108,7 @@ class LoginHandler(BaseHandler):
         self.set_secure_cookie("email",login_subject)
 
         next_url = self.get_cookie("next_url","/")
-        self.redirect(next_url)
+        self.redirectWithProtocol(uri=next_url,protocol="http")
         self.clear_cookie("next_url")
 
 class LogoutHandler(BaseHandler):
