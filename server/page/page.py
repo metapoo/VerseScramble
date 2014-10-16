@@ -11,6 +11,7 @@ def get_handlers():
 
 class EditPageHandler(BaseHandler):
     def get(self):
+        language = self.language_code()
         selected_nav = "about"
         page = Page.collection.find_one({"name":"about"})
         name = self.get_argument("name", "about")

@@ -11,6 +11,7 @@ def get_handlers():
 class RegisterApiHandler(BaseHandler, ApiMixin):
     api_name="login/register"
 
+    @require_secure
     def get(self):
         return self.post()
 
@@ -63,6 +64,7 @@ class RegisterApiHandler(BaseHandler, ApiMixin):
 class LoginApiHandler(BaseHandler, ApiMixin):
     api_name="login/login"
 
+    @require_secure
     def get(self):
         return self.post()
 
