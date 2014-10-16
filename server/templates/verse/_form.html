@@ -1,12 +1,12 @@
 <form class="pure-form pure-form-stacked centered" action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
-<h2>{% if verse %}Update Verse{% else %}Add a Verse to this Set{% end %}</h2>
+<h2>{% if verse %}{{gt("Update Verse")}}{% else %}{{gt("Add Verse")}}{% end %}</h2>
 
   {% if error_message %}
   <div class="error">{{error_message}}</div>
   {% end %}
 
 <fieldset>
-<label for="reference">Verse Reference</label>
+<label for="reference">{{gt("Verse Reference")}}</label>
 <input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference"/> 
 <div class="pad_top">
 {% if verse %}
@@ -15,13 +15,13 @@
   <input type="hidden" name="version" value="{{version}}" />
 {% end %}
 </div>
-<label class="pad_top" for="text">Verse Text</label>
+<label class="pad_top" for="text">{{gt("Verse Text")}}</label>
 
 <textarea name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
 </fieldset>
 
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
 <input type="hidden" name="verseset_id" value="{{verseset._id}}" />
-<input class="pure-button" type="submit" value="{% if verse %}save {% else %}add verse{% end %}" />
+<input class="pure-button" type="submit" value="{% if verse %}{{gt("save")}} {% else %}{{gt("add verse")}}{% end %}" />
 {% if verse %}<input class="pure-button" type="button" value="cancel" onclick="location.href='/verseset/show/{{verseset._id}}'; return false;" />{% end %}
 </form>

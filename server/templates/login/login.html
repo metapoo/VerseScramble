@@ -2,29 +2,26 @@
 
 {% block page_content %}
 
-
 {% if next_url %}
-<div class="centered_wrapper" style="width:100%;">
-  <div class="centered error" style="width:250px;margin:auto;">Please login to continue.</div>
+<div class="centered_wrapper">
+  <div class="centered form_feedback">Please login to continue.</div>
 </div>
 {% end %}
-
-
 
 <div class="centered_wrapper"  ">
 <form class="pure-form pure-form-stacked login centered" action="/login" method="POST">
 
-<h3>Login</h3>
+<h3>{{gt("Login")}}</h3>
 
-<label for="email">Email or Username</label><input placeholder="Email" type="text" name="email" value="{{email}}" />
+<label for="email">{{gt("Username or Email")}}</label><input placeholder="Email" type="text" name="email" value="{{email}}" />
 
-<label for="password">Password</label><input type="password" name="password" />
+<label for="password">{{gt("Password")}}</label><input type="password" name="password" />
 <p>
-Don't have an account? <a href="/register" class="link">Sign Up for free.</a>
+<a href="/register" class="link">{{gt("Don't have an account? Sign up at verserain.com")}}</a>
 </p>
 
 {% if error_message %}
-<div class="error">{{error_message}}</div>
+<div class="error">{{gt("error_message")}}</div>
 {% end %}
 
 <input class="pure-button pure-button-primary" type="submit" value="login" />

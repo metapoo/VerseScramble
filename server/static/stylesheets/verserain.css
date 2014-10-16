@@ -1,5 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+.form_feedback {
+  padding: 10px;
+  background-color: #f6f6f6;
+  width:300px;
+  margin:auto;
+  border: 1px solid #ccc;
+}
+
 #top_buttons_wrapper {
   position:absolute; 
   z-index:3;
