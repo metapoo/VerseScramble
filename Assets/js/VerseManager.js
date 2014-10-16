@@ -647,6 +647,10 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		if (verseIndex < 0) verseIndex = 0;
 		
 		GameManager.SetChallengeModeEnabled((verseId == null));
+		var gm : GameManager = GameManager.GetInstance();
+		if (gm != null) {
+			gm.SyncSetProgressLabel();
+		}
 		loaded = true;
 		UserSession.GetUserSession().ClearUrlOptions();
 		Debug.Log("finished loading verse set");

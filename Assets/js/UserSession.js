@@ -42,6 +42,10 @@ function HandleURL(url : String) {
 	var idstr = parts[4];
 	var apiDom = parts[5];
 	var sessionKey = parts[6];
+
+	if ((idstr == "None") || (idstr == "null")) {
+		idstr = null;
+	}	
 	
 	if (subject == "verse") {
 		verseId = idstr;
@@ -60,8 +64,12 @@ function HandleURL(url : String) {
 			gameManager.Cleanup();
 		}
 	
-		VerseManager.loaded = false;
-		Application.LoadLevel("scramble");
+		if (idstr != null) {
+			VerseManager.loaded = false;
+			Application.LoadLevel("scramble");
+		} else {
+			
+		}
 	};
 	
 	var onLogin = function(userData:Hashtable) {
@@ -107,6 +115,7 @@ function ClearUrlOptions() {
 }
 
 function HandleLogin(userData : Hashtable) {
+	
 	if (!userData["logged_in"]) {
 		return;
 	}
@@ -124,6 +133,11 @@ function HandleLogin(userData : Hashtable) {
 	
 	var json : String = HashtableToJSON(userData);
 	PlayerPrefs.SetString("user_data", json);
+	
+	var loginButton : LoginButton = GameObject.FindObjectOfType(LoginButton);
+	if (loginButton != null) {
+		loginButton.SyncLoginStatus();
+	}
 }
 
 function Save() {
@@ -168,11 +182,13 @@ function Start () {
 		);
 		started = true;
 	}
+	
 /*
 	SetApiDomain("www.verserain.com");
 	SetVerseSetId("542af9923f7ab0224bd53e2f");
     SetVerseId("542afb763f7ab0224bd53e33");
     */
+    //HandleURL("verserain://com.hopeofglory.verserain/verse/None/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
     //HandleURL("verserain://com.hopeofglory.verserain/verseset/542af9923f7ab0224bd53e2f/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 	//HandleURL("verserain://com.hopeofglory.verserain/verse/542afb763f7ab0224bd53e33/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 }

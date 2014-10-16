@@ -314,6 +314,10 @@ static function RecordPlay() {
 	needToRecordPlay = false;
 }
 
+public static function GetInstance() : GameManager {
+	return GameObject.FindObjectOfType(GameManager);
+}
+
 function Start() {
 	if (needToRecordPlay) {
 		RecordPlay();
