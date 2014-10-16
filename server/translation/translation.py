@@ -48,7 +48,7 @@ class ShowTranslationHandler(BaseHandler):
         if language.lower() == "all":
             language = "en"
 
-        msgids  = [x['msgid'] for x in list(Translation.collection.find({"language":"en"}))]
+        msgids  = [x['msgid'] for x in list(Translation.collection.find({"language":"en"}).sort("_id",pymongo.DESCENDING))]
         
         trans = []
 
