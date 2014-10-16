@@ -187,8 +187,19 @@ function reverseString(s : String) {
 
 function setWord(w : String) {
 	//var mesh = GetComponent(MeshFilter).mesh;
-	
+	var wOriginal : String;
+	wOriginal = w;
 	var language : String = VerseManager.GetVerseLanguage();
+	Debug.Log("+++++++++++++++ ene:" + language);
+	if (Application.platform == RuntimePlatform.Android) {
+	    if(language=="mn")
+	    {
+	         w = w.Replace("ө", "ø"); 
+	         w = w.Replace("Ө", "Ø");
+	         w = w.Replace("ү", "v"); 
+	         w = w.Replace("Ү", "Y");
+	      }
+	}
 
 	label.fontStyle = FontStyle.Normal;
 	label.color = Color.black;
@@ -201,7 +212,7 @@ function setWord(w : String) {
 	} else {
 		label.text = w;
 	}
-	word = w;
+	word = wOriginal;
 	
 	ResetBubble();
 }
