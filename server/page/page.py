@@ -3,8 +3,8 @@ from verserain.login.auth import *
 from verserain.page.models import *
 
 def get_handlers():
-    return ((r"/about/?", AboutPageHandler),
-            (r"/about/([^/]+)/?", AboutPageHandler),
+    return ((r"/about/([^/]+)/?", AboutPageHandler),
+            (r"/about/?", AboutPageHandler),
             (r"/page/edit/([^/]+)/?", EditPageHandler),
             (r"/page/about/([^/]+)/?", AboutPageHandler),
             (r"/page/update/?", UpdatePageHandler),
@@ -34,8 +34,7 @@ class UpdatePageHandler(BaseHandler):
 class AboutPageHandler(BaseHandler):
     def get(self, language=None):
         if language is None:
-            self.redirect("/about/en")
-            return
+            language = self.language_code()
 
         selected_nav = "about"
         page = Page.collection.find_one({"name":"about","language":language})
