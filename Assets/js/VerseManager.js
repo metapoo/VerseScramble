@@ -148,7 +148,7 @@ static function GetCurrentVerse() : Verse {
 		verseIndex = 0;
 	}
 
-	if (verses.length == 0) {
+	if ((verses.length == 0) && (!ApiManager.IsConnectedToInternet())) {
 		SetCurrentView("history");
 		LoadVersesLocally();
 		verses = GetCurrentVerses();

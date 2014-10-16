@@ -10,6 +10,37 @@ class ApiManager extends MonoBehaviour {
  	static var secretKey:String = "0>a-q,wYTmq%<,h$OXYg<js:h([TR/:4hSVh.vEJhq4RvWIx@_|^B|]z`b<d~kI@";
 	static var cacheEnabled:boolean = true;
 	
+	public static function IsConnectedToInternet() : boolean {
+		var isConnectedToInternet = false;
+		
+#if UNITY_EDITOR
+    	if (Network.player.ipAddress.ToString() != "127.0.0.1")
+    	{
+        	isConnectedToInternet = true;      
+    	}
+#endif
+#if UNITY_IPHONE
+    	if (iPhoneSettings.internetReachability == iPhoneNetworkReachability.ReachableViaWiFiNetwork)
+    	{
+        	isConnectedToInternet = true;
+    	}
+#endif
+#if UNITY_ANDROID
+    	if (iPhoneSettings.internetReachability == iPhoneNetworkReachability.ReachableViaWiFiNetwork)
+    	{
+        	isConnectedToInternet = true;
+    	}
+#endif
+#if (!UNITY_IPHONE  !UNITY_ANDROID)
+    	if (Network.player.ipAddress.ToString() != "127.0.0.1")
+    	{
+        	isConnectedToInternet = true;
+ 
+    	}
+#endif
+		return isConnectedToInternet;
+	}
+	
 	static function Md5(strToEncrypt: String)
 	{
 		var encoding = System.Text.UTF8Encoding();
