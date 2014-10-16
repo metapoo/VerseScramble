@@ -148,7 +148,7 @@ static function GetCurrentVerse() : Verse {
 		verseIndex = 0;
 	}
 
-	if ((verses.length == 0) && (!ApiManager.IsConnectedToInternet())) {
+	if (verses.length == 0) {
 		SetCurrentView("history");
 		LoadVersesLocally();
 		verses = GetCurrentVerses();
@@ -647,6 +647,10 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		if (verseIndex < 0) verseIndex = 0;
 		
 		GameManager.SetChallengeModeEnabled((verseId == null));
+		var gm : GameManager = GameManager.GetInstance();
+		if (gm != null) {
+			gm.SyncSetProgressLabel();
+		}
 		loaded = true;
 		UserSession.GetUserSession().ClearUrlOptions();
 		Debug.Log("finished loading verse set");
