@@ -15,16 +15,17 @@
 {% set commentary_text = verseset.get_commentary_text() %}
 {% if commentary_text %}
 <div class="commentary_text pad_bottom paragraph">
-{% raw commentary_text %}
+{% from verserain.utils.text import remove_script %}
+{% raw remove_script(commentary_text) %}
 </div>
 {% end %}
 
 <div class="pad_bottom">
-<a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> play challenge</a> &nbsp;
+<a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> {{gt("play challenge (all verses)")}}</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
-<a class="link" href="/verseset/edit/{{verseset._id}}">edit</a> &nbsp;
-<a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">remove</a>
+<a class="link" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a> &nbsp;
+<a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">{{gt("remove")}}</a>
 {% end %}
 </div>
 
