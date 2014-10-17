@@ -13,8 +13,8 @@
 </select>
 </form>
 
-{% if user.is_admin() %}
-<form class="centered pure-form pure-form-stacked" onsubmit="var msgid = $('#addstring').val(); vr.ajax_request('/translation/save',{language:'en',msgid:msgid,msgstr:msgid},'#feedback'); return false;">
+{% if user.is_admin() and language_code == 'en' %}
+<form class="centered pure-form pure-form-stacked" onsubmit="var msgid = $('#addstring').val(); $('#feedback').html('adding string..'); vr.ajax_request('/translation/save',{language:'en',msgid:msgid,msgstr:msgid},'#feedback'); return false;">
 <fieldset>
 <span id="feedback"></span>
 <label for="addstring">Add String</label>
