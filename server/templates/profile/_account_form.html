@@ -1,0 +1,12 @@
+{% if error_message %}<div class="error">{{error_message}}</div>{% end %}
+{% if feedback_message %}<div class="feedback" style="margin:0px;text-align:center;">{{feedback_message}}</div>{% end %}
+
+<form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="/profile/email/update">
+<label for="email">Email</label>
+<table><tr><td>
+<input type="text" name="email" value="{{user['email']}}" /></td><td><input type="submit" value="{{gt("update")}}" class="pure-button"  />
+</td></tr></table>
+{% if not user.email_verified() %}
+{{gt("email not verified")}}: <a class="link" href="/profile/verify_email/send">{{gt("send verification email")}}</a>
+{% end %}
+</form>

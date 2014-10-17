@@ -7,15 +7,81 @@ from tornado.web import asynchronous
 from tornado.gen import coroutine
 from verserain.api.api import *
 from verserain.utils.paging import Pagination
+from verserain.email.models import *
+from verserain import settings
 from bson.objectid import ObjectId
 import pymongo
 
 def get_handlers():
     return ((r"/u/([^/]+)/scores/?", ProfileListScoresHandler),
             (r"/u/([^/]+)/scores/(\d+)/?", ProfileListScoresHandler),
+            (r"/u/([^/]+)/account/?", ProfileAccountHandler),
             (r"/u/([^/]+)/?$", ProfileOtherIndexHandler),
+            (r"/profile/email/update/?", UpdateEmailHandler),
+            (r"/profile/account/?", ProfileAccountHandler),
+            (r"/profile/verify_email/send/?", SendVerifyEmailHandler),
+            (r"/profile/verify_email/verify/?", ConfirmVerifyEmailHandler),
             (r"/profile/?", ProfileIndexHandler),
     )
+
+
+class AccountMixin:
+    def render_account(self, error_message=None, feedback_message=None):
+        user = self.current_user
+        self.render("profile/account.html", viewed_user=user, selected_subnav="account",
+                    error_message=error_message, feedback_message=feedback_message)
+
+class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
+    def get(self):
+        session_key = self.get_argument("s")
+        hash_code = self.get_argument("h")
+
+        if not self.current_user:
+            self.current_user = User.by_id(authenticate_session_key(session_key))
+            
+        user = self.current_user
+        
+        if user is None or (user.email_hash() != hash_code):
+            return self.render_account(error_message=self.gt("Sorry we failed to verify your email."))
+        else:
+            user["email_verified"] = True
+            user.save()
+            return self.render_account(feedback_message=self.gt("Your email has been verified!"))
+
+class UpdateEmailHandler(BaseHandler, AccountMixin):
+    @require_login
+    def get(self):
+        email = self.get_argument("email")
+        user = self.current_user
+        if email != user["email"]:
+            user["email"] = email
+            user["email_verified"] = False
+            user.save()
+        self.redirect("/profile/account")
+
+class SendVerifyEmailHandler(BaseHandler, AccountMixin):
+    @require_login
+    def get(self):
+        from hashlib import md5
+        language_code = self.language_code()
+        user = self.current_user
+        email = user['email']
+        subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Verify Email"))
+        hash_code = user.email_hash()
+        verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
+                                                                        hash_code, user.session_key())
+        message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
+
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+        return self.render_account(feedback_message=self.gt("Verification email has been sent"))
+
+class ProfileAccountHandler(BaseHandler):
+    @require_login
+    def get(self, username=None):
+        user = self.current_user
+        error_message = None
+        self.render("profile/account.html", viewed_user=user,
+                    selected_subnav="account", error_message=None, feedback_message=None)
 
 class ProfileOtherIndexHandler(BaseHandler):
     def get(self, username=None):

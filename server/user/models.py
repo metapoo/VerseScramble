@@ -1,6 +1,8 @@
 from verserain.mongo.models import BaseModel
 from minimongo import Index
 from verserain.user.password import PasswordMixin
+from verserain import settings
+from hashlib import md5
 
 class User(BaseModel, PasswordMixin):
     class Meta:
@@ -12,6 +14,14 @@ class User(BaseModel, PasswordMixin):
             Index("username",unique=True),
             Index("total_score"),
         )
+
+    def email_hash(self):
+        email = self.get("email")
+        hash_code = md5("%s-%s-%s" % (email, str(self._id), settings.SECRET_KEY)).hexdigest()
+        return hash_code
+
+    def email_verified(self):
+        return self.get("email_verified",False)
 
     def set_language(self, language_code):
         if self.get("language", None) != language_code:

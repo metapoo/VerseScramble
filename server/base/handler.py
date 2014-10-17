@@ -10,6 +10,21 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
+    def get_email_message(self, email_name, **kwargs):
+        language_code = self.language_code()
+
+        def get_message(lang_code):
+            message = self.render_string("emails/%s/%s.txt" % (lang_code, email_name),
+                                         **kwargs)
+            return message
+
+        try:
+            message = get_message(language_code)
+        except:
+            message = get_message("en")
+
+        return message
+
     def _handle_request_exception(self, exc):
         super(BaseHandler, self)._handle_request_exception(exc)
         from verserain.utils.mail import report_exception

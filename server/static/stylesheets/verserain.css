@@ -124,8 +124,16 @@ form.centered {
   margin: 5px 0px 15px 0px;
   border: 2px solid #f66;
   text-align: center;
-  padding: 5px;
+  padding: 8px;
   background-color: #fff;
+
+}
+
+.feedback {
+  margin: 5px 0px 15px 0px;
+  background-color: #eee;
+  text-align: center;
+  padding: 8px;
 
 }
 

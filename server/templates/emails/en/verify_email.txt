@@ -1,0 +1,11 @@
+Hi {{user['username']}}!
+
+Welcome to Verse Rain! 
+
+To complete your email verification, visit this url:
+
+{{verify_url}}
+
+God Bless,
+
+Verse Rain Team
