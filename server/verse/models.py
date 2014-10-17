@@ -87,6 +87,9 @@ class VerseSet(BaseModel):
     def url(self):
         return "/verseset/show/%s" % str(self._id)
 
+    def play_url(self):
+        return "/verseset/play/%s" % str(self._id)
+
     def play_count(self):
         return self.get("play_count",0)
 

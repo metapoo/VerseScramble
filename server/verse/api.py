@@ -35,7 +35,7 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
 
         page = self.get_int_argument("page",1)
         per_page = 100
-        args = {"verse_count":{"$gt":0}}
+        args = {}
 
         if language_code != "ALL":
             args.update({"language":language_code})

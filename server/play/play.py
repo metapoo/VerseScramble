@@ -19,7 +19,7 @@ class PlayHandler(BaseHandler):
         language = self.language_code(not_all=True)
         if self.isIOS() or self.isAndroid():
             verseset = list(VerseSet.collection.find(\
-              {"language":language, "play_count":{"$gt":10}, "verse_count":{"$gt":0}}).sort("_id",pymongo.DESCENDING)[0:1])
+                                                     {"language":language, "play_count":{"$gt":10}, "verse_count":{"$gt":1}}).sort("_id",pymongo.DESCENDING)[0:1])
 
             if len(verseset) > 0:
                 verseset = verseset[0]
@@ -41,7 +41,11 @@ class PlayVerseHandler(BaseHandler):
         if self.current_user:
             session_key = self.current_user.session_key()
 
-        device_url = verse.device_url(session_key=session_key)
+        if verse:
+            device_url = verse.device_url(session_key=session_key)
+        else:
+            self.redirect("/play")
+            return
 
         template_name = "webplayer.html"
 
@@ -59,7 +63,10 @@ class PlayVerseSetHandler(BaseHandler):
         if self.current_user:
             session_key = self.current_user.session_key()
 
-        device_url = vs.device_url(session_key=session_key)
+        if vs:
+            device_url = vs.device_url(session_key=session_key)
+        else:
+            return self.redirect("/play")
 
         template_name = "webplayer.html"
 

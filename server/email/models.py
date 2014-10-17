@@ -3,6 +3,7 @@ from minimongo import Index
 import pymongo
 from datetime import datetime
 from verserain.utils.mail import *
+from hashlib import md5
 
 class EmailQueue(BaseModel):
     class Meta:
@@ -29,3 +30,6 @@ class EmailQueue(BaseModel):
         send_mail(self.from_address,self.to_address,self.subject,self.message,self.reply_to,connection=connection)
         self.remove()
 
+    def save(self, *args, **kwargs):
+        super(EmailQueue,self).save(*args, **kwargs)
+        

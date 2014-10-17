@@ -10,6 +10,11 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
+    def _handle_request_exception(self, exc):
+        super(BaseHandler, self)._handle_request_exception(exc)
+        from verserain.utils.mail import report_exception
+        report_exception(handler=self)
+
     def isDevelopment(self):
         return settings.VERSERAIN_ENV == "development"
 
@@ -111,7 +116,10 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-        
+
+        if not kwargs.has_key('play_url'):
+            kwargs['play_url'] = '/play'
+
         if not kwargs.has_key('error_message'):
             kwargs['error_message'] = None
 

@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
+<meta property='og:image' content="/images/vr_icon_small.png"/>
 <link rel="stylesheet" href="/stylesheets/verserain.css" type="text/css" />
 <link rel="stylesheet" href="/stylesheets/cssmenu.css" type="text/css" />
 <link rel="stylesheet" href="/stylesheets/pure-min.css" />
@@ -44,7 +45,6 @@
 </head>
 
 <body class="pure-skin-blue">
-
 
 <div id="top_buttons_wrapper" >
   <div id="top_buttons" >
@@ -92,7 +92,7 @@
   <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>{{gt("Profile")}}</span></a></li>
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>{{gt("Leaderboard")}}</span></a></li>
-  <li {% if selected_nav == "play" %}class="active"{% end %}><a href="/play"><span>{{gt("Play")}}</span></a></li>
+  <li {% if selected_nav == "play" %}class="active"{% end %}><a href="{{play_url}}"><span>{{gt("Play")}}</span></a></li>
   <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>{{gt("Search")}}</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
   {% if not user %}

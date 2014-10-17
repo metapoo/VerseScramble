@@ -15,16 +15,17 @@
 {% set commentary_text = verseset.get_commentary_text() %}
 {% if commentary_text %}
 <div class="commentary_text pad_bottom paragraph">
-{% raw commentary_text %}
+{% from verserain.utils.text import remove_script %}
+{% raw remove_script(commentary_text) %}
 </div>
 {% end %}
 
 <div class="pad_bottom">
-<a class="link" href="/verseset/play/{{verseset._id}}">play challenge</a> &nbsp;
+<a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> {{gt("play challenge (all verses)")}}</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
-<a class="link" href="/verseset/edit/{{verseset._id}}">edit</a> &nbsp;
-<a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">remove</a>
+<a class="link" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a> &nbsp;
+<a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">{{gt("remove")}}</a>
 {% end %}
 </div>
 
@@ -39,7 +40,7 @@
 
 <h3>{{gt("High Scores")}}</h3>
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks").replace("{0}","#")}}</th><th>{{gt("Time")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Date")}}</th></tr></thead>
+<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks") % "#"}}</th><th>{{gt("Time")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Date")}}</th></tr></thead>
 
 <tbody>
 {% if len(scores) == 0 %}
