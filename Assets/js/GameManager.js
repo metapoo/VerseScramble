@@ -336,9 +336,13 @@ function Start() {
 	
 	difficulty = verseManager.GetCurrentDifficulty();
 	
-	if (needToSelectDifficulty && 
-	   (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
+	if (needToSelectDifficulty) { 
+	   if (verseManager.GetCurrentDifficultyAllowed() == Difficulty.Easy) {
+			verseManager.SetDifficulty(Difficulty.Easy);
+			BeginGame();
+		} else {
 			ShowDifficultyOptions();
+		}
 	} else {
 		verseManager.SetDifficulty(difficulty);
 		BeginGame();
@@ -403,9 +407,9 @@ function SplitVerse(verse : String) {
 			// combine with previous clause if too small
 			var previousClause : String = clauseArray[clauseArray.length-1];
 			Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
-			// subtract 2 to account for separators
-			if (((clause.Length + previousClause.Length - 2) < phraseLength*1.5) ||
-				(clause.Length == 1)) {
+			
+			// if clause length is 2 or less just glob it on
+			if (clause.Length <= 2) {
 				clauseArray[clauseArray.length-1] += clause;
 				combined = true;
 			}	
@@ -554,8 +558,21 @@ function SplitVerse(verse : String) {
 			clause = clause.Replace("/","");
 			if (isChinese) {clause = clause.Replace(" ","");}
 			phraseArray.push(clause);
+		}
+		
+		// combine phrases for long laundry lists
+		if (phraseArray.length > 1) {
+			l = phraseArray.length;
+			var curPhrase : String = phraseArray[l-1];
+			var prevPhrase : String = phraseArray[l-2];
 			
-		}		
+			var hasCommas : boolean = (curPhrase.Contains(",") &&
+			 prevPhrase.Contains(","));
+			if ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f) {
+				prevPhrase += " " + phraseArray.pop();
+				phraseArray[l-2] = prevPhrase;
+			}
+		}
 	}
 	return phraseArray;
 
