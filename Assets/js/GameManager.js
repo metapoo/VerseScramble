@@ -336,9 +336,13 @@ function Start() {
 	
 	difficulty = verseManager.GetCurrentDifficulty();
 	
-	if (needToSelectDifficulty && 
-	   (verseManager.GetCurrentDifficultyAllowed() != Difficulty.Easy)) {
+	if (needToSelectDifficulty) { 
+	   if (verseManager.GetCurrentDifficultyAllowed() == Difficulty.Easy) {
+			verseManager.SetDifficulty(Difficulty.Easy);
+			BeginGame();
+		} else {
 			ShowDifficultyOptions();
+		}
 	} else {
 		verseManager.SetDifficulty(difficulty);
 		BeginGame();

@@ -9,7 +9,7 @@ private var gt = TextManager.GetText;
 
 // Make the contents of the window
 function DifficultyWindow() {
-	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
+	var difficulty : Difficulty = Difficulty.Easy;
 	var selected : boolean = false;
 	var title = gt("Choose difficulty");
 	
