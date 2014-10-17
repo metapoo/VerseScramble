@@ -71,6 +71,12 @@
                                   $("#plugin_block_tip").hide();
 {% if device_url %}
                                   unity.SendMessage("UserSession", "HandleURL", "{{device_url}}");
+{% else %}
+
+{% if user %}
+                                  unity.SendMessage("UserSession","DoLogin","{{user.session_key()}}");
+{% end %}
+
 {% end %}
 
                                 }
