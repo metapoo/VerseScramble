@@ -25,9 +25,12 @@ class PlayHandler(BaseHandler):
                 verseset = verseset[0]
             else:
                 verseset = None
+
             if verseset is None:
                 verseset = VerseSet.collection.find_one({"language":"en"})
+
             self.redirect("/verseset/play/%s" % str(verseset._id))
+            return
 
         device_url = None
 
