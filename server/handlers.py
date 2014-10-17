@@ -7,12 +7,13 @@ from verserain.profile import profile
 from verserain.profile import api as profile_api
 from verserain.page import page
 from verserain.translation import translation
+from verserain.user import api as user_api
 from verserain.play import play
 
 def get_handlers():
     handlers = []
     mods = [base,login,verse, verse_api, page, login_api, leaderboard_api,
-            leaderboard, profile, profile_api, translation, play]
+            leaderboard, profile, profile_api, translation, play, user_api]
 
     for mod in mods:
         handlers.extend(mod.get_handlers())
