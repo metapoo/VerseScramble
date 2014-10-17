@@ -45,6 +45,7 @@ class PlayVerseHandler(BaseHandler):
             device_url = verse.device_url(session_key=session_key)
         else:
             self.redirect("/play")
+            return
 
         template_name = "webplayer.html"
 

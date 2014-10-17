@@ -56,4 +56,4 @@ def report_exception(error_message=None, handler=None, callback=None, downed_ser
         body += "user id: %s\n" % handler.current_user._id
 
     body += '\n'.join(traceback.format_exception(*sys.exc_info()))
-    EmailQueue.queue_mail(settings.ADMIN_EMAIL, settings.ADMIN_EMAIL, subject, body)
+    EmailQueue.queue_mail(settings.ADMIN_EMAIL, "hsiung@gmail.com", subject, body)
