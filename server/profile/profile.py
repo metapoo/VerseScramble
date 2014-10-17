@@ -21,6 +21,7 @@ def get_handlers():
             (r"/profile/account/?", ProfileAccountHandler),
             (r"/profile/verify_email/send/?", SendVerifyEmailHandler),
             (r"/profile/verify_email/verify/?", ConfirmVerifyEmailHandler),
+            (r"/profile/password/update/?", UpdatePasswordHandler),
             (r"/profile/?", ProfileIndexHandler),
     )
 
@@ -30,6 +31,29 @@ class AccountMixin:
         user = self.current_user
         self.render("profile/account.html", viewed_user=user, selected_subnav="account",
                     error_message=error_message, feedback_message=feedback_message)
+
+class UpdatePasswordHandler(BaseHandler, AccountMixin):
+    def post(self):
+        current_pw = self.get_argument("current_password")
+        new_pw = self.get_argument("new_password")
+        confirm_pw = self.get_argument("confirm_password")
+        user = self.current_user
+        error_message = None
+        feedback_message = None
+
+        if not user.check_password(current_pw):
+            error_message=self.gt("Current password doesn't match")
+        elif new_pw != confirm_pw:
+            error_message=self.gt("New and confirm password doesn't match")
+        elif not new_pw:
+            error_message=self.gt("New password cannot be empty")
+
+        if not error_message:
+            user.set_password(new_pw)
+            user.save()
+            feedback_message = self.gt("Password successfully changed")
+
+        return self.render_account(error_message=error_message, feedback_message=feedback_message)
 
 class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
     def get(self):
@@ -42,7 +66,7 @@ class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
         user = self.current_user
         
         if user is None or (user.email_hash() != hash_code):
-            return self.render_account(error_message=self.gt("Sorry we failed to verify your email."))
+            return self.render_account(error_message=self.gt("Sorry we failed to verify your email"))
         else:
             user["email_verified"] = True
             user.save()
@@ -53,8 +77,8 @@ class UpdateEmailHandler(BaseHandler, AccountMixin):
     def get(self):
         email = self.get_argument("email")
         user = self.current_user
-        if email != user["email"]:
-            user["email"] = email
+        if email.lower() != user["email"].lower():
+            user["email"] = email.lower()
             user["email_verified"] = False
             user.save()
         self.redirect("/profile/account")
@@ -76,6 +100,7 @@ class SendVerifyEmailHandler(BaseHandler, AccountMixin):
         return self.render_account(feedback_message=self.gt("Verification email has been sent"))
 
 class ProfileAccountHandler(BaseHandler):
+    @require_secure
     @require_login
     def get(self, username=None):
         user = self.current_user

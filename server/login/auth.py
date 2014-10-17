@@ -112,6 +112,17 @@ def require_login(method):
         return method(self, *args, **kwargs)
     return wrapper
 
+def require_nonsecure(method):
+    """Decorate methods with this to require that the user be logged in                                                                                             
+    and a superuser."""
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if self.isSecure() and (settings.VERSERAIN_ENV != "development"):
+            return self.redirectHttp()
+        else:
+            return method(self, *args, **kwargs)
+    return wrapper
+
 def require_secure(method):
     """Decorate methods with this to require that the user be logged in                                                                                             
     and a superuser."""

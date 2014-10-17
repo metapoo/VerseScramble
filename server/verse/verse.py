@@ -307,6 +307,7 @@ class CreateVerseSetHandler(BaseHandler):
                            selected_subnav="create", viewed_user=user)
 
 class ListVerseSetHandler(BaseHandler):
+    @require_nonsecure
     def get(self, option="popular", language_code=None, page=1):
         per_page = 15
         page = int(page)
