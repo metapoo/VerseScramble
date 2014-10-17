@@ -13,6 +13,10 @@ class User(BaseModel, PasswordMixin):
             Index("total_score"),
         )
 
+    def set_language(self, language_code):
+        if self.get("language", None) != language_code:
+            self["language"] = language_code
+
     def total_score(self):
         return self.get("total_score", 0)
 
