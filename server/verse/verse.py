@@ -189,8 +189,6 @@ class ShowVerseSetHandler(BaseHandler):
         verseset.update_verse_count(len(verses))
         user = self.current_user
 
-        self.set_language(language)
-
         if user and (verseset["user_id"] == user._id):
             selected_nav = "profile"
         else:
@@ -205,7 +203,7 @@ class ShowVerseSetHandler(BaseHandler):
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
                            versions=versions, selected_nav=selected_nav, scores=scores,
-                           language_code=language, play_url=play_url
+                           play_url=play_url
                            )
 
 
