@@ -30,7 +30,7 @@
 {% set i=0 %}
 {% for tran in trans %}
 <fieldset>
-<label for="tran_{{i}}">{{tran["msgid"]}} {% if user and user.is_admin() %}&nbsp;
+<label for="tran_{{i}}">{{tran["msgid"]}} {% if user and user.is_admin() and tran.has_key('_id') %}&nbsp;
 <a href="#" onclick="vr.ajax_request('/translation/remove/{{str(tran._id)}}', {}, '#status_{{i}}'); return false;" class="pure-button button-xsmall">x</a>
 {% end %}
 </label>
