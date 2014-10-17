@@ -56,37 +56,47 @@ function HandleURL(url : String) {
 	apiDomain = apiDom;	
 	Debug.Log("api domain set to " + apiDom);
 	
-	var startGame = function() {
-		var gmObject = GameObject.Find("GameManager");	
-	
-		if (gmObject) {
-			var gameManager : GameManager = gmObject.GetComponent("GameManager");
-			gameManager.Cleanup();
-		}
-	
+	var _startGame : Function = function() {
 		if (idstr != null) {
-			VerseManager.loaded = false;
-			Application.LoadLevel("scramble");
-		} else {
-			
-		}
-	};
-	
-	var onLogin = function(userData:Hashtable) {
-		HandleLogin(userData);
-		startGame();
+			StartGame();
+		}		
 	};
 	
 	if (!IsLoggedIn() && (sessionKey != "None")) {
-		var apiManager : ApiManager = ApiManager.GetInstance();
-		apiManager.cacheEnabled = false;
-		apiManager.CallApi("login/login",
-				new Hashtable({"session_key":sessionKey}), onLogin);
+		DoLogin(sessionKey, _startGame);
 	} else {
-		startGame();
+		_startGame();
+	}
+}
+
+var StartGame = function() {
+	var gmObject = GameObject.Find("GameManager");	
+	
+	if (gmObject) {
+		var gameManager : GameManager = gmObject.GetComponent("GameManager");
+		gameManager.Cleanup();
 	}
 	
+	VerseManager.loaded = false;
+	Application.LoadLevel("scramble");
+};
 
+function DoLogin(sessionKey : String) {
+	DoLogin(sessionKey, null);
+}
+
+function DoLogin(sessionKey : String, afterLogin : Function) {
+	var onLogin = function(userData:Hashtable) {
+		HandleLogin(userData);
+		if (afterLogin != null) {
+			afterLogin();
+		}
+	};
+	
+	var apiManager : ApiManager = ApiManager.GetInstance();
+	apiManager.cacheEnabled = false;
+	apiManager.CallApi("login/login",
+		new Hashtable({"session_key":sessionKey}), onLogin);
 }
 
 function SetVerseId(verseId_ : String) {
