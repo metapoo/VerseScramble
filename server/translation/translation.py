@@ -7,8 +7,22 @@ import pymongo
 def get_handlers():
     return ((r"/translation/save/?", SaveTranslationHandler),
             (r"/translation/([^/]+)/?", ShowTranslationHandler),
+            (r"/translation/remove/([^/]+)/?", RemoveTranslationHandler),
             (r"/translation/?", ShowTranslationHandler),
     )
+
+class RemoveTranslationHandler(BaseHandler):
+    def get(self, tran_id=None):
+        if self.current_user is None:
+            return self.write("Please login.")
+        if not self.current_user.is_admin():
+            return self.write("Must be admin to remove.")
+        tran = Translation.by_id(tran_id)
+        if tran:
+            tran.remove()
+            self.write("translation removed")
+        else:
+            self.write("translation already removed")
 
 class SaveTranslationHandler(BaseHandler):
     def get(self):

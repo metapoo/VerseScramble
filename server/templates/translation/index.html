@@ -30,7 +30,10 @@
 {% set i=0 %}
 {% for tran in trans %}
 <fieldset>
-<label for="tran_{{i}}">{{tran["msgid"]}}</label>
+<label for="tran_{{i}}">{{tran["msgid"]}} {% if user and user.is_admin() %}&nbsp;
+<a href="#" onclick="vr.ajax_request('/translation/remove/{{str(tran._id)}}', {}, '#status_{{i}}'); return false;" class="pure-button button-xsmall">x</a>
+{% end %}
+</label>
 
 <input type="text" value="{% raw tran["msgstr"] %}" style="width:500px;" onblur="$('#status_{{i}}').html('Saving..'); var msgid='{% raw tran["msgid"].replace("'","\\'")%}'; vr.ajax_request('/translation/save', {language:'{{language_code}}', msgid:msgid, msgstr:this.value}, '#status_{{i}}');"/>
 <span id="status_{{i}}">{% include "history.html" %}</span>
