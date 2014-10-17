@@ -13,7 +13,7 @@
 <div class="">{{v['text']}}</div>
 <div class="links">
 
-<a class="link" href="/verse/play/{{v._id}}">{{gt("play verse")}}</a> &nbsp;
+<a class="link" href="/verse/play/{{v._id}}">{{gt("Practice Verse").lower()}}</a> &nbsp;
 
 {% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
  <a class="link" href="/verse/edit/{{v._id}}">{{gt("edit")}}</a>  &nbsp;
