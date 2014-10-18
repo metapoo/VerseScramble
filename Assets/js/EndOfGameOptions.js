@@ -102,6 +102,7 @@ function EndGameWindowForChallenge () {
 		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
 			optionDialog.AddOption(gt("Try again"),
 			  	function() {
+					verseManager.verseIndex = 0;
 					needToSelectDifficulty = false;
 					ReloadGame(needToSelectDifficulty);
 			  	});
