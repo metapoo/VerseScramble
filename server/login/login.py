@@ -9,8 +9,7 @@ from tornado.gen import coroutine
 import re
 
 def get_handlers():
-    return ((r"/login/fb/?", FacebookGraphLoginHandler),
-            (r"/login/logout/?", LogoutHandler),
+    return ((r"/login/logout/?", LogoutHandler),
             (r"/login/register/?", RegisterHandler),
             (r"/login/forgot_password/?", ForgotPasswordHandler),
             (r"/login/reset_password/?", ResetPasswordHandler),
@@ -181,53 +180,3 @@ class LogoutHandler(BaseHandler):
         self.clear_cookie("session_key")
         self.redirect("/")
 
-class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
-    @coroutine
-    def get(self):
-        fblogin_url = "%s/login/fb" % self.settings["site_url"]
-        fb_user=None
-        user_created = False
-        user = None
-
-        if self.get_argument("code", False):
-            fb_user = yield self.get_authenticated_user(
-                redirect_uri=fblogin_url,
-                client_id=self.settings["facebook_api_key"],
-                client_secret=self.settings["facebook_secret"],
-                code=self.get_argument("code"))
-
-            fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
-
-            if fb_profile.has_key('email'):
-                fb_user['email'] = fb_profile['email']
-            if fb_profile.has_key('gender'):
-                fb_user['gender'] = fb_profile['gender']
-
-            # Save the user with e.g. set_secure_cookie
-            fb_uid = fb_user["id"]
-            name = fb_user["name"]
-            username = name
-            user = authenticate_login(fb_uid=fb_uid, 
-            )
-
-            if user is None:
-                user = create_new_user(fb_uid=fb_uid, name=name, username=username)
-                user_created = True
-
-            user.handle_fb_user(fb_user)
-
-            session_key = user.session_key()
-            self.set_secure_cookie("session_key", session_key)
-
-        else:
-            yield self.authorize_redirect(
-                redirect_uri=fblogin_url,
-                client_id=self.settings["facebook_api_key"],
-                extra_params={"scope": ["offline_access","email"]})
-            return
-
-        url = "/versesets"
-        if user_created or (user and ((not user.has_key('email')) or (not user.has_key('password')))):
-            url = "/profile/account"
-
-        self.redirect(url)

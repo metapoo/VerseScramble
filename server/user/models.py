@@ -3,62 +3,25 @@ from minimongo import Index
 from verserain.user.password import PasswordMixin
 from verserain import settings
 from hashlib import md5
+from verserain.fb.models import FacebookMixin
 
-class User(BaseModel, PasswordMixin):
+class User(BaseModel, PasswordMixin, FacebookMixin):
     class Meta:
         collection = "users"
         
         indices = (
             Index("email",unique=True,sparse=True),
-            Index("fb_uid",unique=True,sparse=True),
+            Index("fb_uid",sparse=True),
             Index("username",unique=True),
             Index("total_score"),
         )
 
-    def by_username(self, username):
-        return self.collection.find_one({"username":username})
+    @classmethod
+    def by_username(cls, username):
+        return cls.collection.find_one({"username":username})
 
-    def fb_user(self):
-        from verserain.fb.models import FbUser
-        fb_user = FbUser.collection.find_one({"id":self.get("fb_uid")})
-        return fb_user
-
-    def handle_fb_user(self, fb_user):
-        from verserain.fb.models import FbUser
-        picture = fb_user.get('picture')
-        email = fb_user.get('email')
-
-        changed = False
-        if picture:
-            data = picture.get('data')
-            if data:
-                url = data.get('url')
-                if self.get('fb_pic_url') != url:
-                    self['fb_pic_url'] = url
-                    changed = True
-
-        if self.get('name') != fb_user.get('name'):
-            self['name'] = fb_user.get('name')
-            changed = True
-
-        if self.get('fb_uid') != fb_user.get('id'):
-            self['fb_uid'] = fb_user['id']
-            changed = True
-
-        if email and not self.has_key(email):
-            self['email'] = email
-            changed = True
-
-        if changed:
-            self.save()
-
-        fbuser = self.fb_user()
-        if fbuser:
-            fbuser.update(fb_user)
-            fbuser.save()
-        else:
-            fbuser = FbUser(fb_user)
-            fbuser.save()
+    def has_fb(self):
+        return self.has_key('fb_uid')
 
     def reset_password_hash(self):
         password = self.get("password", "")

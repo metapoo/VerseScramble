@@ -3,4 +3,15 @@
 {% block profile_content %}
 {% include "_account_form.html" %}
 
+<br/>
+
+<h2>{{gt("Facebook Settings")}}</h2>
+{% if user.has_fb() %}
+<table class="pure-table" ><tr><td><img src="{{user['fb_pic_url']}}" /></td><td>{{user['name']}}</td></tr></table>
+<p>
+<a href="/fb/disconnect"><img id="fb_login" src="/images/logout-facebook.png" /></a>
+</p>
+{% else %}
+<a href="/fb/login?next=/profile/account"><img id="fb_login" src="/images/login-facebook.png" /></a>
+{% end %}
 {% end %}
