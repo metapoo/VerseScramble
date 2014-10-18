@@ -48,6 +48,10 @@ class SaveTranslationHandler(BaseHandler):
 
         tran = Translation.translate(language, msgid, msgstr, username=self.current_user['username'])
 
+        if language == "en":
+            tran["msgid"] = tran["msgstr"]
+            tran.save()
+
         self.load_translation(language)
         self.translations[language][msgid.lower()] = msgstr
 
