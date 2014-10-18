@@ -18,7 +18,7 @@
 
 <h3>{{gt("Facebook Settings")}}</h3>
 {% if user.has_fb() %}
-<table class="pure-table" ><tr><td><img src="{{user['fb_pic_url']}}" /></td><td>{{user['name']}}</td></tr>
+<table class="pure-table" ><tr><td>{% if user.has_key("fb_pic_url") %}<img src="{{user['fb_pic_url']}}" />{% end %}</td><td>{{user['name']}}</td></tr>
 <tr><td colspan=2>
 <a href="/fb/disconnect"><img id="fb_login" src="/images/logout-facebook.png" /></a>
 </td></tr></table>
