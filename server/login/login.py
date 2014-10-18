@@ -1,5 +1,6 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
+from verserain.email.models import *
 from verserain import settings
 from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
@@ -12,9 +13,72 @@ def get_handlers():
             (r"/login/logout/?", LogoutHandler),
             (r"/login/fb/?", FacebookGraphLoginHandler),
             (r"/login/register/?", RegisterHandler),
+            (r"/login/forgot_password/?", ForgotPasswordHandler),
+            (r"/login/reset_password/?", ResetPasswordHandler),
             (r"/register/?", RegisterHandler),
             (r"/login/?", LoginHandler),
 )
+
+class ResetPasswordHandler(BaseHandler):
+    @require_secure
+    def get(self, error_message=None):
+        self.render("login/reset_password.html",error_message=error_message,
+                    selected_nav="login")
+
+    @require_secure
+    @require_login
+    def post(self):
+        password = self.get_argument("password")
+        confirm_password = self.get_argument("confirm_password")
+        error_message = None
+        user = self.current_user
+
+        if not confirm_password:
+            error_message = "Password confirmation is required"
+        elif not password:
+            error_message = "Password is required."
+        elif password != confirm_password:
+            error_message = "Password does not match with confirmation"
+        if error_message:
+            return self.get(error_message=error_message)
+        
+        user.set_password(password)
+        user.save()
+        return self.redirect("/login")
+
+class ForgotPasswordHandler(BaseHandler):
+    def get(self, error_message=None, feedback_message=None):
+        self.render("login/forgot_password.html",error_message=error_message,
+                    feedback_message=feedback_message,
+                    selected_nav="login")
+
+    def post(self):
+        email = self.get_argument("email","").strip()
+        user = None
+        error_message = None
+        feedback_message = None
+
+        if "@" not in email:
+            username = email
+            user = User.collection.find_one({"username":username})
+        else:
+            email = email.lower()
+            user = User.collection.find_one({"email":email})
+        
+        if user is None:
+            error_message = self.gt("User not found")
+        else:
+            feedback_message = self.gt("Email sent!")
+            email = user['email']
+            subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Reset Password"))
+            hash_code = user.reset_password_hash()
+            verify_url = "http://%s/login/reset_password?h=%s&s=%s" % (settings.SITE_DOMAIN,
+                                                                       hash_code, user.session_key())
+            message = self.get_email_message("reset_password", verify_url=verify_url, user=user)
+
+            EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+            
+        return self.get(error_message=error_message, feedback_message=feedback_message)
 
 class RegisterHandler(BaseHandler):
     @require_secure

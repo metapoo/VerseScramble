@@ -57,12 +57,8 @@ class UpdatePasswordHandler(BaseHandler, AccountMixin):
 
 class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
     def get(self):
-        session_key = self.get_argument("s")
         hash_code = self.get_argument("h")
 
-        if not self.current_user:
-            self.current_user = User.by_id(authenticate_session_key(session_key))
-            
         user = self.current_user
         
         if user is None or (user.email_hash() != hash_code):
@@ -75,9 +71,9 @@ class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
 class UpdateEmailHandler(BaseHandler, AccountMixin):
     @require_login
     def get(self):
-        email = self.get_argument("email")
+        email = self.get_argument("email").lower().strip()
         user = self.current_user
-        if email.lower() != user["email"].lower():
+        if email != user["email"]:
             user["email"] = email.lower()
             user["email_verified"] = False
             user.save()
@@ -86,14 +82,13 @@ class UpdateEmailHandler(BaseHandler, AccountMixin):
 class SendVerifyEmailHandler(BaseHandler, AccountMixin):
     @require_login
     def get(self):
-        from hashlib import md5
         language_code = self.language_code()
         user = self.current_user
         email = user['email']
         subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Verify Email"))
         hash_code = user.email_hash()
         verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
-                                                                        hash_code, user.session_key())
+                                                                          hash_code, user.session_key())
         message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
 
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)

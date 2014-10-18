@@ -21,7 +21,7 @@ $("input[name='email']").focus();
 <div class="error">{{gt(error_message)}}</div>
 {% end %}
 <fieldset>
-<label for="email">{{gt("Username or Email")}}</label><input placeholder="Email" type="text" name="email" value="{{email}}" />
+<label for="email">{{gt("Username or Email")}}</label><input placeholder="{{gt("Email")}}" type="text" name="email" value="{{email}}" />
 
 <label for="password">{{gt("Password")}}</label><input type="password" name="password" />
 </fieldset>
@@ -29,7 +29,8 @@ $("input[name='email']").focus();
 <input class="pure-button pure-button-primary" type="submit" value="{{gt("Login")}}" />
 
 <p>
-<a href="/register" class="link">{{gt("Sign up")}}</a>
+<a href="/register" class="link">{{gt("Sign up")}}</a><br/>
+<a href="/login/forgot_password" class="link">{{gt("Forgot password")}}</a>
 </p>
 
 </form>

@@ -79,15 +79,21 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
     def get_current_user(self, cookieless_okay=False):
         session_key = self.get_argument('session_key', None)
-        if session_key:
-            self.set_secure_cookie('session_key', session_key)
-        else:
-            session_key = self.get_secure_cookie('session_key')
+
+        if session_key is None:
+            session_key = self.get_argument('s',None)
 
         if (not cookieless_okay) and self.cookieless_okay:
             cookieless_okay = True
 
+        if session_key is None:
+            session_key = self.get_secure_cookie('session_key')
+
         user_id = self.authenticate_session_key(session_key)
+
+        if user_id and session_key:
+            self.set_secure_cookie('session_key', session_key)
+        
 
         if not user_id:
             if cookieless_okay:

@@ -4,7 +4,7 @@ Welcome to Verse Rain!
 
 To complete your email verification, visit this url:
 
-{{verify_url}}
+{% raw verify_url %}
 
 God Bless,
 

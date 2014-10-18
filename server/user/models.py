@@ -15,6 +15,11 @@ class User(BaseModel, PasswordMixin):
             Index("total_score"),
         )
 
+    def reset_password_hash(self):
+        password = self.get("password", "")
+        hash_code = md5("%s-%s-%s" % (password, str(self._id), settings.SECRET_KEY)).hexdigest()
+        return hash_code
+
     def email_hash(self):
         email = self.get("email")
         hash_code = md5("%s-%s-%s" % (email, str(self._id), settings.SECRET_KEY)).hexdigest()
