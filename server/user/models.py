@@ -15,13 +15,52 @@ class User(BaseModel, PasswordMixin):
             Index("total_score"),
         )
 
+    def fb_user(self):
+        from verserain.fb.models import FbUser
+        fb_user = FbUser.collection.find_one({"id":self.get("fb_uid")})
+        return fb_user
+
+    def handle_fb_user(self, fb_user):
+        from verserain.fb.models import FbUser
+        picture = fb_user.get('picture')
+        changed = False
+        if picture:
+            data = picture.get('data')
+            if data:
+                url = data.get('url')
+                if self.get('fb_pic_url') != url:
+                    self['fb_pic_url'] = url
+                    changed = True
+
+        if self.get('name') != fb_user.get('name'):
+            self['name'] = fb_user.get('name')
+            changed = True
+
+        if self.get('fb_uid') != fb_user.get('id'):
+            self['fb_uid'] = fb_user['id']
+            changed = True
+
+        if changed:
+            self.save()
+
+        fbuser = self.fb_user()
+        if fbuser:
+            fbuser.update(fb_user)
+            fbuser.save()
+        else:
+            fbuser = FbUser(fb_user)
+            fbuser.save()
+
     def reset_password_hash(self):
         password = self.get("password", "")
         hash_code = md5("%s-%s-%s" % (password, str(self._id), settings.SECRET_KEY)).hexdigest()
         return hash_code
 
+    def email(self):
+        return self.get("email",None)
+
     def email_hash(self):
-        email = self.get("email")
+        email = self.get("email","")
         hash_code = md5("%s-%s-%s" % (email, str(self._id), settings.SECRET_KEY)).hexdigest()
         return hash_code
 
@@ -75,6 +114,7 @@ class User(BaseModel, PasswordMixin):
 
     def __new__(cls, *args, **kwargs):
         from verserain.verse.models import VerseSet, Verse
+        from verserain.fb.models import FbUser
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(Verse,one_to_many=True)
         cls.register_foreign_key(VerseSet,one_to_many=True)

@@ -66,6 +66,8 @@ class ForgotPasswordHandler(BaseHandler):
         
         if user is None:
             error_message = self.gt("User not found")
+        elif user.email() is None:
+            error_message = self.gt("User has no email recorded")
         else:
             feedback_message = self.gt("Email sent!")
             email = user['email']
@@ -183,6 +185,7 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
     @coroutine
     def get(self):
         fblogin_url = "%s/login/fb" % self.settings["site_url"]
+        fb_user=None
 
         if self.get_argument("code", False):
             fb_user = yield self.get_authenticated_user(
@@ -191,7 +194,7 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 client_secret=self.settings["facebook_secret"],
                 code=self.get_argument("code"))
             # Save the user with e.g. set_secure_cookie
-
+            
             fb_uid = fb_user["id"]
             name = fb_user["name"]
             username = name
@@ -200,14 +203,16 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
 
             if user is None:
                 user = create_new_user(fb_uid=fb_uid, name=name, username=username)
+            else:
+                user.handle_fb_user(fb_user)
 
             session_key = user.session_key()
             self.set_secure_cookie("session_key", session_key)
-            
+
         else:
             yield self.authorize_redirect(
                 redirect_uri=fblogin_url,
                 client_id=self.settings["facebook_api_key"],
                 extra_params={"scope": "offline_access"})
 
-        self.redirect("/")
+        self.redirect("/versesets")
