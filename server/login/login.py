@@ -127,6 +127,8 @@ class RegisterHandler(BaseHandler):
         session_key=user.session_key()
         self.set_secure_cookie("session_key",session_key)
         self.set_secure_cookie("email",email)
+        self.current_user = user
+        self.send_verify_email()
         self.redirectWithProtocol(uri="/",protocol="http")
 
 class LoginHandler(BaseHandler):

@@ -97,15 +97,7 @@ class SendVerifyEmailHandler(BaseHandler, AccountMixin):
         user = self.current_user
         if not user.email():
             return self.render_account(error_message=self.gt("Cannot verify empty email"))
-
-        email = user['email']
-        subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Verify Email"))
-        hash_code = user.email_hash()
-        verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
-                                                                          hash_code, user.session_key())
-        message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
-
-        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+        self.send_verify_email()
         return self.render_account(feedback_message=self.gt("Verification email has been sent"))
 
 class ProfileAccountHandler(BaseHandler):
