@@ -42,7 +42,7 @@ class FacebookMixin:
             from verserain.user.models import User
             user = User.collection.find_one({'email':email})
             email_exists = False
-            if user._id != self._id:
+            if user:
                 email_exists = True
 
             if not email_exists:
