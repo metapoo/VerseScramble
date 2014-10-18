@@ -10,7 +10,7 @@
 <div>
 <div class="heading" >{{verseset.get('name')}}</div>
 {% set author = verseset.user() %}
-<div class="pad_bottom">by {% module UserLink(user=author) %}</div> <div class="fb-like pad_bottom" data-href="{{current_url}}" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+<div class="pad_bottom">by {% module UserLink(user=author) %}</div> <div class="fb-like pad_bottom" data-href="{{current_url}}" data-layout="button-count" data-action="like" data-show-faces="true" data-share="true"></div>
 
 {% set commentary_text = verseset.get_commentary_text() %}
 {% if commentary_text %}
