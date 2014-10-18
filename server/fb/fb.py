@@ -67,11 +67,12 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
             
         if next_url is None:
             url = "/profile/account"
-            if user.has_key('email') and user.has_key('password'):
+            if user.has_key('email'):
                 url = "/"
         else:
             url = next_url
 
+        self.clear_cookie("next")
         self.redirect(url)
 
 class FacebookDisconnectHandler(BaseHandler):

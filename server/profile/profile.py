@@ -122,6 +122,7 @@ class ProfileAccountHandler(BaseHandler):
             feedback_message = self.gt("You should set a password")
 
         self.render("profile/account.html", viewed_user=user,
+                    selected_nav="profile",
                     selected_subnav="account", error_message=error_message, 
                     feedback_message=feedback_message)
 

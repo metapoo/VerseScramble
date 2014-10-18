@@ -14,7 +14,7 @@ $("input[name='email']").focus();
 </div>
 {% end %}
 
-<div class="centered_wrapper"  ">
+<div class="centered_wrapper">
 <form class="pure-form pure-form-stacked login centered" action="/login" method="POST">
 
 {% if error_message %}
@@ -33,6 +33,9 @@ $("input[name='email']").focus();
 <a href="/login/forgot_password" class="link">{{gt("Forgot password")}}</a>
 </p>
 
+<a href="/fb/login"><img src="/images/login-facebook.png" id="fb_login" /></a>
+
 </form>
+</div>
 
 {% end %}
