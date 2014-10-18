@@ -9,12 +9,12 @@
 </div>
 
 <div class="pad_bottom">
-{% if user and (selected_nav == "profile") and (viewed_user == user) %}
-  <a class="pure-button {% if selected_subnav=='account'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/account">{{gt("Account")}}</a>
+{% if user and (selected_nav == "profile") and (viewed_user._id == user._id) %}
+  <a class="pure-button {% if selected_subnav=='account'%}pure-button-primary{% end %}" href="/profile/account">{{gt("Account")}}</a>
 {% end %}
   <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/versesets">{{gt("Verse Sets")}}</a>
   <a class="pure-button {% if selected_subnav=='scores'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/scores">{{gt("Recently Played")}}</a>
-{% if user and (selected_nav == "profile") and (viewed_user == user) %}
+{% if user and (selected_nav == "profile") and (viewed_user._id == user._id) %}
   <a  class="pure-button {% if selected_subnav=='create'%}pure-button-primary{% end %}" href="/verseset/create">{{gt("Create")}}</a>
 {% end %}
 </div>

@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+#fb_login {
+  height: 40px;
+}
+
 .form_feedback {
   padding: 10px;
   background-color: #f6f6f6;
@@ -106,7 +110,8 @@ form.centered {
 }
 
 .heading {
-  font-size: 2.0em;
+  font-family: Constantia, Georgia, serif;
+  font-size: 2.4em;
 }
 
 .pad_top {
@@ -211,7 +216,7 @@ body {
 }
 
 .logo span.points {
-  font-size:1.4em;
+  font-size:1.5em;
 }
 
 .logo_wrapper {

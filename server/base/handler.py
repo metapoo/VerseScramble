@@ -10,18 +10,30 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
+    def send_verify_email(self):
+        from verserain.email.models import EmailQueue
+        user = self.current_user
+        if user is None or (user.email() is None):
+            return
+
+        email = user['email']
+        subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Verify Email"))
+        hash_code = user.email_hash()
+        verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
+                                                                          hash_code, user.session_key())
+        message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+
     def get_email_message(self, email_name, **kwargs):
         language_code = self.language_code()
+        kwargs["gt"] = self.gt
 
         def get_message(lang_code):
             message = self.render_string("emails/%s/%s.txt" % (lang_code, email_name),
                                          **kwargs)
             return message
 
-        try:
-            message = get_message(language_code)
-        except:
-            message = get_message("en")
+        message = get_message("en")
 
         return message
 
@@ -35,6 +47,11 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
     def isSecure(self):
         return self.request.headers.get('X-Forwarded-Protocol','https') == 'https'
+
+    def current_url(self, protocol="http"):
+        uri = self.request.uri
+        url = "%s://%s%s" % (protocol,settings.SITE_DOMAIN,uri)
+        return url
 
     def redirectWithProtocol(self, uri=None, protocol="http"):
         if uri is None:
@@ -140,13 +157,14 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
         self.set_current_language(language_code)
 
+        kwargs['current_url'] = self.current_url()
         kwargs['gt'] = self.__class__.gt
         kwargs['user'] = self.current_user
         kwargs['isIOS'] = self.isIOS()
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-
+        
         if not kwargs.has_key('play_url'):
             kwargs['play_url'] = '/play'
 

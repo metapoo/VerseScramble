@@ -1,11 +1,11 @@
-Hi {{user['username']}}!
+{{gt("Hi")}} {{user['username']}}!
 
-Welcome to Verse Rain! 
+{{gt("Welcome to Verse Rain")}}! 
 
-To complete your email verification, visit this url:
+{{gt("To complete your email verification, visit this url")}}:
 
 {% raw verify_url %}
 
-God Bless,
+{{gt("God Bless")}},
 
-Verse Rain Team
+{{gt("Verse Rain Team")}}
