@@ -97,7 +97,7 @@
 <ul class="cssmenu">
   <li {% if selected_nav == "verse sets" %}class="active"{% end %}><a href="/versesets"><span>{{gt("Verse Sets")}}</span></a></li>
   {% if user %}
-  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/u/{{user['username']}}" ><span>{{gt("Profile")}}</span></a></li>
+  <li {% if selected_nav == "profile" %}class="active"{% end %}><a href="/profile/account" ><span>{{gt("Profile")}}</span></a></li>
   {% end %}
   <li {% if selected_nav == "leaderboard" %}class="active"{% end %}><a href="/leaderboard" ><span>{{gt("Leaderboard")}}</span></a></li>
   <li {% if selected_nav == "play" %}class="active"{% end %}><a href="{{play_url}}"><span>{{gt("Play")}}</span></a></li>
