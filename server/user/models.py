@@ -72,7 +72,7 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
         return self.get("accuracy",0)
 
     def is_admin(self):
-        return self.get("is_admin", True)
+        return self.get("is_admin", False)
 
     def display_name(self):
         if self.has_key("username"):
