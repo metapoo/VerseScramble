@@ -160,7 +160,7 @@ class TextManager extends MonoBehaviour {
             if (key != null && val != null) 
             {
                     // TODO: add error handling here in case of duplicate keys
-                    textTable.Add(key, val);
+                    textTable[key] = val;
 
                     key = val = null;
             } 
