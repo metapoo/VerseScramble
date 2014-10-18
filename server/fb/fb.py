@@ -15,7 +15,14 @@ def get_handlers():
 class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
     @coroutine
     def get(self):
+        login_only = self.get_argument("login_only",None)
         next_url = self.get_argument("next",None)
+
+        if login_only:
+            self.set_cookie("login_only", login_only)
+        else:
+            login_only = self.get_cookie("login_only")
+
         if next_url:
             self.set_cookie("next", next_url)
         else:
@@ -72,6 +79,7 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
         else:
             url = next_url
 
+        self.clear_cookie("login_only")
         self.clear_cookie("next")
         self.redirect(url)
 
