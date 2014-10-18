@@ -16,6 +16,9 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
             Index("total_score"),
         )
 
+    def account_incomplete(self):
+        return (not self.has_key("email")) or (not self.has_key("password")) or (not self.has_key("fb_uid"))
+
     @classmethod
     def by_username(cls, username):
         return cls.collection.find_one({"username":username})
@@ -72,7 +75,7 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
         return self.get("accuracy",0)
 
     def is_admin(self):
-        return self.get("is_admin", True)
+        return self.get("is_admin", False)
 
     def display_name(self):
         if self.has_key("username"):

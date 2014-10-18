@@ -121,6 +121,12 @@ class ProfileAccountHandler(BaseHandler):
 class ProfileOtherIndexHandler(BaseHandler):
     def get(self, username=None):
         user = User.collection.find_one({'username':username})
+        
+        if self.current_user and (user._id == self.current_user._id):
+            if self.current_user.account_incomplete():
+                self.redirect("/profile/account")
+                return
+
         has_versesets = VerseSet.collection.find_one({'user_id':user._id}) is not None
         if has_versesets:
             self.redirect("/u/%s/versesets/"%username)
