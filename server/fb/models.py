@@ -38,7 +38,7 @@ class FacebookMixin:
             self['fb_uid'] = fb_user['id']
             changed = True
 
-        if email and not self.has_key(email):
+        if email and not self.has_key("email"):
             from verserain.user.models import User
             user = User.collection.find_one({'email':email})
             email_exists = False
