@@ -9,7 +9,7 @@ class User(BaseModel, PasswordMixin):
         collection = "users"
         
         indices = (
-            Index("email",unique=True),
+            Index("email",unique=True,sparse=True),
             Index("fb_uid",unique=True,sparse=True),
             Index("username",unique=True),
             Index("total_score"),
