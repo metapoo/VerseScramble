@@ -15,6 +15,9 @@ class User(BaseModel, PasswordMixin):
             Index("total_score"),
         )
 
+    def by_username(self, username):
+        return self.collection.find_one({"username":username})
+
     def fb_user(self):
         from verserain.fb.models import FbUser
         fb_user = FbUser.collection.find_one({"id":self.get("fb_uid")})

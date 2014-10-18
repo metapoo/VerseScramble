@@ -4,7 +4,7 @@
 <form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="/profile/email/update">
 <label for="email">{{gt("Email")}}</label>
 <table><tr><td>
-<input type="text" name="email" value="{{user['email']}}" /></td><td><input type="submit" value="{{gt("update")}}" class="pure-button"  />
+<input type="text" name="email" value="{{user.get('email','')}}" /></td><td><input type="submit" value="{{gt("update")}}" class="pure-button"  />
 </td></tr></table>
 {% if not user.email_verified() %}
 {{gt("email not verified")}}: <a class="link" href="/profile/verify_email/send">{{gt("send verification email")}}</a>
@@ -15,8 +15,11 @@
 
 <h3>{{gt("Change Password")}}</h3>
 <form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="{{settings.SECURE_SITE_URL}}/profile/password/update">
+{% if user.has_key('password') %}
 <label for="current_password">{{gt("Current Password")}}</label>
 <input type="password" name="current_password" />
+{% end %}
+
 <label for="new_password">{{gt("New Password")}}</label>
 <input type="password" name="new_password" />
 <label for="confirm_password">{{gt("Confirm Password")}}</label>

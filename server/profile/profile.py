@@ -34,14 +34,14 @@ class AccountMixin:
 
 class UpdatePasswordHandler(BaseHandler, AccountMixin):
     def post(self):
-        current_pw = self.get_argument("current_password")
+        current_pw = self.get_argument("current_password", None)
         new_pw = self.get_argument("new_password")
         confirm_pw = self.get_argument("confirm_password")
         user = self.current_user
         error_message = None
         feedback_message = None
 
-        if not user.check_password(current_pw):
+        if user.has_key("password") and (not user.check_password(current_pw)):
             error_message=self.gt("Current password doesn't match")
         elif new_pw != confirm_pw:
             error_message=self.gt("New and confirm password doesn't match")
@@ -73,7 +73,18 @@ class UpdateEmailHandler(BaseHandler, AccountMixin):
     def get(self):
         email = self.get_argument("email").lower().strip()
         user = self.current_user
-        if email != user["email"]:
+        error_message = None
+        if "@" not in email:
+            error_message = self.gt("Invalid email")
+
+        dupe = User.collection.find_one({"email":email})
+        if dupe:
+            error_message = self.gt("Email already exists")
+
+        if error_message:
+            return self.render_account(error_message=error_message)
+
+        if email != user.email():
             user["email"] = email.lower()
             user["email_verified"] = False
             user.save()
@@ -84,6 +95,9 @@ class SendVerifyEmailHandler(BaseHandler, AccountMixin):
     def get(self):
         language_code = self.language_code()
         user = self.current_user
+        if not user.email():
+            return self.render_account(error_message=self.gt("Cannot verify empty email"))
+
         email = user['email']
         subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Verify Email"))
         hash_code = user.email_hash()
