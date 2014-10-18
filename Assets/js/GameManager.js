@@ -78,7 +78,7 @@ static function GetChallengeModeEnabled() {
 	if (challengeModeState == -1) {
 		return PlayerPrefs.GetInt("challenge_mode") == 1;
 	} else {
-		return challengeModeState == 1;
+		return (challengeModeState == 1);
 	}
 }
 

@@ -108,6 +108,7 @@ function EndGameWindowForChallenge () {
 		} else {
 			optionDialog.AddOption(String.Format(gt("Next level"), nextDifficultyString),
 				function() {
+					verseManager.verseIndex = 0;
 					verseManager.SetDifficulty(nextDifficulty);
 					needToSelectDifficulty = false;
 					ReloadGame(needToSelectDifficulty);
@@ -242,7 +243,7 @@ function ShowRestartVerse() {
 
 function Start() {
 	if (gameManager.showingSolution) {
-		ShowRestartVerse();
+		//ShowRestartVerse();
 	} else {
 		ShowEndOfGameOptions();
 	}
