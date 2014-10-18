@@ -67,12 +67,17 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         self.redirectWithProtocol(uri=uri,protocol="http")
 
     def isIOS(self):
+        if self.get_argument("test_ios", False):
+            return True
+
         user_agent = self.request.headers['User-Agent']
         if ("iPod" in user_agent) or ("iPhone" in user_agent) or ("iPad" in user_agent):
             return True
         return False
 
     def isAndroid(self):
+        if self.get_argument("test_android", False):
+            return True
         user_agent = self.request.headers['User-Agent']
         if ("Android" in user_agent):
             return True

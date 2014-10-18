@@ -9,15 +9,15 @@
 {% end %}
 
 <form class="centered pure-form pure-form-stacked" action="/contact/submit" method="post" onsubmit="if (document.getElementById('email').value == '') { alert('email required'); return false; } if (document.getElementById('message').value == '') { alert('message required'); return false; } this.submit(); return false;" >
-<h2>Questions? Feedback?</h2>
+<h2>{{gt("Questions")}}? {{gt("Feedback")}}?</h2>
 <fieldset>
-<label for="email">Email</label> <input type="text" name="email" id="email" {% if user %}value="{{user['email']}}"{% end %}/>
-<label for="subject">Subject</label> <input type="text" name="subject" />
-<label for="message">Message</label>
+<label for="email">{{gt("Email")}}</label> <input type="text" name="email" id="email" {% if user %}value="{{user['email']}}"{% end %}/>
+<label for="subject">{{gt("Subject")}}</label> <input type="text" name="subject" />
+<label for="message">{{gt("Message")}}</label>
 <textarea name="message" id="message">
 </textarea>
 </fieldset>
-<input class="pure-button" type="submit" />
+<input class="pure-button" type="submit" value="{{gt("Send Email")}}" />
 </form>
 </div>
 
