@@ -101,7 +101,7 @@ function Awake() {
 'sw':'Kiswahili'
 });
 	
-	languageCodes = new Array(['en', 'zh-hant', 'zh-hans','ko','ru','mn', 'af', 'amu', 'id', 'ms', 'ckw', 'ca', 'ceb', 'cco', 'cy', 'da', 'de', 'es-ES', 'es', 'eo', 'tl', 'fr', 'ga', 'hwc', 'hr', 'hil', 'it', 'jac', 'kek', 'kw', 'sw', 'ht', 'la', 'hu', 'mvc', 'mvj', 'mi', 'ppl', 'nl', 'no', 'ngu', 'nds', 'pl', 'pt', 'pt-PT', 'qu', 'qut', 'ro', 'st', 'sq', 'sk', 'so', 'fi', 'sv', 'vi', 'twi', 'tr', 'usp', 'yo', 'sn', 'xh', 'zu', 'is', 'cs', 'grc', 'bg', 'ky', 'mk', 'sr', 'uk', 'he', 'ur', 'ar', 'awa', 'ne', 'mr', 'hi', 'bn', 'pa', 'or', 'ta', 'th', 'chr', 'ja']);
+	languageCodes = new Array(['en', 'zh-hant', 'zh-hans','ko','ja','ru','mn', 'af', 'amu', 'id', 'ms', 'ckw', 'ca', 'ceb', 'cco', 'cy', 'da', 'de', 'es-ES', 'es', 'eo', 'tl', 'fr', 'ga', 'hwc', 'hr', 'hil', 'it', 'jac', 'kek', 'kw', 'sw', 'ht', 'la', 'hu', 'mvc', 'mvj', 'mi', 'ppl', 'nl', 'no', 'ngu', 'nds', 'pl', 'pt', 'pt-PT', 'qu', 'qut', 'ro', 'st', 'sq', 'sk', 'so', 'fi', 'sv', 'vi', 'twi', 'tr', 'usp', 'yo', 'sn', 'xh', 'zu', 'is', 'cs', 'grc', 'bg', 'ky', 'mk', 'sr', 'uk', 'he', 'ur', 'ar', 'awa', 'ne', 'mr', 'hi', 'bn', 'pa', 'or', 'ta', 'th', 'chr']);
 	for (var i=0;i<languageCodes.length;i++) {
 		var code = languageCodes[i];
 		var lang = languageByCode[code];
