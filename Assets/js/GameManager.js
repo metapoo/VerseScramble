@@ -566,9 +566,13 @@ function SplitVerse(verse : String) {
 			var curPhrase : String = phraseArray[l-1];
 			var prevPhrase : String = phraseArray[l-2];
 			
-			var hasCommas : boolean = (curPhrase.Contains(",") &&
-			 prevPhrase.Contains(","));
-			if ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f) {
+			var curWords = curPhrase.Split(" "[0]).Length;
+			
+			var hasCommas : boolean = (curPhrase.EndsWith(",") &&
+			 prevPhrase.EndsWith(","));
+			 
+			if (hasCommas && ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f)) {
+			 Debug.Log("COMBINE(" + prevPhrase + " | " + curPhrase + ")");
 				prevPhrase += " " + phraseArray.pop();
 				phraseArray[l-2] = prevPhrase;
 			}
