@@ -131,6 +131,12 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             else:
                 return None
 
+        # save ip
+        ip = self.request.remote_ip
+        if user.get('ip') != ip:
+            user['ip'] = ip
+            user.save()
+
         return user
 
     def language_code(self, not_all=False):
