@@ -48,6 +48,11 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def isSecure(self):
         return self.request.headers.get('X-Forwarded-Protocol','https') == 'https'
 
+    def current_url(self, protocol="http"):
+        uri = self.request.uri
+        url = "%s://%s%s" % (protocol,settings.SITE_DOMAIN,uri)
+        return url
+
     def redirectWithProtocol(self, uri=None, protocol="http"):
         if uri is None:
             uri = self.request.uri
@@ -152,13 +157,14 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
         self.set_current_language(language_code)
 
+        kwargs['current_url'] = self.current_url()
         kwargs['gt'] = self.__class__.gt
         kwargs['user'] = self.current_user
         kwargs['isIOS'] = self.isIOS()
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-
+        
         if not kwargs.has_key('play_url'):
             kwargs['play_url'] = '/play'
 
