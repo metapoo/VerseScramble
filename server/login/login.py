@@ -187,6 +187,7 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
         fblogin_url = "%s/login/fb" % self.settings["site_url"]
         fb_user=None
         user_created = False
+        user = None
 
         if self.get_argument("code", False):
             fb_user = yield self.get_authenticated_user(
@@ -194,8 +195,15 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 client_id=self.settings["facebook_api_key"],
                 client_secret=self.settings["facebook_secret"],
                 code=self.get_argument("code"))
+
+            fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
+
+            if fb_profile.has_key('email'):
+                fb_user['email'] = fb_profile['email']
+            if fb_profile.has_key('gender'):
+                fb_user['gender'] = fb_profile['gender']
+
             # Save the user with e.g. set_secure_cookie
-            
             fb_uid = fb_user["id"]
             name = fb_user["name"]
             username = name
@@ -216,9 +224,10 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 redirect_uri=fblogin_url,
                 client_id=self.settings["facebook_api_key"],
                 extra_params={"scope": ["offline_access","email"]})
+            return
 
         url = "/versesets"
-        if user_created:
+        if user_created or (user and ((not user.has_key('email')) or (not user.has_key('password')))):
             url = "/profile/account"
 
         self.redirect(url)

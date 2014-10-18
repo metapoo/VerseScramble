@@ -114,8 +114,16 @@ class ProfileAccountHandler(BaseHandler):
     def get(self, username=None):
         user = self.current_user
         error_message = None
+        feedback_message = None
+
+        if not user.has_key('email'):
+            feedback_message = self.gt("You should specify an email")
+        elif not user.has_key('password'):
+            feedback_message = self.gt("You should set a password")
+
         self.render("profile/account.html", viewed_user=user,
-                    selected_subnav="account", error_message=None, feedback_message=None)
+                    selected_subnav="account", error_message=error_message, 
+                    feedback_message=feedback_message)
 
 class ProfileOtherIndexHandler(BaseHandler):
     def get(self, username=None):

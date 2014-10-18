@@ -26,6 +26,8 @@ class User(BaseModel, PasswordMixin):
     def handle_fb_user(self, fb_user):
         from verserain.fb.models import FbUser
         picture = fb_user.get('picture')
+        email = fb_user.get('email')
+
         changed = False
         if picture:
             data = picture.get('data')
@@ -41,6 +43,10 @@ class User(BaseModel, PasswordMixin):
 
         if self.get('fb_uid') != fb_user.get('id'):
             self['fb_uid'] = fb_user['id']
+            changed = True
+
+        if email and not self.has_key(email):
+            self['email'] = email
             changed = True
 
         if changed:
