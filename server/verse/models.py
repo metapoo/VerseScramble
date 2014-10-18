@@ -33,6 +33,28 @@ class VerseSet(BaseModel):
             Index("hotness",unique=False)
         )
 
+    def make_copy(self, user_id=None):
+        vs = VerseSet(dict(self))
+        del vs['_id']
+        if vs.has_key('commentary_id'):
+            del vs['commentary_id']
+        if user_id:
+            vs['user_id'] = user_id
+        vs['play_count'] = 0
+        vs['verse_count'] = 0
+        vs.save()
+
+        commentary = self.commentary()
+        if commentary:
+            vs.set_commentary_text(commentary['text'])
+
+        for v in self.verses():
+            v_copy = Verse(dict(v))
+            del v_copy['_id']
+            v_copy['verseset_id'] = vs._id
+            v_copy.save()
+        return vs
+
     def device_url(self, session_key=None):
         url = "verserain://com.hopeofglory.verserain/verseset/%s/%s/%s" % (self._id, settings.SITE_DOMAIN, session_key)
         return url
