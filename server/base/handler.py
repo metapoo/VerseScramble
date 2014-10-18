@@ -12,16 +12,14 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
     def get_email_message(self, email_name, **kwargs):
         language_code = self.language_code()
+        kwargs["gt"] = self.gt
 
         def get_message(lang_code):
             message = self.render_string("emails/%s/%s.txt" % (lang_code, email_name),
                                          **kwargs)
             return message
 
-        try:
-            message = get_message(language_code)
-        except:
-            message = get_message("en")
+        message = get_message("en")
 
         return message
 
