@@ -10,7 +10,7 @@ $("input[name='email']").focus();
 
 {% if next_url %}
 <div class="centered_wrapper">
-  <div class="centered form_feedback">Please login to continue.</div>
+  <div class="centered form_feedback">{{gt("Please login to continue")}}</div>
 </div>
 {% end %}
 
