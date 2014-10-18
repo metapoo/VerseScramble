@@ -10,10 +10,10 @@
 <div class="error">{{error_message}}</div>
 {% end %}
 <fieldset>
-<label for="email">{{gt("Email")}}</label><input type="text" name="email" value="{{email}}" placeholder="Email" />
-<label for="username">{{gt("Username")}}</label><input type="text" name="username" value="{{username}}" placeholder="Username" />
-<label for="password">{{gt("Password")}}</label><input type="password" name="password" placeholder="Password" />
-<label for="confirm_password">{{gt("Confirm Password")}}</label><input type="password" name="confirm_password" placeholder="Confirm Password" />
+<label for="email">{{gt("Email")}}</label><input type="text" name="email" value="{{email}}" placeholder="{{gt("Email")}}" />
+<label for="username">{{gt("Username")}}</label><input type="text" name="username" value="{{username}}" placeholder="{{gt("Username")}}" />
+<label for="password">{{gt("Password")}}</label><input type="password" name="password" placeholder="{{gt("Password")}}" />
+<label for="confirm_password">{{gt("Confirm Password")}}</label><input type="password" name="confirm_password" placeholder="{{gt("Confirm Password")}}" />
 </fieldset>
 <input class="pure-button pure-button-primary" type="submit" value="{{gt("Sign Up")}}" />
 </form>
