@@ -102,12 +102,14 @@ function EndGameWindowForChallenge () {
 		if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
 			optionDialog.AddOption(gt("Try again"),
 			  	function() {
+					verseManager.verseIndex = 0;
 					needToSelectDifficulty = false;
 					ReloadGame(needToSelectDifficulty);
 			  	});
 		} else {
 			optionDialog.AddOption(String.Format(gt("Next level"), nextDifficultyString),
 				function() {
+					verseManager.verseIndex = 0;
 					verseManager.SetDifficulty(nextDifficulty);
 					needToSelectDifficulty = false;
 					ReloadGame(needToSelectDifficulty);
@@ -242,7 +244,7 @@ function ShowRestartVerse() {
 
 function Start() {
 	if (gameManager.showingSolution) {
-		ShowRestartVerse();
+		//ShowRestartVerse();
 	} else {
 		ShowEndOfGameOptions();
 	}
