@@ -1,6 +1,7 @@
 import BeautifulSoup
 import re
 numre = re.compile("(\d+)")
+footnote_re = re.compile("\[\w\]")
 
 def remove_script(txt):
     soup = BeautifulSoup.BeautifulSoup(txt)
@@ -71,7 +72,10 @@ def process_verse(reference,txt):
         if part not in numlist:
             final_parts.append(part)
 
-    txtnonum = ''.join(final_parts)
+    txt = ''.join(final_parts)
 
-    return txtnonum
+    parts = re.split(footnote_re,txt)
+    txt = ''.join(parts)
+
+    return txt
 
