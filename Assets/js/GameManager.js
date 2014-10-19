@@ -462,7 +462,7 @@ function SplitVerse(verse : String) {
 	var phrase : String = "";
 	var newPhrase : String = "";
 	var phraseLengthForClause : int;
-	
+	var isCharacterBased = verseManager.IsCharacterBased(language);
 	
 	var phraseHasPunctuation = function(phrase : String) {
 		for (var sc in seps) {
@@ -481,10 +481,13 @@ function SplitVerse(verse : String) {
 		for (i=0;i<clause.Length;i++) {
 			if ((clause[i] == "／"[0]) || (clause[i] == "/"[0]) || (clause[i] == " "[0])) {
 				nobreakMarkers.Add(i);
+			} else if ((i % phraseLength == 0) && isCharacterBased) {
+				nobreakMarkers.Add(i);
 			}
 		}
 		
 		nobreakMarkers.Add(clause.Length-1);
+		//Debug.Log("nobreak markers = " + nobreakMarkers);
 		
 		//Debug.Log("clause.Length > phraseLength*clauseBreakMultiplier = " + clause.Length + " >" + phraseLength + "*"+ clauseBreakMultiplier);
 		if (clause.Length > phraseLength*clauseBreakMultiplier) {
@@ -502,13 +505,7 @@ function SplitVerse(verse : String) {
 				if ((l + phraseLengthForClause*1.5) > clause.Length) {
 					phraseLengthForClause = clause.Length - l;	
 				}
-				
-
-				while (((l + phraseLengthForClause) < clause.Length) &&
-							 (clause[l+phraseLengthForClause] != " ") ) {
-							phraseLengthForClause += 1;
-				}
-				
+								
 				// glob onto the closest no break marker
 				if (nobreakMarkers.length > 0) {
 					var best = 100;
@@ -518,7 +515,7 @@ function SplitVerse(verse : String) {
 						if ((diff < best) && (index >= l)) {
 							bestIndex = index;
 							best = diff;
-//							Debug.Log("best index = " + index + " best diff = " +  best);
+							//Debug.Log("best index = " + index + " best diff = " +  best);
 						}
 					}
 					if (bestIndex != -1) {
@@ -580,57 +577,6 @@ function SplitVerse(verse : String) {
 	}
 	return phraseArray;
 
-}
-
-
-function SplitVerseWordByWord(verse : String) {
-
-	var phraseLength = 5;
-	var language = verseManager.GetVerseLanguage();
-	
-	switch (difficulty) {
-		case Difficulty.Easy:
-			phraseLength = 20;
-			break;
-		case Difficulty.Medium:
-			phraseLength = 15;
-			break;
-		case Difficulty.Hard:
-			phraseLength = 10;
-			break;
-	}
-	//Debug.Log("phrase length = " + phraseLength);
-
-	var wordsArray : Array;
-	var phraseArray : Array = new Array();
-
-	wordsArray = verse.Split(" "[0]);
-	
-	var phrase : String = "";
-	var newPhrase : String = "";
-	for (word in wordsArray) {
-		newPhrase = phrase + word + " ";
-		if (newPhrase.Length > phraseLength) {
-		  var newPhraseDiff = Mathf.Abs(newPhrase.Length - phraseLength);
-		  var phraseDiff = Mathf.Abs(phrase.Length - phraseLength);
-		  if ((newPhraseDiff < phraseDiff) || (phrase == "")) {
-			  phraseArray.push(newPhrase);
-			  phrase = "";
-		  } else {
-		      // use previous phrase if it's closer to the limit
-		  	  phraseArray.push(phrase);
-		  	  phrase = word + " ";
-		  }
-		} else {
-		  phrase = newPhrase;
-		}
-		
-	}
-	if (phrase != "") {
-		//Debug.Log("Phrase = "+ phrase);
-		phraseArray.push(phrase);
-	}
-	return phraseArray;
 }
 
 function Cleanup () {
