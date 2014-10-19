@@ -51,6 +51,13 @@
 	background-image:url(images/link.png);
 }
 
+.markItUp .markItUpButton16 a {
+	background-image:url(images/youtube.png); 
+}
+.markItUp .markItUpButton17 a {
+	background-image:url(images/vimeo.png);
+}
+
 .markItUp .clean a {
 	background-image:url(images/clean.png);
 }
