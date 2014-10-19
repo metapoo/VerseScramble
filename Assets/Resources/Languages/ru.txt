@@ -1,4 +1,4 @@
-﻿msgid "High Score"
+msgid "High Score"
 msgstr "Рекорд"
 msgid "Verse Rain"
 msgstr "Дождь стихов"
