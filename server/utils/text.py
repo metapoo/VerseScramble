@@ -1,12 +1,27 @@
 import BeautifulSoup
 import re
+numre = re.compile("(\d+)")
 
 def remove_script(txt):
     soup = BeautifulSoup.BeautifulSoup(txt)
     [s.extract() for s in soup('script')]
     return soup
 
+def last_number(txt):
+    parts = re.findall(numre, txt)
+    if len(parts) > 0:
+        return int(parts[-1])
+    return None
+    
 def get_versenums_from_reference(reference):
+    if ";" in reference:
+        parts = reference.split(";")
+        if len(parts) > 1:
+            numlist = get_versenums_from_reference(parts[0])
+            numlist2 = get_versenums_from_reference(parts[1])
+            numlist.extend(numlist2)
+            return numlist
+
     parts = reference.split(":")
     if len(parts) > 2:
         return
@@ -25,17 +40,25 @@ def get_versenums_from_reference(reference):
                 numlist.append(int(p))
     elif "-" in verse_numbers:
         parts = verse_numbers.split("-")
-        start = int(parts[0])
-        end = int(parts[1])
-        numlist = range(start,end+1)
+        start = last_number(parts[0])
+        end = last_number(parts[1])
+        if start and end:
+            numlist = range(start,end+1)
+        else:
+            numlist = []
     else:
-        numlist = [int(verse_numbers),]
+        try:
+            numlist = [int(verse_numbers),]
+        except:
+            numlist = []
     return numlist
 
 def process_verse(reference,txt):
-    numre = re.compile("(\d+)")
     numlist = get_versenums_from_reference(reference)
-    numlist = map(str, numlist)
+    if numlist is None:
+        print reference
+    if len(numlist) > 0:
+        numlist = map(str, numlist)
 
     parts = re.split(numre, txt)
     final_parts = []
