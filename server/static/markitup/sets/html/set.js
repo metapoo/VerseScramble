@@ -34,7 +34,9 @@ mySettings = {
 		{separator:'---------------' },
 		{name:'Picture', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
 		{name:'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
+	        {name:'Youtube',replaceWith:'<iframe width="560" height="315" src="//www.youtube.com/embed/[![Youtube Id:!:]!]" frameborder="0" allowfullscreen></iframe>'},
 		{separator:'---------------' },
+	        {name:'Vimeo',replaceWith:'<iframe src="//player.vimeo.com/video/[![Vimeo Id:!:]!]" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'},
 		{name:'Clean', className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } },
 		{name:'Preview', className:'preview', call:'preview' }
 	]
