@@ -25,7 +25,18 @@ def get_handlers():
             (r"/verse/remove/([^/]+)/?",RemoveVerseHandler),
             (r"/verse/move(up|down)/([^/]+)/?", MoveVerseHandler),
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
+            (r"/verse/lookup/?",LookupVerseHandler),
             )
+
+class LookupVerseHandler(BaseHandler):
+    def get(self):
+        reference = self.get_argument("reference").strip()
+        version = self.get_argument("version").strip()
+        verse = Verse.collection.find_one({"reference":reference, "version":version})
+        if verse:
+            self.write(verse['text'])
+        else:
+            self.write("")
 
 class MoveVerseHandler(BaseHandler):
     def get(self, direction, verse_id):
