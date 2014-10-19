@@ -248,6 +248,10 @@ static function IsLanguageChinese(language : String) : boolean {
 	return (language == 'zh') || (language == 'zh-hans') || (language == 'zh-hant') || (language == 'zh-CN') || (language == 'zh-TW');
 }
 
+static function IsCharacterBased(language : String) : boolean {
+	return (language == 'ja');
+}
+
 static function IsLanguageWestern(language : String) : boolean {
 	return (language == 'en') || (language == 'de') || (language == 'fr') || (language == 'es') ||
 			(language == 'it');
