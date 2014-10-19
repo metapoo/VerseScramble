@@ -133,9 +133,11 @@ class UpdateVerseHandler(BaseHandler):
             return
         reference = self.get_argument("reference").strip()
         version = self.get_argument("version")
-        text = self.get_argument("text").strip()
 
-        text = text.replace("\n","")
+        from verserain.utils.text import process_verse
+        text = self.get_argument("text")
+        text = process_verse(reference, text)
+
         verse.update({"version":version,
                       "text":text,
                       "reference":reference})
@@ -163,7 +165,9 @@ class CreateVerseHandler(BaseHandler):
             self.write(error_message)
             return
 
-        text = text.replace("\n","")
+        from verserain.utils.text import process_verse
+        text = self.get_argument("text")
+        text = process_verse(reference, text)
 
         verse = Verse({'reference':reference,
                        'version':version,
