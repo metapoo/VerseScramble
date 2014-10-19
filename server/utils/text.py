@@ -2,6 +2,7 @@ import BeautifulSoup
 import re
 numre = re.compile("(\d+)")
 footnote_re = re.compile("\[\w\]")
+extraspace_re = re.compile("\s\s+")
 
 def remove_script(txt):
     soup = BeautifulSoup.BeautifulSoup(txt)
@@ -74,8 +75,8 @@ def process_verse(reference,txt):
 
     txt = ''.join(final_parts)
 
-    parts = re.split(footnote_re,txt)
-    txt = ''.join(parts)
+    txt = re.sub(footnote_re,"", txt)
+    txt = re.sub(extraspace_re," ",txt)
 
     return txt
 

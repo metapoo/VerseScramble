@@ -7,7 +7,7 @@
 
 <fieldset>
 <label for="reference">{{gt("Verse Reference")}}</label>
-<input name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference"/> 
+<input id="reference" name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference" onblur="vr.ajax_request('/verse/lookup',{'reference':$('#reference').val(), 'version':'{{verseset["version"]}}'},'#verse_text'); return false;" /> 
 <div class="pad_top">
 {% if verse %}
   {% include "../version_select.html" %}
@@ -17,7 +17,7 @@
 </div>
 <label class="pad_top" for="text">{{gt("Verse Text")}}</label>
 
-<textarea name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
+<textarea id="verse_text" name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
 </fieldset>
 
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
