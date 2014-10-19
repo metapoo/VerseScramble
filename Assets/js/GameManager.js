@@ -444,7 +444,7 @@ function SplitVerse(verse : String) {
 		for (var s : String in seps) {
 			if (isSeparator(s,c,n)	) {
 				if ((clause != "") && (clause != " ")) {
-					Debug.Log("process " + clause);
+					//Debug.Log("process " + clause);
 					processClause(clause);
 				}
 				clause = "";
@@ -563,10 +563,12 @@ function SplitVerse(verse : String) {
 			var curPhrase : String = phraseArray[l-1];
 			var prevPhrase : String = phraseArray[l-2];
 			
-			var curWords = curPhrase.Split(" "[0]).Length;
+			var curWords = curPhrase.Trim().Split(" "[0]).Length;
+			var prevWords = prevPhrase.Trim().Split(" "[0]).Length;
 			
-			var hasCommas : boolean = (curPhrase.EndsWith(",") &&
-			 prevPhrase.EndsWith(","));
+			// try to handle laundry lists, be more generous
+			var hasCommas : boolean = (curPhrase.EndsWith(",") && (curWords < 2) &&
+			 prevPhrase.EndsWith(",") && (prevWords < 2));
 			 
 			if (hasCommas && ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f)) {
 			 Debug.Log("COMBINE(" + prevPhrase + " | " + curPhrase + ")");
