@@ -162,6 +162,15 @@ class Verse(BaseModel):
             Index("user_id",unique=False)
         )
 
+    def fix_text(self):
+        from verserain.utils.text import process_verse
+        text = process_verse(self['reference'], self['text'])
+        if text != self['text']:
+            self['text'] = text
+            self.save()
+            return text
+        return None
+
     def order(self):
         return self.get("order",-1)
 

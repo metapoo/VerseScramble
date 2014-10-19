@@ -54,10 +54,14 @@ def get_versenums_from_reference(reference):
     return numlist
 
 def process_verse(reference,txt):
+    txt = txt.strip()
+    txt = txt.replace("\n","")
+
     numlist = get_versenums_from_reference(reference)
-    if numlist is None:
-        print reference
+
     if len(numlist) > 0:
+        numlist.append(numlist[-1]+1)
+        numlist.insert(0, numlist[0]-1)
         numlist = map(str, numlist)
 
     parts = re.split(numre, txt)
