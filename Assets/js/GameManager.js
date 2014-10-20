@@ -49,6 +49,7 @@ public var showingSolution : boolean = false;
 public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
+private var beginningGame : boolean = false;
 
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
@@ -284,6 +285,7 @@ function AnimateIntro() {
 	var endScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
 	var verse : Verse = verseManager.GetCurrentVerse();
 	SetVerseReference(verse.reference);	
+	introReferenceLabel.enabled = true;
 	introReferenceLabel.color.a = 1.0f;
 	introReferenceLabel.transform.localScale = Vector3.zero;
 	AnimationManager.ScaleOverTime(introReferenceLabel.transform, endScale, duration);
@@ -591,8 +593,17 @@ function Cleanup () {
 }
 
 function BeginGame() {
+	
+	if (beginningGame) return;
+	beginningGame = true;
 	SetupVerse();
+	
+	introReferenceLabel.enabled = false;
+	verseManager.SpeakUtterance("");
+	
+	yield WaitForSeconds(1.0f);
 	AnimateIntro();
+	beginningGame = false;
 }
 
 function GetMaxWordsActive() {
