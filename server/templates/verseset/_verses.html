@@ -30,15 +30,8 @@
 {% end %}
 </div>
 
-{% if v.has_commentary() %}
-{% set commentary_text = v.get_commentary_text() %}
-{% if commentary_text %}
-<div class="commentary_text pad_top pad_bottom">
-{% from verserain.utils.text import remove_script %}
-{% raw remove_script(commentary_text) %}
-</div>
-{% end %}
-{% end %}
+{% set commentary_parent = v %}
+{% include "_commentary.html" %}
 
 </td></tr>
 

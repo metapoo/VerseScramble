@@ -3,6 +3,10 @@ import re
 numre = re.compile("(\d+)")
 footnote_re = re.compile("\[\w\]")
 extraspace_re = re.compile("\s\s+")
+email_re = re.compile("[^@]+@[^@]+\.[^@]+")
+
+def is_valid_email(email):
+    return (re.match(email_re,email) is not None)
 
 def remove_script(txt):
     soup = BeautifulSoup.BeautifulSoup(txt)

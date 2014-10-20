@@ -1,24 +1,64 @@
 from verserain import settings
+from verserain.utils.encoding import *
+from smtplib import SMTP
+from email.MIMEText import MIMEText
+from email.Header import Header
+from email.Utils import parseaddr, formataddr
 
-def send_mail(from_address, to_address, subject, message, reply_to=None, connection=None):
-    import smtplib
-    if reply_to is None:
-        reply_to = from_address
+def send_mail(sender, recipient, subject, body, reply_to=None, connection=None):
+    """Send an email.
 
-    if isinstance(to_address, basestring):
-        to_field = to_address
-    else:
-        to_field = ", ".join(to_address)
+    All arguments should be Unicode strings (plain ASCII works as well).
 
-    full_message = """From: %s\nTo: %s\nSubject: %s\nReply-To: %s\n%s\n""" % (from_address, to_field, subject, reply_to, message)
+    Only the real name part of sender and recipient addresses may contain
+    non-ASCII characters.
 
-    # Send the mail
+    The email will be properly MIME encoded and delivered though SMTP to
+    localhost port 25.  This is easy to change if you want something different.
+
+    The charset of the email will be the first one out of US-ASCII, ISO-8859-1
+    and UTF-8 that can represent all the characters occurring in the email.
+    """
+
+    # Header class is smart enough to try US-ASCII, then the charset we
+    # provide, then fall back to UTF-8.
+    header_charset = 'ISO-8859-1'
+
+    # We must choose the body charset manually
+    for body_charset in 'US-ASCII', 'ISO-8859-1', 'UTF-8':
+        try:
+            body.encode(body_charset)
+        except UnicodeError:
+            pass
+        else:
+            break
+
+    # Split real name (which is optional) and email address parts
+    sender_name, sender_addr = parseaddr(sender)
+    recipient_name, recipient_addr = parseaddr(recipient)
+
+    # We must always pass Unicode strings to Header, otherwise it will
+    # use RFC 2047 encoding even on plain ASCII strings.
+    sender_name = str(Header(unicode(sender_name), header_charset))
+    recipient_name = str(Header(unicode(recipient_name), header_charset))
+
+    # Make sure email addresses do not contain non-ASCII characters
+    sender_addr = sender_addr.encode('ascii')
+    recipient_addr = recipient_addr.encode('ascii')
+
+    # Create the message ('plain' stands for Content-Type: text/plain)
+    msg = MIMEText(body.encode(body_charset), 'plain', body_charset)
+    msg['From'] = formataddr((sender_name, sender_addr))
+    msg['To'] = formataddr((recipient_name, recipient_addr))
+    msg['Subject'] = Header(unicode(subject), header_charset)
+
     created = False
     if connection is None:
         connection = smtplib.SMTP(settings.IP_ADDRESS,port=25)
         created = True
 
-    connection.sendmail(from_address, to_field, full_message)
+    # Send the message via SMTP to localhost:25
+    connection.sendmail(sender, recipient, msg.as_string())
 
     if created:
         connection.quit()
