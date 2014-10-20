@@ -49,7 +49,7 @@ function SetPoints(dScore : float, right : boolean) {
 		textMesh.color = new Color(1.0,0.1,0.1,1.0);
 	}
 
-		textMesh.text = String.Format("{0}{1}",plusminus,dScore);
+	textMesh.text = String.Format("{0}{1}",plusminus,dScore);
 	shadow.text = textMesh.text;
 }
 
@@ -60,5 +60,6 @@ function SetString(str : String, right : boolean) {
 		textMesh.color = new Color(1.0,0.1,0.1,1.0);
 	}
 	textMesh.text = str;
+	shadow.text = textMesh.text;
 }
 

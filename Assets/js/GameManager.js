@@ -39,6 +39,7 @@ var difficultyLabel : Text;
 var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
+var lastDiffSpoken : String;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -597,8 +598,12 @@ function BeginGame() {
 	
 	introReferenceLabel.enabled = false;
 	var diffString : String = verseManager.DifficultyToString(difficulty);
+	var diffSpoken : String = TextManager.GetText(diffString);
 	
-	verseManager.SpeakUtterance(TextManager.GetText(diffString));
+	if (lastDiffSpoken != diffSpoken) {
+		verseManager.SpeakUtterance(diffSpoken);
+		lastDiffSpoken = diffSpoken;
+	}
 	
 	AnimateIntro();
 }
