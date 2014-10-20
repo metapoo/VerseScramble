@@ -488,8 +488,10 @@ function SplitVerse(verse : String) {
 	
 	for (clause in clauseArray) {
 		// check for special '\' marker which we cannot split on
-		var nobreakMarkers = new Array();
-		var breakLength : int = Mathf.RoundToInt(clause.Length/Mathf.RoundToInt((clause.Length + 0.0f)/phraseLength));
+		var nobreakMarkers : Array = new Array();
+		var numPhrase : float = Mathf.RoundToInt((clause.Length + 0.0f)/phraseLength);
+		if (numPhrase == 0) numPhrase = 1;
+		var breakLength : int = Mathf.RoundToInt((clause.Length + 0.0f)/numPhrase);
 		//Debug.Log("break length = " + breakLength);
 		
 		for (i=0;i<clause.Length;i++) {
