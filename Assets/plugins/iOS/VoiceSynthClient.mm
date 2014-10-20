@@ -43,6 +43,7 @@ extern "C" {
         NSString *languageString = CreateNSString(language);
         if (synthesizer == nil) {
             synthesizer = [[AVSpeechSynthesizer alloc] init];
+            [NSThread sleepForTimeInterval:2.0f];
         }
         NSArray *speechVoices = [AVSpeechSynthesisVoice speechVoices];
         AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];

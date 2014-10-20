@@ -23,6 +23,7 @@ public static void SpeakUtterance(string text,string language)
 				androidPluginObject.Call("Init");
 			}
 			androidPluginObject.Call("Speak", new object[] {text, language});
+
 		}
 #endif
 
