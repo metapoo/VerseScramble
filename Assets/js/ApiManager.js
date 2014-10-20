@@ -12,32 +12,26 @@ class ApiManager extends MonoBehaviour {
 	
 	public static function IsConnectedToInternet() : boolean {
 		var isConnectedToInternet = false;
-		
-#if UNITY_EDITOR
-    	if (Network.player.ipAddress.ToString() != "127.0.0.1")
-    	{
-        	isConnectedToInternet = true;      
-    	}
-#endif
+		var ipAddress : String = Network.player.ipAddress.ToString().Trim();
+
 #if UNITY_IPHONE
-    	if (iPhoneSettings.internetReachability == iPhoneNetworkReachability.ReachableViaWiFiNetwork)
+    	if (iPhoneSettings.internetReachability != iPhoneNetworkReachability.NotReachable)
     	{
         	isConnectedToInternet = true;
-    	}
+    	} 
 #endif
 #if UNITY_ANDROID
-    	if (iPhoneSettings.internetReachability == iPhoneNetworkReachability.ReachableViaWiFiNetwork)
+    	if (iPhoneSettings.internetReachability != iPhoneNetworkReachability.NotReachable)
     	{
         	isConnectedToInternet = true;
     	}
 #endif
-#if (!UNITY_IPHONE  !UNITY_ANDROID)
-    	if (Network.player.ipAddress.ToString() != "127.0.0.1")
+    	if ((ipAddress == "127.0.0.1") || (ipAddress == "0.0.0.0"))
     	{
-        	isConnectedToInternet = true;
- 
+        	isConnectedToInternet = false;      
     	}
-#endif
+
+		Debug.Log("Connected to the internet: " + isConnectedToInternet + " ip= " + Network.player.ipAddress.ToString());
 		return isConnectedToInternet;
 	}
 	

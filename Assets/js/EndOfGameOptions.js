@@ -15,6 +15,13 @@ function BackToMenu() {
 }
 
 function SubmitScore(showPopup: boolean) {
+	Debug.Log("showPopup = " + showPopup);
+	if (!showPopup) {
+		if (!ApiManager.IsConnectedToInternet()) {
+			Debug.Log("skipping submit score because not connected to internet");
+			return;
+		}
+	}
 	
 	var score = scoreManager.score;
 	var versesetId = verseManager.currentVerseSet.onlineId;
