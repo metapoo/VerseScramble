@@ -153,6 +153,10 @@ class UpdateVerseHandler(BaseHandler):
                       "text":text,
                       "reference":reference})
         verse.save()
+
+        commentary = self.get_argument("commentary",None)
+        if commentary is not None:
+            verse.set_commentary_text(commentary)
         
         self.redirect(verseset.url())
 
@@ -189,6 +193,11 @@ class CreateVerseHandler(BaseHandler):
                    })
         verse.save()
         verseset.update_verse_count()
+
+        commentary = self.get_argument("commentary",None)
+        if commentary is not None:
+            verse.set_commentary_text(commentary)
+
         self.redirect(verseset.url())
         
 class ShowVerseSetHandler(BaseHandler):
@@ -214,11 +223,12 @@ class ShowVerseSetHandler(BaseHandler):
         scores = VersesetScore.collection.find({'verseset_id':verseset_id}).sort('score', pymongo.DESCENDING)[0:limit]
         scores = list(scores)
         play_url = verseset.play_url()
+        is_me = (user and ((verseset['user_id'] == user._id) or user.is_admin()))
 
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
                            versions=versions, selected_nav=selected_nav, scores=scores,
-                           play_url=play_url
+                           play_url=play_url, is_me=is_me,
                            )
 
 
@@ -257,12 +267,12 @@ class UpdateVerseSetHandler(BaseHandler):
         name = self.get_argument("name")
         language = self.get_argument("language")
         version = smart_text(self.get_argument("version"))
-        commentary = self.get_argument("commentary",None)
 
         verseset.update({"name":name,
                          "language":language,
                          "version":version})
 
+        commentary = self.get_argument("commentary",None)
         if commentary is not None:
             verseset.set_commentary_text(commentary)
 
@@ -302,6 +312,11 @@ class CreateVerseSetHandler(BaseHandler):
             vs["version"] = version
 
         vs.save()
+
+        commentary = self.get_argument("commentary",None)
+        if commentary is not None:
+            verseset.set_commentary_text(commentary)
+
         self.redirect(vs.url())
 
     @require_login

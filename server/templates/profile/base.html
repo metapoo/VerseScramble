@@ -4,6 +4,7 @@
 {% block page_content %}
 
 <h2 style="margin-top:2px;margin-bottom:0px;">{% module UserLink(user=viewed_user) %} </h2>
+
 <div class="pad_bottom">
 {{gt("{0} points") % viewed_user.total_score()}}, {{viewed_user.accuracy()}}% {{gt("Accuracy")}}, {{gt("{0} Blocks") % viewed_user.total_blocks()}}
 </div>

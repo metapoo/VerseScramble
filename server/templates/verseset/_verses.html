@@ -20,16 +20,29 @@
  <a class="link" onclick="return vr.confirm_delete();" href="/verse/remove/{{v._id}}">{{gt("remove")}}</a> |
 
 {% if i > 1 %}
- <a class="pure-button button-xsmall" onclick="vr.move_verse('up','{{v._id}}'); return false;" href="/verse/moveup/{{v._id}}">↑<a> &nbsp;
+ <a class="pure-button button-xsmall" onclick="vr.move_verse('up','{{v._id}}'); return false;" href="/verse/moveup/{{v._id}}">↑</a> &nbsp;
 {% end %}
 
 {% if i < (len(verses)) %}
- <a class="pure-button button-xsmall" onclick="vr.move_verse('down','{{v._id}}'); return false;" href="/verse/movedown/{{v._id}}">↓<a> &nbsp;
+ <a class="pure-button button-xsmall" onclick="vr.move_verse('down','{{v._id}}'); return false;" href="/verse/movedown/{{v._id}}">↓</a> &nbsp;
 {% end %}
 
+{% end %}
+</div>
+
+{% if v.has_commentary() %}
+{% set commentary_text = v.get_commentary_text() %}
+{% if commentary_text %}
+<div class="commentary_text pad_top pad_bottom">
+{% from verserain.utils.text import remove_script %}
+{% raw remove_script(commentary_text) %}
+</div>
+{% end %}
 {% end %}
 
 </td></tr>
+
+
 {% set i += 1 %}
 {% end %}
 </tbody>
