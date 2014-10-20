@@ -341,12 +341,14 @@ class ListVerseSetHandler(BaseHandler):
             self.set_language(language_code)
 
         args = {}
-
+        
         if (option in ("new","popular")):
             template_name = "verseset/list.html"
             selected_nav = "verse sets"
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
+
+            args.update({"verse_count":{"$gte":2}})
 
             versesets = VerseSet.collection.find(args)
             cursor = versesets

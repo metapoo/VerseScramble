@@ -30,7 +30,8 @@ class VerseSet(BaseModel):
             Index("name",unique=False),
             Index("language",unique=False),
             Index("user_id",unique=False),
-            Index("hotness",unique=False)
+            Index("hotness",unique=False),
+            Index("verse_count",unique=False)
         )
 
     def make_copy(self, user_id=None):
