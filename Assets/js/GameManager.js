@@ -599,7 +599,9 @@ function BeginGame() {
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
-	verseManager.SpeakUtterance("");
+	var diffString : String = verseManager.DifficultyToString(difficulty);
+	
+	verseManager.SpeakUtterance(TextManager.GetText(diffString));
 	
 	yield WaitForSeconds(1.0f);
 	AnimateIntro();
