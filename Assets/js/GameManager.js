@@ -49,7 +49,6 @@ public var showingSolution : boolean = false;
 public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
-private var beginningGame : boolean = false;
 
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
@@ -594,8 +593,6 @@ function Cleanup () {
 
 function BeginGame() {
 	
-	if (beginningGame) return;
-	beginningGame = true;
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
@@ -603,9 +600,7 @@ function BeginGame() {
 	
 	verseManager.SpeakUtterance(TextManager.GetText(diffString));
 	
-	yield WaitForSeconds(1.0f);
 	AnimateIntro();
-	beginningGame = false;
 }
 
 function GetMaxWordsActive() {
