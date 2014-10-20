@@ -35,7 +35,7 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
 
         page = self.get_int_argument("page",1)
         per_page = 100
-        args = {"verse_count":{"$gte":2}}
+        args = {}
 
         if language_code != "ALL":
             args.update({"language":language_code})
@@ -45,6 +45,9 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
             args.update({"user_id":user_id})
 
         versesets = VerseSet.collection.find(args)
+
+        if order_by in ("new", "popular"):
+            args.update({"verse_count":{"$gte":2}})
 
         if order_by == "new":
             versesets = versesets.sort("_id",pymongo.DESCENDING)
