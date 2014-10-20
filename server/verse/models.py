@@ -25,7 +25,12 @@ class CommentaryMixin:
             commentary = Commentary(verseset_id=self._id)
 
         commentary["text"] = text
-        commentary["verseset_id"] = self._id
+        if type(self) is Verse:
+            attrname = "verse_id"
+        else:
+            attrname = "verseset_id"
+
+        commentary[attrname] = self._id
         commentary.save()
         if self.get("commentary_id") != commentary._id:
             self["commentary_id"] = commentary._id
@@ -44,6 +49,7 @@ class Commentary(BaseModel):
     def __new__(cls, *args, **kwargs):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(VerseSet)
+        cls.register_foreign_key(Verse)
         return new_instance
 
 
