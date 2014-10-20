@@ -249,8 +249,8 @@ form.login input[type="text"], form.login input[type="password"] {
 }
 
 form textarea[name="text"] {
-  width: 400px;
-  height: 100px;
+  width: 575px;
+  height: 140px;
 }
 
 

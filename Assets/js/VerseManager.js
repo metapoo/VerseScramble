@@ -205,6 +205,7 @@ function SpeakUtteranceViaWeb(word : String, language: String) {
 }
 
 function SpeakUtterance(word : String, language: String) {
+
 	if (language == null) return;
 	if ((Application.platform!=RuntimePlatform.Android) &&
 	    (Application.platform!=RuntimePlatform.IPhonePlayer)) {

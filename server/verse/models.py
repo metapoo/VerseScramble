@@ -13,16 +13,47 @@ class Version(BaseModel):
             Index("language",unique=False)
         )
 
+class CommentaryMixin:
+    def has_commentary(self):
+        return self.has_key("commentary_id")
+
+    def set_commentary_text(self, text):
+        commentary = self.commentary()
+        if commentary is None:
+            if text == "":
+                return
+            commentary = Commentary(verseset_id=self._id)
+
+        commentary["text"] = text
+        if type(self) is Verse:
+            attrname = "verse_id"
+        else:
+            attrname = "verseset_id"
+
+        commentary[attrname] = self._id
+        commentary.save()
+        if self.get("commentary_id") != commentary._id:
+            self["commentary_id"] = commentary._id
+            self.save()
+
+    def get_commentary_text(self):
+        if self.has_commentary():
+            commentary = self.commentary()
+            if commentary:
+                return commentary["text"]
+        return ""
+
 class Commentary(BaseModel):
     collection = "commentary"
     
     def __new__(cls, *args, **kwargs):
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(VerseSet)
+        cls.register_foreign_key(Verse)
         return new_instance
 
 
-class VerseSet(BaseModel):
+class VerseSet(BaseModel, CommentaryMixin):
     class Meta:
         collection = "verseset"
         
@@ -30,7 +61,8 @@ class VerseSet(BaseModel):
             Index("name",unique=False),
             Index("language",unique=False),
             Index("user_id",unique=False),
-            Index("hotness",unique=False)
+            Index("hotness",unique=False),
+            Index("verse_count",unique=False)
         )
 
     def make_copy(self, user_id=None):
@@ -50,6 +82,9 @@ class VerseSet(BaseModel):
 
         for v in self.verses():
             v_copy = Verse(dict(v))
+            commentary = v_copy.commentary()
+            if commentary:
+                v.set_commentary_text(commentary['text'])
             del v_copy['_id']
             v_copy['verseset_id'] = vs._id
             v_copy.save()
@@ -85,27 +120,6 @@ class VerseSet(BaseModel):
         cls.register_foreign_key(Commentary)
         return new_instance
 
-    def set_commentary_text(self, text):
-        commentary = self.commentary()
-        if commentary is None:
-            if text == "":
-                return
-            commentary = Commentary(verseset_id=self._id)
-
-        commentary["text"] = text
-        commentary["verseset_id"] = self._id
-        commentary.save()
-        if self.get("commentary_id") != commentary._id:
-            self["commentary_id"] = commentary._id
-            self.save()
-    
-    def get_commentary_text(self):
-        if self.has_key("commentary_id"):
-            commentary = self.commentary()
-            if commentary:
-                return commentary["text"]
-        return ""
-    
     def url(self):
         return "/verseset/show/%s" % str(self._id)
 
@@ -148,9 +162,10 @@ class VerseSet(BaseModel):
         commentary = self.commentary()
         if commentary:
             commentary.remove()
+
         super(VerseSet, self).remove(*args, **kwargs)
 
-class Verse(BaseModel):
+class Verse(BaseModel, CommentaryMixin):
     class Meta:
         collection = "verse"
 
@@ -179,6 +194,10 @@ class Verse(BaseModel):
         return url
 
     def remove(self, *args, **kwargs):
+        commentary = self.commentary()
+        if commentary:
+            commentary.remove()
+
         super(Verse, self).remove(*args, **kwargs)
 
     def __new__(cls, *args, **kwargs):
@@ -186,5 +205,6 @@ class Verse(BaseModel):
         cls.register_foreign_key(VerseSet)
         cls.register_foreign_key(User)
         cls.register_foreign_key(Version)
+        cls.register_foreign_key(Commentary)
         return new_instance
 
