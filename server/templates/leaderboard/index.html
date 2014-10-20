@@ -16,7 +16,7 @@ B1;2c{% extends "../base.html" %}
 {% if selected_subnav == "total" %}
 
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks") % "#"}}</th></tr></thead>
+<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks", "#")}}</th></tr></thead>
 <tbody>
 {% set i = 1 +start_index %}
 {% for u in users %}

@@ -78,7 +78,7 @@
   </td> 
   <td class="right">
 {% if user %}
-  <span class="points">{{user.get('total_score',0)}} points</span></span>
+  <span class="points">{{gt("{0} points", user.get('total_score',0))}}</span></span>
 {% else %}
   
 {% end %}

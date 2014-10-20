@@ -57,7 +57,7 @@
 
 <h3>{{gt("High Scores")}}</h3>
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks") % "#"}}</th><th>{{gt("Time")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Date")}}</th></tr></thead>
+<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks", "#")}}</th><th>{{gt("Time")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Date")}}</th></tr></thead>
 
 <tbody>
 {% if len(scores) == 0 %}
