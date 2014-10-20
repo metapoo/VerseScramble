@@ -1,5 +1,24 @@
 {% extends "../base.html" %}
 
+{% block head %}
+{% if is_me %} 
+<link rel="stylesheet" type="text/css" href="/markitup/skins/markitup/style.css" />
+<link rel="stylesheet" type="text/css" href="/markitup/sets/html/style.css" />
+{% end %}
+{% end %}
+
+{% block extra_js %}
+{% if is_me %}
+<script type="text/javascript" src="/markitup/jquery.markitup.js"></script>
+<script type="text/javascript" src="/markitup/sets/html/set.js"></script>
+<script language="javascript">
+  $(document).ready(function(){
+   $('#mark-it-up').markItUp(mySettings);
+});
+</script>
+{% end %}
+{% end %}
+
 {% block script_content %}
 {% end %}
 
@@ -12,6 +31,7 @@
 {% set author = verseset.user() %}
 <div class="pad_bottom">by {% module UserLink(user=author) %}</div> <div class="fb-like pad_bottom" data-href="{{current_url}}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 
+{% if verseset.has_commentary() %}
 {% set commentary_text = verseset.get_commentary_text() %}
 {% if commentary_text %}
 <div class="commentary_text pad_bottom paragraph">
@@ -19,11 +39,12 @@
 {% raw remove_script(commentary_text) %}
 </div>
 {% end %}
+{% end %}
 
 <div class="pad_bottom">
 <a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> {{gt("challenge all verses")}}</a> 
 
-{% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
+{% if is_me %}
 | <a class="link" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a> |
 <a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">{{gt("remove")}}</a>
 {% end %}
@@ -57,7 +78,7 @@
 
 <br/>
 
-{% if user and (verseset['user_id'] == user._id) %}
+{% if is_me %}
 {% include "../verse/_form.html" %}
 {% end %}
 

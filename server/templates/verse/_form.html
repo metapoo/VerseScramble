@@ -1,3 +1,4 @@
+
 <form class="pure-form pure-form-stacked centered" action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
 <h2>{% if verse %}{{gt("Update Verse")}}{% else %}{{gt("Add Verse")}}{% end %}</h2>
 
@@ -18,6 +19,10 @@
 <label class="pad_top" for="text">{{gt("Verse Text")}}</label>
 
 <textarea id="verse_text" name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
+
+  <label class="pad_top" for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
+  <textarea id="mark-it-up" name="commentary" cols="60" rows="14">{% if verse %}{% raw verse.get_commentary_text() %}{% end %}</textarea>
+
 </fieldset>
 
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
