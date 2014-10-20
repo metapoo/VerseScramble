@@ -39,7 +39,6 @@ var difficultyLabel : Text;
 var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
-var lastDiffSpoken : String;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -51,6 +50,7 @@ public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
+static var lastDiffSpoken : String;
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
 static var words : Array = new Array();
