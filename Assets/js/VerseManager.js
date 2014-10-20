@@ -250,7 +250,7 @@ static function IsLanguageChinese(language : String) : boolean {
 }
 
 static function IsCharacterBased(language : String) : boolean {
-	return (language == 'ja');
+	return ((language == 'ja') || IsLanguageChinese(language));
 }
 
 static function IsLanguageWestern(language : String) : boolean {
