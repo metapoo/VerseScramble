@@ -39,5 +39,13 @@ class TranslationManager:
             str = str.replace("{0}","%s")
         return str
 
-def gt(str):
-    return TranslationManager.gt(str)
+def gt(str, arg=None):
+    text = TranslationManager.gt(str)
+    if arg is None:
+        return text
+
+    try:
+        text = text % arg
+        return text
+    except:
+        return text
