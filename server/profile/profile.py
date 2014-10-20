@@ -7,6 +7,7 @@ from tornado.web import asynchronous
 from tornado.gen import coroutine
 from verserain.api.api import *
 from verserain.utils.paging import Pagination
+from verserain.utils.text import *
 from verserain.email.models import *
 from verserain import settings
 from bson.objectid import ObjectId
@@ -74,7 +75,7 @@ class UpdateEmailHandler(BaseHandler, AccountMixin):
         email = self.get_argument("email").lower().strip()
         user = self.current_user
         error_message = None
-        if "@" not in email:
+        if not is_valid_email(email):
             error_message = self.gt("Invalid email")
 
         dupe = User.collection.find_one({"email":email})

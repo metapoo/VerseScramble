@@ -1,6 +1,7 @@
 from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.email.models import *
+from verserain.utils.text import *
 from verserain import settings
 from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
@@ -117,7 +118,9 @@ class RegisterHandler(BaseHandler):
             error_message = "Email is required."
         elif not username:
             error_message = "Username is required."
-        
+        elif (not is_valid_email(email)):
+            error_message = "Invalid email"
+
         if error_message:
             self.render("login/register.html",user=None,error_message=error_message,
                         email=email,username=username, next_url=None)
