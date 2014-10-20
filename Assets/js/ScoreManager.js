@@ -279,6 +279,7 @@ function Start() {
 	while (!VerseManager.loaded) {
 		yield WaitForSeconds(0.1f);
 	}
+	totalElapsedTime = 0;
 	resetStats();
 	reset();
 	SetupUI();

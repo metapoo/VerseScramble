@@ -347,7 +347,6 @@ function Start() {
 		verseManager.SetDifficulty(difficulty);
 		BeginGame();
 	}
-	
 	needToSelectDifficulty = true;
 	
 }
@@ -406,7 +405,7 @@ function SplitVerse(verse : String) {
 		if (clauseArray.length > 0) {
 			// combine with previous clause if too small
 			var previousClause : String = clauseArray[clauseArray.length-1];
-			Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
+			//Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
 			
 			// if clause length is 2 or less just glob it on
 			if (clause.Length <= 2) {
@@ -570,13 +569,14 @@ function SplitVerse(verse : String) {
 			var hasCommas : boolean = (curPhrase.EndsWith(",") && (curWords < 2) &&
 			 prevPhrase.EndsWith(",") && (prevWords < 2));
 			 
-			if (hasCommas && ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f)) {
+			if ((difficulty != difficulty.Hard) && hasCommas && ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f)) {
 			 Debug.Log("COMBINE(" + prevPhrase + " | " + curPhrase + ")");
 				prevPhrase += " " + phraseArray.pop();
 				phraseArray[l-2] = prevPhrase;
 			}
 		}
 	}
+	Debug.Log("# blocks = " + phraseArray.length);
 	return phraseArray;
 
 }
@@ -681,10 +681,16 @@ function SetupVerse() {
 	//Debug.Log("verse length = " + verse.text.length);
 	
 	wordScale = 1.0f;
-	
-	if (verse.text.length > 300) {
-		wordScale = 0.5f + 0.5f*(300.0f / verse.text.length);
+	var ratio : float = (Screen.width+0.0f) / Screen.height;
+	var maxCharSize : float = 250.0f;
+	maxCharSize *= ratio;
+	var smoothing : float = 0.6f;
+	if (verse.text.length > maxCharSize) {
+		wordScale = 0.2f + 0.8f * (maxCharSize * (1.0f + smoothing) / 
+		(verse.text.length + maxCharSize * smoothing));
 	}
+	
+	Debug.Log("word scale = " + wordScale);
 	
 	words = SplitVerse(verse.text);
 	wordIndex = 0;
