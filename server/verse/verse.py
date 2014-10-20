@@ -315,7 +315,7 @@ class CreateVerseSetHandler(BaseHandler):
 
         commentary = self.get_argument("commentary",None)
         if commentary is not None:
-            verseset.set_commentary_text(commentary)
+            vs.set_commentary_text(commentary)
 
         self.redirect(vs.url())
 
