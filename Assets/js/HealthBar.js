@@ -37,7 +37,7 @@ function GetHeight() {
 
 function SetProgress(p : float) {
 	currentPercentage = p;
-	healthLabel.text = String.Format("{0}X", Mathf.RoundToInt(p*100.0));
+	healthLabel.text = String.Format("{0}x", Mathf.RoundToInt(p*100.0));
 	if (p > 1.0f) {
 		p = 1.0f;
 	}
