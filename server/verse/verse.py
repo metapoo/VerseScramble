@@ -12,6 +12,7 @@ def get_handlers():
             (r"/verseset/show/([^/]+)/?", ShowVerseSetHandler),
             (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
+            (r"/verseset/publish/([^/]+)/?", PublishVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
             (r"/versesets/([^/]+)/([^/]+)/(\d+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
@@ -27,6 +28,14 @@ def get_handlers():
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
             (r"/verse/lookup/?",LookupVerseHandler),
             )
+
+class PublishVerseSetHandler(BaseHandler):
+    def get(self, verseset_id=None):
+        vs = VerseSet.by_id(verseset_id)
+        if vs is None:
+            return self.write("verse set not found")
+        vs.publish()
+        self.redirect(vs.url())
 
 class LookupVerseHandler(BaseHandler):
     def get(self):

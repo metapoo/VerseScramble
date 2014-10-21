@@ -66,6 +66,9 @@ class VerseSet(BaseModel, CommentaryMixin):
             Index("published",unique=False),
         )
 
+    def is_published(self):
+        return self.get("published", False)
+
     def publish(self):
         self["published"] = True
         self.save()

@@ -26,6 +26,15 @@
 
 {% block page_content %}
 
+{% if user  %}
+{% if (user._id == verseset.user_id) or user.is_admin() %}
+{% if not verseset.is_published() %}
+<div class="feedback">{{gt("When you are ready you can publish the verse set")}}: <a href="/verseset/publish/{{str(verseset._id)}}" class="pure-button pure-button-primary button-xsmall">{{gt("publish")}}</a> </div>
+{% end %}
+{% end %}
+
+{% end %}
+
 <div>
 <div class="heading" >{{verseset.get('name')}}</div>
 {% module ProfilePhoto(verseset.user(), current_user=user, gt=gt) %}
