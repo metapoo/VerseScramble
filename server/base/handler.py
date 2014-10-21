@@ -217,3 +217,6 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         arg = self.get_argument(key, default)
         arg = float(arg)
         return arg
+
+    def head(self, *args, **kwargs):
+        return
