@@ -72,15 +72,17 @@
 
  <table>
   <tr>
-  <td class="left">{% if user %}<span class="username">{{user['username']}}</span>{% end %}</td>
+  <td class="left">
+{% if user %}
+    <span class="points">{{gt("{0} points", user.get('total_score',0))}}</span></span>
+{% end %}
+  </td>
   <td>
     <img src="/images/logo.png"></img>
   </td> 
   <td class="right">
 {% if user %}
-  <span class="points">{{gt("{0} points", user.get('total_score',0))}}</span></span>
-{% else %}
-  
+    <span class="username">{{user['username']}}</span> &nbsp; <a href="/login/logout" class="pure-button button-small pure-button-primary" >logout</a>
 {% end %}
   </td>
   </tr>
@@ -103,10 +105,6 @@
   <li {% if selected_nav == "play" %}class="active"{% end %}><a href="{{play_url}}"><span>{{gt("Play")}}</span></a></li>
   <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>{{gt("Search")}}</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
-  {% if not user %}
-  {% else %}
-  <li class="last"><a href="/login/logout"><span>{{gt("Logout")}}</span></a></li>
-  {% end %}
 
 </ul>
 </div>
