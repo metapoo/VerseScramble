@@ -41,9 +41,11 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 code=self.get_argument("code"))
 
             fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
+            email = None
 
             if fb_profile.has_key('email'):
-                fb_user['email'] = fb_profile['email']
+                email = fb_profile['email']
+                fb_user['email'] = email
             if fb_profile.has_key('gender'):
                 fb_user['gender'] = fb_profile['gender']
 
@@ -55,7 +57,8 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
             
             if user is None:
                 user = authenticate_login(fb_uid=fb_uid, 
-                                      )
+                                          email = email,
+                )
             if user is None:
                 user = create_new_user(fb_uid=fb_uid, name=name, username=username)
                 user_created = True
