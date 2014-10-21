@@ -50,6 +50,7 @@ public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
+static var lastDiffSpoken : String;
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
 static var words : Array = new Array();
@@ -284,6 +285,7 @@ function AnimateIntro() {
 	var endScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
 	var verse : Verse = verseManager.GetCurrentVerse();
 	SetVerseReference(verse.reference);	
+	introReferenceLabel.enabled = true;
 	introReferenceLabel.color.a = 1.0f;
 	introReferenceLabel.transform.localScale = Vector3.zero;
 	AnimationManager.ScaleOverTime(introReferenceLabel.transform, endScale, duration);
@@ -433,6 +435,9 @@ function SplitVerse(verse : String) {
 		}
 	};
 	
+	var numSeps : int = 0;
+	var numSpaces : int = 0;
+	
 	for (var c : char in verse) {	
 		
 		clause = clause + c;
@@ -447,11 +452,18 @@ function SplitVerse(verse : String) {
 					processClause(clause);
 				}
 				clause = "";
+				numSeps += 1;
 			}
 		}
+		
+		if (c == " "[0]) {
+			numSpaces += 1;
+		}
+		
 		i += 1;
 	}
 	
+	var spaceSepRatio : float = (numSeps+1.0f)/(numSpaces+1.0f);
 	
 	if ((clause != "") && (clause != " ") && (clause != "  ")) {
 		processClause(clause);
@@ -461,7 +473,7 @@ function SplitVerse(verse : String) {
 	var phrase : String = "";
 	var newPhrase : String = "";
 	var phraseLengthForClause : int;
-	var isCharacterBased = verseManager.IsCharacterBased(language);
+	var isCharacterBased = verseManager.IsCharacterBased(language) && (spaceSepRatio > 1.5f);
 	
 	var phraseHasPunctuation = function(phrase : String) {
 		for (var sc in seps) {
@@ -477,10 +489,13 @@ function SplitVerse(verse : String) {
 	for (clause in clauseArray) {
 		// check for special '\' marker which we cannot split on
 		var nobreakMarkers = new Array();
+		var breakLength : int = Mathf.RoundToInt(clause.Length/Mathf.RoundToInt((clause.Length + 0.0f)/phraseLength));
+		//Debug.Log("break length = " + breakLength);
+		
 		for (i=0;i<clause.Length;i++) {
 			if ((clause[i] == "／"[0]) || (clause[i] == "/"[0]) || (clause[i] == " "[0])) {
 				nobreakMarkers.Add(i);
-			} else if ((i % phraseLength == 0) && isCharacterBased) {
+			} else if ((i % breakLength == 0) && isCharacterBased) {
 				nobreakMarkers.Add(i);
 			}
 		}
@@ -591,7 +606,18 @@ function Cleanup () {
 }
 
 function BeginGame() {
+	
 	SetupVerse();
+	
+	introReferenceLabel.enabled = false;
+	var diffString : String = verseManager.DifficultyToString(difficulty);
+	var diffSpoken : String = TextManager.GetText(diffString);
+	
+	if (lastDiffSpoken != diffSpoken) {
+		verseManager.SpeakUtterance(diffSpoken);
+		lastDiffSpoken = diffSpoken;
+	}
+	
 	AnimateIntro();
 }
 

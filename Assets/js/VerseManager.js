@@ -173,6 +173,7 @@ static function GetCurrentReference() : String {
 }
 
 function SayVerseReference() {
+
 	var verse : Verse = GetCurrentVerse();
 	var reference : String = verse.reference;
 	var refParts = reference.Split(":"[0]);
@@ -189,7 +190,6 @@ function SayVerseReference() {
 	}
 		
 	for (var refPart in refParts) {
-		yield WaitForSeconds(1);
 		SpeakUtterance(refPart);
 	}
 }
@@ -250,7 +250,7 @@ static function IsLanguageChinese(language : String) : boolean {
 }
 
 static function IsCharacterBased(language : String) : boolean {
-	return (language == 'ja');
+	return ((language == 'ja') || IsLanguageChinese(language));
 }
 
 static function IsLanguageWestern(language : String) : boolean {
@@ -779,7 +779,7 @@ static function Load() {
 
 function Start() {
 	if (!started) {
-		SetCurrentView(defaultView);
+		SetCurrentView(defaultView);		
 	}
 	LoadVerses();
 	Load();

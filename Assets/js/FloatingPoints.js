@@ -3,10 +3,12 @@
 var startTime : float;
 var ttl : float;
 var startingScale : float;
+var shadow : TextMesh;
 
 function Start () {
 	rigidbody2D.velocity = new Vector3(0,4,0);
 	renderer.material.color.a = 1.0;
+	shadow.gameObject.renderer.material.color.a = 1.0f;
 	startTime = Time.time;
 	startingScale = transform.localScale.x;
 	transform.localScale = new Vector3(0,0,1.0f);
@@ -31,6 +33,7 @@ function Update () {
 		alpha = 1;
 	}
 	renderer.material.color.a = alpha;
+	shadow.gameObject.renderer.material.color.a = alpha;
 }
 
 function SetPoints(dScore : float, right : boolean) {
@@ -39,13 +42,15 @@ function SetPoints(dScore : float, right : boolean) {
 	var textMesh : TextMesh = GetComponent(TextMesh);
 	
 	textMesh.color = new Color(0.2,1.0,0.2,1.0);
+	
 	if (!right) {
 		plusminus = "";
 		if (dScore == 0) plusminus = "-";
 		textMesh.color = new Color(1.0,0.1,0.1,1.0);
 	}
-	Debug.Log(String.Format("SetPoints = {0}{1}",plusminus,dScore));
+
 	textMesh.text = String.Format("{0}{1}",plusminus,dScore);
+	shadow.text = textMesh.text;
 }
 
 function SetString(str : String, right : boolean) {
@@ -55,5 +60,6 @@ function SetString(str : String, right : boolean) {
 		textMesh.color = new Color(1.0,0.1,0.1,1.0);
 	}
 	textMesh.text = str;
+	shadow.text = textMesh.text;
 }
 
