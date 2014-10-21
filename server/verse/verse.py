@@ -52,7 +52,7 @@ class MoveVerseHandler(BaseHandler):
             self.write("verseset not found")
             return
 
-        if (not self.current_user.is_admin()) or \
+        if (not self.current_user.is_admin()) and \
            (self.current_user._id != verseset.user_id):
             self.write("not authorized")
             return
