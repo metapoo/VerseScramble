@@ -28,8 +28,7 @@
 
 <div>
 <div class="heading" >{{verseset.get('name')}}</div>
-{% set author = verseset.user() %}
-<div class="">by {% module UserLink(user=author) %}</div> 
+{% module ProfilePhoto(verseset.user(), current_user=user, gt=gt) %}
 
 <div class="pad_bottom links">
 <a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> {{gt("challenge all verses")}}</a> 

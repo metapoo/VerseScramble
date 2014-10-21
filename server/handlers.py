@@ -9,13 +9,14 @@ from verserain.page import page
 from verserain.translation import translation
 from verserain.user import api as user_api
 from verserain.play import play
+from verserain.subscribe import subscribe
 from verserain.fb import fb
 
 def get_handlers():
     handlers = []
     mods = [base,login,verse, verse_api, page, login_api, leaderboard_api,
             leaderboard, profile, profile_api, translation, play, user_api,
-            fb]
+            fb, subscribe]
 
     for mod in mods:
         handlers.extend(mod.get_handlers())

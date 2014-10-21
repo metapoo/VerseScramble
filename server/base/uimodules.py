@@ -1,6 +1,11 @@
 import tornado.web
 from verserain.translation.localization import *
 
+class ProfilePhoto(tornado.web.UIModule):
+    def render(self, user=None, current_user=None, gt=None):
+        return self.render_string("profile/photo.html",
+                                  user=user, current_user=current_user, gt=gt)
+
 class LanguageUrl(tornado.web.UIModule):
     def render(self, uri=None, language_code=None):
         if ("/versesets/popular" in uri):

@@ -1,0 +1,10 @@
+{% set is_subscribed = False %}
+
+{% if current_user %}
+{% from verserain.subscribe.models import Subscription %}
+{% if Subscription.get_subscription(user, current_user) %}
+{% set is_subscribed = True %}
+{% end %}
+{% end %}
+
+<table class="profile"><thead></thead><tbody><tr><td><img src="{{user.fb_pic_url()}}" /></td><td>{% module UserLink(user=user) %} <div style="padding-top:5px;"> <a href="/{% if is_subscribed %}un{% end %}subscribe/{{user['username']}}?subscribe_url={{request.uri}}" class="pure-button pure-button-primary button-xsmall">{% if is_subscribed %}{{gt("unsubscribe")}}{% else %}{{gt("subscribe")}}{% end %}</a></td></div></tr></tbody></table>
