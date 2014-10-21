@@ -58,6 +58,17 @@ function SetPercentage(p : float) {
 	targetPercentage = p;
 	var endPercentage = targetPercentage;
 	var startPercentage = currentPercentage;
+	
+	// make sure percentage is not below 0.05f for graphic purposes
+	if (startPercentage < 0.05f) {
+		startPercentage = 0.05f;
+	}
+	
+	if (endPercentage == 0) {
+		if (startPercentage <= 0.05f) {
+			startPercentage = 0.0f;
+		}
+	}
 	var duration = 1.0f;
 	var rate = 1.0/duration;
 	var t = 0.0f;
