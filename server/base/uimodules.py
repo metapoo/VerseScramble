@@ -7,6 +7,8 @@ class LanguageUrl(tornado.web.UIModule):
             return "/versesets/popular/%s" % language_code
         elif ("/versesets/new" in uri):
             return "/versesets/new/%s" % language_code
+        elif ("/versesets" in uri):
+            return "/versesets/popular/%s" % language_code
         elif ("/about" in uri):
             return "/about/%s" % language_code
         elif ("/translation" in uri):
