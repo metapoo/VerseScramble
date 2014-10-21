@@ -292,7 +292,7 @@ function AnimateIntro() {
 	
 	verseManager.SayVerseReference();	
 
-	yield WaitForSeconds(2.0f);
+	yield WaitForSeconds(3.0f);
 
 	AnimationManager.FadeOverTime(introReferenceLabel, 1.0f, 0.0f, duration);
 	
