@@ -4,18 +4,6 @@
 {% if error_message %}<div class="error">{{error_message}}</div>{% end %}
 {% if feedback_message %}<div class="feedback" style="margin:0px;text-align:center;">{{feedback_message}}</div>{% end %}
 
-<form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="/profile/email/update">
-<label for="email">{{gt("Email")}}</label>
-<table><tr><td>
-<input type="text" name="email" value="{{user.get('email','')}}" /></td><td><input type="submit" value="{{gt("update")}}" class="pure-button"  />
-</td></tr></table>
-{% if not user.email_verified() %}
-{{gt("email not verified")}}: <a class="link" href="/profile/verify_email/send">{{gt("send verification email")}}</a>
-{% end %}
-</form>
-
-<br/>
-
 <h3>{{gt("Facebook Settings")}}</h3>
 {% if user.has_fb() %}
 <table class="pure-table" ><tr><td>{% if user.has_key("fb_pic_url") %}<img src="{{user['fb_pic_url']}}" />{% end %}</td><td>{{user['name']}}</td></tr>
@@ -26,6 +14,27 @@
 <a href="/fb/login?next=/profile/account"><img id="fb_login" src="/images/login-facebook.png" /></a>
 <br/>
 {% end %}
+
+<br/>
+
+<div>
+<h3>{{gt("Profile Photo")}} (Gravatar)</h3>
+<a href="http://gravatar.com" target="_blank">
+   <img src="{{user.gravatar_pic_url()}}" class="no-grav">
+</a>
+</div>
+
+<br/>
+
+<form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="/profile/email/update">
+<label for="email"><h3>{{gt("Email")}}</h3></label>
+<table><tr><td>
+<input type="text" name="email" value="{{user.get('email','')}}" /></td><td><input type="submit" value="{{gt("update")}}" class="pure-button"  />
+</td></tr></table>
+{% if not user.email_verified() %}
+{{gt("email not verified")}}: <a class="link" href="/profile/verify_email/send">{{gt("send verification email")}}</a>
+{% end %}
+</form>
 
 <br/>
 
