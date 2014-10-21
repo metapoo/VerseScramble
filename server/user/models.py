@@ -19,11 +19,18 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
     def account_incomplete(self):
         return (not self.has_key("email")) or (not self.has_key("password")) or (not self.has_key("fb_uid"))
 
-    def fb_pic_url(self):
+    def gravatar_pic_url(self):
+        if self.email():
+            email_hash = md5(self.email().strip().lower())
+        else:
+            return "http://www.gravatar.com/avatar"
+        return "http://www.gravatar.com/avatar/%s" % email_hash
+
+    def pic_url(self):
         if self.has_key('fb_pic_url'):
             return self['fb_pic_url']
         else:
-            return "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfp1/v/t1.0-1/c20.4.48.48/p56x56/283270_257757160902107_690367_n.jpg?oh=b83c442809c4e61e7b84acf25a008fc7&oe=54EEC6E5&__gda__=1420889662_a7bb1a46e9609b35e92147863284f218"
+            return self.gravatar_pic_url()
 
     @classmethod
     def by_username(cls, username):

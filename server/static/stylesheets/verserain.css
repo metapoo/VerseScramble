@@ -4,6 +4,11 @@ table.profile tr td {
   padding: 5px 10px 5px 0px;
 }
 
+table.profile img {
+  width: 50px;
+  height: 50px;
+}
+
 .links .fb-like {
   top:5px;
 }
