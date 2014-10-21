@@ -122,8 +122,27 @@
 {% end %}
 </div>
 
+</div>
+
 <div id="footer">
 <div class="centered_wrapper">
+
+<div id="footer_links">
+<table class="centered"><tr>
+<td><a class="pure-button" onclick="vr.show_language_selector(); return false;">Select Language &#x25BC;</a></td>
+<td><a class="pure-button" href="/translation">{{gt("Translate Verserain")}}</a></td><td>  <a class="pure-button" href="/contact">{{gt("Help")}}</a></td><td>  <a class="pure-button" href="/privacy">{{gt("Privacy")}}</a> </td></tr>
+</table>
+
+<div id="languages">
+{% from verserain.verse.language import LANGUAGE_CODES, LANGUAGE_BY_CODE %}
+{% for code in LANGUAGE_CODES %}
+<a class="pure-button {% if code == current_language %}pure-button-primary{% end %}" hreflang="{{code}}" rel="alternate" href="{% module LanguageUrl(request.uri, code) %}">{{LANGUAGE_BY_CODE[code]}}</a>
+{% end %}
+</div>
+
+</div>
+
+
 <table class="centered" id="device_badges">
 <tr><td>
 <a href="https://play.google.com/store/apps/details?id=com.hopeofglory.verserain" target="_blank">
@@ -138,14 +157,7 @@ target="_blank">
 </tr>
 </table>
 </div>
-<div id="footer_links">
-<a class="link" href="/translation">Help Translate</a> | <a class="link" href="/contact">Contact Us</a> | <a class="link" href="/privacy">Privacy</a>  
 </div>
-
-</div>
-
-
-
 </div>
 
 <script src="/javascripts/application.js"></script>

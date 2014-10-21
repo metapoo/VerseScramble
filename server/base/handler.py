@@ -161,8 +161,13 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         return language
 
     def render(self, *args, **kwargs):
+        l = self.get_argument("l", None)
+
         if kwargs.has_key("language_code"):
             language_code = kwargs["language_code"]
+        elif l:
+            language_code = l
+            self.set_language(l)
         else:
             language_code = self.language_code()
 
@@ -175,7 +180,8 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-        
+        kwargs['current_language'] = language_code
+
         if not kwargs.has_key('play_url'):
             kwargs['play_url'] = '/play'
 

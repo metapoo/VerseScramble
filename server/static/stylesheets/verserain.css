@@ -24,6 +24,19 @@
   text-align:center;
 }
 
+#languages {
+  padding-top: 10px;
+  width:900px;
+  margin: auto;
+  text-align:left; 
+  display:none;
+}
+
+#languages a {
+  margin:2px 0px 2px 0px; 
+  width:121px;
+}
+
 #top_buttons {
   z-index:2;
   display:block;
@@ -84,14 +97,23 @@ form.centered {
   margin-left:8px;
 }
 
+#footer_links table td {
+  padding:5px;
+}
+
 #footer_links {
-  padding-top:30px;
+  margin: auto;
+  padding: 10px 0px 20px 0px;
 }
 
 #footer {
-  padding-top:50px;
   text-align:center;
   font-size:0.8em;
+  border-width: 1px 0px 0px 0px; 
+  border-style: solid; 
+  border-color: #eee; 
+  background-color:#f6f6f6;
+  padding-bottom:30px;
 }
 
 #unity_player_content {
