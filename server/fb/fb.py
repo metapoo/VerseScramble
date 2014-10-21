@@ -57,8 +57,11 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
             
             if user is None:
                 user = authenticate_login(fb_uid=fb_uid, 
-                                          email = email,
                 )
+
+            if user is None and email:
+                user = User.collection.find_one({"email":email})
+
             if user is None:
                 user = create_new_user(fb_uid=fb_uid, name=name, username=username)
                 user_created = True
