@@ -47,7 +47,8 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         versesets = VerseSet.collection.find(args)
 
         if order_by in ("new", "popular"):
-            args.update({"verse_count":{"$gte":2}})
+            args.update({"verse_count":{"$gte":2},
+                         "published":True})
 
         if order_by == "new":
             versesets = versesets.sort("_id",pymongo.DESCENDING)

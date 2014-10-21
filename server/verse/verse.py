@@ -372,7 +372,8 @@ class ListVerseSetHandler(BaseHandler):
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
 
-            args.update({"verse_count":{"$gte":2}})
+            args.update({"verse_count":{"$gte":2},
+                         "published":True})
 
             versesets = VerseSet.collection.find(args)
             cursor = versesets
