@@ -62,8 +62,17 @@ class VerseSet(BaseModel, CommentaryMixin):
             Index("language",unique=False),
             Index("user_id",unique=False),
             Index("hotness",unique=False),
-            Index("verse_count",unique=False)
+            Index("verse_count",unique=False),
+            Index("published",unique=False),
         )
+
+    def publish(self):
+        self["published"] = True
+        self.save()
+
+    def unpublish(self):
+        self["published"] = False
+        self.save()
 
     def make_copy(self, user_id=None):
         vs = VerseSet(dict(self))
