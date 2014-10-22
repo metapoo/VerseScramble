@@ -10,6 +10,26 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
+    def language_uri(self):
+        uri = request.uri
+        if ("/versesets/popular" in uri):
+            return "/versesets/popular/%s"
+        elif ("/versesets/new" in uri):
+            return "/versesets/new/%s"
+        elif ("/versesets" in uri):
+            return "/versesets/popular/%s"
+        elif ("/about" in uri):
+            return "/about/%s"
+        elif ("/translation" in uri):
+            return "/translation/%s"
+
+        if "?" in uri:
+            sep = "&"
+        else:
+            sep = "?"
+
+        return "%s%sl=%s" % (uri,sep,"%s")
+        
     def send_verify_email(self):
         from verserain.email.models import EmailQueue
         user = self.current_user
@@ -187,6 +207,9 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         kwargs['settings'] = settings
         kwargs['request'] = self.request
         kwargs['current_language'] = language_code
+
+        if not kwargs.has_key('language_uri'):
+            kwargs['language_uri'] = self.language_uri()
 
         if not kwargs.has_key('play_url'):
             kwargs['play_url'] = '/play'

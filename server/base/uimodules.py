@@ -6,25 +6,6 @@ class ProfilePhoto(tornado.web.UIModule):
         return self.render_string("profile/photo.html",
                                   user=user, current_user=current_user, gt=gt)
 
-class LanguageUrl(tornado.web.UIModule):
-    def render(self, uri=None, language_code=None):
-        if ("/versesets/popular" in uri):
-            return "/versesets/popular/%s" % language_code
-        elif ("/versesets/new" in uri):
-            return "/versesets/new/%s" % language_code
-        elif ("/versesets" in uri):
-            return "/versesets/popular/%s" % language_code
-        elif ("/about" in uri):
-            return "/about/%s" % language_code
-        elif ("/translation" in uri):
-            return "/translation/%s" % language_code
-
-        if "?" in uri:
-            sep = "&"
-        else:
-            sep = "?"
-
-        return "%s%sl=%s" % (uri,sep,language_code)
 
 class PlayButton(tornado.web.UIModule):
     def render(self, verseset=None, verseset_id=None):

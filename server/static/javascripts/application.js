@@ -25,6 +25,7 @@ vr.show_language_selector = function() {
     if (!$("#languages").is(":visible")) {
 	$("#languages").show();
 	window.scrollTo(0,document.body.scrollHeight);
+	vr.ajax_request("/base/show_languages", {}, "#languages");
     } else {
 	$("#languages").hide();
     }

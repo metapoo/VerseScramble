@@ -118,7 +118,7 @@
 <div id="languages">
 {% from verserain.verse.language import LANGUAGE_CODES, LANGUAGE_BY_CODE %}
 {% for code in LANGUAGE_CODES %}
-<a class="pure-button {% if code == current_language %}pure-button-primary{% end %}" hreflang="{{code}}" rel="alternate" href="{% module LanguageUrl(request.uri, code) %}">{{LANGUAGE_BY_CODE[code]}}</a>
+<a class="pure-button {% if code == current_language %}pure-button-primary{% end %}" hreflang="{{code}}" rel="alternate" href="{{language_uri % code}}">{{LANGUAGE_BY_CODE[code]}}</a>
 {% end %}
 </div>
 
