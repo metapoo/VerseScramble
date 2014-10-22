@@ -34,6 +34,7 @@ class AccountMixin:
                     error_message=error_message, feedback_message=feedback_message)
 
 class UpdatePasswordHandler(BaseHandler, AccountMixin):
+    @require_secure
     def post(self):
         current_pw = self.get_argument("current_password", None)
         new_pw = self.get_argument("new_password")
@@ -102,7 +103,6 @@ class SendVerifyEmailHandler(BaseHandler, AccountMixin):
         return self.render_account(feedback_message=self.gt("Verification email has been sent"))
 
 class ProfileAccountHandler(BaseHandler):
-    @require_secure
     @require_login
     def get(self, username=None):
         user = self.current_user
