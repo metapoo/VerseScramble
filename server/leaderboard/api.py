@@ -60,19 +60,21 @@ class LeaderboardSubmitScoreHandler(BaseHandler, ApiMixin):
         submitted_hash = self.get_argument("hash","")
         validated = (expected_hash == submitted_hash)
 
-        VersesetScore.submit_score(user_id=self.current_user._id,
-                                   username=self.current_user['username'],
-                                   score=score,
-                                   verseset_id=verseset_id,
-                                   user = self.current_user,
-                                   mistakes = mistakes,
-                                   mastered = mastered,
-                                   elapsed_time = elapsed_time,
-                                   correct = correct,
-                                   is_challenge = is_challenge,
-                                   difficulty = difficulty,
-        )
-
+        if validated:
+            VersesetScore.submit_score(user_id=self.current_user._id,
+                                       username=self.current_user['username'],
+                                       score=score,
+                                       verseset_id=verseset_id,
+                                       user = self.current_user,
+                                       mistakes = mistakes,
+                                       mastered = mastered,
+                                       elapsed_time = elapsed_time,
+                                       correct = correct,
+                                       is_challenge = is_challenge,
+                                       difficulty = difficulty,
+                                   )
+        else:
+            pass
         response = get_scores_json(verseset_id)
         response["is_logged_in"] = True
         response["validated"] = validated
