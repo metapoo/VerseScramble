@@ -28,6 +28,7 @@ var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
 var sceneSetup : SceneSetup;
+var fellDownEnough : boolean = false;
 
 private var shrinkingEdges : boolean = false;
 
@@ -67,7 +68,7 @@ function Explode() {
 	audio.PlayOneShot(sndPop, Random.RandomRange(0.5f,1.0f));
 	yield WaitForSeconds(2.5f);
 	exploding = false;
-	rigidbody2D.gravityScale = gameManager.GetWordGravityScale();
+	rigidbody2D.gravityScale = 0.1;
 }
 
 function FixedUpdate() {
