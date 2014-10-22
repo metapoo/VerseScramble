@@ -21,7 +21,10 @@ class SubscriptionsHandler(BaseHandler):
         if not viewed_user:
             return self.write("user not found")
         subscriptions = list(Subscription.collection.find({"subscriber_id":viewed_user._id}))
-        self.render("profile/subscriptions.html", subscriptions=subscriptions,
+        user_ids = [sub.user_id for sub in subscriptions]
+        users = list(User.collection.find({"_id":{"$in":user_ids}}))
+
+        self.render("profile/subscriptions.html", users=users,
                     selected_nav="profile", selected_subnav="subscriptions",
                     viewed_user=viewed_user)
 
@@ -31,7 +34,10 @@ class SubscribersHandler(BaseHandler):
         if not viewed_user:
             return self.write("user not found")
         subscriptions = list(Subscription.collection.find({"user_id":viewed_user._id}))
-        self.render("profile/subscriptions.html", subscriptions=subscriptions,
+        user_ids = [sub.user_id for sub in subscriptions]
+        users = list(User.collection.find({"_id":{"$in":user_ids}}))
+
+        self.render("profile/subscriptions.html", users=users,
                     selected_nav="profile", selected_subnav="subscribers",
                     viewed_user=viewed_user)
 
