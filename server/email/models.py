@@ -17,17 +17,22 @@ class EmailQueue(BaseModel):
         return new_instance
 
     @classmethod
-    def queue_mail(cls, from_address, to_address, subject, message, reply_to=None):
+    def queue_mail(cls, from_address, to_address, subject, message, reply_to=None, html=None):
         eq = EmailQueue(from_address=from_address,
                         to_address=to_address,
                         subject=subject,
                         message=message,
-                        reply_to=reply_to)
+                        reply_to=reply_to,
+                        html=html)
         eq.save()
         return eq
 
     def send_mail(self, connection=None):
-        send_mail(self.from_address,self.to_address,self.subject,self.message,self.reply_to,connection=connection)
+        html = None
+        if self.has_key("html"):
+            html = self["html"]
+
+        send_mail(self.from_address,self.to_address,self.subject,self.message,self.reply_to,connection=connection,html=html)
         self.remove()
 
     def save(self, *args, **kwargs):

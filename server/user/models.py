@@ -16,6 +16,14 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
             Index("total_score"),
         )
 
+    def language(self):
+        return self.get("language","en")
+
+    def set_language(self, code):
+        if self.get("language") != code:
+            self["language"] = code
+            self.save()
+
     def account_incomplete(self):
         return (not self.has_key("email")) or (not self.has_key("password")) or (not self.has_key("fb_uid"))
 

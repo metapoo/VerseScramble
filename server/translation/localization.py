@@ -33,8 +33,10 @@ class TranslationManager:
         return transdict.get(str.lower(),str)
 
     @classmethod
-    def gt(cls, str, arg=None):
-        str = cls.get_localized_string(str, cls.current_language)
+    def gt(cls, str, arg=None, language=None):
+        if language is None:
+            language = cls.current_language
+        str = cls.get_localized_string(str, language)
         if "{0}" in str:
             str = str.replace("{0}","%s")
         if arg is None:
@@ -47,6 +49,6 @@ class TranslationManager:
 
         return str
 
-def gt(str, arg=None):
-    text = TranslationManager.gt(str)
+def gt(str, arg=None, language=None):
+    text = TranslationManager.gt(str, arg=arg, language=language)
     return text

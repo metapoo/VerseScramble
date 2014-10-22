@@ -22,6 +22,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                           hash_code, user.session_key())
         message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
+        
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
 
     def get_email_message(self, email_name, **kwargs):
@@ -140,6 +141,9 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         return user
 
     def language_code(self, not_all=False):
+        if self.current_user:
+            if self.current_user.has_key("language"):
+                return self.current_user["language"]
         language_code = self.get_cookie("language_code",self.default_language())
         if not_all and (language_code.lower() == "all"):
             return self.default_language()
@@ -148,7 +152,9 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def set_language(self, language_code):
         self.set_cookie("language_code", language_code)
         self.set_current_language(language_code)
-    
+        if self.current_user:
+            self.current_user.set_language(language_code)
+
     def default_language(self):
         locale = self.get_browser_locale().code.lower()
 
