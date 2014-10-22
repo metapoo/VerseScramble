@@ -15,7 +15,7 @@ else:
     SITE_URL = "http://%s" % SITE_DOMAIN
     SECURE_SITE_URL = SITE_URL.replace("http://","https://")
 
-ADMIN_EMAIL = "admin@%s" % MAIL_DOMAIN
+ADMIN_EMAIL = "\"Verse Rain\" <admin@%s>" % MAIL_DOMAIN
 MONGODB_HOST = "localhost"
 MONGODB_PORT = 27017
 MONGODB_USERNAME = "admin"

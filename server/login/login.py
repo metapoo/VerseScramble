@@ -183,5 +183,8 @@ class LoginHandler(BaseHandler):
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie("session_key")
+        self.clear_cookie("next_url")
+        self.clear_cookie("language_code")
+
         self.redirect("/")
 

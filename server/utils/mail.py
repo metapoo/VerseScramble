@@ -1,11 +1,12 @@
 from verserain import settings
 from verserain.utils.encoding import *
 from smtplib import SMTP
+from email.mime.multipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Header import Header
 from email.Utils import parseaddr, formataddr
 
-def send_mail(sender, recipient, subject, body, reply_to=None, connection=None):
+def send_mail(sender, recipient, subject, body, reply_to=None, connection=None, html=None):
     """Send an email.
 
     All arguments should be Unicode strings (plain ASCII works as well).
@@ -47,7 +48,15 @@ def send_mail(sender, recipient, subject, body, reply_to=None, connection=None):
     recipient_addr = recipient_addr.encode('ascii')
 
     # Create the message ('plain' stands for Content-Type: text/plain)
-    msg = MIMEText(body.encode(body_charset), 'plain', body_charset)
+    msg = MIMEMultipart('alternative')
+
+    text_part = MIMEText(body.encode(body_charset), 'plain', body_charset)
+    msg.attach(text_part)
+
+    if html:
+        html_part = MIMEText(html.encode(body_charset), 'html', body_charset)
+        msg.attach(html_part)
+
     msg['From'] = formataddr((sender_name, sender_addr))
     msg['To'] = formataddr((recipient_name, recipient_addr))
     msg['Subject'] = Header(unicode(subject), header_charset)
@@ -87,10 +96,12 @@ def report_exception(error_message=None, handler=None, callback=None, downed_ser
 
     import simplejson
     arguments = ""
+    headers = ""
     if handler and handler.request:
         arguments = handler.request.arguments
+        headers = handler.request.headers
 
-    body = str(arguments) + "\n"
+    body = "arguments: %s\nheaders: %s\n" % (str(arguments) + str(headers))
 
     if handler and handler.current_user:
         body += "user id: %s\n" % handler.current_user._id

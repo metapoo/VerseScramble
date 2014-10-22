@@ -12,6 +12,7 @@ def get_handlers():
             (r"/verseset/show/([^/]+)/?", ShowVerseSetHandler),
             (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
+            (r"/verseset/publish/([^/]+)/?", PublishVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
             (r"/versesets/([^/]+)/([^/]+)/(\d+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
@@ -27,6 +28,43 @@ def get_handlers():
             (r"/version/update_selector/?",UpdateVersionSelectorHandler),
             (r"/verse/lookup/?",LookupVerseHandler),
             )
+
+class PublishVerseSetHandler(BaseHandler):
+
+    def send_emails(self,verseset):
+        from verserain.subscribe.models import Subscription
+        subscriptions = Subscription.collection.find({"user_id":verseset.user_id})
+        user = verseset.user()
+        for sub in subscriptions:
+            self.send_email(verseset, user, sub.subscriber())
+
+    def send_email(self, verseset, user, subscriber):
+        from verserain.email.models import EmailQueue
+        from verserain.translation.localization import gt
+        if subscriber.email() is None:
+            return
+        language = subscriber.language()
+        email = subscriber['email']
+        subject = "%s: %s" % (gt("Verse Rain", language=language), gt("{0} has published a verse set", arg=user['username'], language=language))
+        message = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings)
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+
+    @require_login
+    def get(self, verseset_id=None):
+        user = self.current_user
+        vs = VerseSet.by_id(verseset_id)
+
+        if vs is None:
+            return self.write("verse set not found")
+
+        if (not user.is_admin()) and (user._id != vs.user_id):
+            return self.write("not authorized")
+
+        if not vs.is_published():
+            vs.publish()
+            self.send_emails(vs)
+
+        self.redirect(vs.url())
 
 class LookupVerseHandler(BaseHandler):
     def get(self):
@@ -363,7 +401,8 @@ class ListVerseSetHandler(BaseHandler):
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
 
-            args.update({"verse_count":{"$gte":2}})
+            args.update({"verse_count":{"$gte":2},
+                         "published":True})
 
             versesets = VerseSet.collection.find(args)
             cursor = versesets

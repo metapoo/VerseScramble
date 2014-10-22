@@ -10,6 +10,31 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
+    def language_uri(self):
+        uri = self.request.uri
+        l = None
+
+        if ("/versesets/popular" in uri):
+            l = "/versesets/popular/%s"
+        elif ("/versesets/new" in uri):
+            l = "/versesets/new/%s"
+        elif ("/versesets" in uri):
+            l = "/versesets/popular/%s"
+        elif ("/about" in uri):
+            l = "/about/%s"
+        elif ("/translation" in uri):
+            l = "/translation/%s"
+
+        if l is None:
+            if "?" in uri:
+                sep = "&"
+            else:
+                sep = "?"
+
+            l = "%s%sl=%s" % (uri,sep,"%s")
+        
+        return l
+
     def send_verify_email(self):
         from verserain.email.models import EmailQueue
         user = self.current_user
@@ -22,6 +47,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                           hash_code, user.session_key())
         message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
+        
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
 
     def get_email_message(self, email_name, **kwargs):
@@ -140,6 +166,9 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         return user
 
     def language_code(self, not_all=False):
+        if self.current_user:
+            if self.current_user.has_key("language"):
+                return self.current_user["language"]
         language_code = self.get_cookie("language_code",self.default_language())
         if not_all and (language_code.lower() == "all"):
             return self.default_language()
@@ -148,21 +177,31 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def set_language(self, language_code):
         self.set_cookie("language_code", language_code)
         self.set_current_language(language_code)
-    
-    def default_language(self):
-        locale = self.get_browser_locale().code.lower()
+        if self.current_user:
+            self.current_user.set_language(language_code)
 
-        if locale == "zh_cn":
+    def default_language(self):
+        accept_language = self.request.headers.get('Accept-Language','en-us').lower()
+        parts = accept_language.split(",")
+        part = parts[0]
+        locale = part
+
+        if locale == "zh-cn":
             language = "zh-hans"
-        elif locale == "zh_tw":
+        elif locale == "zh-tw":
             language = "zh-hant"
         else:
             language = locale.split("_")[0]
         return language
 
     def render(self, *args, **kwargs):
+        l = self.get_argument("l", None)
+
         if kwargs.has_key("language_code"):
             language_code = kwargs["language_code"]
+        elif l:
+            language_code = l
+            self.set_language(l)
         else:
             language_code = self.language_code()
 
@@ -175,7 +214,11 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         kwargs['isAndroid'] = self.isAndroid()
         kwargs['settings'] = settings
         kwargs['request'] = self.request
-        
+        kwargs['current_language'] = language_code
+
+        if not kwargs.has_key('language_uri'):
+            kwargs['language_uri'] = self.language_uri()
+
         if not kwargs.has_key('play_url'):
             kwargs['play_url'] = '/play'
 

@@ -23,24 +23,6 @@
 {% from verserain import settings %}
 
 <script type="text/javascript"> var idx=window.location.toString().indexOf("#_=_"); if (idx>0) { window.location = window.location.toString().substring(0, idx); } </script>
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '{{settings.FACEBOOK_API_KEY}}',
-          xfbml      : true,
-          version    : 'v2.0'
-        });
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-
-    </script>
 
 </head>
 
@@ -72,15 +54,17 @@
 
  <table>
   <tr>
-  <td class="left">{% if user %}<span class="username">{{user['username']}}</span>{% end %}</td>
+  <td class="left">
+{% if user %}
+    <span class="points">{{gt("{0} points", user.get('total_score',0))}}</span></span>
+{% end %}
+  </td>
   <td>
     <img src="/images/logo.png"></img>
   </td> 
   <td class="right">
 {% if user %}
-  <span class="points">{{gt("{0} points", user.get('total_score',0))}}</span></span>
-{% else %}
-  
+    <span class="username">{{user['username']}}</span> &nbsp; <a href="/login/logout" class="pure-button button-small pure-button-primary" >{{gt("Logout")}}</a>
 {% end %}
   </td>
   </tr>
@@ -103,10 +87,6 @@
   <li {% if selected_nav == "play" %}class="active"{% end %}><a href="{{play_url}}"><span>{{gt("Play")}}</span></a></li>
   <li {% if selected_nav == "search" %}class="active"{% end %}><a href="/search"><span>{{gt("Search")}}</span></a></li>
   <li {% if selected_nav == "about" %}class="active"{% end %}><a href="/about"><span>{{gt("About")}}</span></a></li>
-  {% if not user %}
-  {% else %}
-  <li class="last"><a href="/login/logout"><span>{{gt("Logout")}}</span></a></li>
-  {% end %}
 
 </ul>
 </div>
@@ -124,8 +104,29 @@
 {% end %}
 </div>
 
+</div>
+
 <div id="footer">
 <div class="centered_wrapper">
+
+<div id="footer_links">
+<table class="centered"><tr>
+<td><a class="pure-button" onclick="vr.show_language_selector(); return false;">{{gt("Select Language")}} &#x25BC;</a></td>
+<td><a class="pure-button" href="/translation">{{gt("Translate Verserain")}}</a></td><td>  <a class="pure-button" href="/contact">{{gt("Help")}}</a></td><td>  <a class="pure-button" href="/privacy">{{gt("Privacy")}}</a> </td>
+<td><a class="pure-button" href="#" onclick="return false;" >Browser Language: {{handler.default_language()}}</a>
+</tr>
+</table>
+
+<div id="languages">
+{% from verserain.verse.language import LANGUAGE_CODES, LANGUAGE_BY_CODE %}
+{% for code in LANGUAGE_CODES %}
+<a class="pure-button {% if code == current_language %}pure-button-primary{% end %}" hreflang="{{code}}" rel="alternate" href="{{language_uri.replace("%s",code)}}">{{LANGUAGE_BY_CODE[code]}}</a>
+{% end %}
+</div>
+
+</div>
+
+
 <table class="centered" id="device_badges">
 <tr><td>
 <a href="https://play.google.com/store/apps/details?id=com.hopeofglory.verserain" target="_blank">
@@ -140,17 +141,10 @@ target="_blank">
 </tr>
 </table>
 </div>
-<div id="footer_links">
-<a class="link" href="/translation">Help Translate</a> | <a class="link" href="/contact">Contact Us</a> | <a class="link" href="/privacy">Privacy</a> | &copy; 2014 Hope of Glory Publishing LLC 
+</div>
 </div>
 
-</div>
-
-
-
-</div>
-
-<script src="/javascripts/application.js"></script>
+<script src="/javascripts/application.js?v=1"></script>
 <script src="/javascripts/jquery-2.1.1.min.js"></script>
 <script>
 {% block script_content %}

@@ -16,8 +16,29 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
             Index("total_score"),
         )
 
+    def language(self):
+        return self.get("language","en")
+
+    def set_language(self, code):
+        if self.get("language") != code:
+            self["language"] = code
+            self.save()
+
     def account_incomplete(self):
         return (not self.has_key("email")) or (not self.has_key("password")) or (not self.has_key("fb_uid"))
+
+    def gravatar_pic_url(self):
+        if self.email():
+            email_hash = md5(self.email().strip().lower()).hexdigest()
+        else:
+            return "http://www.gravatar.com/avatar"
+        return "http://www.gravatar.com/avatar/%s" % email_hash
+
+    def pic_url(self):
+        if self.has_key('fb_pic_url'):
+            return self['fb_pic_url']
+        else:
+            return self.gravatar_pic_url()
 
     @classmethod
     def by_username(cls, username):

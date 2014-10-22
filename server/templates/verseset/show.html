@@ -22,14 +22,13 @@
 {% block script_content %}
 {% end %}
 
-{% block title %}Verses on "{{verseset['name']}}"{% end %}
+{% block title %}"{{verseset['name']}}" {{gt("Verses")}}{% end %}
 
 {% block page_content %}
 
 <div>
 <div class="heading" >{{verseset.get('name')}}</div>
-{% set author = verseset.user() %}
-<div class="">by {% module UserLink(user=author) %}</div> 
+{% module ProfilePhoto(verseset.user(), current_user=user, gt=gt) %}
 
 <div class="pad_bottom links">
 <a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> {{gt("challenge all verses")}}</a> 
@@ -42,6 +41,14 @@
 | <div class="fb-like" data-href="{{current_url}}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 
 </div>
+
+{% if user  %}
+{% if (user._id == verseset.user_id) or user.is_admin() %}
+{% if not verseset.is_published() %}
+<div class="feedback" style="border: 1px solid #ccc;"><div>{{gt("Your verse set is not yet published")}} </div> <a href="/verseset/publish/{{str(verseset._id)}}" class="pure-button pure-button-primary " style="margin-top:5px;">{{gt("publish")}}</a> </div>
+{% end %}
+{% end %}
+{% end %}
 
 {% set commentary_parent = verseset %}
 {% include "_commentary.html" %}
