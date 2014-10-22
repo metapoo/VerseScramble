@@ -49,10 +49,16 @@ class PublishVerseSetHandler(BaseHandler):
         message = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings)
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
 
+    @require_login
     def get(self, verseset_id=None):
+        user = self.current_user
         vs = VerseSet.by_id(verseset_id)
+
         if vs is None:
             return self.write("verse set not found")
+
+        if (not user.is_admin()) and (user._id != vs.user_id):
+            return self.write("not authorized")
 
         if not vs.is_published():
             vs.publish()
