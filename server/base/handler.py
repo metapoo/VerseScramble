@@ -12,24 +12,29 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
     def language_uri(self):
         uri = self.request.uri
+        l = None
+
         if ("/versesets/popular" in uri):
-            return "/versesets/popular/%s"
+            l = "/versesets/popular/%s"
         elif ("/versesets/new" in uri):
-            return "/versesets/new/%s"
+            l = "/versesets/new/%s"
         elif ("/versesets" in uri):
-            return "/versesets/popular/%s"
+            l = "/versesets/popular/%s"
         elif ("/about" in uri):
-            return "/about/%s"
+            l = "/about/%s"
         elif ("/translation" in uri):
-            return "/translation/%s"
+            l = "/translation/%s"
 
-        if "?" in uri:
-            sep = "&"
-        else:
-            sep = "?"
+        if l is None:
+            if "?" in uri:
+                sep = "&"
+            else:
+                sep = "?"
 
-        return "%s%sl=%s" % (uri,sep,"%s")
+            l = "%s%sl=%s" % (uri,sep,"%s")
         
+        return l
+
     def send_verify_email(self):
         from verserain.email.models import EmailQueue
         user = self.current_user
