@@ -11,7 +11,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
     def language_uri(self):
-        uri = request.uri
+        uri = self.request.uri
         if ("/versesets/popular" in uri):
             return "/versesets/popular/%s"
         elif ("/versesets/new" in uri):
