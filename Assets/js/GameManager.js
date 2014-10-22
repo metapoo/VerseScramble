@@ -623,6 +623,14 @@ function BeginGame() {
 	AnimateIntro();
 }
 
+function GetWordGravityScale() : float {
+	var maxWords = GetMaxWordsActive();
+}
+
+function IsWordInGame(wordLabel : WordLabel) : boolean {
+	return (wordLabel.transform.position.y < topWall.transform.position.y);
+}
+
 function GetMaxWordsActive() {
 	
 	switch(difficulty) {

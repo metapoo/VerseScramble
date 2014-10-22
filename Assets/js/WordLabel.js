@@ -67,7 +67,7 @@ function Explode() {
 	audio.PlayOneShot(sndPop, Random.RandomRange(0.5f,1.0f));
 	yield WaitForSeconds(2.5f);
 	exploding = false;
-	rigidbody2D.gravityScale = 0.1;
+	rigidbody2D.gravityScale = gameManager.GetWordGravityScale();
 }
 
 function FixedUpdate() {
