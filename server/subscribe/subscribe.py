@@ -34,7 +34,7 @@ class SubscribersHandler(BaseHandler):
         if not viewed_user:
             return self.write("user not found")
         subscriptions = list(Subscription.collection.find({"user_id":viewed_user._id}))
-        user_ids = [sub.user_id for sub in subscriptions]
+        user_ids = [sub.subscriber_id for sub in subscriptions]
         users = list(User.collection.find({"_id":{"$in":user_ids}}))
 
         self.render("profile/subscriptions.html", users=users,
