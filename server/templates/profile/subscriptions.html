@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% block profile_content %}
 
-{% if selected_nav == "subscriptions" %}
+{% if selected_subnav == "subscriptions" %}
+
 {% for sub in subscriptions %}
 <div style="display:inline-block;">{% module ProfilePhoto(sub.user(), current_user=user, gt=gt) %}</div>
 {% end %}
+
 {% else %}
+
 {% for sub in subscriptions %}
 <div style="display:inline-block;">{% module ProfilePhoto(sub.subscriber(), current_user=user, gt=gt) %}</div>
 {% end %}
