@@ -165,6 +165,9 @@ function LoadUserLogin() {
 		Debug.Log("loaded user json = " + json);
 		var userData : Hashtable = ParseJSON(json);
 		HandleLogin(userData);
+		// refresh by logging in again
+		var sessionKey = userData["session_key"];
+		DoLogin(sessionKey);
 	}
 }
 
