@@ -28,9 +28,19 @@ var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
 var sceneSetup : SceneSetup;
-var fellDownEnough : boolean = false;
 
 private var shrinkingEdges : boolean = false;
+
+function GetPercentFell() : float {
+	var maxY : float = gameManager.topWall.center.y;
+	var minY : float = gameManager.bottomWall.center.y;
+	var y : float = transform.position.y;
+	var range : float = (maxY - minY)*.8f;
+	var pct : float = (maxY - y) / range;
+	if (pct < 0) pct = 0;
+	if (pct > 1) pct = 1;
+	return pct;
+}
 
 function Explode() {
 	if (exploding || !returnedToVerse) return;
@@ -452,4 +462,9 @@ function OnMouseDown() {
 	if (str != "") {
 		clone.SetString(str, right);
 	}
+	
+	if (!gameManager.gameStarted) {
+		gameManager.StartGame();
+	}
+
 }

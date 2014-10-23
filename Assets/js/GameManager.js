@@ -130,7 +130,7 @@ function SetupWalls () {
 	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f);	
 	
 	medWall.size = topWall.size;
-	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.5f,0f)).y + 0.5f);	
+	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.75f,0f)).y + 0.5f);	
 	
 	bottomWall.size = topWall.size;
 	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
@@ -642,22 +642,22 @@ function UpdateGravityScale() : float {
 	
 	for (var i : int = wordIndex;i<maxWords;i++) {
 		var wordLabel : WordLabel = scrambledWordLabels[i];
-		if (wordLabel.fellDownEnough) {
-			fellDownEnough += 1.0;
-		}
+		fellDownEnough += wordLabel.GetPercentFell();
 	}
 	
 	if (fellDownEnough == 0) {
 		fellDownEnough = 1;
 	}
-	
+
+	Debug.Log("fell down enough = " + fellDownEnough);
+		
 	var pct : float = 1.0f;
 	
 	if ((numWords > 0) && (wordIndex > 0)) {
 		pct = fellDownEnough / numWords;
 	} 
 	
-	var gravity : float = 0.1 / (Mathf.Pow(pct,1.5f));
+	var gravity : float = 0.1 / pct;
 	
 	for (i = wordIndex;i<maxWords;i++) {
 		wordLabel = scrambledWordLabels[i];
@@ -875,7 +875,6 @@ function releaseWords(index: int, numWords : int) {
 		}
 	}
 	
-	UpdateGravityScale();
 	return i+1;
 }
 
@@ -944,6 +943,9 @@ function Update () {
 	}
 	refreshButton.active = CanShowSolution();
 	hintButton.active = !GetChallengeModeEnabled();
+	if (!finished && gameStarted) {
+		UpdateGravityScale();
+	}
 }
 
 static function StartChallenge() {
