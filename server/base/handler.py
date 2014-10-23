@@ -24,6 +24,9 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             l = "/about/%s"
         elif ("/translation" in uri):
             l = "/translation/%s"
+        
+        if l is None:
+            l = self.request.uri.split("?")[0]
 
         l = "%s?l=%s" % (l,"%s")
         
