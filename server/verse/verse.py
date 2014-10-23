@@ -69,8 +69,8 @@ class PublishVerseSetHandler(BaseHandler):
 
 class LookupVerseHandler(BaseHandler):
     def get(self):
-        reference = self.get_argument("reference").strip()
-        version = self.get_argument("version").strip()
+        reference = self.get_argument("reference", "").strip()
+        version = self.get_argument("version", "").strip()
         verse = Verse.collection.find_one({"reference":reference, "version":version})
         if verse:
             self.write(verse['text'])
