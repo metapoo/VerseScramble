@@ -25,13 +25,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         elif ("/translation" in uri):
             l = "/translation/%s"
 
-        if l is None:
-            if "?" in uri:
-                sep = "&"
-            else:
-                sep = "?"
-
-            l = "%s%sl=%s" % (uri,sep,"%s")
+        l = "%s?l=%s" % (l,"%s")
         
         return l
 
@@ -191,15 +185,13 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         elif locale == "zh-tw":
             language = "zh-hant"
         else:
-            language = locale.split("_")[0]
+            language = locale.split("-")[0]
         return language
 
     def render(self, *args, **kwargs):
         l = self.get_argument("l", None)
 
-        if kwargs.has_key("language_code"):
-            language_code = kwargs["language_code"]
-        elif l:
+        if l:
             language_code = l
             self.set_language(l)
         else:
