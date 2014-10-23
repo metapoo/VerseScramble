@@ -422,8 +422,8 @@ class ListVerseSetHandler(BaseHandler):
         if (language_code is None) or ((language_code.lower() != "all") and (not language_code in LANGUAGE_CODES)):
             language_code = self.language_code()
 
-#        if language_code:
-#            self.set_language(language_code)
+        if language_code.lower() != "all":
+            self.set_language(language_code)
 
         args = {}
         
