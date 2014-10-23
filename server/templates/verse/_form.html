@@ -1,9 +1,9 @@
 
 <form class="pure-form pure-form-stacked centered" action="/verse/{% if verse %}update{% else %}create{% end %}" method="POST">
-<h2>{% if verse %}{{gt("Update Verse")}}{% else %}{{gt("Add Verse")}}{% end %}</h2>
+<h2>{% if verse %}{{gt("Update Verse")}}{% else %}{{gt("Add Verse")}}{% end %} : {{verseset.get('name')}}</h2>
 
   {% if error_message %}
-  <div class="error">{{error_message}}</div>
+  <div class="error">{{gt(error_message)}}</div>
   {% end %}
 
 <fieldset>

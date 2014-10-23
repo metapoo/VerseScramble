@@ -14,6 +14,7 @@ def get_handlers():
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
             (r"/verseset/publish/([^/]+)/?", PublishVerseSetHandler),
             (r"/verseset/update", UpdateVerseSetHandler),
+            (r"/verseset/add_verse/([^/]+)/?", CreateVerseHandler),
             (r"/versesets/([^/]+)/([^/]+)/(\d+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/([^/]+)/?", ListVerseSetHandler),
             (r"/versesets/([^/]+)/?", ListVerseSetHandler),
@@ -199,6 +200,19 @@ class UpdateVerseHandler(BaseHandler):
         self.redirect(verseset.url())
 
 class CreateVerseHandler(BaseHandler):
+    def get(self, verseset_id=None, error_message=None, text=None, reference=None,
+            version=None):
+        user = self.current_user
+        verseset_id = ObjectId(verseset_id)
+        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        if version is None:
+            version = verseset.get('version')
+        if verseset is None:
+            error_message = "Invalid verse set: %s" % verseset_id
+        self.render("verse/create.html", verseset=verseset, verse=None,
+                    version=version, error_message=error_message,
+                    text=text, reference=reference)
+
     def post(self):
         user = self.current_user
         reference = self.get_argument("reference").strip()
@@ -211,12 +225,20 @@ class CreateVerseHandler(BaseHandler):
 
         if verseset is None:
             error_message = "Invalid verse set: %s" % verseset_id
-        if verseset['user_id'] != user._id:
+        if verseset['user_id'] != user._id and (not user.is_admin()):
             error_message = "You can't edit a verse set you don't own"
 
         if error_message:
             self.write(error_message)
             return
+
+        if not text:
+            error_message = "Verse text is required"
+        elif not reference:
+            error_message = "Verse reference is required"
+        
+        if error_message:
+            return self.get(verseset_id,error_message,text,reference,version)
 
         from verserain.utils.text import process_verse
         text = self.get_argument("text")
@@ -355,7 +377,7 @@ class CreateVerseSetHandler(BaseHandler):
         if commentary is not None:
             vs.set_commentary_text(commentary)
 
-        self.redirect(vs.url())
+        self.redirect("/verseset/add_verse/%s" % str(vs._id))
 
     @require_login
     def get(self, error_message=None):
