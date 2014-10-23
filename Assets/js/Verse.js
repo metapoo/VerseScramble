@@ -1,4 +1,4 @@
-public class Verse extends MonoBehaviour
+public class Verse
 {
 	public var onlineId : String;
 	public var reference : String;

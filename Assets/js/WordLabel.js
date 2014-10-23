@@ -28,6 +28,7 @@ var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
 var sceneSetup : SceneSetup;
+var fellDownEnough : boolean = false;
 
 private var shrinkingEdges : boolean = false;
 

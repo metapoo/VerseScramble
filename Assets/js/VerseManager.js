@@ -26,7 +26,7 @@ static function Unload() {
 		var versesets : Array = versesetsByView[view];
 		
 		for (var vs : VerseSet in versesets) {
-			Destroy(vs);
+			vs.HandleRemoved();
 		}
 		versesets.Clear();
 	}
@@ -551,7 +551,7 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 			versesets.RemoveAt(i);
 			
 			if (!(Object.ReferenceEquals(vs, verseset))) {
-				Destroy(vs);
+				vs.HandleRemoved();
 			}
 			
 			versesets.push(verseset);

@@ -1,6 +1,6 @@
 static var versesetBySaveKey : Hashtable = new Hashtable();
 
-public class VerseSet extends MonoBehaviour
+public class VerseSet
 {
 	public var onlineId : String;
 	public var setname : String;
@@ -52,6 +52,10 @@ public class VerseSet extends MonoBehaviour
 		setname = setname_;
 		verses = new Array();
 		versesetBySaveKey[SaveKey()] = this;
+	}
+	
+	public function HandleRemoved() {
+		versesetBySaveKey.Remove(SaveKey());
 	}
 	
 	public function AddVerse(verse_ : Verse) {

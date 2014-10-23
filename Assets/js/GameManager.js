@@ -12,6 +12,7 @@ var topWall : BoxCollider2D;
 var bottomWall: BoxCollider2D;
 var leftWall : BoxCollider2D;
 var rightWall : BoxCollider2D;
+var medWall : BoxCollider2D;
 var finished : boolean = false;
 var references : Array = new Array();
 var difficulty : Difficulty = Difficulty.Easy;
@@ -126,7 +127,10 @@ function SetupWalls () {
 	var h = mainCam.pixelHeight;
 
 	topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w*2.0f, 0f, 0f)).x, 1f);
-	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h,0f)).y + 0.5f);	
+	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f);	
+	
+	medWall.size = topWall.size;
+	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.75f,0f)).y + 0.5f);	
 	
 	bottomWall.size = topWall.size;
 	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
@@ -623,6 +627,41 @@ function BeginGame() {
 	AnimateIntro();
 }
 
+function UpdateGravityScale() : float {
+	var maxActiveWords : int = GetMaxWordsActive();
+	var maxWords : int = wordLabels.length;
+	if ((wordIndex + maxActiveWords) < maxWords) {
+		maxWords = wordIndex + maxActiveWords;
+	}
+	
+	var fellDownEnough : float = 0.0;
+	var numWords : float = maxWords - wordIndex;
+	
+	for (var i : int = wordIndex;i<maxWords;i++) {
+		var wordLabel : WordLabel = scrambledWordLabels[i];
+		if (wordLabel.fellDownEnough) {
+			fellDownEnough += 1.0;
+		}
+	}
+	
+	if (fellDownEnough == 0) {
+		fellDownEnough = 1;
+	}
+	
+	var pct : float = 1.0f;
+	
+	if ((numWords > 0) && (wordIndex > 0)) {
+		pct = fellDownEnough / numWords;
+	} 
+	
+	var gravity : float = 0.1 / pct;
+	
+	for (i = wordIndex;i<maxWords;i++) {
+		wordLabel = scrambledWordLabels[i];
+		wordLabel.rigidbody2D.gravityScale = gravity;
+	}
+}
+
 function GetMaxWordsActive() {
 	
 	switch(difficulty) {
@@ -765,7 +804,7 @@ function SetupVerse() {
 	var numWordsActive = 0;
 	var groupSize = GetGroupSize();
 
-	var dt = 0.2f;
+	var dt = 0.1f;
 	
 	while (numWordsReleased < wordLabels.length) {
 		numWordsActive = (numWordsReleased - wordIndex);
@@ -781,17 +820,16 @@ function SetupVerse() {
 		
 		yield WaitForSeconds(dt);
 
-		if (!gameStarted  && ((numWordsReleased >= 2*groupSize) ||
-		    (numWordsReleased >= wordLabels.length) || (numWordsReleased == maxWordsActive) ))
-		{
-			gameStarted = true;
-			scoreManager.resetTime();
-		}
 	}
 
 	
 	numWordsReleased = wordLabels.length;
 	
+}
+
+function StartGame() {
+	gameStarted = true;
+	scoreManager.resetTime();
 }
 
 function GetWordLabelAt(index : int) : WordLabel {
@@ -832,6 +870,8 @@ function releaseWords(index: int, numWords : int) {
 			break;
 		}
 	}
+	
+	UpdateGravityScale();
 	return i+1;
 }
 
