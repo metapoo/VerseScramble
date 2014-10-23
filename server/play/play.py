@@ -48,7 +48,10 @@ class PlayHandler(BaseHandler):
 
 class PlayVerseHandler(BaseHandler):
     def get(self, verse_id):
-        verse = Verse.by_id(verse_id)
+        try:
+            verse = Verse.by_id(verse_id)
+        except:
+            verse = None
 
         session_key = None
         if self.current_user:
