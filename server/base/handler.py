@@ -25,13 +25,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         elif ("/translation" in uri):
             l = "/translation/%s"
 
-        if l is None:
-            if "?" in uri:
-                sep = "&"
-            else:
-                sep = "?"
-
-            l = "%s%sl=%s" % (uri,sep,"%s")
+        l = "%s?l=%s" % (l,"%s")
         
         return l
 
