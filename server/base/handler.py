@@ -191,7 +191,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         elif locale == "zh-tw":
             language = "zh-hant"
         else:
-            language = locale.split("_")[0]
+            language = locale.split("-")[0]
         return language
 
     def render(self, *args, **kwargs):
