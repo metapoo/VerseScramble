@@ -400,7 +400,7 @@ function Blink() {
 }
 
 function OnMouseDown() { 
-
+	/*
     var ray : Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     var hit : RaycastHit2D = Physics2D.GetRayIntersection(ray,Mathf.Infinity);
     var wasReallyHit : boolean = false;  
@@ -410,6 +410,7 @@ function OnMouseDown() {
     }
     // fix bug where onmousedown is triggered when it shouldn't be
 	if (!wasReallyHit) return;
+	 */
 	 
 	var dScore = 0;
 	var str = "";
