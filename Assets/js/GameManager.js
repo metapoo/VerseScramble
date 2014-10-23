@@ -130,7 +130,7 @@ function SetupWalls () {
 	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f);	
 	
 	medWall.size = topWall.size;
-	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.75f,0f)).y + 0.5f);	
+	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.5f,0f)).y + 0.5f);	
 	
 	bottomWall.size = topWall.size;
 	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
@@ -629,13 +629,16 @@ function BeginGame() {
 
 function UpdateGravityScale() : float {
 	var maxActiveWords : int = GetMaxWordsActive();
-	var maxWords : int = wordLabels.length;
+	var maxWords : int = scrambledWordLabels.length;
 	if ((wordIndex + maxActiveWords) < maxWords) {
 		maxWords = wordIndex + maxActiveWords;
 	}
 	
 	var fellDownEnough : float = 0.0;
 	var numWords : float = maxWords - wordIndex;
+	
+	if (wordIndex >= maxWords) return;
+	if (wordIndex < 0) return;
 	
 	for (var i : int = wordIndex;i<maxWords;i++) {
 		var wordLabel : WordLabel = scrambledWordLabels[i];
@@ -654,12 +657,13 @@ function UpdateGravityScale() : float {
 		pct = fellDownEnough / numWords;
 	} 
 	
-	var gravity : float = 0.1 / pct;
+	var gravity : float = 0.1 / (Mathf.Pow(pct,1.5f));
 	
 	for (i = wordIndex;i<maxWords;i++) {
 		wordLabel = scrambledWordLabels[i];
 		wordLabel.rigidbody2D.gravityScale = gravity;
 	}
+	Debug.Log("gravity = " + gravity);
 }
 
 function GetMaxWordsActive() {
