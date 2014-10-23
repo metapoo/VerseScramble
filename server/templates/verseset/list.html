@@ -3,11 +3,10 @@
 {% block title %}Bible Verse Sets ({{selected_subnav}}){% end %}
 {% block page_content %}
 {% from verserain.verse import language %}
-<div class="pad_bottom">
+<div class="pad_bottom subnav">
         <a class="pure-button {% if selected_subnav=="popular" %}pure-button-primary{% end %}" href="/versesets/popular/{{language_code}}">{{gt("Popular")}}</a>
         <a class="pure-button {% if selected_subnav=="new" %}pure-button-primary{% end %}" href="/versesets/new/{{language_code}}">{{gt("Recent")}}</a>
-        <a class="pure-button" href="/verseset/create">{{gt("Create")}}</a>
-<form style="display:inline;float:right;padding-top:7px;">
+<form style="display:inline;padding:7px 0px 0px 5px;">
 &nbsp; {{gt("Language:")}} &nbsp; <select name="language" onchange="location.href='/versesets/{{selected_subnav}}/'+this.value;">
 <option value="all" {% if language_code.lower() == "all" %}selected {% end %}>All Languages</option>
 {% for lang_code in language.LANGUAGE_CODES %}
@@ -15,6 +14,9 @@
 {% end %}
 </select>
 </form>
+
+        <a style="float:right;" class="pure-button-active pure-button" href="/verseset/create">{{gt("Create Verse Set")}}</a>
+
 </div>
 
 

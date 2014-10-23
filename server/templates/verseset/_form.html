@@ -44,7 +44,7 @@ selected="selected"
 {% if verseset %}<input type="hidden" name="verseset_id" value="{{verseset._id}}" />{% end %}
 
 
-  <input class="pure-button" type="submit" value="{% if verseset %}update{% else %}{{gt("create")}}{% end %}" />
+  <input class="pure-button" type="submit" value="{% if verseset %}{{gt("update")}}{% else %}{{gt("Next")}}{% end %}" />
   <input class="pure-button" type="button" value="{{gt("cancel")}}" onclick="window.history.back(); return false;" />
 </form>
 

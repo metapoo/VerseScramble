@@ -19,7 +19,7 @@ class PlayHandler(BaseHandler):
         if self.isIOS():
             verseset = list(VerseSet.collection.find(\
                                                      {"language":language, "play_count":{"$gt":10}, "verse_count":{"$gt":1}}).sort("_id",pymongo.DESCENDING)[0:1])
-
+            
             if len(verseset) > 0:
                 verseset = verseset[0]
             else:
@@ -73,7 +73,10 @@ class PlayVerseHandler(BaseHandler):
 
 class PlayVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
-        vs = VerseSet.by_id(verseset_id)
+        try:
+            vs = VerseSet.by_id(verseset_id)
+        except:
+            vs = None
 
         session_key = None
         if self.current_user:
