@@ -40,6 +40,7 @@ var difficultyLabel : Text;
 var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
+var updateCount : int = 0;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -664,7 +665,7 @@ function UpdateGravityScale() : float {
 		wordLabel = scrambledWordLabels[i];
 		wordLabel.rigidbody2D.gravityScale = gravity;
 	}
-	Debug.Log("gravity = " + gravity);
+	
 }
 
 function GetMaxWordsActive() {
@@ -944,7 +945,10 @@ function Update () {
 	}
 	refreshButton.active = CanShowSolution();
 	hintButton.active = !GetChallengeModeEnabled();
-	if (!finished && gameStarted) {
+	
+	updateCount += 1;
+	
+	if (!finished && gameStarted && (updateCount % 10 == 0)) {
 		UpdateGravityScale();
 	}
 }
