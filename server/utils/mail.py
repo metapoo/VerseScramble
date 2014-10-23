@@ -97,11 +97,14 @@ def report_exception(error_message=None, handler=None, callback=None, downed_ser
     import simplejson
     arguments = ""
     headers = ""
+    user_info = ""
+
     if handler and handler.request:
         arguments = handler.request.arguments
         headers = handler.request.headers
+        user_info = handler.current_user
 
-    body = "arguments: %s\nheaders: %s\n" % (str(arguments), str(headers))
+    body = "arguments: %s\nheaders: %s\nuser_info:%s" % (str(arguments), str(headers), str(user_info))
 
     if handler and handler.current_user:
         body += "user id: %s\n" % handler.current_user._id
