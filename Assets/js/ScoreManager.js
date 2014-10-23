@@ -128,7 +128,7 @@ function CalculateMaxTime() {
 	}
 	Debug.Log("seconds per block = " + secondsPerBlock);
 	
-	return Mathf.RoundToInt(5+n*secondsPerBlock);
+	return Mathf.RoundToInt(8+n*secondsPerBlock);
 	
 }
 

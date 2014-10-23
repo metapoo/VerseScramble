@@ -131,6 +131,7 @@ function SetupWalls () {
 	
 	medWall.size = topWall.size;
 	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.75f,0f)).y + 0.5f);	
+	
 	bottomWall.size = topWall.size;
 	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
 	
