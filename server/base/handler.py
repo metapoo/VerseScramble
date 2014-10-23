@@ -197,9 +197,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def render(self, *args, **kwargs):
         l = self.get_argument("l", None)
 
-        if kwargs.has_key("language_code"):
-            language_code = kwargs["language_code"]
-        elif l:
+        if l:
             language_code = l
             self.set_language(l)
         else:

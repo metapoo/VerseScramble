@@ -101,7 +101,7 @@ def report_exception(error_message=None, handler=None, callback=None, downed_ser
         arguments = handler.request.arguments
         headers = handler.request.headers
 
-    body = "arguments: %s\nheaders: %s\n" % (str(arguments) + str(headers))
+    body = "arguments: %s\nheaders: %s\n" % (str(arguments), str(headers))
 
     if handler and handler.current_user:
         body += "user id: %s\n" % handler.current_user._id
