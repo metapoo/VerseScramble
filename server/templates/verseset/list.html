@@ -19,7 +19,11 @@
 
 </div>
 
-
 {% module VerseSetsTable(versesets=versesets,paginator=paginator,language_code=language_code, gt=gt) %}
 {% module Paginator(paginator=paginator, base_url=base_url) %}
+
+{% if (len(versesets) == 0) and (page <= 1) %}
+<div class="feedback">{{gt("There are no verse sets yet")}}<p> <a class="pure-button-primary pure-button">{{gt("Create Verse Set")}}</a></p></div>
+{% end %}
+
 {% end %}
