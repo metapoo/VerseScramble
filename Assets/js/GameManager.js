@@ -608,6 +608,7 @@ function Cleanup () {
 		Destroy(wObject.gameObject);
 	}
 	wordLabels.Clear();
+	scrambledWordLabels.Clear();
 	needToRecordPlay = true;
 }
 
