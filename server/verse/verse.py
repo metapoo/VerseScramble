@@ -266,6 +266,10 @@ class ShowVerseSetHandler(BaseHandler):
 
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+
+        if verseset is None:
+            return self.write("verse set not found, possibly removed")
+
         language = verseset['language']
         versions = VERSION_BY_LANGUAGE_CODE.get(language,[])
         version = verseset.get("version","")

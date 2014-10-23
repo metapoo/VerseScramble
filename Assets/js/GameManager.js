@@ -40,6 +40,7 @@ var difficultyLabel : Text;
 var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
+var updateCount : int = 0;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -608,6 +609,7 @@ function Cleanup () {
 		Destroy(wObject.gameObject);
 	}
 	wordLabels.Clear();
+	scrambledWordLabels.Clear();
 	needToRecordPlay = true;
 }
 
@@ -629,7 +631,7 @@ function BeginGame() {
 
 function UpdateGravityScale() : float {
 	var maxActiveWords : int = GetMaxWordsActive();
-	var maxWords : int = wordLabels.length;
+	var maxWords : int = scrambledWordLabels.length;
 	if ((wordIndex + maxActiveWords) < maxWords) {
 		maxWords = wordIndex + maxActiveWords;
 	}
@@ -637,17 +639,20 @@ function UpdateGravityScale() : float {
 	var fellDownEnough : float = 0.0;
 	var numWords : float = maxWords - wordIndex;
 	
+	if (wordIndex >= maxWords) return;
+	if (wordIndex < 0) return;
+	
 	for (var i : int = wordIndex;i<maxWords;i++) {
 		var wordLabel : WordLabel = scrambledWordLabels[i];
-		if (wordLabel.fellDownEnough) {
-			fellDownEnough += 1.0;
-		}
+		fellDownEnough += wordLabel.GetPercentFell();
 	}
 	
 	if (fellDownEnough == 0) {
 		fellDownEnough = 1;
 	}
-	
+
+	Debug.Log("fell down enough = " + fellDownEnough);
+		
 	var pct : float = 1.0f;
 	
 	if ((numWords > 0) && (wordIndex > 0)) {
@@ -660,6 +665,7 @@ function UpdateGravityScale() : float {
 		wordLabel = scrambledWordLabels[i];
 		wordLabel.rigidbody2D.gravityScale = gravity;
 	}
+	
 }
 
 function GetMaxWordsActive() {
@@ -871,7 +877,6 @@ function releaseWords(index: int, numWords : int) {
 		}
 	}
 	
-	UpdateGravityScale();
 	return i+1;
 }
 
@@ -940,6 +945,12 @@ function Update () {
 	}
 	refreshButton.active = CanShowSolution();
 	hintButton.active = !GetChallengeModeEnabled();
+	
+	updateCount += 1;
+	
+	if (!finished && gameStarted && (updateCount % 10 == 0)) {
+		UpdateGravityScale();
+	}
 }
 
 static function StartChallenge() {
