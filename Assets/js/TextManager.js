@@ -159,8 +159,10 @@ class TextManager extends MonoBehaviour {
  
             if (key != null && val != null) 
             {
-                    // TODO: add error handling here in case of duplicate keys
-                    textTable[key] = val;
+					if (textTable.ContainsKey(key)) {
+						Debug.Log("duplicate key: " + key);
+					}
+					textTable[key] = val;
 
                     key = val = null;
             } 

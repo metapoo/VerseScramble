@@ -13,4 +13,9 @@
     
 }
 
+@property (nonatomic, retain) NSString *languageString;
+@property (nonatomic, retain) NSString *textString;
+
+- (void)speakUtterance:(NSString*)languageString text:(NSString*)textString;
+
 @end
