@@ -16,10 +16,80 @@
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
-static AVSpeechSynthesizer *synthesizer = nil;
+static AVSpeechSynthesizer *_synthesizer = nil;
+static NSMutableArray *_queue = nil;
 
 @implementation VoiceSynthClient
 
+- (void)speakUtterance:(NSString*)languageString text:(NSString*)textString {
+    self.languageString = languageString;
+    self.textString = textString;
+    [self speakUtterance];
+}
+
+- (void)speakUtterance {
+    @synchronized(_queue) {
+        if (_queue == nil) {
+            _queue = [[NSMutableArray alloc] initWithCapacity:10];
+        }
+        
+        [_queue addObject:self];
+        
+        if ([_queue objectAtIndex:0] != self) {
+            [self performSelector:@selector(speakUtterance) withObject:nil afterDelay:0.1f];
+            return;
+        }
+        
+    }
+
+    if ([NSThread isMainThread]) {
+        [self performSelectorInBackground:@selector(speakUtterance) withObject:nil];
+        return;
+    }
+    
+    @synchronized(_synthesizer) {
+        if (_synthesizer == nil) {
+            _synthesizer = [[AVSpeechSynthesizer alloc] init];
+        }
+    
+    
+        NSArray *speechVoices = [AVSpeechSynthesisVoice speechVoices];
+        AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:_languageString];
+    
+        if (![speechVoices containsObject:voice]) {
+            NSLog(@"speech voice not found for: %@", _languageString);
+            // don't play speech if language not available
+            return;
+        }
+
+        AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:_textString];
+    
+        utterance.voice = voice;
+    
+        float rate = 0.2f;
+    
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+            rate = 0.12f;
+        }
+    
+        [utterance setRate:rate];
+    
+        [_synthesizer speakUtterance:utterance];
+
+        //NSLog(@"synthesizer speakUtterance: %@", utterance);
+    }
+    
+    @synchronized(_queue) {
+        [_queue removeObject:self];
+    }
+
+}
+
+- (void)dealloc {
+    self.languageString = nil;
+    self.textString = nil;
+    [super dealloc];
+}
 @end
 
 // Converts C style string to NSString
@@ -52,33 +122,11 @@ extern "C" {
         }
         
         NSString *languageString = CreateNSString(language);
-        if (synthesizer == nil) {
-            synthesizer = [[AVSpeechSynthesizer alloc] init];
-//            [NSThread sleepForTimeInterval:2.0f];
-        }
+        NSString *textString = CreateNSString(text);
+        VoiceSynthClient *client = [[VoiceSynthClient alloc] init];
+        [client speakUtterance:languageString text:textString];
+        [client release];
         
-        
-        NSArray *speechVoices = [AVSpeechSynthesisVoice speechVoices];
-        AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
-        
-        if (![speechVoices containsObject:voice]) {
-            NSLog(@"speech voice not found for: %@", languageString);
-            // don't play speech if language not available
-            return;
-        }
-        AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:CreateNSString(text)];
-
-        utterance.voice = voice;
-        
-        float rate = 0.2f;
-        
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-            rate = 0.12f;
-        }
-        
-        [utterance setRate:rate];
-        
-        [synthesizer speakUtterance:utterance];
         
 	}
 }
