@@ -15,11 +15,15 @@
 </select>
 </form>
 
-        <a style="float:right;" class="pure-button-active pure-button" href="/verseset/create">{{gt("Create Verse Set")}}</a>
+        <a style="float:right;" class="pure-button-primary pure-button" href="/verseset/create">{{gt("Create Verse Set")}}</a>
 
 </div>
 
-
 {% module VerseSetsTable(versesets=versesets,paginator=paginator,language_code=language_code, gt=gt) %}
 {% module Paginator(paginator=paginator, base_url=base_url) %}
+
+{% if (len(versesets) == 0) and (page <= 1) %}
+<div class="feedback">{{gt("There are no verse sets yet")}}<p> <a class="pure-button-primary pure-button" href="/verseset/create{% if selected_nav == "verse sets" %}?l={{language_code}}{% end %}">{{gt("Create Verse Set")}}</a></p></div>
+{% end %}
+
 {% end %}

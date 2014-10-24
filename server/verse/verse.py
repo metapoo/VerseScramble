@@ -69,8 +69,8 @@ class PublishVerseSetHandler(BaseHandler):
 
 class LookupVerseHandler(BaseHandler):
     def get(self):
-        reference = self.get_argument("reference").strip()
-        version = self.get_argument("version").strip()
+        reference = self.get_argument("reference", "").strip()
+        version = self.get_argument("version", "").strip()
         verse = Verse.collection.find_one({"reference":reference, "version":version})
         if verse:
             self.write(verse['text'])
@@ -130,6 +130,7 @@ class UpdateVersionSelectorHandler(BaseHandler):
         return self.get()
 
 class RemoveVerseHandler(BaseHandler):
+    @require_login
     def get(self, verse_id):
         verse_id = ObjectId(verse_id)
         user = self.current_user
@@ -146,6 +147,7 @@ class RemoveVerseHandler(BaseHandler):
         self.redirect(verseset.url())
 
 class UpdateVerseHandler(BaseHandler):
+    @require_login
     def get(self, verse_id):
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
 
@@ -169,6 +171,8 @@ class UpdateVerseHandler(BaseHandler):
         
         self.render("verse/edit.html", verse=verse, verseset=verseset,
                     user=user, versions=versions, version=version, selected_nav=selected_nav)
+
+    @require_login
     def post(self):
         verse_id = self.get_argument("verse_id")
         verse_id = ObjectId(verse_id)
@@ -200,6 +204,7 @@ class UpdateVerseHandler(BaseHandler):
         self.redirect(verseset.url())
 
 class CreateVerseHandler(BaseHandler):
+    @require_login
     def get(self, verseset_id=None, error_message=None, text=None, reference=None,
             version=None):
         user = self.current_user
@@ -213,6 +218,7 @@ class CreateVerseHandler(BaseHandler):
                     version=version, error_message=error_message,
                     text=text, reference=reference)
 
+    @require_login
     def post(self):
         user = self.current_user
         reference = self.get_argument("reference").strip()
@@ -416,8 +422,8 @@ class ListVerseSetHandler(BaseHandler):
         if (language_code is None) or ((language_code.lower() != "all") and (not language_code in LANGUAGE_CODES)):
             language_code = self.language_code()
 
-#        if language_code:
-#            self.set_language(language_code)
+        if language_code.lower() != "all":
+            self.set_language(language_code)
 
         args = {}
         

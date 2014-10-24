@@ -98,6 +98,18 @@
 <h3><a style="text-decoration:underline;" class="link" target="_blank" href="http://unity3d.com/webplayer">{{gt("Verse Rain requires the Unity Player plug-in")}}</a></h3>
  {{gt("Please allow plug-ins to run on www.verserain.com in order to play")}} 
 </p>
+{% set user_guide_url = None %}
+
+{% if handler.isMacOS() and handler.isFirefox() %}
+{% set user_guide_url = "UserGuide_MacFirefox.pdf" %}
+{% elif handler.isMacOS() and handler.isChrome() %}
+{% set user_guide_url = "UserGuide_MacChrome.pdf" %}
+{% end %}
+
+{% if user_guide_url %}
+<p>Having Trouble? See our <a class="link" href="/pdf/{{user_guide_url}}" target="_blank">instructions on how to download Unity Player plug-in </a></p>
+{% end %}
+
 </form>
 </div>
 
