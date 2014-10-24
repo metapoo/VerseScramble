@@ -650,8 +650,6 @@ function UpdateGravityScale() : float {
 	if (fellDownEnough == 0) {
 		fellDownEnough = 1;
 	}
-
-	Debug.Log("fell down enough = " + fellDownEnough);
 		
 	var pct : float = 1.0f;
 	

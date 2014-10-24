@@ -129,6 +129,7 @@ function OnGlobeClick() {
 }
 
 function GoBack () {
+	TitleManager.stayInTitleScreen = true;
 	Application.LoadLevel("title");
 }
 
