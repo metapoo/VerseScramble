@@ -93,9 +93,6 @@ public class VerseSet
 	}
 	
 	public function UnloadVerses() {
-		for (var i=0;i<verses.length;i++) {
-			Destroy(verses[i]);
-		}
 		verses.Clear();
 	}
 	
