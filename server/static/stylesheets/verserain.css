@@ -35,7 +35,7 @@ table.profile img {
 
 #languages {
   padding-top: 10px;
-  width:900px;
+  width:850px;
   margin: auto;
   text-align:left; 
   display:none;
@@ -51,7 +51,7 @@ table.profile img {
   display:block;
   margin:auto;
   text-align:left;
-  width:900px;
+  width:850px;
 }
 
 #login_buttons {
@@ -210,7 +210,7 @@ body {
 
 #page_layout {
   text-align: left;
-  width: 900px;
+  width: 850px;
   margin: auto;
   padding: 0px 0px 50px 0px;
 }
@@ -267,7 +267,7 @@ body {
 }
 
 .logo {
-  width: 900px;
+  width: 850px;
   height: 40px;
   text-align:center;
   margin:auto;
