@@ -37,8 +37,8 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         per_page = 100
         args = {}
 
-#        if language_code != "ALL":
-#            args.update({"language":language_code})
+        if (language_code != "ALL") and (user_id == None):
+            args.update({"language":language_code})
 
         if user_id:
             user_id = ObjectId(user_id)
