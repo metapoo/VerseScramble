@@ -53,7 +53,14 @@
 {% set commentary_parent = verseset %}
 {% include "_commentary.html" %}
 
+{% if is_me %}
+<a class="pure-button pure-button-primary" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a>
+
+{% end %}
+
 </div>
+
+
 <br/>
 
 <div id="verses">
