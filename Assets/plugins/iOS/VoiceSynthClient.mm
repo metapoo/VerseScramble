@@ -9,6 +9,13 @@
 #import "VoiceSynthClient.h"
 #import <AVFoundation/AVFoundation.h>
 
+
+#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
+
 static AVSpeechSynthesizer *synthesizer = nil;
 
 @implementation VoiceSynthClient
@@ -40,11 +47,17 @@ char* MakeStringCopy (const char* string)
 extern "C" {
 	void _SpeakUtterance (const char* text, const char* language)
 	{
+        if (SYSTEM_VERSION_LESS_THAN(@"6.0")) {
+            return;
+        }
+        
         NSString *languageString = CreateNSString(language);
         if (synthesizer == nil) {
             synthesizer = [[AVSpeechSynthesizer alloc] init];
-            [NSThread sleepForTimeInterval:2.0f];
+//            [NSThread sleepForTimeInterval:2.0f];
         }
+        
+        
         NSArray *speechVoices = [AVSpeechSynthesisVoice speechVoices];
         AVSpeechSynthesisVoice* voice = [AVSpeechSynthesisVoice voiceWithLanguage:languageString];
         
