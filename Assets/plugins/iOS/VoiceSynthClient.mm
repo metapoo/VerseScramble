@@ -54,7 +54,7 @@ extern "C" {
         NSString *languageString = CreateNSString(language);
         if (synthesizer == nil) {
             synthesizer = [[AVSpeechSynthesizer alloc] init];
-            [NSThread sleepForTimeInterval:2.0f];
+//            [NSThread sleepForTimeInterval:2.0f];
         }
         
         
