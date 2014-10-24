@@ -205,7 +205,7 @@ function Start () {
     SetVerseId("542afb763f7ab0224bd53e33");
     */
     //HandleURL("verserain://com.hopeofglory.verserain/verse/None/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
-    //HandleURL("verserain://com.hopeofglory.verserain/verseset/542af9923f7ab0224bd53e2f/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
+    HandleURL("verserain://com.hopeofglory.verserain/verse/544a600b3f7ab063b3c5839b/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 	//HandleURL("verserain://com.hopeofglory.verserain/verse/542afb763f7ab0224bd53e33/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 }
 
