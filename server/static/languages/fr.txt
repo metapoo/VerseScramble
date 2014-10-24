@@ -1,7 +1,5 @@
 msgid "Your verse set is not yet published"
 msgstr "Vos jeux de versets ne sont pas encore publiés"
-msgid "subscribers"
-msgstr "abonnés"
 msgid "Subscriptions"
 msgstr "abonnements"
 msgid "unsubscribe"
