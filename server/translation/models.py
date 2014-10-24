@@ -10,6 +10,7 @@ class Translation(BaseModel):
         indices = (
             Index("msgid"),
             Index("language"),
+            Index("lower_msgid"),
         )
 
     def __new__(cls, *args, **kwargs):
@@ -18,6 +19,9 @@ class Translation(BaseModel):
 
     def msgid(self):
         return self.get("msgid",None)
+
+    def lower_msgid(self):
+        return self.get("lower_msgid",None)
 
     def msgstr(self):
         return self.get("msgstr",None)
@@ -61,11 +65,25 @@ class Translation(BaseModel):
         history.append(revision)
         self["history"] = history
 
+    def sync_lower_msgid(self, save=True):
+        lower_msgid = self.msgid().lower()
+        if self.lower_msgid() != lower_msgid:
+            self["lower_msgid"] = lower_msgid
+            if save:
+                self.save()
+    def save(self, *args, **kwargs):
+        self.sync_lower_msgid(save=False)
+        super(Translation, self).save(*args, **kwargs)
+
     @classmethod
     def translate(cls, language, msgid, msgstr, username=None):
-        translation = Translation.collection.find_one({'language':language,'msgid':msgid})
+        translation = Translation.collection.find_one({'language':language,'lower_msgid':msgid.lower()})
+
         if translation is None:
-            translation = Translation({'language':language,'msgid':msgid})
+            translation = Translation.collection.find_one({'language':language,'msgid':msgid})
+
+        if translation is None:
+            translation = Translation({'language':language,'msgid':msgid, 'lower_msgid':msgid.lower()})
 
         if not translation.is_msgstr_duplicate(msgstr):
             translation.save_to_history()
@@ -73,6 +91,7 @@ class Translation(BaseModel):
         if username:
             translation['username'] = username
 
+        translation['msgid'] = msgid
         translation['msgstr'] = msgstr
         
         translation.save()
