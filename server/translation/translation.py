@@ -31,12 +31,13 @@ class SaveTranslationHandler(BaseHandler):
 
         language = self.get_argument("language")
         msgid = self.get_argument("msgid")
+        lower_msgid = msgid.lower()
         msgstr = self.get_argument("msgstr").strip()
         
         if msgstr == "":
             return self.write("Can't save empty string")
 
-        tran = Translation.collection.find_one({"language":language, "msgid":msgid})
+        tran = Translation.collection.find_one({"language":language, "lower_msgid":lower_msgid})
 
         if tran:
             if msgstr == tran.msgstr():
@@ -51,6 +52,13 @@ class SaveTranslationHandler(BaseHandler):
         if language == "en":
             tran["msgid"] = tran["msgstr"]
             tran.save()
+            msgid = tran["msgid"]
+            lower_msgid = msgid.lower()
+
+            other_trans = Translation.collection.find({"lower_msgid":lower_msgid})
+            for tran in other_trans:
+                tran["msgid"] = msgid
+                tran.save()
 
         self.load_translation(language)
         self.translations[language][msgid.lower()] = msgstr
@@ -73,17 +81,18 @@ class ShowTranslationHandler(BaseHandler):
 
         
         for msgid in msgids:
-            tran = Translation.collection.find_one({"language":language, "msgid": msgid})
+            lower_msgid = msgid.lower()
+            tran = Translation.collection.find_one({"language":language, "lower_msgid": lower_msgid, "msgid":msgid})
             if tran is None:
-                tran = Translation({"language":language,"msgid":msgid,"msgstr":""})
+                tran = Translation({"language":language,"msgid":msgid,"msgstr":"","lower_msgid":lower_msgid})
             trans.append(tran)
-            trans_by_msgid[msgid] = tran
+            trans_by_msgid[lower_msgid] = tran
 
         trans_for_lang = list(Translation.collection.find({"language":language}))
         for tran in trans_for_lang:
-            msgid = tran['msgid']
+            lower_msgid = tran['lower_msgid']
             if not trans_by_msgid.has_key(msgid):
-                trans_by_msgid[msgid] = tran
+                trans_by_msgid[lower_msgid] = tran
                 trans.append(tran)
 
         self.render("translation/index.html",language_code=language, trans=trans)
