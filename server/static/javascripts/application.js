@@ -13,7 +13,12 @@ vr.move_verse = function(direction, verse_id) {
 vr.ajax_request = function(url, args, html_id) {
     $.ajax({ url: url, data: args}).done(
 	function(data) {
-	    $(html_id).html(data);
+        var el = $(html_id);
+        if (el.prop("tagName") == "TEXTAREA") {
+          el.val(data)
+        } else {
+	  el.html(data);
+        }
     });
 }
 

@@ -72,6 +72,8 @@ class LookupVerseHandler(BaseHandler):
         reference = self.get_argument("reference", "").strip()
         version = self.get_argument("version", "").strip()
         verse = Verse.collection.find_one({"reference":reference, "version":version})
+        reference = reference.replace('+',' ')
+
         if verse:
             self.write(verse['text'])
         else:
