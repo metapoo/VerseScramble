@@ -719,6 +719,55 @@ function scrambleWordLabels() {
   	}
 }
 
+function DetermineWordScale(verse : Verse) {
+	// initial guess
+	wordScale = 1.0f;
+	var ratio : float = (Screen.width+0.0f) / Screen.height;
+	var maxCharSize : float = 250.0f;
+	maxCharSize *= ratio;
+	var smoothing : float = 0.6f;
+	if (verse.text.length > maxCharSize) {
+		wordScale = 0.2f + 0.8f * (maxCharSize * (1.0f + smoothing) / 
+		(verse.text.length + maxCharSize * smoothing));
+	}
+	
+	Debug.Log("initial word scale = " + wordScale);
+}
+
+function AdjustWordScale() {
+	WordLabel.ResetVersePosition();
+	var minY = screenBounds.y - screenBounds.height;
+	var maxX = screenBounds.x + screenBounds.width;
+	Debug.Log("minY = " + minY);
+	
+	var h : float = 0.0f;
+	for (var i=0;i<wordLabels.length;i++) {
+		var wordLabel : WordLabel = wordLabels[i];
+		wordLabel.CalculateVersePosition();
+		wordLabel.isLastInLine = false;
+		wordLabel.isFirstInLine = false;
+		h = wordLabel.nonEdgeSize.y;
+        //Debug.Log("verse position = " + wordLabel.versePosition);
+	}
+	var wordY : float = (WordLabel.versePosition.y - h);
+	
+    Debug.Log("wordY = " + wordY);
+	
+	if ((wordY) < minY) {
+		wordScale -= 0.025f;
+		Debug.Log("adjust word scale to " + wordScale);
+		for (i=0;i<wordLabels.length;i++) {
+			wordLabel = wordLabels[i];
+			wordLabel.SyncFontSize();
+		}
+		AdjustWordScale();
+		return;
+	}
+	
+	var screenBounds = GameManager.screenBounds;
+	WordLabel.ResetVersePosition();
+}
+
 function SetupVerse() {
 	SyncSetProgressLabel();
 	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
@@ -748,20 +797,7 @@ function SetupVerse() {
 		//difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	}
 	
-	// calculate word size based on length of text
-	//Debug.Log("verse length = " + verse.text.length);
-	
-	wordScale = 1.0f;
-	var ratio : float = (Screen.width+0.0f) / Screen.height;
-	var maxCharSize : float = 250.0f;
-	maxCharSize *= ratio;
-	var smoothing : float = 0.6f;
-	if (verse.text.length > maxCharSize) {
-		wordScale = 0.2f + 0.8f * (maxCharSize * (1.0f + smoothing) / 
-		(verse.text.length + maxCharSize * smoothing));
-	}
-	
-	Debug.Log("word scale = " + wordScale);
+	DetermineWordScale(verse);
 	
 	words = SplitVerse(verse.text);
 	wordIndex = 0;
@@ -799,6 +835,8 @@ function SetupVerse() {
 		clone.rigidbody2D.isKinematic = true;
 		i += 1;
 	}
+	
+	AdjustWordScale();
 	
 	scrambleWordLabels();
 	

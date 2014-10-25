@@ -22,7 +22,10 @@ function Start () {
 	if (PlayerPrefs.HasKey("language") && !stayInTitleScreen) {
 		var language : String = VerseManager.GetLanguage();
 		var onFinish : Function = function() {
-			Application.LoadLevel("versesets");
+			var us: UserSession = UserSession.GetUserSession();
+			if ((!us.verseId) && (!us.versesetId)) {			
+				Application.LoadLevel("versesets");
+			}
 		};
 		VerseManager.GetInstance().SwitchLanguage(language, onFinish);
 		

@@ -5,8 +5,6 @@ var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
 var word : String;
-static var versePosition : Vector3;
-static var startPosition : Vector3;
 var destination : Vector3;
 var gotoVerse : boolean = false;
 var returnedToVerse : boolean = false;
@@ -28,6 +26,9 @@ var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
 var sceneSetup : SceneSetup;
+
+static var versePosition : Vector3;
+static var startPosition : Vector3;
 
 private var shrinkingEdges : boolean = false;
 
@@ -216,7 +217,6 @@ function setWord(w : String) {
 	label.color = Color.black;
 	label.font = sceneSetup.GetCurrentFont();
 	label.renderer.material = label.font.material;
-	label.fontSize = 80.0f*gameManager.wordScale;
 	
 	if (rightToLeft) {
 		label.text = reverseString(w);
@@ -225,6 +225,18 @@ function setWord(w : String) {
 	}
 	word = wOriginal;
 	
+	SyncFontSize();
+	
+	ResetBubble();
+}
+
+function SyncFontSize() {
+	var fontSize : int = 80.0f*gameManager.wordScale;
+	SetFontSize(fontSize);
+}
+
+function SetFontSize(size : int) {
+	label.fontSize = size;
 	ResetBubble();
 }
 
@@ -249,16 +261,19 @@ function Awake () {
 	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
 }
 
-function Start () {
+static function ResetVersePosition() {
     var screenBounds = GameManager.screenBounds;
-    var startx = screenBounds.x+screenBounds.width*.075;
-    if (verseManager.rightToLeft) {
-    	startx = screenBounds.x+screenBounds.width*(0.925);
+    var startx = screenBounds.x+screenBounds.width*.05;
+    if (VerseManager.rightToLeft) {
+    	startx = screenBounds.x+screenBounds.width*(0.95);
     }
     
 	startPosition = new Vector3(startx,screenBounds.y-screenBounds.height*0.25);
 	versePosition = startPosition;
-	
+}
+
+function Start () {
+	ResetVersePosition();	
 }
 
 function Update () {
@@ -327,7 +342,7 @@ function handleReturnedToVerse() {
 }
 
 
-function calculateVersePosition () {
+function CalculateVersePosition () {
 	oldRotation = transform.rotation;
 	transform.rotation = new Quaternion.Euler(0,0,0);
 	var spacing = 0.0f;
@@ -344,8 +359,9 @@ function calculateVersePosition () {
 	// z = 1 so placed words are drawn behind other wordlabels
 	destination = new Vector3(versePosition.x - dx*0.5f, versePosition.y, 1);
 	var screenBounds = GameManager.screenBounds;
-	var maxX = screenBounds.x + screenBounds.width*0.95;
-	var minX = screenBounds.x + screenBounds.width*0.05;
+	var b : float = 0.98;
+	var maxX = screenBounds.x + screenBounds.width*b;
+	var minX = screenBounds.x + screenBounds.width*(1-b);
 	var padding = 0.0f;
 	var vSpacing = nonEdgeSize.y + padding;
 	
@@ -360,7 +376,7 @@ function calculateVersePosition () {
 									versePosition.y-vSpacing,
 									0);
 		isFirstInLine = true;
-		calculateVersePosition();
+		CalculateVersePosition();
 		var pw = GetPreviousWordLabel();
 		if (pw) {
 			pw.isLastInLine = true;
@@ -386,7 +402,7 @@ function returnToVerse () {
 	oldRotation = transform.rotation;
 
 	//transform.rotation = new Quaternion.Euler(0,0,0);
-	calculateVersePosition();
+	CalculateVersePosition();
 	gotoVerse = true;
 	
 	startTime = Time.time;
