@@ -11,16 +11,19 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
 <meta property='og:image' content="/images/vr_icon_small.png"/>
-<link rel="stylesheet" href="/stylesheets/verserain.css" type="text/css" />
+
+{% if settings.VERSERAIN_ENV == "development" %}
+<link rel="stylesheet" href="/stylesheets/application.css" type="text/css" />
 <link rel="stylesheet" href="/stylesheets/cssmenu.css" type="text/css" />
-<link rel="stylesheet" href="/stylesheets/pure-min.css" />
-<!-- link rel="stylesheet" href="/stylesheets/pure.css" type="text/css" -->
+<link rel="stylesheet" href="/stylesheets/pure-min.css" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="/stylesheets/verserain.css" type="text/css" />
+{% end %}
 
 {% block head %}
 {% end %}
 
 {% import random %}
-{% from verserain import settings %}
 
 <script type="text/javascript"> var idx=window.location.toString().indexOf("#_=_"); if (idx>0) { window.location = window.location.toString().substring(0, idx); } </script>
 
