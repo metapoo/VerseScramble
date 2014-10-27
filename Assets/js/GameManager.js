@@ -289,7 +289,7 @@ function AnimateIntro() {
 	var duration : float = 0.25f;
 	var endScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
 	var verse : Verse = verseManager.GetCurrentVerse();
-	SetVerseReference(verse.reference);	
+	SetVerseReference(verse.reference, verse.version);	
 	introReferenceLabel.enabled = true;
 	introReferenceLabel.color.a = 1.0f;
 	introReferenceLabel.transform.localScale = Vector3.zero;
@@ -358,11 +358,16 @@ function Start() {
 	
 }
 
-function SetVerseReference (reference : String) {
+function SetVerseReference (reference : String, version : String) {
 	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
+	var label : String = reference;
 	
-	introReferenceLabel.text = reference;
-	panelReferenceLabel.text = reference;
+	if (version != null) {
+		label += String.Format(" ({0})", version.ToLower());
+	}
+	
+	introReferenceLabel.text = label;
+	panelReferenceLabel.text = label;
 	difficultyLabel.text = diffString;
 }
 
@@ -790,7 +795,7 @@ function SetupVerse() {
 	var clone : WordLabel;
 	
 	var verse : Verse = verseManager.GetCurrentVerse();
-	SetVerseReference(verse.reference);
+	SetVerseReference(verse.reference, verse.version);
 	verseMetadata = verse.GetMetadata();
 	//Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
 	if (verseMetadata["difficulty"] != null) {
