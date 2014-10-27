@@ -37,7 +37,13 @@ class ContactHandler(BaseHandler):
         reply_to_email = self.get_argument("email")
         to_email = ["help@%s" % settings.MAIL_DOMAIN] # must be a list
         subject = self.get_argument('subject')
+        
         message = self.get_argument('message')
+
+        if self.current_user:
+            message += "\n\nemail: %s" % self.current_user.get('email')
+            message += "\nuser info: %s" % self.current_user
+        
         EmailQueue.queue_mail(from_email,to_email,subject,message,reply_to=reply_to_email)
 
         self.redirect("/contact?message_sent=True")
