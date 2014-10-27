@@ -60,11 +60,14 @@ function SubmitScore(showPopup: boolean) {
 	var elapsedTime : float = scoreManager.totalElapsedTime;
 	var correct : int = scoreManager.correct;
 	
+	var errorHandler: Function = function() {
+		Debug.Log("got error while submitting score");
+	};
 	ApiManager.GetInstance().CallApi("leaderboard/verseset/submit_score",
 	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash, "mistakes":mistakes,
 	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime, "correct":correct,
 	"is_challenge":GameManager.GetChallengeModeEnabled()
-	}), handler);
+	}), handler, errorHandler);
 }
 
 function GetStatsMessage() : String {
@@ -171,7 +174,11 @@ function EndGameWindow () {
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
 	var needToSelectDifficulty : boolean = true;
 	var description = String.Format(gt("You scored {0}"), scoreManager.score);
-	var title = gt("Verse completed!");
+	var title : String = gt("Verse completed!");
+	
+	if (gameManager.showingSolution) {
+		title = gt("Game Over");
+	}
 	
 	if (gameManager.DidRanOutOfTime) {
 		description = gt("You ran out of time.");
@@ -262,11 +269,7 @@ function ShowRestartVerse() {
 }
 
 function Start() {
-	if (gameManager.showingSolution) {
-		//ShowRestartVerse();
-	} else {
-		ShowEndOfGameOptions();
-	}
+	ShowEndOfGameOptions();
 }
 
 function Awake () {

@@ -29,9 +29,11 @@ class ApiManager extends MonoBehaviour {
     	if ((ipAddress == "127.0.0.1") || (ipAddress == "0.0.0.0"))
     	{
         	isConnectedToInternet = false;      
+    	} else {
+    		isConnectedToInternet = true;
     	}
 
-		Debug.Log("Connected to the internet: " + isConnectedToInternet + " ip= " + Network.player.ipAddress.ToString());
+		Debug.Log("Connected to the internet: " + isConnectedToInternet + " ip= " + ipAddress);
 		return isConnectedToInternet;
 	}
 	

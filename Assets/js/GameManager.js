@@ -41,6 +41,7 @@ var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
 var updateCount : int = 0;
+var endPopup : EndOfGameOptions;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -106,12 +107,18 @@ function ExitToVerseList() {
 }
 
 function CanShowSolution() {
-	return (!showingSolution && (wordIndex < wordLabels.length) && gameStarted && !GetChallengeModeEnabled());	
+	return ((wordIndex < wordLabels.length) && gameStarted && !GetChallengeModeEnabled());	
 }
 
 function ShowSolution() {
 	if (!CanShowSolution()) {
 		audio.PlayOneShot(sndFailure1,1.0f);
+		return;
+	}
+	if (showingSolution) {
+		if (endPopup == null) {
+			ShowEndOfGameOptions();
+		}
 		return;
 	}
 	audio.PlayOneShot(sndSelect,1.0);
@@ -247,7 +254,8 @@ function showFeedback(feedbackText : String, time : float) {
 }
 
 function ShowEndOfGameOptions() {
-	Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+	Debug.Log("show end of game options");
+	endPopup = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
 }
 
 function ShowDifficultyOptions() {
@@ -275,7 +283,7 @@ function nextWord() {
 			showFeedback(TextManager.GetText("Awesome!"),3);
 			HandleVerseFinished();
 		} else {
-			ShowEndOfGameOptions();
+			//ShowEndOfGameOptions();
 		}
 		return null;
 	}
@@ -616,6 +624,7 @@ function Cleanup () {
 	wordLabels.Clear();
 	scrambledWordLabels.Clear();
 	needToRecordPlay = true;
+	endPopup = null;
 }
 
 function BeginGame() {
