@@ -108,7 +108,11 @@ function ShowVerses() {
 	
 	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
 	if (!Object.ReferenceEquals(currentVerseSet, null)) {
-		verseHeaderLabel.text = currentVerseSet.setname;
+		var label : String = currentVerseSet.setname;
+		if (currentVerseSet.version != null) {
+			label += String.Format(" ({0})", currentVerseSet.version);
+		}
+		verseHeaderLabel.text = label;
 	} else {
 		verseHeaderLabel.text = TextManager.GetText("Verses");
 	}
