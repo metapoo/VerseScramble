@@ -19,7 +19,7 @@
   <input type="hidden" name="version" value="{{version}}" id="version_select" />
 {% end %}
 </div>
-<label class="pad_top" for="text">{{gt("Verse Text")}} - <span class="example"><a href="http://www.biblegateway.com" onclick="$(this).attr('href','http://www.biblegateway.com/passage/?search='+$('#reference').val()+'&version='+$('#version_select').val()); return true;" class="link" target="_blank">search on bible gateway</a></span></label>
+<label class="pad_top" for="text">{{gt("Verse Text")}} - <span class="example"><a href="http://www.biblegateway.com" onclick="$(this).attr('href','http://www.biblegateway.com/passage/?search='+$('#reference').val()+'&version='+$('#version_select').val()); return true;" class="link" target="_blank">{{gt("search on bible gateway")}}</a></span></label>
 
 <textarea id="verse_text" name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
 <br/>
