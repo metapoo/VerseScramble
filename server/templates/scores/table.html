@@ -1,10 +1,11 @@
 {% from verserain.utils.date import pretty_date %}
+{% from verserain.verse.language import LANGUAGE_BY_CODE %}
 <table class="pure-table pure-table-bordered" style="width:100%;">
-<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Verse Sets")}}</th><th>{{gt("Date")}}</th></tr></thead>
+<thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Language")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Verse Sets")}}</th><th>{{gt("Date")}}</th></tr></thead>
 <tbody>
 {% set i = 1+start_index %}
 {% for vs in scores %}
-<tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td><td>{{vs.accuracy()}}%</td><td>{{vs.difficulty()}}</td>
+<tr><td>{{i}}</td><td>{% module UserLink(username=vs['username']) %}</td><td>{{vs['score']}}</td><td>{{LANGUAGE_BY_CODE.get(vs.get('language'))}}</td><td>{{vs.difficulty()}}</td>
 <td>{% module VerseSetLink(verseset_id=vs['verseset_id'],verseset_name=vs['verseset_name']) %} {% module PlayButton(verseset_id=vs['verseset_id']) %}</td><td>{{pretty_date(vs['last_played_date'])}}</td>
 </tr>
 {% set i = i + 1 %}

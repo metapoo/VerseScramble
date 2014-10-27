@@ -85,14 +85,13 @@ class ShowTranslationHandler(BaseHandler):
             tran = Translation.collection.find_one({"language":language, "lower_msgid": lower_msgid, "msgid":msgid})
             if tran is None:
                 tran = Translation({"language":language,"msgid":msgid,"msgstr":"","lower_msgid":lower_msgid})
-            trans.append(tran)
             trans_by_msgid[lower_msgid] = tran
+            trans.append(tran)
 
-        trans_for_lang = list(Translation.collection.find({"language":language}))
+        trans_for_lang = list(Translation.collection.find({"language":language}).sort("_id",pymongo.DESCENDING))
         for tran in trans_for_lang:
             lower_msgid = tran['lower_msgid']
             if not trans_by_msgid.has_key(msgid):
                 trans_by_msgid[lower_msgid] = tran
-                trans.append(tran)
 
         self.render("translation/index.html",language_code=language, trans=trans)
