@@ -61,12 +61,12 @@
 {% if (user._id == verseset.user_id) or user.is_admin() %}
 {% if not verseset.is_published() %}
 <div class="feedback" style="border: 1px solid #ccc;"><div>{{gt("Your verse set is not yet published")}} 
-{% if verseset.verse_count() < 2 %}
-<br/>{{gt("You need at least two verses to publish")}}
+{% if verseset.verse_count() < 1 %}
+<br/>{{gt("You need at least one verse to publish")}}
 {% end %}
 </div>
 
-{% if verseset.verse_count() >= 2 %}
+{% if verseset.verse_count() >= 1 %}
 <a href="/verseset/publish/{{str(verseset._id)}}" class="pure-button pure-button-primary " style="margin-top:5px;">{{gt("publish")}}</a> 
 {% end %}
 </div> 

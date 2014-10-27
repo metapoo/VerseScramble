@@ -61,8 +61,8 @@ class PublishVerseSetHandler(BaseHandler):
         if (not user.is_admin()) and (user._id != vs.user_id):
             return self.write("not authorized")
 
-        if (vs.verse_count() < 2):
-            return self.write("at least two verses are required before publishing")
+        if (vs.verse_count() < 1):
+            return self.write("at least one verse is required before publishing")
 
         if not vs.is_published():
             vs.publish()
