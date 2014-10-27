@@ -14,7 +14,8 @@ def get_handlers():
 
 class PrivacyPageHandler(BaseHandler):
     def get(self):
-        self.render("privacy.html", selected_nav="about")
+        language_code = self.language_code()
+        self.redirect("/page/privacy/%s" % language_code)
 
 class FrontPageHandler(BaseHandler):
     def get(self, path=None):
