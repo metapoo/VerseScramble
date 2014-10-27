@@ -67,6 +67,14 @@ function SubmitScore(showPopup: boolean) {
 	}), handler);
 }
 
+function GetStatsMessage() : String {
+
+	var text : String = String.Format("\n{0}: {1}%", gt("Accuracy"), scoreManager.GetAccuracy());
+	text += String.Format("\n{0}: {1}s\n", gt("Time"), Mathf.RoundToInt(scoreManager.totalElapsedTime*100.0)/100.0);
+	text += String.Format(gt("{0} Blocks"), scoreManager.correct);
+	return text;
+}
+
 function EndGameWindowForChallenge () {
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
@@ -84,6 +92,8 @@ function EndGameWindowForChallenge () {
 	} else if (scoreManager.highScore == scoreManager.score) {
 		text = String.Format(gt("New high score {0}!"), scoreManager.score);
 	}	
+	
+	text += GetStatsMessage();
 	
 	var optionDialog = DialogManager.CreateOptionDialog(title,text);
 	
@@ -171,7 +181,9 @@ function EndGameWindow () {
 	} else if (scoreManager.highScore == scoreManager.score) {
 		description = String.Format(gt("New high score {0}!"), scoreManager.score);
 	} 
-
+	
+	description += GetStatsMessage();
+	
 	var optionDialog = DialogManager.CreateOptionDialog(title,description);
 		
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime) && 

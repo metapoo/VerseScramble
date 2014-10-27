@@ -588,8 +588,8 @@ function SplitVerse(verse : String) {
 			var prevWords = prevPhrase.Trim().Split(" "[0]).Length;
 			
 			// try to handle laundry lists, be more generous
-			var hasCommas : boolean = (curPhrase.EndsWith(",") && (curWords < 2) &&
-			 prevPhrase.EndsWith(",") && (prevWords < 2));
+			var hasCommas : boolean = ((curPhrase.EndsWith(",") || curPhrase.EndsWith("、")) && (curWords < 2) &&
+			 (prevPhrase.EndsWith(",") || curPhrase.EndsWith("、")) && (prevWords < 2));
 			 
 			if ((difficulty != difficulty.Hard) && hasCommas && ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f)) {
 			 Debug.Log("COMBINE(" + prevPhrase + " | " + curPhrase + ")");
