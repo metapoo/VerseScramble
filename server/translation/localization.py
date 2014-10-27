@@ -21,7 +21,7 @@ class TranslationManager:
             return translations[language]
 
         if not translations.has_key('en') and (language != 'en'):
-            load_translation('en')
+            cls.load_translation('en')
             
         translations[language] = {}
         transdict = translations[language]
