@@ -61,6 +61,9 @@ class PublishVerseSetHandler(BaseHandler):
         if (not user.is_admin()) and (user._id != vs.user_id):
             return self.write("not authorized")
 
+        if (vs.verse_count() < 2):
+            return self.write("at least two verses are required before publishing")
+
         if not vs.is_published():
             vs.publish()
             self.send_emails(vs)
@@ -435,8 +438,7 @@ class ListVerseSetHandler(BaseHandler):
             if (language_code.lower() != "all") and (language_code):
                 args.update({"language":language_code})
 
-            args.update({"verse_count":{"$gte":2},
-                         "published":True})
+            args.update({"published":True})
 
             versesets = VerseSet.collection.find(args)
             cursor = versesets

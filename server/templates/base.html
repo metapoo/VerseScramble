@@ -11,31 +11,25 @@
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
 <meta property='og:image' content="/images/vr_icon_small.png"/>
-<link rel="stylesheet" href="/stylesheets/verserain.css" type="text/css" />
+
+{% if settings.VERSERAIN_ENV == "development" %}
+<link rel="stylesheet" href="/stylesheets/application.css" type="text/css" />
 <link rel="stylesheet" href="/stylesheets/cssmenu.css" type="text/css" />
-<link rel="stylesheet" href="/stylesheets/pure-min.css" />
-<!-- link rel="stylesheet" href="/stylesheets/pure.css" type="text/css" -->
+<link rel="stylesheet" href="/stylesheets/pure-min.css" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="/stylesheets/verserain.css?v=1" type="text/css" />
+{% end %}
 
 {% block head %}
 {% end %}
 
 {% import random %}
-{% from verserain import settings %}
 
 <script type="text/javascript"> var idx=window.location.toString().indexOf("#_=_"); if (idx>0) { window.location = window.location.toString().substring(0, idx); } </script>
 
 </head>
 
 <body class="pure-skin-blue">
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1439577092991935&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 <div id="top_buttons_wrapper" >
   <div id="top_buttons" >

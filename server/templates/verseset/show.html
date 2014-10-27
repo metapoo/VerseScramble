@@ -26,6 +26,15 @@
 
 {% block page_content %}
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1439577092991935&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <div>
 <div class="heading" >{{verseset.get('name')}}</div>
 {% module ProfilePhoto(verseset.user(), current_user=user, gt=gt) %}
@@ -45,7 +54,17 @@
 {% if user  %}
 {% if (user._id == verseset.user_id) or user.is_admin() %}
 {% if not verseset.is_published() %}
-<div class="feedback" style="border: 1px solid #ccc;"><div>{{gt("Your verse set is not yet published")}} </div> <a href="/verseset/publish/{{str(verseset._id)}}" class="pure-button pure-button-primary " style="margin-top:5px;">{{gt("publish")}}</a> </div>
+<div class="feedback" style="border: 1px solid #ccc;"><div>{{gt("Your verse set is not yet published")}} 
+{% if verseset.verse_count() < 2 %}
+<br/>{{gt("You need at least two verses to publish")}}
+{% end %}
+</div>
+
+{% if verseset.verse_count() >= 2 %}
+<a href="/verseset/publish/{{str(verseset._id)}}" class="pure-button pure-button-primary " style="margin-top:5px;">{{gt("publish")}}</a> 
+{% end %}
+</div> 
+
 {% end %}
 {% end %}
 {% end %}
@@ -54,7 +73,7 @@
 {% include "_commentary.html" %}
 
 {% if is_me %}
-<a class="pure-button pure-button-primary" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a>
+<a class="pure-button pure-button-primary button-small" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a>
 
 {% end %}
 
@@ -69,14 +88,12 @@
 
 {% from verserain.utils.date import pretty_date %}
 
+{% if len(scores) > 0 %}
 <h3>{{gt("High Scores")}}</h3>
 <table class="pure-table pure-table-bordered" style="width:100%;">
 <thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks", "#")}}</th><th>{{gt("Time")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Date")}}</th></tr></thead>
 
 <tbody>
-{% if len(scores) == 0 %}
-<tr><td colspan="8">No one has submitted scores for challenge mode yet.</td></tr>
-{% end %}
 
 {% set i = 1 %}
 {% for score in scores %}
@@ -87,6 +104,7 @@
 </table>
 
 <br/>
+{% end %}
 
 {% if is_me %}
 {% include "../verse/_form.html" %}
