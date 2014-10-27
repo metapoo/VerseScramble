@@ -3,10 +3,15 @@ from verserain.translation.models import *
 class TranslationManager:
     translations = {}
     current_language = None
+    translation_string_count = 1.0
 
     @classmethod
     def set_current_language(cls, language_code):
         cls.current_language = language_code
+
+    @classmethod
+    def percent_translated(cls):
+        return len(cls.translations[cls.current_language]) * 1.0 / (cls.translation_string_count * 1.0)
 
     @classmethod
     def load_translation(cls, language, force=False):
@@ -23,6 +28,10 @@ class TranslationManager:
 
             if msgid and msgstr:
                 transdict[msgid.lower()]=msgstr
+
+        
+        if (language == 'en'):
+            cls.translation_string_count = len(transdict)
 
         translations[language] = transdict
         return transdict

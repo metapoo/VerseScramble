@@ -3,6 +3,10 @@
 {% set i = 1 %}
 {% for v in verses %}
 <tr><td class="verseset_show">
+
+{% set commentary_parent = v %}
+{% include "_commentary.html" %}
+
 <div ><span style="font-weight:bold;">{{i}}. {{v['reference'] }}</span>
 
 {% if v.has_key('version') %}
@@ -30,8 +34,6 @@
 {% end %}
 </div>
 
-{% set commentary_parent = v %}
-{% include "_commentary.html" %}
 
 </td></tr>
 

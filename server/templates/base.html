@@ -94,6 +94,11 @@
 
 
 <div id="page_content">
+{% if handler.percent_translated() < 1 %}
+{% from verserain.verse.language import LANGUAGE_BY_CODE %}
+<div class="feedback">{{LANGUAGE_BY_CODE.get(current_language)}} is currently {{int(handler.percent_translated()*100.0)}}% translated. <a class="link" href="/translation/{{current_language}}">Click here to help us complete the translation.</a> </div>
+{% end %}
+
 {% block page_content %}
 {% end %}
 </div>
@@ -106,7 +111,7 @@
 <div id="footer_links">
 <table class="centered"><tr>
 <td><a class="pure-button" onclick="vr.show_language_selector(); return false;">{{gt("Select Language")}} ({{current_language}}) &#x25BC;</a></td>
-<td><a class="pure-button" href="/translation">{{gt("Translate Verserain")}}</a></td><td>  <a class="pure-button" href="/contact">{{gt("Help")}}</a></td><td>  <a class="pure-button" href="/privacy">{{gt("Privacy")}}</a> </td>
+<td><a class="pure-button" href="/translation">{{gt("Translate Verserain")}}</a></td><td>  <a class="pure-button" href="/contact">{{gt("Help")}}</a></td><td>  <a class="pure-button" href="/privacy">{{gt("Privacy")}}</a></td><td> <a class="pure-button" href="/page/faith/{{current_language}}">{{gt("Statement of Faith")}}</a></td><td><a class="pure-button" href="/page/terms/{{current_language}}">{{gt("Terms of Use")}}</a></td>
 </tr>
 </table>
 

@@ -66,6 +66,7 @@ class VersesetScore(BaseModel):
         verseset = VerseSet.by_id(verseset_id)
         if verseset:
             verseset_name = verseset['name']
+            language = verseset.get('language')
         else:
             return
 
@@ -81,6 +82,7 @@ class VersesetScore(BaseModel):
                   'difficulty':difficulty,
                   'correct':correct,
                   'is_challenge':is_challenge,
+                  'language':language
         }
         high_score = False
 
