@@ -94,6 +94,11 @@
 
 
 <div id="page_content">
+{% if handler.percent_translated() < 1 %}
+{% from verserain.verse.language import LANGUAGE_BY_CODE %}
+<div class="feedback">{{LANGUAGE_BY_CODE.get(current_language)}} is currently {{int(handler.percent_translated()*100.0)}}% translated. <a class="link" href="/translation/{{current_language}}">Click here to help us complete the translation.</a> </div>
+{% end %}
+
 {% block page_content %}
 {% end %}
 </div>
