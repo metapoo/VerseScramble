@@ -27,6 +27,10 @@ var healthBar : HealthBar;
 var startingHealth : float = 0.0f;
 var healthBarUnits : float = startingHealth;
 
+function GetAccuracy() : float {
+	return Mathf.RoundToInt((correct*1.0)/(mistakes+correct+0.0)*1000.0f)*1.0f/10.0f;
+}
+
 function HandleWordCorrect(timeSinceLast : float) {
 	var dHealth = (5.0f-healthBarUnits)*0.01f;
 	if (dHealth < 0.01) dHealth = 0.01f;
