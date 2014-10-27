@@ -20,6 +20,7 @@
   {% end %}
 
   <fieldset>
+
   <label for="name">{{gt("Verse Set Name")}}</label>
   <input type="text" name="name" {% if verseset %}value="{{verseset.get('name')}}"{% end %} placeholder="Verse Set Name"  />
   
@@ -39,6 +40,7 @@ selected="selected"
 
   <label class="pad_top" for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
   <textarea id="mark-it-up" name="commentary" cols="80" rows="14">{% if verseset %}{% raw verseset.get_commentary_text() %}{% end %}</textarea>
+
   </fieldset>
 
 {% if verseset %}<input type="hidden" name="verseset_id" value="{{verseset._id}}" />{% end %}

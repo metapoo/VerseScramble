@@ -6,8 +6,9 @@
   <div class="error">{{gt(error_message)}}</div>
   {% end %}
 
-<fieldset>
-<label for="reference">{{gt("Verse Reference")}}</label>
+  <label for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
+  <textarea id="mark-it-up" name="commentary" cols="60" rows="14" style="height:130px;">{% if verse %}{% raw verse.get_commentary_text() %}{% end %}</textarea>
+<label class="pad_top" for="reference">{{gt("Verse Reference")}}</label>
 <input id="reference" name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="Verse Reference" onblur="if ($('#verse_text').val() == '') {vr.ajax_request('/verse/lookup',{'reference':$('#reference').val(), 'version':$('#version_select').val()},'#verse_text');} return false;" /> 
 <div class="pad_top">
 {% if verse %}
@@ -19,11 +20,7 @@
 <label class="pad_top" for="text">{{gt("Verse Text")}}</label>
 
 <textarea id="verse_text" name="text">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
-
-  <label class="pad_top" for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
-  <textarea id="mark-it-up" name="commentary" cols="60" rows="14">{% if verse %}{% raw verse.get_commentary_text() %}{% end %}</textarea>
-
-</fieldset>
+<br/>
 
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}
 <input type="hidden" name="verseset_id" value="{{verseset._id}}" />
