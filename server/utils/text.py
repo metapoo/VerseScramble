@@ -3,7 +3,7 @@ import re
 numre = re.compile("(\d+)")
 footnote_re = re.compile("\[\w\]")
 extraspace_re = re.compile("\s\s+")
-email_re = re.compile("[^@]+@[^@]+\.[^@]+")
+email_re = re.compile("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,4}$")
 
 def is_valid_email(email):
     return (re.match(email_re,email) is not None)

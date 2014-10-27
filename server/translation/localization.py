@@ -15,16 +15,29 @@ class TranslationManager:
 
     @classmethod
     def load_translation(cls, language, force=False):
+        
         translations = cls.translations
         if translations.has_key(language) and not force:
             return translations[language]
+
+        if not translations.has_key('en') and (language != 'en'):
+            cls.load_translation('en')
+            
         translations[language] = {}
         transdict = translations[language]
         trans = list(Translation.collection.find({"language":language}))
 
+        if language != 'en':
+            eng_transdict = translations['en']
+        else:
+            eng_transdict = None
+
         for tran in trans:
             msgid = tran.msgid()
             msgstr = tran.msgstr()
+
+            if eng_transdict and (not eng_transdict.has_key(msgid.lower())):
+                continue
 
             if msgid and msgstr:
                 transdict[msgid.lower()]=msgstr

@@ -60,7 +60,8 @@ def send_mail(sender, recipient, subject, body, reply_to=None, connection=None, 
     msg['From'] = formataddr((sender_name, sender_addr))
     msg['To'] = formataddr((recipient_name, recipient_addr))
     msg['Subject'] = Header(unicode(subject), header_charset)
-
+    if reply_to:
+        msg['Reply-To'] = reply_to
     created = False
     if connection is None:
         connection = smtplib.SMTP(settings.IP_ADDRESS,port=25)

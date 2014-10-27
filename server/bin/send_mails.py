@@ -9,7 +9,12 @@ def send_mails():
     if len(eqs) > 0:
         connection = smtplib.SMTP(settings.IP_ADDRESS,port=25)
         for eq in eqs:
-            if not is_valid_email(eq["to_address"]):
+            email = eq["to_address"]
+            if type(eq["to_address"]) in (list, tuple):
+                email = email[0]
+
+            if not is_valid_email(email):
+                print "invalid email: %s" % email
                 eq.remove()
                 continue
             print eq
