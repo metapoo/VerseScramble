@@ -38,6 +38,8 @@ class UpdatePageHandler(BaseHandler):
 
 class ShowPageHandler(BaseHandler):
     def get(self, name=None, language=None):
+        language = self.get_argument("l",language)
+
         if language is None:
             language = self.language_code()
 

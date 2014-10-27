@@ -29,7 +29,8 @@ class TranslationManager:
             if msgid and msgstr:
                 transdict[msgid.lower()]=msgstr
 
-        if len(trans) > cls.translation_string_count:
+        
+        if (language == 'en'):
             cls.translation_string_count = len(transdict)
 
         translations[language] = transdict
