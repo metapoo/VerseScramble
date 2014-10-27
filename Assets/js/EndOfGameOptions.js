@@ -180,10 +180,7 @@ function EndGameWindow () {
 		title = gt("Game Over");
 	}
 	
-	if (gameManager.DidRanOutOfTime) {
-		description = gt("You ran out of time.");
-		title = gt("Game Over");
-	} else if (!scoreManager.WasVerseMastered()) {
+    if (!scoreManager.WasVerseMastered()) {
 		description = String.Format(gt("You made {0} mistakes"), scoreManager.mistakes);
 	} else if (scoreManager.highScore == scoreManager.score) {
 		description = String.Format(gt("New high score {0}!"), scoreManager.score);
