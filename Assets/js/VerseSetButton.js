@@ -6,7 +6,7 @@ public var verseset : VerseSet;
 public var label : Text;
 public var normalColor : Color;
 public var verseSetsManager : VerseSetsManager;
-public var createVerseSet : boolean;
+public var createVerseSet : boolean = false;
 static var selectedButton : VerseSetButton = null;
 
 function Awake() {
