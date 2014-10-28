@@ -114,12 +114,18 @@ function HandleOnClick() {
 	VerseManager.verseIndex = 0;
 	VerseManager.SetCurrentVerseSet(verseset);
 	Highlight();
+	var apiManager : ApiManager = ApiManager.GetInstance();
 	
-	if (verseset.isOnline && (verseset.verses.length == 0)) {
-		var apiManager : ApiManager = ApiManager.GetInstance();
-		apiManager.CallApi("verseset/show",
+	var handleError : Function = function() {
+		apiManager.GetApiCache("verseset/show",
 		new Hashtable({"verseset_id":verseset.onlineId}),
 		HandleApiVerseSetShow);
+	};
+	
+	if (verseset.isOnline && (verseset.verses.length == 0)) {
+		apiManager.CallApi("verseset/show",
+		new Hashtable({"verseset_id":verseset.onlineId}),
+		HandleApiVerseSetShow, handleError);
 	} else {
 		verseSetsManager.ShowVerses();
 	}

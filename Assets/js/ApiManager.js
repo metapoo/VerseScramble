@@ -91,7 +91,7 @@ class ApiManager extends MonoBehaviour {
 		CallApi(apiName, arguments, handler, errorHandler);
 	}	
 	
-    public function CallApi(apiName : String, arguments : Hashtable, handler : Function, errorHandler : Function) {
+	public function SerializeArguments(arguments : Hashtable) {
 		if (UserSession.IsLoggedIn()) {
 			var sessionKey : String = UserSession.GetUserSession().sessionKey;
 			if (sessionKey != null) {
@@ -112,7 +112,11 @@ class ApiManager extends MonoBehaviour {
     			serializedArguments += "&";
     		}
     	}
-
+		return serializedArguments;
+	}
+	
+    public function CallApi(apiName : String, arguments : Hashtable, handler : Function, errorHandler : Function) {
+    	var serializedArguments : String = SerializeArguments(arguments);
 		CallApi(apiName, serializedArguments, handler, errorHandler);
     }
     
@@ -128,12 +132,26 @@ class ApiManager extends MonoBehaviour {
     	return resultData;
     }
     
-    public function CallApi(apiName : String, arguments : String, handler : Function, errorHandler : Function) {
+    public function UrlForApi(apiName : String, arguments : String) {
     	var protocol : String = "http";
     	if (apiName.Contains("login")) {
     		protocol = "https";
     	}
     	var url : String = String.Format("{0}://{1}/api/{2}?{3}",protocol,GetApiDomain(),apiName,arguments);
+    	return url;
+    }
+    
+    public function GetApiCache(apiName: String, arguments : Hashtable, handler : Function) {
+    	var serializedArguments : String = SerializeArguments(arguments);
+    	var url : String = UrlForApi(apiName, serializedArguments);
+    	var resultData : Hashtable = GetApiCache(url);
+    	if (resultData != null) {
+    		handler(resultData);
+    	}
+    }
+    
+    public function CallApi(apiName : String, arguments : String, handler : Function, errorHandler : Function) {
+		var url : String = UrlForApi(apiName, arguments);
 		Debug.Log("api call: " + url);
 		var _cacheEnabled : boolean = cacheEnabled;
 		var www : WWW = new WWW(url);

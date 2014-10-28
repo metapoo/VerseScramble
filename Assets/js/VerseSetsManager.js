@@ -59,6 +59,7 @@ function ShowVerseSets() {
 	verseSetScrollContent.sizeDelta.y = numRows*(rowHeight+rowPadding);
 	
 	if (currentButton != null) {
+		yield WaitForSeconds(0.01f);
 		currentButton.HandleOnClick();
 		yield WaitForSeconds(0.01f);
 		
