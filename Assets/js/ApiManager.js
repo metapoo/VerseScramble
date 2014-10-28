@@ -86,7 +86,7 @@ class ApiManager extends MonoBehaviour {
 	public function CallApi(apiName : String, arguments : Hashtable, handler : Function) {
 		var errorHandler : Function = function() {
 			var gt : Function = TextManager.GetText;
-			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error. Is your network connection enabled?"));
+			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error. Is your network connection enabled?") + "\nAPI: " + apiName);
 		};
 		CallApi(apiName, arguments, handler, errorHandler);
 	}	
