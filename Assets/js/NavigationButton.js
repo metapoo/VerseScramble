@@ -50,17 +50,16 @@ function HandleOnClick() {
 	var apiManager : ApiManager = ApiManager.GetInstance();
 	var us : UserSession = UserSession.GetUserSession();
 	var arguments : Hashtable;
+	arguments = new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()});
 	
 	var handleError : Function = function() {
-		yield WaitForSeconds(0.5);
-		apiManager.CallApi("verseset/list",
+		apiManager.GetApiCache("verseset/list",
 		arguments,
 		HandleApiVerseSetList);
 		return;
 	};
 	
 	if ((view == "popular") || (view == "new")) {
-		arguments = new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()});
 		apiManager.CallApi("verseset/list",
 		arguments,
 		HandleApiVerseSetList, handleError);
