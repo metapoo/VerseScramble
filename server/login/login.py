@@ -134,7 +134,7 @@ class RegisterHandler(BaseHandler):
         self.set_secure_cookie("email",email)
         self.current_user = user
         self.send_verify_email()
-        self.redirectWithProtocol(uri="/",protocol="http")
+        self.redirectWithProtocol(uri="/profile/account",protocol="http")
 
 class LoginHandler(BaseHandler):
     @require_secure
