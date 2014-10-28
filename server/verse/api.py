@@ -17,7 +17,10 @@ class RecordPlayVerseSetApiHandler(BaseHandler, ApiMixin):
     api_name = "verseset/record_play"
 
     def get(self):
-        verseset_id = self.get_argument("verseset_id")
+        verseset_id = self.get_argument("verseset_id", None)
+        if verseset_id is None:
+            return self.return_success({})
+
         vs = VerseSet.by_id(verseset_id)
         if vs:
             vs["play_count"] = vs.play_count() + 1

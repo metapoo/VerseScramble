@@ -98,11 +98,17 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             return True
         return False
 
+    def isIE(self):
+        return "MSIE" in self.request.headers['User-Agent']
+
     def isFirefox(self):
         return "Firefox/" in self.request.headers['User-Agent']
 
     def isChrome(self):
         return "Chrome/" in self.request.headers['User-Agent']
+
+    def isSafari(self):
+        return (not self.isChrome()) and ("Safari/" in self.request.headers['User-Agent'])
 
     def isMacOS(self):
         return "Macintosh" in self.request.headers['User-Agent']
