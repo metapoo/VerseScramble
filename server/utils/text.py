@@ -8,6 +8,11 @@ email_re = re.compile("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,4}$")
 def is_valid_email(email):
     return (re.match(email_re,email) is not None)
 
+def is_valid_username(username):
+    if ("/" in username) or ("\\" in username):
+        return False
+    return True
+
 def remove_script(txt):
     soup = BeautifulSoup.BeautifulSoup(txt)
     [s.extract() for s in soup('script')]

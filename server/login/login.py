@@ -106,6 +106,8 @@ class RegisterHandler(BaseHandler):
 
         if len(username) < 4:
             error_message = "Username must be at least four characters."
+        elif not is_valid_username(username):
+            error_message = "Username contains invalid characters"
         elif user:
             error_message = "An account is already registered with that username."        
         elif not confirm_password:
