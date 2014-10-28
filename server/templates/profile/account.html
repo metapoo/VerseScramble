@@ -17,6 +17,22 @@
 
 <br/>
 
+<h3>{{gt("Change Password")}}</h3>
+<form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="{{settings.SECURE_SITE_URL}}/profile/password/update">
+{% if user.has_key('password') %}
+<label for="current_password">{{gt("Current Password")}}</label>
+<input type="password" name="current_password" />
+{% end %}
+
+<label for="new_password">{{gt("New Password")}}</label>
+<input type="password" name="new_password" />
+<label for="confirm_password">{{gt("Confirm Password")}}</label>
+<input type="password" name="confirm_password" />
+<input type="submit" value="{{gt("update")}}" class="pure-button"  />
+</form>
+
+<br/>
+
 <div>
 <h3>{{gt("Profile Photo")}} (Gravatar)</h3>
 <a href="http://gravatar.com" target="_blank">
@@ -38,18 +54,5 @@
 
 <br/>
 
-<h3>{{gt("Change Password")}}</h3>
-<form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="{{settings.SECURE_SITE_URL}}/profile/password/update">
-{% if user.has_key('password') %}
-<label for="current_password">{{gt("Current Password")}}</label>
-<input type="password" name="current_password" />
-{% end %}
-
-<label for="new_password">{{gt("New Password")}}</label>
-<input type="password" name="new_password" />
-<label for="confirm_password">{{gt("Confirm Password")}}</label>
-<input type="password" name="confirm_password" />
-<input type="submit" value="{{gt("update")}}" class="pure-button"  />
-</form>
 
 {% end %}
