@@ -153,7 +153,6 @@ function Start () {
 	for (var i=0;i<navButtons.length;i++) {
 		var navButton : NavigationButton = navButtons[i];
 		if (navButton.view == currentViewNoLanguage) {
-			yield WaitForSeconds(0.1f);
 			navButton.HandleOnClick();
 		}
 	}
