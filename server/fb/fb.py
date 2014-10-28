@@ -55,6 +55,11 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
             username = name
             user = self.current_user
             
+            if User.by_username(username):
+                username = username.replace(" ",".")
+            if User.by_username(username):
+                username = username.replace(".","")
+
             if user is None:
                 user = authenticate_login(fb_uid=fb_uid, 
                 )
@@ -77,7 +82,10 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 client_id=self.settings["facebook_api_key"],
                 extra_params={"scope": ["offline_access","email"]})
             return
-            
+
+        if user.get('password') is None:
+            next_url = "/login/reset_password?session_key=%s&fb_uid=%s" % (session_key, fb_uid) 
+
         if next_url is None:
             url = "/profile/account"
             if user.has_key('email'):

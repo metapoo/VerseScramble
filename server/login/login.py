@@ -20,6 +20,7 @@ def get_handlers():
 
 class ResetPasswordHandler(BaseHandler):
     @require_secure
+    @require_login
     def get(self, error_message=None):
         self.render("login/reset_password.html",error_message=error_message,
                     selected_nav="login")
@@ -43,7 +44,7 @@ class ResetPasswordHandler(BaseHandler):
         
         user.set_password(password)
         user.save()
-        return self.redirect("/login")
+        return self.redirect("/profile/account")
 
 class ForgotPasswordHandler(BaseHandler):
     def get(self, error_message=None, feedback_message=None):
