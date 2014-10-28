@@ -6,8 +6,11 @@
   <div class="error">{{gt(error_message)}}</div>
   {% end %}
 
+{% if user and user.is_admin() %}
   <label for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
   <textarea id="mark-it-up" name="commentary" cols="60" rows="14" style="height:130px;">{% if verse %}{% raw verse.get_commentary_text() %}{% end %}</textarea>
+{% end %}
+
 <label class="pad_top" for="reference">{{gt("Verse Reference")}}</label>
 <input id="reference" name="reference" {% if verse %}value="{{verse['reference']}}"{% end %} placeholder="{{gt("Example:")}} {{gt("John 3:16")}}" onblur="if ($('#verse_text').val() == '') {vr.ajax_request('/verse/lookup',{'reference':$('#reference').val(), 'version':$('#version_select').val()},'#verse_text');} return false;" /> 
 
