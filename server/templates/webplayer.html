@@ -100,10 +100,37 @@
 </p>
 {% set user_guide_url = None %}
 
-{% if handler.isMacOS() and handler.isFirefox() %}
+
+{% if handler.isMacOS() %}
+
+{% if handler.isFirefox() %}
 {% set user_guide_url = "UserGuide_MacFirefox.pdf" %}
-{% elif handler.isMacOS() and handler.isChrome() %}
+{% elif handler.isChrome() %}
 {% set user_guide_url = "UserGuide_MacChrome.pdf" %}
+{% elif handler.isSafari() %}
+{% set user_guide_url = "UserGuide_MacSafari.pdf" %}
+{% end %}
+
+{% elif handler.isWindows() %}
+{% if handler.isFirefox() %}
+
+{% if current_language == "mn" %}
+{% set user_guide_url = "UserGuide_MN_WindowsFirefox.pdf" %}
+{% else %}
+{% set user_guide_url = "UserGuide_WindowsFirefox.pdf" %}
+{% end %}
+
+{% elif handler.isChrome() %}
+{% if current_language == "mn" %}
+{% set user_guide_url = "UserGuide_MN_WindowsChrome.pdf" %}
+{% else %}
+{% set user_guide_url = "UserGuide_WindowsChrome.pdf" %}
+{% end %}
+
+{% elif handler.isIE() %}
+{% set user_guide_Url = "UserGuide_WindowsIE.pdf" %}
+{% end %}
+
 {% end %}
 
 {% if user_guide_url %}
