@@ -28,7 +28,9 @@ var startingHealth : float = 0.0f;
 var healthBarUnits : float = startingHealth;
 
 function GetAccuracy() : float {
-	return Mathf.RoundToInt((correct*1.0)/(mistakes+correct+0.0)*1000.0f)*1.0f/10.0f;
+	var accuracy : float = Mathf.RoundToInt((correct*1.0)/(mistakes+correct+0.0)*1000.0f)*1.0f/10.0f;
+	if (accuracy < 0.001f) accuracy = 0.0f;
+	return accuracy;
 }
 
 function HandleWordCorrect(timeSinceLast : float) {
