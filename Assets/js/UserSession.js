@@ -37,7 +37,26 @@ function Awake() {
 }
 
 function HandleFbLogin(parameters : Hashtable) {
+	var accessToken = parameters["accessToken"];
+	var fbUid = parameters["fbUid"];
+	var fbPicUrl = parameters["fbPicUrl"];
 	
+	var onLogin = function(userData:Hashtable) {
+		HandleLogin(userData);	
+		var loginPanel : LoginPanel = GameObject.FindObjectOfType(LoginPanel);
+		if (loginPanel != null) {
+			Destroy(loginPanel.gameObject);
+		}
+	};
+	
+	ApiManager.GetInstance().CallApi("fb/login", 
+	new Hashtable({"access_token":accessToken,
+				   "fb_uid":fbUid,
+				   "fb_pic_url":fbPicUrl}),
+	new Hashtable({"cacheEnabled":false,
+	               "protocol":"https",
+	               "method":"post",
+	               "handler":onLogin}));
 }
 
 // example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
@@ -100,16 +119,12 @@ function DoLogin(sessionKey : String, afterLogin : Function) {
 			afterLogin();
 		}
 	};
-	
-	var onError = function() {
-	};
-	
+		
 	var apiManager : ApiManager = ApiManager.GetInstance();
 	
 	apiManager.CallApi("login/login",
 		new Hashtable({"session_key":sessionKey}), 
 		new Hashtable({"handler":onLogin,
-					   "errorHandler":onError,
 					   "cacheEnabled":false,
 					   "protocol":"https",
 					   "method":"post"}));

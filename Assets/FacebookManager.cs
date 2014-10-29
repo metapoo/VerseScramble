@@ -63,7 +63,8 @@ public class FacebookManager : MonoBehaviour {
 				parameters.Add("name", _name);
 				parameters.Add("email",_email);
 				parameters.Add("fbUid",FB.UserId);
-				parameters.Add ("fbPicUrl",_picUrl);
+				parameters.Add("fbPicUrl",_picUrl);
+				parameters.Add("accessToken",FB.AccessToken);
 				userSession.SendMessage("HandleFbLogin", parameters);
 			});
 		});
