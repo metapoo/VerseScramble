@@ -61,11 +61,11 @@ class ApiManager extends MonoBehaviour {
     {
             if (instance == null) 
             {
-            	var notificationObject:GameObject = GameObject.Find("Default ApiManager");
+            	var notificationObject:GameObject = GameObject.Find("ApiManager");
             	
                 // Because the TextManager is a component, we have to create a GameObject to attach it to.
                 if (notificationObject == null) {
-	                notificationObject = new GameObject("Default ApiManager");
+	                notificationObject = new GameObject("ApiManager");
 	                // Add the DynamicObjectManager component, and set it as the defaultCenter
     		      	instance = notificationObject.AddComponent(typeof(ApiManager));
  				}

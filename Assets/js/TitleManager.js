@@ -19,9 +19,11 @@ function Awake() {
 }
 
 function Start () {
+	
 	if (PlayerPrefs.HasKey("language") && !stayInTitleScreen) {
 		var language : String = VerseManager.GetLanguage();
 		var onFinish : Function = function() {
+			
 			var us: UserSession = UserSession.GetUserSession();
 			if ((!us.verseId) && (!us.versesetId)) {			
 				Application.LoadLevel("versesets");

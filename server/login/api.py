@@ -29,20 +29,15 @@ class RegisterApiHandler(BaseHandler, ApiMixin):
         user = User.collection.find_one({'username':username})
         if user:
             error_message = "An account is already registered with that username."
-
-        if not confirm_password:
+        elif not confirm_password:
             error_message = "Password confirmation is required"
-
-        if not password:
+        elif not password:
             error_message = "Password is required."
-
-        if password != confirm_password:
+        elif password != confirm_password:
             error_message = "Password does not match with confirmation"
-
-        if not email:
+        elif not email:
             error_message = "Email is required."
-
-        if not username:
+        elif not username:
             error_message = "Username is required."
 
         response = {"error_message":error_message}

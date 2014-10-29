@@ -20,6 +20,7 @@ def get_handlers():
 
 class ResetPasswordHandler(BaseHandler):
     @require_secure
+    @require_login
     def get(self, error_message=None):
         self.render("login/reset_password.html",error_message=error_message,
                     selected_nav="login")
@@ -43,7 +44,7 @@ class ResetPasswordHandler(BaseHandler):
         
         user.set_password(password)
         user.save()
-        return self.redirect("/login")
+        return self.redirect("/profile/account")
 
 class ForgotPasswordHandler(BaseHandler):
     def get(self, error_message=None, feedback_message=None):
@@ -106,6 +107,8 @@ class RegisterHandler(BaseHandler):
 
         if len(username) < 4:
             error_message = "Username must be at least four characters."
+        elif not is_valid_username(username):
+            error_message = "Username contains invalid characters"
         elif user:
             error_message = "An account is already registered with that username."        
         elif not confirm_password:
@@ -132,7 +135,7 @@ class RegisterHandler(BaseHandler):
         self.set_secure_cookie("email",email)
         self.current_user = user
         self.send_verify_email()
-        self.redirectWithProtocol(uri="/",protocol="http")
+        self.redirectWithProtocol(uri="/profile/account",protocol="http")
 
 class LoginHandler(BaseHandler):
     @require_secure

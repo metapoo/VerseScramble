@@ -46,7 +46,7 @@ class PublishVerseSetHandler(BaseHandler):
             return
         language = subscriber.language()
         email = subscriber['email']
-        subject = "%s: %s" % (gt("Verse Rain", language=language), gt("{0} has published a verse set", arg=user['username'], language=language))
+        subject = verseset['name']
         message = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings)
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
 
