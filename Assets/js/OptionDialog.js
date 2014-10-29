@@ -11,6 +11,11 @@ var windowPadding = 60;
 var buttonPadding = 30;
 	
 function HandleOkayButtonClick() {
+	CloseDialog();
+}
+
+function CloseDialog() {
+	GameManager.endPopup = null;
 	Destroy(this.gameObject);
 }
 
@@ -45,10 +50,6 @@ function SetDescription(_description : String) {
 		GetComponent(RectTransform).sizeDelta.y -= (descriptionPanel.sizeDelta.y + buttonPadding);
 		descriptionPanel.sizeDelta.y = 0;
 	}
-}
-
-function CloseDialog() {
-	Destroy(this.gameObject);
 }
 
 function AddOption(label : String, handler : Function) {

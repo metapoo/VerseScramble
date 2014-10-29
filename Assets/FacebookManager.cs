@@ -9,6 +9,7 @@ public class FacebookManager : MonoBehaviour {
 	private static string _picUrl;
 	private static string _name;
 	private static string _email;
+	private static bool _initialized;
 
 	//-----------------------------------------------------------------------------------------------
 	// Returns an instance of the FacebookManager
@@ -37,7 +38,7 @@ public class FacebookManager : MonoBehaviour {
 		return Instance;
 	}  
 
-	void OnLogin(FBResult response) {
+	public void OnLogin(FBResult response) {
 		FB.API("/me/picture?redirect=false", HttpMethod.GET, delegate (FBResult picResponse) {
 			if (picResponse.Error == null) {
 				var picResult = (Dictionary<string,object>)Json.Deserialize(picResponse.Text);
@@ -63,15 +64,16 @@ public class FacebookManager : MonoBehaviour {
 
 	}
 
-	void OnInitComplete() {
-		if (!FB.IsLoggedIn) {
-			FB.Login ("offline_access, email, user_likes", OnLogin);
+	public void DoLogin() {
+		FB.Init(onInitComplete:delegate {
+			_initialized = true;
+			FB.Login ("offline_access, email", OnLogin);
 		}
+		);
 	}
 
 	// Use this for initialization
 	void Start () {
-		//FB.Init(onInitComplete:OnInitComplete);
 	}
 	
 	// Update is called once per frame

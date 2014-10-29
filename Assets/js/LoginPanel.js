@@ -10,7 +10,6 @@ function Start() {
 function Update() {
 }
 
-
 function HandleRegisterClick() {
 	var url : String = String.Format("https://{0}/login/register",ApiManager.GetApiDomain());
 	Debug.Log("open url: " + url);

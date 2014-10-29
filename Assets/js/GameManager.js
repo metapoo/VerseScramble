@@ -41,7 +41,7 @@ var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
 var updateCount : int = 0;
-var endPopup : EndOfGameOptions;
+
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -53,6 +53,7 @@ public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
+static var endPopup : EndOfGameOptions;
 static var lastDiffSpoken : String;
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
