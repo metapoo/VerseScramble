@@ -617,7 +617,8 @@ function LoadOnlineVerse(verseId : String, includeSet : boolean) {
 		UserSession.GetUserSession().ClearUrlOptions();
 	};
 	
-	ApiManager.GetInstance().CallApi("verse/show", new Hashtable({"verse_id":verseId}), handleApi);
+	ApiManager.GetInstance().CallApi("verse/show", new Hashtable({"verse_id":verseId}), 
+	new Hashtable({"handler":handleApi}));
 	
 }
 
@@ -661,7 +662,8 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 		Debug.Log("finished loading verse set");
 	};
 	
-	ApiManager.GetInstance().CallApi("verseset/show",new Hashtable({"verseset_id":versesetId}),handleApi);
+	ApiManager.GetInstance().CallApi("verseset/show",new Hashtable({"verseset_id":versesetId}),
+	new Hashtable({"handler":handleApi}));
 }
 
 function LoadVerses() {
