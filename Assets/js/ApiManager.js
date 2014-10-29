@@ -116,7 +116,7 @@ class ApiManager extends MonoBehaviour {
 		var form : WWWForm = new WWWForm();
 		
 		for (var key:String in arguments.Keys) {
-    		var val = arguments[key];
+    		var val : String = arguments[key];
     		if (val == null) {
     			Debug.Log("key: " + key + " value is null!");
     		}
@@ -160,6 +160,8 @@ class ApiManager extends MonoBehaviour {
     	var serializedArguments : String = SerializeArguments(arguments);
     	var url : String;
     	var method : String = "get";
+    	var resultData : Hashtable;
+    	
     	if (options.ContainsKey("method")) {
     		method = options["method"];
     	}

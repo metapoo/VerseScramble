@@ -73,6 +73,7 @@ public class FacebookManager : MonoBehaviour {
 	}
 
 	public void DoLogin() {
+
 		FB.Init(onInitComplete:delegate {
 			_initialized = true;
 			if (FB.IsLoggedIn) {
