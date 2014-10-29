@@ -7,6 +7,10 @@ var userId : String = null;
 var sessionKey : String = null;
 var username : String = null;
 var email : String = null;
+var fbUid : String = null;
+var _name : String = null;
+var fbPicUrl : String = null;
+
 var totalScore : int = 0;
 var isLoggedIn : boolean = false;
 
@@ -30,6 +34,10 @@ static function GetUserSession() {
 function Awake() {
 	DontDestroyOnLoad(this.gameObject);
 	LoadUserLogin();
+}
+
+function HandleFbLogin(parameters : Hashtable) {
+	
 }
 
 // example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
@@ -147,6 +155,15 @@ function HandleLogin(userData : Hashtable) {
 	} else {
 		totalScore = 0;
 	}
+	if (userData.ContainsKey("fb_uid")) {
+		fbUid = userData["fb_uid"];
+	}
+	if (userData.ContainsKey("fb_pic_url")) {
+		fbPicUrl = userData["fb_pic_url"];
+	}
+	if (userData.ContainsKey("name")) {
+		_name = userData["name"];
+	}
 	isLoggedIn = true;
 	
 	var json : String = HashtableToJSON(userData);
@@ -161,7 +178,8 @@ function HandleLogin(userData : Hashtable) {
 function Save() {
 	
 	var userData : Hashtable = new Hashtable({"email":email,"username":username,
-	"_id":userId,"session_key":sessionKey,"total_score":totalScore,"logged_in":isLoggedIn});
+	"_id":userId,"session_key":sessionKey,"total_score":totalScore,"logged_in":isLoggedIn,
+	"fb_uid":fbUid, "name":_name, "fb_pic_url":fbPicUrl});
 	var json : String = HashtableToJSON(userData);
 	PlayerPrefs.SetString("user_data", json);
 }
@@ -191,6 +209,9 @@ function Logout() {
 	sessionKey = null;
 	username = null;
 	email = null;
+	_name = null;
+	fbPicUrl = null;
+	fbUid = null;
 	totalScore = 0;
 	PlayerPrefs.DeleteKey("user_data");
 }

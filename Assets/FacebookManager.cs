@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using Facebook;
 using Facebook.MiniJSON;
 
@@ -57,7 +58,13 @@ public class FacebookManager : MonoBehaviour {
 					}
 				}
 
-
+				var userSession = GameObject.Find("UserSession");
+				var parameters = new Hashtable();
+				parameters.Add("name", _name);
+				parameters.Add("email",_email);
+				parameters.Add("fbUid",FB.UserId);
+				parameters.Add ("fbPicUrl",_picUrl);
+				userSession.SendMessage("HandleFbLogin", parameters);
 			});
 		});
 
