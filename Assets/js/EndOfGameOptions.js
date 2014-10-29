@@ -193,6 +193,9 @@ function EndGameWindow () {
 		
 	var mastered = (difficulty == difficulty.Hard) && (!gameManager.DidRanOutOfTime) && 
 	(scoreManager.WasVerseMastered());
+	optionDialog.onClose = function() {
+		Destroy(this.gameObject);
+	};
 	
 	optionDialog.AddOption(String.Format(gt("Play Challenge (All Verses)"), nextDifficultyString),
 				function() {

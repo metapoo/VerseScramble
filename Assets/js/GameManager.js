@@ -53,7 +53,6 @@ public var DidRanOutOfTime : boolean = false;
 
 private var wordHinted : boolean = false;
 
-static var endPopup : EndOfGameOptions;
 static var lastDiffSpoken : String;
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
@@ -117,6 +116,7 @@ function ShowSolution() {
 		return;
 	}
 	if (showingSolution) {
+		var endPopup : EndOfGameOptions = GameObject.FindObjectOfType(EndOfGameOptions);
 		if (endPopup == null) {
 			ShowEndOfGameOptions();
 		}
@@ -255,8 +255,7 @@ function showFeedback(feedbackText : String, time : float) {
 }
 
 function ShowEndOfGameOptions() {
-	Debug.Log("show end of game options");
-	endPopup = Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
+	Instantiate(endOfGameOptions, new Vector3(0,0,0), Quaternion.identity);	
 }
 
 function ShowDifficultyOptions() {
@@ -626,7 +625,6 @@ function Cleanup () {
 	wordLabels.Clear();
 	scrambledWordLabels.Clear();
 	needToRecordPlay = true;
-	endPopup = null;
 }
 
 function BeginGame() {

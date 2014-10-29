@@ -9,14 +9,16 @@ var numOptions : int = 0;
 var descriptionPanel : RectTransform;
 var windowPadding = 60;
 var buttonPadding = 30;
+var onClose : Function = null;
 	
 function HandleOkayButtonClick() {
 	CloseDialog();
 }
 
 function CloseDialog() {
-	GameManager.endPopup = null;
-
+	if (onClose != null) {
+		onClose();
+	}
 	Destroy(this.gameObject);
 }
 
