@@ -68,8 +68,8 @@ function SubmitLogin() {
 	var username = usernameField.value;
 	var password = passwordField.value;
 	var apiManager : ApiManager = ApiManager.GetInstance();
-	apiManager.cacheEnabled = false;
 	apiManager.CallApi("login/login",
-	new Hashtable({"username":username,"password":password}),HandleLogin);
+	new Hashtable({"username":username,"password":password}),
+	new Hashtable({"handler":HandleLogin, "method":"post", "cacheEnabled":false}));
 }
 

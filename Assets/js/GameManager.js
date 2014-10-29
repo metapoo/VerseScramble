@@ -324,7 +324,8 @@ static function RecordPlay() {
 	}
 	var versesetId = verseset.onlineId;
 	if (versesetId != null) {
-		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}), null, null);
+		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}),
+		new Hashtable({"errorHandler":null}));
 	}
 	needToRecordPlay = false;
 }

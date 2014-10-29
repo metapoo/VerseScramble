@@ -38,8 +38,6 @@ public class FacebookManager : MonoBehaviour {
 	}  
 
 	void OnLogin(FBResult response) {
-		Debug.Log (FB.AccessToken);
-		Debug.Log (FB.UserId);
 		FB.API("/me/picture?redirect=false", HttpMethod.GET, delegate (FBResult picResponse) {
 			if (picResponse.Error == null) {
 				var picResult = (Dictionary<string,object>)Json.Deserialize(picResponse.Text);

@@ -8,7 +8,6 @@ class ApiManager extends MonoBehaviour {
     static var instance:ApiManager;
  	static var apiDomain:String = null;
  	static var secretKey:String = "0>a-q,wYTmq%<,h$OXYg<js:h([TR/:4hSVh.vEJhq4RvWIx@_|^B|]z`b<d~kI@";
-	static var cacheEnabled:boolean = true;
 	
 	public static function IsConnectedToInternet() : boolean {
 		var isConnectedToInternet = false;
@@ -79,17 +78,8 @@ class ApiManager extends MonoBehaviour {
     }
 
 	public function CallApi(apiName : String, arguments : Hashtable) {
-		var handler : Function = function() {};
-		CallApi(apiName, arguments, handler);
+		CallApi(apiName, arguments, new Hashtable({}));
 	}
-
-	public function CallApi(apiName : String, arguments : Hashtable, handler : Function) {
-		var errorHandler : Function = function() {
-			var gt : Function = TextManager.GetText;
-			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error. Is your network connection enabled?") + "\nAPI: " + apiName);
-		};
-		CallApi(apiName, arguments, handler, errorHandler);
-	}	
 	
 	public function SerializeArguments(arguments : Hashtable) {
 		if (UserSession.IsLoggedIn()) {
@@ -115,9 +105,9 @@ class ApiManager extends MonoBehaviour {
 		return serializedArguments;
 	}
 	
-    public function CallApi(apiName : String, arguments : Hashtable, handler : Function, errorHandler : Function) {
+    public function CallApi(apiName : String, arguments : Hashtable, options : Hashtable) {
     	var serializedArguments : String = SerializeArguments(arguments);
-		CallApi(apiName, serializedArguments, handler, errorHandler);
+		CallApi(apiName, serializedArguments, options);
     }
     
     public function SetApiCache(url : String, resultData : Hashtable) {
@@ -141,30 +131,46 @@ class ApiManager extends MonoBehaviour {
     	return url;
     }
     
-    public function GetApiCache(apiName: String, arguments : Hashtable, handler : Function) {
+    public function GetApiCache(apiName: String, arguments : Hashtable, options : Hashtable) {
     	var serializedArguments : String = SerializeArguments(arguments);
     	var url : String = UrlForApi(apiName, serializedArguments);
     	var resultData : Hashtable = GetApiCache(url);
+    	var handler : Function = options["handler"];
     	if (resultData != null) {
     		handler(resultData);
     	}
     }
     
-    public function CallApi(apiName : String, arguments : String, handler : Function, errorHandler : Function) {
+    public function CallApi(apiName : String, arguments : String, options : Hashtable) {
 		var url : String = UrlForApi(apiName, arguments);
 		Debug.Log("api call: " + url);
-		var _cacheEnabled : boolean = cacheEnabled;
 		var www : WWW = new WWW(url);
 		yield www;
-		// restore cache enabled flag for next call
-		cacheEnabled = true;
-			
-		var resultData : Hashtable = null;
+		var cacheEnabled = true;
+		
+		if (options.ContainsKey("cacheEnabled")) {
+			cacheEnabled = options["cacheEnabled"];
+		}
+		
+		var handler : Function = function() {};
+		if (options.ContainsKey("handler")) {
+			handler = options["handler"];
+		}
+		
+		var errorHandler : Function = function() {
+			var gt : Function = TextManager.GetText;
+			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error. Is your network connection enabled?") + "\nAPI: " + apiName);
+		};
+		
+		if (options.ContainsKey("errorHandler")) {
+			errorHandler = options["errorHandler"];
+		}
+		
 
 		if (www.error != null) {
 			Debug.Log("www.error = " + www.error);
 			try {
-				if (_cacheEnabled) {
+				if (cacheEnabled) {
 					Debug.Log("Got error, trying cache..");
 					resultData = GetApiCache(url);
 				}

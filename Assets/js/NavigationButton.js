@@ -55,25 +55,24 @@ function HandleOnClick() {
 	var handleError : Function = function() {
 		apiManager.GetApiCache("verseset/list",
 		arguments,
-		HandleApiVerseSetList);
-		return;
+		new Hashtable({"handler":HandleApiVerseSetList}));
 	};
 	
 	if ((view == "popular") || (view == "new")) {
 		apiManager.CallApi("verseset/list",
 		arguments,
-		HandleApiVerseSetList, handleError);
+		new Hashtable({"handler":HandleApiVerseSetList, "errorHandler":handleError}));
 	} else if (view == "history") {
 		if (UserSession.IsLoggedIn() && (!VerseManager.historyLoaded)) {
 			apiManager.CallApi("profile/versesets/history",
 			new Hashtable({}),
-			HandleApiVerseSetList);
+			new Hashtable({"handler":HandleApiVerseSetList}));
 		}
 	} else if (view == "mysets") {
 		var showMySets : Function = function() {
 			apiManager.CallApi("verseset/list",
 			new Hashtable({"user_id":us.userId,"page":1,"language_code":VerseManager.GetLanguage()}),
-			HandleApiVerseSetList);
+			new Hashtable({"handler":HandleApiVerseSetList}));
 		};
 		
 		if (!UserSession.IsLoggedIn()) {

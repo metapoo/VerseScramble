@@ -97,9 +97,12 @@ function DoLogin(sessionKey : String, afterLogin : Function) {
 	};
 	
 	var apiManager : ApiManager = ApiManager.GetInstance();
-	apiManager.cacheEnabled = false;
+	
 	apiManager.CallApi("login/login",
-		new Hashtable({"session_key":sessionKey}), onLogin, onError);
+		new Hashtable({"session_key":sessionKey}), 
+		new Hashtable({"handler":onLogin,
+					   "errorHandler":onError,
+					   "cacheEnabled":false}));
 }
 
 function SetVerseId(verseId_ : String) {

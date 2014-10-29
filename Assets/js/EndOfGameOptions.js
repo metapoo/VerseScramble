@@ -67,7 +67,8 @@ function SubmitScore(showPopup: boolean) {
 	new Hashtable({"score":score, "verseset_id":versesetId, "hash":hash, "mistakes":mistakes,
 	"mastered":mastered, "difficulty":difficulty, "elapsed_time":elapsedTime, "correct":correct,
 	"is_challenge":GameManager.GetChallengeModeEnabled()
-	}), handler, errorHandler);
+	}), 
+	new Hashtable({"handler":handler, "errorHandler":errorHandler}));
 }
 
 function GetStatsMessage() : String {

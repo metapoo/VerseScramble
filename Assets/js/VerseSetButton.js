@@ -119,13 +119,14 @@ function HandleOnClick() {
 	var handleError : Function = function() {
 		apiManager.GetApiCache("verseset/show",
 		new Hashtable({"verseset_id":verseset.onlineId}),
-		HandleApiVerseSetShow);
+		new Hashtable({"handler":HandleApiVerseSetShow}));
 	};
 	
 	if (verseset.isOnline && (verseset.verses.length == 0)) {
 		apiManager.CallApi("verseset/show",
 		new Hashtable({"verseset_id":verseset.onlineId}),
-		HandleApiVerseSetShow, handleError);
+		new Hashtable({"handler":HandleApiVerseSetShow, 
+		"errorHandler":handleError}));
 	} else {
 		verseSetsManager.ShowVerses();
 	}
