@@ -11,6 +11,7 @@ from verserain.user import api as user_api
 from verserain.play import play
 from verserain.subscribe import subscribe
 from verserain.fb import fb
+from verserain.fb import api as fb_api
 
 def get_handlers():
     handlers = []
