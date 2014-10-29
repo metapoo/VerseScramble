@@ -35,7 +35,6 @@ def get_user_from_fb_profile(fb_user, fb_profile):
 
     if user is None and email:
         user = User.collection.find_one({"email":email})
-        user = None
 
     if user is None:
         if User.by_username(username):
