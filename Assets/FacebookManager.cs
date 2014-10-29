@@ -67,7 +67,11 @@ public class FacebookManager : MonoBehaviour {
 	public void DoLogin() {
 		FB.Init(onInitComplete:delegate {
 			_initialized = true;
-			FB.Login ("offline_access, email", OnLogin);
+			if (FB.IsLoggedIn) {
+				OnLogin (null);
+			} else {
+				FB.Login ("offline_access, email", OnLogin);
+			}
 		}
 		);
 	}

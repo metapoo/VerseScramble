@@ -16,6 +16,7 @@ function HandleOkayButtonClick() {
 
 function CloseDialog() {
 	GameManager.endPopup = null;
+
 	Destroy(this.gameObject);
 }
 

@@ -67,6 +67,10 @@ function AddToScrollView(scrollContent : RectTransform, index : int) {
 }
 
 function  HandleOnClick() {
+	var loginPanel : LoginPanel = GameObject.FindObjectOfType(LoginPanel);
+	if (loginPanel != null) {
+		return;
+	}
 	var versesetId = verseManager.currentVerseSet.onlineId;
 	GameManager.needToRecordPlay = true;
 	
