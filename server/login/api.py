@@ -16,10 +16,14 @@ class RegisterApiHandler(BaseHandler, ApiMixin):
         return self.post()
 
     def post(self):
-        confirm_password = self.get_argument("confirm_password")
-        password = self.get_argument("password")
-        email = self.get_argument("email")
-        username = self.get_argument("username")
+        try:
+            confirm_password = self.get_argument("confirm_password")
+            password = self.get_argument("password")
+            email = self.get_argument("email")
+            username = self.get_argument("username")
+        except tornado.web.HTTPError, e:
+            return self.return_error(e.log_message)
+
         error_message = None
 
         user = User.collection.find_one({'email':email})
