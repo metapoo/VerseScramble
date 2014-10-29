@@ -70,9 +70,11 @@ function HandleOnClick() {
 		}
 	} else if (view == "mysets") {
 		var showMySets : Function = function() {
+			Debug.Log("show my sets");
 			apiManager.CallApi("verseset/list",
 			new Hashtable({"user_id":us.userId,"page":1,"language_code":VerseManager.GetLanguage()}),
 			new Hashtable({"handler":HandleApiVerseSetList}));
+			
 		};
 		
 		if (!UserSession.IsLoggedIn()) {

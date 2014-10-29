@@ -102,7 +102,9 @@ function DoLogin(sessionKey : String, afterLogin : Function) {
 		new Hashtable({"session_key":sessionKey}), 
 		new Hashtable({"handler":onLogin,
 					   "errorHandler":onError,
-					   "cacheEnabled":false}));
+					   "cacheEnabled":false,
+					   "protocol":"https",
+					   "method":"post"}));
 }
 
 function SetVerseId(verseId_ : String) {

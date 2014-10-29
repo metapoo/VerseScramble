@@ -70,6 +70,7 @@ function SubmitLogin() {
 	var apiManager : ApiManager = ApiManager.GetInstance();
 	apiManager.CallApi("login/login",
 	new Hashtable({"username":username,"password":password}),
-	new Hashtable({"handler":HandleLogin, "method":"post", "cacheEnabled":false}));
+	new Hashtable({"handler":HandleLogin, "method":"post", 
+	"cacheEnabled":false, "protocol":"https"}));
 }
 
