@@ -169,6 +169,8 @@ class ApiManager extends MonoBehaviour {
 
 		if (www.error != null) {
 			Debug.Log("www.error = " + www.error);
+			var handlerCalled : boolean = false;
+			
 			try {
 				if (cacheEnabled) {
 					Debug.Log("Got error, trying cache..");
@@ -182,13 +184,17 @@ class ApiManager extends MonoBehaviour {
 				if (handler != null) {
 					Debug.Log("Cache hit, calling handler");
 					handler(resultData);
+					handlerCalled = true;
 				}
 			} else if (cacheEnabled) {
 				Debug.Log("Cache result was null, calling error handler");
-				if (errorHandler != null) {
-					errorHandler();
-				}
+				
 			}
+			
+			if (!handlerCalled && (errorHandler != null)) {
+				errorHandler();
+			}
+			
 			return;
 		}
 		
