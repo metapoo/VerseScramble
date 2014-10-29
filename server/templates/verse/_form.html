@@ -6,7 +6,7 @@
   <div class="error">{{gt(error_message)}}</div>
   {% end %}
 
-<div id="commentary" style="display:none;">
+<div id="commentary" {% if verse is None %}style="display:none;"{% end %}>
   <label for="commentary">{{gt("Commentary")}} ({{gt("Optional")}})</label>
   <textarea id="mark-it-up" name="commentary" cols="60" rows="14" style="height:130px;">{% if verse %}{% raw verse.get_commentary_text() %}{% end %}</textarea>
 </div>
