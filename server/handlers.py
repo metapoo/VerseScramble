@@ -17,7 +17,7 @@ def get_handlers():
     handlers = []
     mods = [base,login,verse, verse_api, page, login_api, leaderboard_api,
             leaderboard, profile, profile_api, translation, play, user_api,
-            fb, subscribe]
+            fb, fb_api, subscribe]
 
     for mod in mods:
         handlers.extend(mod.get_handlers())
