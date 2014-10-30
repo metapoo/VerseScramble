@@ -314,18 +314,21 @@ function AnimateIntro() {
 	
 }
 
-static function RecordPlay() {
+function RecordPlay() {
+
 	while (!VerseManager.loaded) {
 		yield WaitForSeconds(1);
 	}
+
 	var verseset : VerseSet = VerseManager.currentVerseSet;
 	if (Object.ReferenceEquals(verseset, null)) {
 		return;
 	}
 	var versesetId = verseset.onlineId;
 	if (versesetId != null) {
-		ApiManager.GetInstance().CallApi("verseset/record_play", new Hashtable({"verseset_id":versesetId}),
-		new Hashtable({"errorHandler":null}));
+		var options : Hashtable = new Hashtable({"errorHandler":null});
+		var arguments : Hashtable = new Hashtable({"verseset_id":versesetId});
+		ApiManager.GetInstance().CallApi("verseset/record_play", arguments);
 	}
 	needToRecordPlay = false;
 }
