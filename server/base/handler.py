@@ -39,7 +39,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             return
 
         email = user['email']
-        subject = "%s: %s" % (self.gt("Verse Rain"), self.gt("Verify Email"))
+        subject = "%s" % (self.gt("Verify Email"),)
         hash_code = user.email_hash()
         verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                           hash_code, user.session_key())
