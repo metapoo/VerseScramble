@@ -125,10 +125,9 @@ function OnGlobeClick() {
 		return;
 	}
 	if (verseset.onlineId == null) {
-		Application.OpenURL(String.Format("http://{0}/",apiDomain));
+		Application.OpenURL(ApiManager.GetUrl("/"));
 	}
-	var url : String = String.Format("http://{0}/verseset/show/{1}",
-	apiDomain, verseset.onlineId);
+	var url : String = ApiManager.GetUrl(String.Format("/verseset/show/{0}",verseset.onlineId));
 	Application.OpenURL(url);
 }
 

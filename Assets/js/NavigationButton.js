@@ -86,9 +86,9 @@ function HandleOnClick() {
 			showMySets();
 		}
 	} else if (view == "profile") {
-		Application.OpenURL(String.Format("http://{0}/profile", apiDomain));
+		Application.OpenURL(ApiManager.GetUrl("/profile"));
 	} else if (view == "leaderboard") {
-		Application.OpenURL(String.Format("http://{0}/leaderboard", apiDomain));
+		Application.OpenURL(ApiManager.GetUrl("/leaderboard"));
 	}
 	
 	verseSetsManager.ShowVerseSets();

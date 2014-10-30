@@ -9,6 +9,18 @@ class ApiManager extends MonoBehaviour {
  	static var apiDomain:String = null;
  	static var secretKey:String = "0>a-q,wYTmq%<,h$OXYg<js:h([TR/:4hSVh.vEJhq4RvWIx@_|^B|]z`b<d~kI@";
 	
+	public static function GetUrl(path : String) : String {
+		var sessionKeyString : String = "";
+		if (UserSession.IsLoggedIn) {
+			var us : UserSession = UserSession.GetUserSession();
+			if (us.sessionKey != null) {
+				sessionKeyString = String.Format("?session_key={0}", us.sessionKey);
+			}
+		}
+		var url : String = String.Format("http://{0}{1}{2}", apiDomain, path, sessionKeyString);
+		return url;
+	}
+	
 	public static function IsConnectedToInternet() : boolean {
 		var isConnectedToInternet = false;
 		var ipAddress : String = Network.player.ipAddress.ToString().Trim();

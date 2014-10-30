@@ -106,7 +106,7 @@ function HandleApiVerseSetShow(resultData : Hashtable) {
 
 function HandleOnClick() {
 	if (createVerseSet) {
-		var url : String = String.Format("http://{0}/verseset/create",ApiManager.GetApiDomain());
+		var url : String = ApiManager.GetUrl("/verseset/create");
 		Application.OpenURL(url);
 		return;
 	}
