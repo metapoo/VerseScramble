@@ -30,6 +30,7 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
             selected_subnav = "total"
             if user and user.has_key('rank'):
                 self.redirect(user.rank_url())
+                return
 
         if selected_subnav == "total":
             users = User.collection.find()
