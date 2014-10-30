@@ -308,7 +308,7 @@ class ShowVerseSetHandler(BaseHandler):
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
                            versions=versions, selected_nav=selected_nav, scores=scores,
-                           play_url=play_url, is_me=is_me,
+                           play_url=play_url, is_me=is_me,reference=None,
                            )
 
 
