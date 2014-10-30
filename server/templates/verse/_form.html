@@ -23,7 +23,7 @@
 </div>
 <label class="pad_top" for="text">{{gt("Verse Text")}} - <span class="example"><a href="http://www.biblegateway.com" onclick="$(this).attr('href','http://www.biblegateway.com/passage/?search='+$('#reference').val()+'&version='+$('#version_select').val()); return true;" class="link" target="_blank">{{gt("search")}} biblegateway.com</a></span></label>
 
-<textarea id="verse_text" name="text" onblur="$('#commentary').show();">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
+<textarea id="verse_text" name="text" onfocus="$('#commentary').show();">{% if verse %}{{verse.get('text')}}{% end %}</textarea>
 <br/>
 
 {% if verse %}<input type="hidden" name="verse_id" value="{{verse._id}}" /> {% end %}

@@ -215,10 +215,15 @@ class CreateVerseHandler(BaseHandler):
         user = self.current_user
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
-        if version is None:
-            version = verseset.get('version')
         if verseset is None:
-            error_message = "Invalid verse set: %s" % verseset_id
+            self.redirect("/verseset/create")
+            return
+
+        if version is None:
+            if verseset:
+                version = verseset.get('version')
+            else:
+                version = None
         self.render("verse/create.html", verseset=verseset, verse=None,
                     version=version, error_message=error_message,
                     text=text, reference=reference)

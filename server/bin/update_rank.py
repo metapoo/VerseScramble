@@ -7,6 +7,8 @@ def update_rank():
     users = User.collection.find().sort("total_score",pymongo.DESCENDING)
     rank = 1
     for user in users:
+        if not user.has_key('total_score'):
+            continue
         if rank != user.get("rank"):
             user["rank"] = rank
             user.save()
