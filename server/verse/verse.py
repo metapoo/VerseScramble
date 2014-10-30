@@ -46,8 +46,9 @@ class PublishVerseSetHandler(BaseHandler):
             return
         language = subscriber.language()
         email = subscriber['email']
-        subject = verseset['name']
-        message = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings)
+        subject = "%s - %s" % (verseset['name'], user['username'])
+        message = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings,
+                                         user=user, subscriber=subscriber)
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
 
     @require_login
@@ -175,7 +176,8 @@ class UpdateVerseHandler(BaseHandler):
         selected_nav = "profile"
         
         self.render("verse/edit.html", verse=verse, verseset=verseset,
-                    user=user, versions=versions, version=version, selected_nav=selected_nav)
+                    user=user, versions=versions, version=version, selected_nav=selected_nav,
+                    reference=None)
 
     @require_login
     def post(self):

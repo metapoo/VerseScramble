@@ -168,12 +168,11 @@ class ApiManager extends MonoBehaviour {
     	}
     }
     
-    public function CallApi(apiName : String, arguments : Hashtable, options : Hashtable) : IEnumerator {
+    public function CallApi(apiName : String, arguments : Hashtable, options : Hashtable) {
     	var serializedArguments : String = SerializeArguments(arguments);
     	var url : String;
     	var method : String = "get";
     	var resultData : Hashtable;
-    	
     	if (options.ContainsKey("method")) {
     		method = options["method"];
     	}
@@ -181,15 +180,16 @@ class ApiManager extends MonoBehaviour {
     	
     	var form : WWWForm = new WWWForm();
 		
-    	if (method == "get") {
-			url = UrlForApi(apiName, serializedArguments, options);
-		} else if (method == "post") {
+    	var www : WWW;
+		if (method == "post") {
 			url = UrlForApi(apiName, "", options);
 			form = GetWWWForm(arguments);
-		}
-		
-		Debug.Log("api call: " + url);
-		var www : WWW = new WWW(url, form);
+			www = new WWW(url, form);
+		} else  {
+			url = UrlForApi(apiName, serializedArguments, options);
+			www = new WWW(url);
+		} 
+		Debug.Log("API CALL: " + url);
 		yield www;
 		var cacheEnabled = true;
 		
