@@ -141,6 +141,11 @@ form.centered {
   padding-top:20px;
 }
 
+.play_count {
+  font-size:1.6em;
+  float:right;
+}
+
 .verseset_show {
   padding-bottom: 20px;
 }
@@ -148,6 +153,15 @@ form.centered {
 .verseset_show .links {
   padding-top: 4px;
   font-size: 0.85em;
+}
+
+.verseset_caption td {
+  padding-bottom: 6px;
+}
+
+.verseset_caption {
+  width: 100%;
+  border-bottom: 1px solid #ccc;
 }
 
 .heading {

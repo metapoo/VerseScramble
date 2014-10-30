@@ -19,7 +19,7 @@ B1;2c{% extends "../base.html" %}
 <tbody>
 {% set i = 1 +start_index %}
 {% for u in users %}
-<tr><td>{{i}}</td><td>{% module UserLink(user=u) %}</td><td>{{u.total_score()}}</td><td>{{u.accuracy()}}%</td><td>{{u.total_blocks()}}</td></tr>
+<tr {% if u['username'] == username %}class="pure-table-odd" style="font-weight:bold;"{% end %}  ><td>{{i}}</td><td>{% module UserLink(user=u) %}</td><td>{{u.total_score()}}</td><td>{{u.accuracy()}}%</td><td>{{u.total_blocks()}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>

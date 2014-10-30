@@ -6,6 +6,7 @@ from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 
+import pymongo
 import re
 
 def get_handlers():

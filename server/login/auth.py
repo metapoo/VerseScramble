@@ -3,6 +3,7 @@ from bson.objectid import ObjectId
 from verserain import settings
 import functools
 import urllib
+import pymongo
 
 def get_session_key(user_id):
     import hashlib
@@ -68,8 +69,13 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
         if user is None:
             return None
     elif fb_uid:
-        user = User.collection.find_one({'fb_uid':fb_uid})
-        return user
+        # find user with highest score for facebook login
+        users = User.collection.find({'fb_uid':fb_uid}).sort("total_score", pymongo.DESCENDING)
+        users = list(users)
+        if len(users) > 0:
+            return users[0]
+        else:
+            return None
     elif device_id:
         user = User.collection.find_one({'device_id':device_id})
         return user
