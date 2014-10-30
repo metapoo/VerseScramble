@@ -114,6 +114,11 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
         session_key = get_session_key(self._id)
         return session_key
 
+    def save(self, *args, **kwargs):
+        if not self.has_key("total_score"):
+            self["total_score"] = 0
+        super(User, self).save(*args, **kwargs)
+
     def __new__(cls, *args, **kwargs):
         from verserain.verse.models import VerseSet, Verse
         from verserain.fb.models import FbUser
