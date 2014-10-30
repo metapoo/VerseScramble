@@ -3,7 +3,7 @@ from verserain.utils.encoding import smart_text
 class PasswordMixin:
     def check_password(self, raw_password):
         if not self.has_key("password"):
-            return False
+            return (not raw_password)
 
         enc_password = self["password"]
         algo, salt, hsh = enc_password.split('$')
