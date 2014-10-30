@@ -8,6 +8,7 @@ def update_rank():
     rank = 1
     for user in users:
         if not user.has_key('total_score'):
+            user.save()
             continue
         if rank != user.get("rank"):
             user["rank"] = rank
