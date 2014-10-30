@@ -32,7 +32,8 @@ function HandleApiVerseSetList(resultData : Hashtable) {
 
 	var versesetsData : Array = resultData["versesets"];
 	for (var i=0;i<versesetsData.length;i++) {
-		var versesetData = versesetsData[i];
+		var versesetData : Hashtable = versesetsData[i];
+		Debug.Log(versesetData);
 		VerseManager.LoadVerseSetData(versesetData);
 	}
 	verseSetsManager.ShowVerseSets();

@@ -181,15 +181,19 @@ class ApiManager extends MonoBehaviour {
     	
     	var form : WWWForm = new WWWForm();
 		
-    	if (method == "get") {
+    	var www : WWW;
+		if (method == "get") {
 			url = UrlForApi(apiName, serializedArguments, options);
+			www = new WWW(url);
 		} else if (method == "post") {
 			url = UrlForApi(apiName, "", options);
 			form = GetWWWForm(arguments);
+			www = new WWW(url, form);
 		}
 		
 		Debug.Log("api call: " + url);
-		var www : WWW = new WWW(url, form);
+		
+		
 		yield www;
 		var cacheEnabled = true;
 		
