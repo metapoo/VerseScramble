@@ -14,7 +14,13 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
             Index("fb_uid",sparse=True),
             Index("username",unique=True),
             Index("total_score"),
+            Index("rank")
         )
+
+    def rank_url(self):
+        rank = self["rank"]
+        page = rank/20 + 1
+        return "/leaderboard/total/%d?user=%s" % (page, self['username'])
 
     def language(self):
         return self.get("language","en")

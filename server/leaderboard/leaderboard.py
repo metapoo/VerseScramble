@@ -16,18 +16,25 @@ def get_handlers():
 )
 
 class LeaderboardUserListHandler(BaseHandler, ApiMixin):
-    def get(self, selected_subnav="total", page=1):
+    def get(self, selected_subnav=None, page=1):
+        username = self.get_argument("user",None)
         per_page = 20
         page = int(page)
         start_index = (page-1)*per_page
         end_index = start_index+per_page
         users = None
         scores = None
+        user = self.current_user
+
+        if selected_subnav is None:
+            selected_subnav = "total"
+            if user and user.has_key('rank'):
+                self.redirect(user.rank_url())
 
         if selected_subnav == "total":
-            users = User.collection.find({'total_score':{'$gt':0}})
+            users = User.collection.find()
             cursor = users
-            users = users.sort("total_score",pymongo.DESCENDING)[start_index:end_index]
+            users = users.sort("rank",pymongo.ASCENDING)[start_index:end_index]
         else:
             scores = VersesetScore.collection.find({'score':{'$gt':0}})
             cursor = scores
@@ -45,4 +52,4 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
 
         self.render("leaderboard/index.html", users=users, selected_nav="leaderboard", 
                     scores=scores, paginator=paginator, selected_subnav=selected_subnav,
-                    base_url=base_url, start_index=start_index)
+                    base_url=base_url, start_index=start_index, username=username)
