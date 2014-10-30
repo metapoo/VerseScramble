@@ -19,7 +19,7 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
 
     def rank_url(self):
         rank = self["rank"]
-        page = rank/20 + 1
+        page = (rank-1)/20 + 1
         return "/leaderboard/total/%d?user=%s" % (page, self['username'])
 
     def language(self):
