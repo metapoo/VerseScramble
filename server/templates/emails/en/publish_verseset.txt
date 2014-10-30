@@ -1,6 +1,8 @@
-{% autoescape None %}{{gt("Click here to view the set")}}: {{settings.SITE_URL}}{{verseset.url()}}
+{% autoescape None %}{{gt("Verse Set")}} URL: {{settings.SITE_URL}}{{verseset.url()}}
 
 {{verseset['name']}}
+{{user['username']}}
+
 {% for verse in verseset.verses() %}
 {{verse['reference']}}
 {{verse['text']}}
