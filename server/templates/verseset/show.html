@@ -36,21 +36,27 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <div>
+
 <div class="heading" >{{verseset.get('name')}}</div>
 {% if verseset.get('language') != current_language %}
 {% from verserain.verse.language import LANGUAGE_BY_CODE %}
 <div>{{gt("Language:")}} {{LANGUAGE_BY_CODE[verseset['language']]}}</div>
 {% end %}
 
+<table class="verseset_caption"><tr>
+<td>
 {% module ProfilePhoto(verseset.user(), current_user=user, gt=gt) %}
+</td>
+<td valign="bottom">
+<div class="play_count">{{verseset.get('play_count',0)}} {{gt("Plays")}}</div>
+</td>
+</tr></table>
 
-
-<div class="pad_bottom links">
+<div class="pad_bottom links pad_top">
 <a class="link" href="{{verseset.play_url()}}"><span>&#9658;</span> {{gt("challenge all verses")}}</a> 
 
 {% if is_me %}
-| <a class="link" href="/verseset/edit/{{verseset._id}}">{{gt("edit")}}</a> |
-<a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">{{gt("remove")}}</a>
+| <a class="link" onclick="return vr.confirm_delete();" href="/verseset/remove/{{verseset._id}}">{{gt("remove")}}</a>
 {% end %}
 
 | <div class="fb-like" data-href="{{current_url}}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
