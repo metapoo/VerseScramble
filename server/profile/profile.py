@@ -37,8 +37,8 @@ class UpdatePasswordHandler(BaseHandler, AccountMixin):
     @require_secure
     def post(self):
         current_pw = self.get_argument("current_password", None)
-        new_pw = self.get_argument("new_password")
-        confirm_pw = self.get_argument("confirm_password")
+        new_pw = self.get_argument("new_password", None)
+        confirm_pw = self.get_argument("confirm_password", None)
         user = self.current_user
         error_message = None
         feedback_message = None
