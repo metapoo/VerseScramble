@@ -176,7 +176,8 @@ class UpdateVerseHandler(BaseHandler):
         selected_nav = "profile"
         
         self.render("verse/edit.html", verse=verse, verseset=verseset,
-                    user=user, versions=versions, version=version, selected_nav=selected_nav)
+                    user=user, versions=versions, version=version, selected_nav=selected_nav,
+                    reference=None)
 
     @require_login
     def post(self):
