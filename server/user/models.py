@@ -117,6 +117,8 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
     def save(self, *args, **kwargs):
         if not self.has_key("total_score"):
             self["total_score"] = 0
+        if not self.has_key("rank"):
+            self["rank"] = 9999999
         super(User, self).save(*args, **kwargs)
 
     def __new__(cls, *args, **kwargs):
