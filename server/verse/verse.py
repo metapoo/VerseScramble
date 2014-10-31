@@ -276,7 +276,7 @@ class CreateVerseHandler(BaseHandler):
         if commentary is not None:
             verse.set_commentary_text(commentary)
 
-        self.redirect(verseset.url())
+        self.redirect("/verseset/add_verse/%s" % str(verseset._id))
         
 class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
