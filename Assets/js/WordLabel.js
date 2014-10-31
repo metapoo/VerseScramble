@@ -441,7 +441,6 @@ function OnMouseDown() {
 	var dScore = 0;
 	var str = "";
 	var right = false;
-	hinting = false;
 	
 	if (returnedToVerse) {
 		verseManager.SpeakUtterance(word);
@@ -451,11 +450,11 @@ function OnMouseDown() {
 	
 	if (word == GameManager.currentWord) {
 		SetColor(Color.white);
-		returnToVerse();
-		dScore = gameManager.HandleWordCorrect();
+		dScore = gameManager.HandleWordCorrect(this);
 		right = true;
 		verseManager.SpeakUtterance(word);
 		scoreCredited = dScore;
+		returnToVerse();
 	} else {
 		str = scoreManager.HandleWordWrong();
 		gameManager.HandleWordWrong();
@@ -465,6 +464,8 @@ function OnMouseDown() {
 		SetColor(Color.white);
 		
 	}
+	
+	hinting = false;
 	
 	if ((dScore != 0) || (str != "")) {
 		var clone : FloatingPoints;

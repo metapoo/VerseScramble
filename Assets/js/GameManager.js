@@ -160,9 +160,7 @@ function SetupWalls () {
 function HandleWordWrong() {
 	streak = 0;
 	
-	if (!GetChallengeModeEnabled()) {
-		ShowHint();	
-	}
+	ShowHint();	
 	
 	audio.PlayOneShot(sndFailure1, 0.5f);
 		
@@ -219,7 +217,7 @@ function HandleProgress() {
 	terrain.SendMessage("SetTargetProgress", p);
 }
 
-function HandleWordCorrect() {
+function HandleWordCorrect(wordLabel : WordLabel) {
 
 	var timeSinceLastWord : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
@@ -247,12 +245,18 @@ function HandleWordCorrect() {
 		}
 	}
 	
-	for (var wordLabel : WordLabel in wordLabels) {
-		wordLabel.hinting = false;
-	}
-	
 	audio.PlayOneShot(snd, 0.25f);
 	HandleProgress();
+	
+	var wasHinting : boolean = wordLabel.hinting;
+	
+	for (var wLabel : WordLabel in wordLabels) {
+		wLabel.hinting = false;
+	}
+	
+	// no credit for hinting
+	if (wasHinting) return 0;
+	
 	return scoreManager.HandleWordCorrect(timeSinceLastWord);
 }
 
