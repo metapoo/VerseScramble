@@ -46,6 +46,14 @@ public class TerrainTextureChanger : MonoBehaviour
 		targetProgress = 0;
 	}
 
+	void SyncGrassDetail() {
+		if (progressGrassDetail < (float)0.5) {
+			SetGrassDetail(terrain.terrainData, 0, 2, progressGrassDetail*(float)2.0);
+		} else {
+			SetGrassDetail(terrain.terrainData, 1, 1, (float)2.0*(progressGrassDetail-(float)0.5));
+		}
+	}
+	
 	void Update()
 	{
 		float r =  Time.deltaTime*0.5f;
@@ -66,11 +74,11 @@ public class TerrainTextureChanger : MonoBehaviour
 			} else {
 				progressGrassDetail -= g;
 			}
-			if (progressGrassDetail < (float)0.5) {
-				SetGrassDetail(terrain.terrainData, 0, 2, progressGrassDetail*(float)2.0);
-			} else {
-				SetGrassDetail(terrain.terrainData, 1, 1, (float)2.0*(progressGrassDetail-(float)0.5));
-			}
+			SyncGrassDetail();
+		} else if (targetGrassDetail != progressGrassDetail) {
+			Debug.Log ("target = " + targetGrassDetail.ToString() + " progress = " + progressGrassDetail.ToString());
+			progressGrassDetail = targetGrassDetail;
+			SyncGrassDetail();
 		}
 
 		if (Mathf.Abs(targetProgress - currentProgress) > r) {
