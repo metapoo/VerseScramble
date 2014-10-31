@@ -76,7 +76,7 @@ public class TerrainTextureChanger : MonoBehaviour
 			}
 			SyncGrassDetail();
 		} else if (targetGrassDetail != progressGrassDetail) {
-			Debug.Log ("target = " + targetGrassDetail.ToString() + " progress = " + progressGrassDetail.ToString());
+
 			progressGrassDetail = targetGrassDetail;
 			SyncGrassDetail();
 		}

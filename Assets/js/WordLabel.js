@@ -148,13 +148,13 @@ function ShrinkLeftEdge(duration : float) {
 	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw*.99,0,0), duration);
 	
 	var oldW = bgMiddle.renderer.bounds.size.x;
-	var newW = oldW+dw;
+	var newW = oldW+dw+.02;
 	startScale = bgMiddle.transform.localScale;
 	endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1.0f*dw*.99,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1.0f*dw,0,0), duration);
 		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
@@ -173,17 +173,17 @@ function ShrinkRightEdge(duration : float) {
 	
 	// move right edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgRight.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw*0.99,0,0), duration);
+	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw,0,0), duration);
 	
 
 	var oldW = bgMiddle.renderer.bounds.size.x;
-	var newW = oldW+dw;
+	var newW = oldW+dw+.02;
 	startScale = bgMiddle.transform.localScale;
 	endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw*0.99,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw,0,0), duration);
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
