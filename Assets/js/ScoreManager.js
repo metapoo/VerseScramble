@@ -178,11 +178,19 @@ function CountTimeUpTo(newTime : int) {
 function CountTimeLeft() {
 	yield WaitForSeconds(0.3f);
 	var dt = 2.0f/timeLeft;
-	if (dt > 0.1f) dt = 0.1f;
+	if (dt > 0.5f) dt = 0.5f;
+	var dTime : int = 1;
+	
+	dTime = Mathf.RoundToInt(timeLeft / 20.0f);
+	if (dTime < 1) dTime = 1;
+	if (dTime > 20) dTime = 20;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty)*healthBarUnits);
-		timeLeft -= 1;
+		if (timeLeft < dTime) {
+			dTime = timeLeft;
+		}
+		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty)*healthBarUnits) * dTime;
+		timeLeft -= dTime;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
 	}
