@@ -57,7 +57,7 @@ public class TerrainTextureChanger : MonoBehaviour
 	void Update()
 	{
 		float r =  Time.deltaTime*0.5f;
-		float g = Time.deltaTime*0.5f;
+		float g = Time.deltaTime*0.25f;
 /*		if (Mathf.Abs(targetGrassDetail - progressGrassDetail) > r) {
 			if (targetGrassDetail > progressGrassDetail) {
 				progressGrassDetail += r;
@@ -100,11 +100,11 @@ public class TerrainTextureChanger : MonoBehaviour
 	void SetGrassDetail(TerrainData terrainData, int layer, int detail, float progress) {
 
 		int [,] map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, 0);
-		int v = Mathf.RoundToInt(progress*terrainData.detailHeight);
+		int v = Mathf.RoundToInt(((float) 1.0 - progress)*terrainData.detailWidth);
 		// For each pixel in the detail map...
 		for (int y = 0; y < terrainData.detailHeight; y++) {
-			for (int x = 0; x < terrainData.detailWidth; x++) {
-				if (y <= v) {
+			for (int x = terrainData.detailWidth-1; x >= 0; x--) {
+				if (x >= v) {
 					map[x,y] = detail;
 				} else {
 					map[x,y] = 0;
