@@ -1,0 +1,172 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class TerrainTextureChanger : MonoBehaviour
+{
+	public Terrain terrain;
+	private float currentProgress = 0;
+	public float targetProgress = 0;
+	private float[,] defaultAlphaMap = null;
+	private float progressGrassDetail = 0;
+	private int currentGrassDetail = -1;
+	private int targetGrassDetail = 0;
+
+	void IncrementProgress() {
+		currentProgress += 0.1f;
+		if (currentProgress >= 3.0f) {
+			currentProgress = 3.0f;
+		}
+		UpdateTerrainTexture(terrain.terrainData, currentProgress);
+	}
+
+
+	void SetCurrentProgress(float progress) {
+		UpdateTerrainTexture(terrain.terrainData, progress);
+		currentProgress = progress;
+
+		if (progress >= 3.0f) {
+			SetGrassDetail(terrain.terrainData, 0, 2);
+			SetGrassDetail(terrain.terrainData, 1, 1);
+		} else if (progress == 0.0f) {
+			ResetGrassDetail();
+		}
+	}
+
+	void SetTargetProgress(float progress) {
+		targetProgress = progress;
+		Debug.Log ("target progress set to " + progress.ToString());
+
+	}
+
+	void Start() {
+		targetProgress = 0.0f;
+		currentProgress = 0.0f;
+
+		ResetTerrainTexture(terrain.terrainData);
+		progressGrassDetail = 0;
+		targetProgress = 0;
+	}
+
+	void Update()
+	{
+		float r =  Time.deltaTime*0.5f;
+/*		if (Mathf.Abs(targetGrassDetail - progressGrassDetail) > r) {
+			if (targetGrassDetail > progressGrassDetail) {
+				progressGrassDetail += r;
+			} else {
+				progressGrassDetail -= r;
+			}
+		} else {
+			progressGrassDetail = targetGrassDetail;
+		}
+*/
+
+		if (Mathf.Abs(targetProgress - currentProgress) > r) {
+			if (targetProgress > currentProgress) {
+				currentProgress += r;
+			} else {
+				currentProgress -= r;
+			}
+			//Debug.Log ("current progress = " + currentProgress.ToString() + " target = " + targetProgress.ToString());
+			SetCurrentProgress(currentProgress);
+
+		} else if (targetProgress != currentProgress) {
+			currentProgress = targetProgress;
+			SetCurrentProgress(currentProgress);
+		}
+
+	}
+
+	void SetGrassDetail(TerrainData terrainData, int layer, int detail) {
+
+		int [,] map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, 0);
+			
+		// For each pixel in the detail map...
+		for (int y = 0; y < terrainData.detailHeight; y++) {
+			for (int x = 0; x < terrainData.detailWidth; x++) {
+				map[x,y] = detail;
+			}
+		}
+			
+		// Assign the modified map back.
+		terrainData.SetDetailLayer(0, 0, layer, map);
+	}
+
+	void ResetGrassDetail() {
+		SetGrassDetail(terrain.terrainData,0,0);
+		SetGrassDetail(terrain.terrainData,1,0);
+	}
+
+	void ResetTerrainTexture(TerrainData terrainData) {
+		ResetGrassDetail();
+
+		//get current paint mask
+		float[, ,] alphas = terrainData.GetAlphamaps(0, 0, terrainData.alphamapWidth, terrainData.alphamapHeight);
+		// make sure every grid on the terrain is modified
+		bool loadAlphaMap = false;
+
+		if (defaultAlphaMap == null) {
+			defaultAlphaMap = new float[terrainData.alphamapWidth, terrainData.alphamapHeight];	
+			loadAlphaMap = true;
+		}
+
+		for (int i = 0; i < terrainData.alphamapWidth; i++)
+		{
+			for (int j = 0; j < terrainData.alphamapHeight; j++)
+			{
+				if (loadAlphaMap) {
+					float sum = 0;
+					for (int k=0;k<4;k++) {
+						sum += alphas[i,j,k];
+					}
+					if (sum >= 1) sum = 1;
+
+					defaultAlphaMap[i,j] = sum;
+				}
+
+				alphas[i, j, 0] = defaultAlphaMap[i,j];
+				alphas[i, j, 1] = 0;
+				alphas[i, j, 2] = 0;
+				alphas[i, j, 3] = 0;
+
+			}
+		}
+		// apply the new alpha
+		terrainData.SetAlphamaps(0, 0, alphas);
+	}
+
+	void UpdateTerrainTexture(TerrainData terrainData, float terrainProgress)
+	{
+		int textureNumberFrom = (int) Mathf.FloorToInt(terrainProgress);
+		int textureNumberTo = (textureNumberFrom + 1) % 4;
+		int textureNumberPrev = textureNumberFrom - 1;
+		float progressBetween = (terrainProgress - textureNumberFrom);
+		float fromAlpha = (float)1.0 - progressBetween;
+		float toAlpha = progressBetween;
+
+		if (textureNumberPrev < 0) {
+			textureNumberPrev = 3;
+		}
+
+		//get current paint mask
+		float[, ,] alphas = terrainData.GetAlphamaps(0, 0, terrainData.alphamapWidth, terrainData.alphamapHeight);
+		// make sure every grid on the terrain is modified
+		for (int i = 0; i < terrainData.alphamapWidth; i++)
+		{
+			for (int j = 0; j < terrainData.alphamapHeight; j++)
+			{
+				if ((textureNumberTo <= 3) && (textureNumberTo >= 0)) {
+					alphas[i, j, textureNumberTo] = toAlpha*defaultAlphaMap[i,j];
+				}
+				if (textureNumberFrom >= 0) {
+					alphas[i, j, textureNumberFrom] = fromAlpha*defaultAlphaMap[i,j];
+				}
+				if (textureNumberPrev != -1) {
+					alphas[i, j, textureNumberPrev] = 0;
+				}
+			}
+		}
+		// apply the new alpha
+		terrainData.SetAlphamaps(0, 0, alphas);
+	}
+}
