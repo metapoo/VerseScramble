@@ -190,8 +190,27 @@ function ExplodeWords() {
 }
 
 function GetProgress() : float {
-	if (finished) return 1.0f;
-	return (wordIndex*1.0f) / (1.0f*wordLabels.length);
+	var verseProgress : float = 0.0f;
+	
+	if (finished) {
+		verseProgress = 1.0f;
+	} else {
+		if (wordLabels.length > 0) {
+			verseProgress = (wordIndex*1.0f) / (1.0f*wordLabels.length);
+		} else {
+			verseProgress = 0.0f;
+		}
+	}
+	if (GetChallengeModeEnabled()) {
+		var versesCount : int = verseManager.GetCurrentVerses().length;
+		if (versesCount == 0) {
+			return 0.0f;
+		}
+		var setProgress : float = (verseManager.verseIndex+verseProgress) / (1.0f* versesCount);
+		return setProgress;
+	} else {
+		return verseProgress;
+	}
 }
 
 function HandleProgress() {
