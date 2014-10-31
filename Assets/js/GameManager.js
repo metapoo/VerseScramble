@@ -189,6 +189,17 @@ function ExplodeWords() {
 	currentWord = words[wordIndex];
 }
 
+function GetProgress() : float {
+	if (finished) return 1.0f;
+	return (wordIndex*1.0f) / (1.0f*wordLabels.length);
+}
+
+function HandleProgress() {
+	var terrain : GameObject = GameObject.Find("GroundTerrain");
+	var p : float = GetProgress()*3.0f;
+	terrain.SendMessage("SetTargetProgress", p);
+}
+
 function HandleWordCorrect() {
 
 	var timeSinceLastWord : float = Time.time - lastWordTime;
@@ -222,6 +233,7 @@ function HandleWordCorrect() {
 	}
 	
 	audio.PlayOneShot(snd, 0.25f);
+	HandleProgress();
 	return scoreManager.HandleWordCorrect(timeSinceLastWord);
 }
 
@@ -631,7 +643,6 @@ function Cleanup () {
 }
 
 function BeginGame() {
-	
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
@@ -642,6 +653,7 @@ function BeginGame() {
 		verseManager.SpeakUtterance(diffSpoken);
 		lastDiffSpoken = diffSpoken;
 	}
+	HandleProgress();
 	
 	AnimateIntro();
 }
