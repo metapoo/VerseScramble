@@ -89,37 +89,41 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def redirectHttp(self, uri=None):
         self.redirectWithProtocol(uri=uri,protocol="http")
 
+    def user_agent(self):
+        return self.request.headers.get('User-Agent')
+
     def isIOS(self):
         if self.get_argument("test_ios", False):
             return True
 
-        user_agent = self.request.headers['User-Agent']
+        user_agent = self.user_agent()
+        
         if ("iPod" in user_agent) or ("iPhone" in user_agent) or ("iPad" in user_agent):
             return True
         return False
 
     def isIE(self):
-        return "MSIE" in self.request.headers['User-Agent']
+        return "MSIE" in self.user_agent()
 
     def isFirefox(self):
-        return "Firefox/" in self.request.headers['User-Agent']
+        return "Firefox/" in self.user_agent()
 
     def isChrome(self):
-        return "Chrome/" in self.request.headers['User-Agent']
+        return "Chrome/" in self.user_agent()
 
     def isSafari(self):
-        return (not self.isChrome()) and ("Safari/" in self.request.headers['User-Agent'])
+        return (not self.isChrome()) and ("Safari/" in self.user_agent())
 
     def isMacOS(self):
-        return "Macintosh" in self.request.headers['User-Agent']
+        return "Macintosh" in self.user_agent()
 
     def isWindows(self):
-        return "Windows" in self.request.headers['User-Agent']
+        return "Windows" in self.user_agent()
 
     def isAndroid(self):
         if self.get_argument("test_android", False):
             return True
-        user_agent = self.request.headers['User-Agent']
+        user_agent = self.user_agent()
         if ("Android" in user_agent):
             return True
         return False

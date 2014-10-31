@@ -104,6 +104,7 @@ class ApiManager extends MonoBehaviour {
     		var val = arguments[key];
     		if (val == null) {
     			Debug.Log("key: " + key + " value is null!");
+    			continue;
     		}
     		serializedArguments += (key+"="+WWW.EscapeURL(val.ToString()));
     		if (i < arguments.Count) {
@@ -131,6 +132,7 @@ class ApiManager extends MonoBehaviour {
     		var val : String = arguments[key];
     		if (val == null) {
     			Debug.Log("key: " + key + " value is null!");
+    			continue;
     		}
     		form.AddField(key, val);
     	}

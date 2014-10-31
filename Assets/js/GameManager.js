@@ -189,6 +189,36 @@ function ExplodeWords() {
 	currentWord = words[wordIndex];
 }
 
+function GetProgress() : float {
+	var verseProgress : float = 0.0f;
+	
+	if (finished) {
+		verseProgress = 1.0f;
+	} else {
+		if (wordLabels.length > 0) {
+			verseProgress = (wordIndex*1.0f) / (1.0f*wordLabels.length);
+		} else {
+			verseProgress = 0.0f;
+		}
+	}
+	if (GetChallengeModeEnabled()) {
+		var versesCount : int = verseManager.GetCurrentVerses().length;
+		if (versesCount == 0) {
+			return 0.0f;
+		}
+		var setProgress : float = (verseManager.verseIndex+verseProgress) / (1.0f* versesCount);
+		return setProgress;
+	} else {
+		return verseProgress;
+	}
+}
+
+function HandleProgress() {
+	var terrain : GameObject = GameObject.Find("GroundTerrain");
+	var p : float = GetProgress()*3.0f;
+	terrain.SendMessage("SetTargetProgress", p);
+}
+
 function HandleWordCorrect() {
 
 	var timeSinceLastWord : float = Time.time - lastWordTime;
@@ -222,6 +252,7 @@ function HandleWordCorrect() {
 	}
 	
 	audio.PlayOneShot(snd, 0.25f);
+	HandleProgress();
 	return scoreManager.HandleWordCorrect(timeSinceLastWord);
 }
 
@@ -631,7 +662,6 @@ function Cleanup () {
 }
 
 function BeginGame() {
-	
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
@@ -642,6 +672,7 @@ function BeginGame() {
 		verseManager.SpeakUtterance(diffSpoken);
 		lastDiffSpoken = diffSpoken;
 	}
+	HandleProgress();
 	
 	AnimateIntro();
 }
