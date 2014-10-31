@@ -107,7 +107,7 @@ function ExitToVerseList() {
 }
 
 function CanShowSolution() {
-	return ((wordIndex < wordLabels.length) && gameStarted && !GetChallengeModeEnabled());	
+	return ((wordIndex < wordLabels.length) && !finished && gameStarted && !GetChallengeModeEnabled());	
 }
 
 function ShowSolution() {
@@ -122,8 +122,11 @@ function ShowSolution() {
 		}
 		return;
 	}
+	
 	audio.PlayOneShot(sndSelect,1.0);
 	showingSolution = true;
+	
+	if (wordIndex < 0) return;
 	
 	for (var i=wordIndex;i<wordLabels.length;i++) {
 		var wordObject : WordLabel = wordLabels[i];

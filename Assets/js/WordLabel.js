@@ -216,8 +216,7 @@ function setWord(w : String) {
 	label.fontStyle = FontStyle.Normal;
 	label.color = Color.black;
 	label.font = sceneSetup.GetCurrentFont();
-	label.renderer.material = label.font.material;
-	
+		
 	if (rightToLeft) {
 		label.text = reverseString(w);
 	} else {
@@ -400,7 +399,9 @@ function returnToVerse () {
 	rigidbody2D.isKinematic = true;
 	rigidbody2D.velocity = new Vector3(0,0,0);
 	oldRotation = transform.rotation;
-
+	
+	SetColor(Color.white);
+	
 	//transform.rotation = new Quaternion.Euler(0,0,0);
 	CalculateVersePosition();
 	gotoVerse = true;
