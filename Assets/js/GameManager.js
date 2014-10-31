@@ -1008,6 +1008,7 @@ function HandleVerseFinished() {
 		//Debug.Log("verse finished");
 		scoreManager.HandleFinished();
 	}
+	HandleProgress();
 }
 
 function ShowHintFromButton() {
