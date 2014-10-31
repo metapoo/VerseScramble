@@ -8,7 +8,7 @@ public class TerrainTextureChanger : MonoBehaviour
 	public float targetProgress = 0;
 	private float[,] defaultAlphaMap = null;
 	private float progressGrassDetail = 0;
-	private int currentGrassDetail = -1;
+
 	private int targetGrassDetail = 0;
 
 	void IncrementProgress() {
@@ -24,18 +24,17 @@ public class TerrainTextureChanger : MonoBehaviour
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
 
-		if (progress >= 3.0f) {
-			SetGrassDetail(terrain.terrainData, 0, 2);
-			SetGrassDetail(terrain.terrainData, 1, 1);
-		} else if (progress == 0.0f) {
-			ResetGrassDetail();
-		}
 	}
 
 	void SetTargetProgress(float progress) {
 		targetProgress = progress;
 		Debug.Log ("target progress set to " + progress.ToString());
-
+		
+		if (progress >= 3.0f) {
+			targetGrassDetail = 1;
+		} else if (progress == 0.0f) {
+			targetGrassDetail = 0;
+		}
 	}
 
 	void Start() {
@@ -50,6 +49,7 @@ public class TerrainTextureChanger : MonoBehaviour
 	void Update()
 	{
 		float r =  Time.deltaTime*0.5f;
+		float g = Time.deltaTime*0.5f;
 /*		if (Mathf.Abs(targetGrassDetail - progressGrassDetail) > r) {
 			if (targetGrassDetail > progressGrassDetail) {
 				progressGrassDetail += r;
@@ -60,6 +60,18 @@ public class TerrainTextureChanger : MonoBehaviour
 			progressGrassDetail = targetGrassDetail;
 		}
 */
+		if (Mathf.Abs (targetGrassDetail - progressGrassDetail) > g) {
+			if (targetGrassDetail > progressGrassDetail) {
+				progressGrassDetail += g;
+			} else {
+				progressGrassDetail -= g;
+			}
+			if (progressGrassDetail < (float)0.5) {
+				SetGrassDetail(terrain.terrainData, 0, 2, progressGrassDetail*(float)2.0);
+			} else {
+				SetGrassDetail(terrain.terrainData, 1, 1, (float)2.0*(progressGrassDetail-(float)0.5));
+			}
+		}
 
 		if (Mathf.Abs(targetProgress - currentProgress) > r) {
 			if (targetProgress > currentProgress) {
@@ -77,14 +89,18 @@ public class TerrainTextureChanger : MonoBehaviour
 
 	}
 
-	void SetGrassDetail(TerrainData terrainData, int layer, int detail) {
+	void SetGrassDetail(TerrainData terrainData, int layer, int detail, float progress) {
 
 		int [,] map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, 0);
-			
+		int v = Mathf.RoundToInt(progress*terrainData.detailHeight);
 		// For each pixel in the detail map...
 		for (int y = 0; y < terrainData.detailHeight; y++) {
 			for (int x = 0; x < terrainData.detailWidth; x++) {
-				map[x,y] = detail;
+				if (y <= v) {
+					map[x,y] = detail;
+				} else {
+					map[x,y] = 0;
+				}
 			}
 		}
 			
@@ -93,8 +109,8 @@ public class TerrainTextureChanger : MonoBehaviour
 	}
 
 	void ResetGrassDetail() {
-		SetGrassDetail(terrain.terrainData,0,0);
-		SetGrassDetail(terrain.terrainData,1,0);
+		SetGrassDetail(terrain.terrainData,0,0,1);
+		SetGrassDetail(terrain.terrainData,1,0,1);
 	}
 
 	void ResetTerrainTexture(TerrainData terrainData) {
