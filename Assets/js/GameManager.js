@@ -107,11 +107,15 @@ function ExitToVerseList() {
 }
 
 function CanShowSolution() {
-	return ((wordIndex < wordLabels.length) && gameStarted && !GetChallengeModeEnabled());	
+	return ((wordIndex < wordLabels.length) && !finished && gameStarted && !GetChallengeModeEnabled());	
 }
 
 function ShowSolution() {
 	if (!CanShowSolution()) {
+		if (finished) {
+			ShowEndOfGameOptions();
+			return;
+		}
 		audio.PlayOneShot(sndFailure1,1.0f);
 		return;
 	}
@@ -122,8 +126,11 @@ function ShowSolution() {
 		}
 		return;
 	}
+	
 	audio.PlayOneShot(sndSelect,1.0);
 	showingSolution = true;
+	
+	if (wordIndex < 0) return;
 	
 	for (var i=wordIndex;i<wordLabels.length;i++) {
 		var wordObject : WordLabel = wordLabels[i];
@@ -132,27 +139,28 @@ function ShowSolution() {
 }
 
 function SetupWalls () {
-	var w = mainCam.pixelWidth;
-	var h = mainCam.pixelHeight;
-
-	topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w*2.0f, 0f, 0f)).x, 1f);
-	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f);	
+	var w : int = mainCam.pixelWidth;
+	var h : int = mainCam.pixelHeight;
+	var thickness : float = 0.2f;
+	
+	topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w*2.0f, 0f, 0f)).x, thickness);
+	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f*thickness);	
 	
 	medWall.size = topWall.size;
-	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.75f,0f)).y + 0.5f);	
+	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.8f,0f)).y +thickness*0.1f);	
 	
 	bottomWall.size = topWall.size;
-	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
+	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - thickness*0.5f);	
 	
-	leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*100.0f, 0f)).y);
-	leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).x - 0.5f, 0f);	
+	leftWall.size = new Vector2(thickness, mainCam.ScreenToWorldPoint(new Vector3(0f, h*100.0f, 0f)).y);
+	leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).x - 0.5f*thickness, 0f);	
 	
 	rightWall.size = leftWall.size;
-	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f, 0f);
+	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f*thickness, 0f);
 	
-	screenBounds = Rect(leftWall.center.x+0.5,topWall.center.y-0.5,
-	rightWall.center.x-leftWall.center.x-1.0,
-	topWall.center.y-bottomWall.center.y-1.0);
+	screenBounds = Rect(leftWall.center.x+0.5*thickness,topWall.center.y-0.5*thickness,
+	rightWall.center.x-leftWall.center.x-1.0*thickness,
+	topWall.center.y-bottomWall.center.y-1.0*thickness);
 	
 	screenBoundsComputed = true;
 }
@@ -160,9 +168,7 @@ function SetupWalls () {
 function HandleWordWrong() {
 	streak = 0;
 	
-	if (!GetChallengeModeEnabled()) {
-		ShowHint();	
-	}
+	ShowHint();	
 	
 	audio.PlayOneShot(sndFailure1, 0.5f);
 		
@@ -219,7 +225,7 @@ function HandleProgress() {
 	terrain.SendMessage("SetTargetProgress", p);
 }
 
-function HandleWordCorrect() {
+function HandleWordCorrect(wordLabel : WordLabel) {
 
 	var timeSinceLastWord : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
@@ -247,12 +253,18 @@ function HandleWordCorrect() {
 		}
 	}
 	
-	for (var wordLabel : WordLabel in wordLabels) {
-		wordLabel.hinting = false;
-	}
-	
 	audio.PlayOneShot(snd, 0.25f);
 	HandleProgress();
+	
+	var wasHinting : boolean = wordLabel.hinting;
+	
+	for (var wLabel : WordLabel in wordLabels) {
+		wLabel.hinting = false;
+	}
+	
+	// no credit for hinting
+	if (wasHinting) return 0;
+	
 	return scoreManager.HandleWordCorrect(timeSinceLastWord);
 }
 
@@ -1001,6 +1013,7 @@ function HandleVerseFinished() {
 		//Debug.Log("verse finished");
 		scoreManager.HandleFinished();
 	}
+	HandleProgress();
 }
 
 function ShowHintFromButton() {
@@ -1027,7 +1040,7 @@ function Update () {
 	if (!wordHinted && !finished && (timeSinceLastWord > timeUntilHint)) {
 		ShowHint();
 	}
-	refreshButton.active = CanShowSolution();
+	refreshButton.active = CanShowSolution() || (finished && !GetChallengeModeEnabled());
 	hintButton.active = !GetChallengeModeEnabled();
 	
 	updateCount += 1;

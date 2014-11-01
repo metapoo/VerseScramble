@@ -55,15 +55,15 @@ TextureImporter:
         y: 16
         width: 48
         height: 97
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 5
+      pivot: {x: 1, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: wordbubble2_middle
       rect:
         serializedVersion: 2
         x: 48
         y: 16
-        width: 32
+        width: 28
         height: 97
       alignment: 0
       pivot: {x: .5, y: .5}
@@ -71,12 +71,12 @@ TextureImporter:
     - name: wordbubble2_right
       rect:
         serializedVersion: 2
-        x: 79
+        x: 76
         y: 16
-        width: 45
+        width: 48
         height: 97
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 4
+      pivot: {x: 0, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: wordbubble2_all
       rect:

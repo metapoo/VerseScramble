@@ -178,7 +178,7 @@ function CountTimeUpTo(newTime : int) {
 function CountTimeLeft() {
 	yield WaitForSeconds(0.3f);
 	var dt = 2.0f/timeLeft;
-	if (dt > 0.5f) dt = 0.5f;
+	if (dt > 0.25f) dt = 0.25f;
 	var dTime : int = 1;
 	
 	dTime = Mathf.RoundToInt(timeLeft / 20.0f);
@@ -241,6 +241,7 @@ function HandleCountTimeLeftFinished() {
 	}
 	
 	updateHighScoreLabel();
+	yield WaitForSeconds(2.0f);
 	gameManager.ShowEndOfGameOptions();
 	
 }
