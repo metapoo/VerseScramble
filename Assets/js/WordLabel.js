@@ -87,9 +87,12 @@ function FixedUpdate() {
 
 function SetColor(color : Color) {
 	bgMiddle.renderer.material.color = color;
-	bgLeft.renderer.material.color = color;
-	bgRight.renderer.material.color = color;
-	
+	if (bgLeft) {
+		bgLeft.renderer.material.color = color;
+	}
+	if (bgRight) {
+		bgRight.renderer.material.color = color;
+	}
 }
 
 function GetColor() {
@@ -116,11 +119,15 @@ function SetBlockLength(l : float, h : float) {
 	bgMiddle.transform.localScale = Vector3(xScale, yScale, 1.0f);
 	bgMiddle.transform.localPosition = Vector3(0,0,0);
 	
-	bgLeft.transform.localScale = Vector3(yScale, yScale, 1.0f);
-	bgLeft.transform.localPosition = Vector3(-l*0.5f,0,0.0f);
+	if (bgLeft) {
+		bgLeft.transform.localScale = Vector3(yScale, yScale, 1.0f);
+		bgLeft.transform.localPosition = Vector3(-l*0.5f,0,0.0f);
+	}
 	
-	bgRight.transform.localScale = Vector3(yScale, yScale, 1.0f);
-	bgRight.transform.localPosition = Vector3(l*0.5f,0,0.0f);
+	if (bgRight) {
+		bgRight.transform.localScale = Vector3(yScale, yScale, 1.0f);
+		bgRight.transform.localPosition = Vector3(l*0.5f,0,0.0f);
+	}
 	
 	var sm = bgMiddle.renderer.bounds.size;
 	var sr = bgLeft.renderer.bounds.size;
@@ -158,6 +165,9 @@ function ShrinkLeftEdge(duration : float) {
 		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
+	Destroy(bgLeft.gameObject);
+	bgLeft = null;
+
 }
 
 function ShrinkRightEdge(duration : float) {
@@ -187,6 +197,9 @@ function ShrinkRightEdge(duration : float) {
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
+	
+	Destroy(bgRight.gameObject);
+	bgRight = null;
 }
 
 function reverseString(s : String) {

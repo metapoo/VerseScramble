@@ -47,6 +47,11 @@ public class TerrainTextureChanger : MonoBehaviour
 	}
 
 	void SyncGrassDetail() {
+		if (progressGrassDetail == 0) {
+			ResetGrassDetail();
+			return;
+		}
+
 		if (progressGrassDetail < (float)0.5) {
 			SetGrassDetail(terrain.terrainData, 0, 2, 1, progressGrassDetail*(float)2.0);
 		} else {
