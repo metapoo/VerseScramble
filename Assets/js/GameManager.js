@@ -1035,7 +1035,7 @@ function Update () {
 	if (!wordHinted && !finished && (timeSinceLastWord > timeUntilHint)) {
 		ShowHint();
 	}
-	refreshButton.active = CanShowSolution();
+	refreshButton.active = CanShowSolution() || finished;
 	hintButton.active = !GetChallengeModeEnabled();
 	
 	updateCount += 1;
