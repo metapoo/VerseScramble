@@ -112,6 +112,10 @@ function CanShowSolution() {
 
 function ShowSolution() {
 	if (!CanShowSolution()) {
+		if (finished) {
+			ShowEndOfGameOptions();
+			return;
+		}
 		audio.PlayOneShot(sndFailure1,1.0f);
 		return;
 	}
@@ -1035,7 +1039,7 @@ function Update () {
 	if (!wordHinted && !finished && (timeSinceLastWord > timeUntilHint)) {
 		ShowHint();
 	}
-	refreshButton.active = CanShowSolution() || finished;
+	refreshButton.active = CanShowSolution() || (finished && !GetChallengeModeEnabled());
 	hintButton.active = !GetChallengeModeEnabled();
 	
 	updateCount += 1;
