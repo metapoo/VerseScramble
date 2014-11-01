@@ -24,11 +24,7 @@ public class TerrainManager : MonoBehaviour
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
 
-		if (progress > 1.5f) {
-			rain.minEmission = 50.0f*(float)Mathf.Pow (3.0f,(progress-1.5f));
-		} else {
-			rain.minEmission = 0;
-		}
+		rain.minEmission = progress*20.0f*(float)Mathf.Pow (3.0f,progress);
 		rain.maxEmission = rain.minEmission*1.5f;
 	}
 
