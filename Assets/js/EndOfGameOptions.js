@@ -253,6 +253,7 @@ function ReloadGame(needToSelectDifficulty:boolean) {
 }
 
 function ShowEndOfGameOptions() {
+	
 	if (gameManager.GetChallengeModeEnabled()) {
 		EndGameWindowForChallenge();
 	} else {
