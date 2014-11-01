@@ -26,7 +26,7 @@ var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
 var sceneSetup : SceneSetup;
-var spacing : float = 0.1f;
+var spacing : float = 0.15f;
 var alpha : float = 1.0f;
 
 static var versePosition : Vector3;

@@ -241,6 +241,7 @@ function HandleCountTimeLeftFinished() {
 	}
 	
 	updateHighScoreLabel();
+	yield WaitForSeconds(2.0f);
 	gameManager.ShowEndOfGameOptions();
 	
 }
