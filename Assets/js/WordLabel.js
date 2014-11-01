@@ -19,13 +19,15 @@ var scoreCredited : float;
 var exploding : boolean = false;
 var totalSize : Vector3;
 var nonEdgeSize : Vector3;
-var shrinkEdgeFactor : float;
+var edgeSize : Vector3;
 var wordIndex : int;
 var isFirstInLine : boolean;
 var isLastInLine : boolean;
 var rightToLeft : boolean;
 var sndPop : AudioClip;
 var sceneSetup : SceneSetup;
+var spacing : float = 0.1f;
+var alpha : float = 1.0f;
 
 static var versePosition : Vector3;
 static var startPosition : Vector3;
@@ -86,6 +88,7 @@ function FixedUpdate() {
 }
 
 function SetColor(color : Color) {
+	color.a = alpha;
 	bgMiddle.renderer.material.color = color;
 	if (bgLeft) {
 		bgLeft.renderer.material.color = color;
@@ -105,19 +108,32 @@ function boxCollider2D() {
 }
 
 function SetBlockLength(l : float, h : float) {
-	var elements = [bgLeft, bgRight, bgMiddle];
-	
-	for (var el in elements) {
-		el.transform.localScale = Vector3.one;
+	var elements : Array = [bgLeft, bgRight, bgMiddle];
+
+	for (var el : SpriteRenderer in elements) {
+		if (el) {
+			el.transform.localScale = Vector3.one;
+		}
 	}	
 	
 	var msize : Vector3 = bgMiddle.renderer.bounds.size;
+	var dx : float = 0;
+	var dw : float = 0;
+	if (bgLeft == null) {
+		dw += spacing*0.5f;
+		dx -= dw*0.5f;
+	}
 	
-	var yScale = h / msize.y;
-	var xScale = l / msize.x;
+	if (bgRight == null) {
+		dw += spacing*0.5f;
+		dx += dw*0.5f;
+	}
+	
+	var yScale = (h) / msize.y;
+	var xScale = (l+dw) / msize.x;
 	
 	bgMiddle.transform.localScale = Vector3(xScale, yScale, 1.0f);
-	bgMiddle.transform.localPosition = Vector3(0,0,0);
+	bgMiddle.transform.localPosition = Vector3(dx,0,0);
 	
 	if (bgLeft) {
 		bgLeft.transform.localScale = Vector3(yScale, yScale, 1.0f);
@@ -129,12 +145,22 @@ function SetBlockLength(l : float, h : float) {
 		bgRight.transform.localPosition = Vector3(l*0.5f,0,0.0f);
 	}
 	
-	var sm = bgMiddle.renderer.bounds.size;
-	var sr = bgLeft.renderer.bounds.size;
-	var sl = bgRight.renderer.bounds.size;
-	var f = shrinkEdgeFactor;
-	totalSize = new Vector3(sl.x+sm.x+sr.x, sm.y, sm.z);
-	nonEdgeSize = new Vector3(totalSize.x-(f)*sl.x-(f)*sr.x,sm.y,sm.z);
+	var sm : Vector3 = bgMiddle.renderer.bounds.size;
+	
+	var sr : Vector3 = Vector3.zero;
+	var sl : Vector3 = Vector3.zero;
+	
+	if (bgLeft) {
+		sr = bgLeft.renderer.bounds.size;
+		edgeSize = sr;
+	}
+	
+	if (bgRight) {
+		sl = bgRight.renderer.bounds.size;
+	}
+	
+	totalSize = new Vector3(edgeSize.x*2.0f+sm.x, sm.y, sm.z);
+	nonEdgeSize = new Vector3(sm.x,sm.y,sm.z);
 	boxCollider2D().size = Vector2(totalSize.x,totalSize.y);
 	
 }
@@ -146,28 +172,27 @@ function ShrinkLeftEdge(duration : float) {
 	shrinkingEdges = true;
 	var startScale = bgLeft.transform.localScale;
 	var endScale = new Vector3(0,startScale.y, startScale.z);
-	var dw = bgLeft.renderer.bounds.size.x;
+	var dw = 0.5*spacing;
 	
-	var f = shrinkEdgeFactor;
 	
 	// move left edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgLeft.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw*.99,0,0), duration);
+	//AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw,0,0), duration);
 	
 	var oldW = bgMiddle.renderer.bounds.size.x;
-	var newW = oldW+dw+.02;
+	var newW = oldW+dw;
 	startScale = bgMiddle.transform.localScale;
 	endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-1.0f*dw,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-0.5f*dw,0,0), duration);
 		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
 	Destroy(bgLeft.gameObject);
 	bgLeft = null;
-
+	//ResetBubble();
 }
 
 function ShrinkRightEdge(duration : float) {
@@ -177,29 +202,28 @@ function ShrinkRightEdge(duration : float) {
 	shrinkingEdges = true;
 	var startScale = bgRight.transform.localScale;
 	var endScale = new Vector3(0,startScale.y, startScale.z);
-	var dw = bgRight.renderer.bounds.size.x;
-	
-	var f = shrinkEdgeFactor;
+	var dw = spacing*0.5f;
 	
 	// move right edge to the right and shrink
 	AnimationManager.ScaleOverTime(bgRight.transform,endScale, duration);
-	AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw,0,0), duration);
+	//AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw,0,0), duration);
 	
 
 	var oldW = bgMiddle.renderer.bounds.size.x;
-	var newW = oldW+dw+.02;
+	var newW = oldW+dw;
 	startScale = bgMiddle.transform.localScale;
 	endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(dw,0,0), duration);
+	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(0.5f*dw,0,0), duration);
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
 	
 	Destroy(bgRight.gameObject);
 	bgRight = null;
+	//ResetBubble();
 }
 
 function reverseString(s : String) {
@@ -258,9 +282,9 @@ function ResetBubble() {
 	var lsize = label.renderer.bounds.size;
 	var textWidth : float = lsize.x;
 	var textHeight : float  = lsize.y;
-	var padding = new Vector2(0.0,0.35);
-	var l : float= textWidth + padding.x;
-	var h : float = textHeight + padding.y;
+	var padding : Vector2 = new Vector2(0,textHeight*0.5f);
+	var l : float = textWidth;
+	var h : float = textHeight+2*padding.y;
 	
 	SetBlockLength(l, h);
 	transform.rotation = oldRotation;
@@ -357,7 +381,7 @@ function handleReturnedToVerse() {
 function CalculateVersePosition () {
 	oldRotation = transform.rotation;
 	transform.rotation = new Quaternion.Euler(0,0,0);
-	var spacing = 0.0f;
+	
 	var wordWidth = nonEdgeSize.x;
 	
 	var dx = wordWidth + spacing;
@@ -374,8 +398,8 @@ function CalculateVersePosition () {
 	var b : float = 0.98;
 	var maxX = screenBounds.x + screenBounds.width*b;
 	var minX = screenBounds.x + screenBounds.width*(1-b);
-	var padding = 0.0f;
-	var vSpacing = nonEdgeSize.y + padding;
+	
+	var vSpacing = nonEdgeSize.y;
 	
 	transform.rotation = oldRotation;
 	
@@ -413,6 +437,7 @@ function returnToVerse () {
 	rigidbody2D.velocity = new Vector3(0,0,0);
 	oldRotation = transform.rotation;
 	
+	alpha = 0.5f;
 	SetColor(Color.white);
 	
 	//transform.rotation = new Quaternion.Euler(0,0,0);

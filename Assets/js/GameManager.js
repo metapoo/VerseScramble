@@ -139,27 +139,28 @@ function ShowSolution() {
 }
 
 function SetupWalls () {
-	var w = mainCam.pixelWidth;
-	var h = mainCam.pixelHeight;
-
-	topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w*2.0f, 0f, 0f)).x, 1f);
-	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f);	
+	var w : int = mainCam.pixelWidth;
+	var h : int = mainCam.pixelHeight;
+	var thickness : float = 0.2f;
+	
+	topWall.size = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w*2.0f, 0f, 0f)).x, thickness);
+	topWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h ,0f)).y + 0.5f*thickness);	
 	
 	medWall.size = topWall.size;
-	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.75f,0f)).y + 0.5f);	
+	medWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*0.8f,0f)).y +thickness*0.1f);	
 	
 	bottomWall.size = topWall.size;
-	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - 0.5f);	
+	bottomWall.center = new Vector2(0f, mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).y - thickness*0.5f);	
 	
-	leftWall.size = new Vector2(1f, mainCam.ScreenToWorldPoint(new Vector3(0f, h*100.0f, 0f)).y);
-	leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).x - 0.5f, 0f);	
+	leftWall.size = new Vector2(thickness, mainCam.ScreenToWorldPoint(new Vector3(0f, h*100.0f, 0f)).y);
+	leftWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(0f, 0f,0f)).x - 0.5f*thickness, 0f);	
 	
 	rightWall.size = leftWall.size;
-	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f, 0f);
+	rightWall.center = new Vector2(mainCam.ScreenToWorldPoint(new Vector3(w, 0f, 0f)).x+0.5f*thickness, 0f);
 	
-	screenBounds = Rect(leftWall.center.x+0.5,topWall.center.y-0.5,
-	rightWall.center.x-leftWall.center.x-1.0,
-	topWall.center.y-bottomWall.center.y-1.0);
+	screenBounds = Rect(leftWall.center.x+0.5*thickness,topWall.center.y-0.5*thickness,
+	rightWall.center.x-leftWall.center.x-1.0*thickness,
+	topWall.center.y-bottomWall.center.y-1.0*thickness);
 	
 	screenBoundsComputed = true;
 }
