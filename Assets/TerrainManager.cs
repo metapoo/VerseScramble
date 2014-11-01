@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TerrainTextureChanger : MonoBehaviour
+public class TerrainManager : MonoBehaviour
 {
 	public Terrain terrain;
-	private float currentProgress = 0;
 	public float targetProgress = 0;
+	public ParticleEmitter rain;
+	private float currentProgress = 0;
 	private float[,] defaultAlphaMap = null;
 	private float progressGrassDetail = 0;
-
 	private int targetGrassDetail = 0;
 
 	void IncrementProgress() {
@@ -24,6 +24,12 @@ public class TerrainTextureChanger : MonoBehaviour
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
 
+		if (progress > 1.5f) {
+			rain.minEmission = 100.0f*(float)Mathf.Pow (3.0f,(progress-1.5f));
+		} else {
+			rain.minEmission = 0;
+		}
+		rain.maxEmission = rain.minEmission*1.5f;
 	}
 
 	void SetTargetProgress(float progress) {
