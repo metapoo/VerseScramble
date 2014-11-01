@@ -25,7 +25,7 @@ public class TerrainManager : MonoBehaviour
 		currentProgress = progress;
 
 		if (progress > 1.5f) {
-			rain.minEmission = 100.0f*(float)Mathf.Pow (3.0f,(progress-1.5f));
+			rain.minEmission = 50.0f*(float)Mathf.Pow (3.0f,(progress-1.5f));
 		} else {
 			rain.minEmission = 0;
 		}

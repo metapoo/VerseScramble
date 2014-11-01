@@ -183,7 +183,7 @@ function CountTimeLeft() {
 	
 	dTime = Mathf.RoundToInt(timeLeft / 20.0f);
 	if (dTime < 1) dTime = 1;
-	if (dTime > 20) dTime = 20;
+	if (dTime > 5) dTime = 5;
 	
 	while (timeLeft > 0) {
 		if (timeLeft < dTime) {
