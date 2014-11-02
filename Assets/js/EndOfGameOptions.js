@@ -48,7 +48,7 @@ function SubmitScore(showPopup: boolean) {
 		var popupDialog : PopupDialog = DialogManager.CreatePopupDialog(gt("High Scores"), text);
 		popupDialog.SetHeight(1200);
 		popupDialog.CenterOnScreen();
-		popupDialog.OnClose = BackToMenu;
+		popupDialog.OnClose = ShowEndOfGameOptions;
 	};
 	
 	var userId : String = UserSession.GetUserSession().userId;
@@ -253,6 +253,7 @@ function ReloadGame(needToSelectDifficulty:boolean) {
 }
 
 function ShowEndOfGameOptions() {
+	
 	if (gameManager.GetChallengeModeEnabled()) {
 		EndGameWindowForChallenge();
 	} else {

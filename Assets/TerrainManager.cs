@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TerrainTextureChanger : MonoBehaviour
+public class TerrainManager : MonoBehaviour
 {
 	public Terrain terrain;
-	private float currentProgress = 0;
 	public float targetProgress = 0;
+	public ParticleEmitter rain;
+	private float currentProgress = 0;
 	private float[,] defaultAlphaMap = null;
 	private float progressGrassDetail = 0;
-
 	private int targetGrassDetail = 0;
 
 	void IncrementProgress() {
@@ -24,6 +24,8 @@ public class TerrainTextureChanger : MonoBehaviour
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
 
+		rain.minEmission = progress*20.0f*(float)Mathf.Pow (3.0f,progress);
+		rain.maxEmission = rain.minEmission*1.5f;
 	}
 
 	void SetTargetProgress(float progress) {
@@ -53,9 +55,11 @@ public class TerrainTextureChanger : MonoBehaviour
 		}
 
 		if (progressGrassDetail < (float)0.5) {
-			SetGrassDetail(terrain.terrainData, 0, 2, 1, progressGrassDetail*(float)2.0);
-		} else {
-			SetGrassDetail(terrain.terrainData, 1, 1, 4, (float)2.0*(progressGrassDetail-(float)0.5));
+			SetGrassDetail(terrain.terrainData, 0, 8, progressGrassDetail*(float)2.0);
+		}
+
+		if (progressGrassDetail >= (float)0.25) {
+			SetGrassDetail(terrain.terrainData, 1, 1, (float)3.0*(progressGrassDetail-(float)0.25));
 		}
 	}
 	
@@ -93,19 +97,26 @@ public class TerrainTextureChanger : MonoBehaviour
 
 	}
 
-	void SetGrassDetail(TerrainData terrainData, int layer, int detail, int skip, float progress) {
+	void SetGrassDetail(TerrainData terrainData, int layer, int detail, float progress) {
 
-		int [,] map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, 0);
+		int [,] map = terrainData.GetDetailLayer(0, 0, terrainData.detailWidth, terrainData.detailHeight, layer);
 		int v = Mathf.RoundToInt((progress)*terrainData.detailWidth);
+		int computedDetail = 0;
 
 		// For each pixel in the detail map...
-		for (int y = 0; y < terrainData.detailHeight; y++) {
-			for (int x = 0; x <terrainData.detailWidth; x++) {
-				if ((x <= v) && (((x+y) % skip) == 0)) {
-					map[x,y] = detail;
-				} else {
-					map[x,y] = 0;
-				}
+		for (int x = 0; x <terrainData.detailWidth; x++) {
+			if (x <= v) {
+				computedDetail = detail;
+			} else {
+				computedDetail = 0;
+			}
+
+			if (map[x,0] == computedDetail)  {
+				continue;
+			} 
+
+			for (int y = 0; y < terrainData.detailHeight; y++) {
+				map[x,y] = computedDetail;
 			}
 		}
 			
@@ -114,8 +125,8 @@ public class TerrainTextureChanger : MonoBehaviour
 	}
 
 	void ResetGrassDetail() {
-		SetGrassDetail(terrain.terrainData,0,0,1,1);
-		SetGrassDetail(terrain.terrainData,1,0,1,1);
+		SetGrassDetail(terrain.terrainData,0,0,1);
+		SetGrassDetail(terrain.terrainData,1,0,1);
 	}
 
 	void ResetTerrainTexture(TerrainData terrainData) {
