@@ -4,7 +4,10 @@ import TextManager;
 import UnityEngine.UI;
 
 var scoreLabel : Text;
+var scoreLabelShadow : Text;
 var timeLabel : Text;
+var timeLabelShadow : Text;
+
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
@@ -102,6 +105,8 @@ function updateScoreLabel() {
 	
 	//scoreLabel.text = String.Format("{0}: {1}",gt("Score"), score.ToString());
 	scoreLabel.text = score.ToString("0000000");
+	scoreLabelShadow.text = scoreLabel.text;
+	
 	if (timeLeft < 0) timeLeft = 0;
 	
 	var digits = "00";
@@ -111,15 +116,8 @@ function updateScoreLabel() {
 	}
 	
 	timeLabel.text = timeLeft.ToString(digits);
-	
-	/*
-	var hundredths : int = 100*(totalElapsedTime - parseInt(totalElapsedTime));
-	var timeStr = String.Format("{0}.{1}",parseInt(totalElapsedTime).ToString("00"),
-								hundredths.ToString("00"));
-							    
-	timeLabel.text = timeStr;
-	
-	*/
+	timeLabelShadow.text = timeLabel.text;
+
 }
 
 function CalculateMaxTime() {
@@ -178,11 +176,19 @@ function CountTimeUpTo(newTime : int) {
 function CountTimeLeft() {
 	yield WaitForSeconds(0.3f);
 	var dt = 2.0f/timeLeft;
-	if (dt > 0.1f) dt = 0.1f;
+	if (dt > 0.25f) dt = 0.25f;
+	var dTime : int = 1;
+	
+	dTime = Mathf.RoundToInt(timeLeft / 20.0f);
+	if (dTime < 1) dTime = 1;
+	if (dTime > 5) dTime = 5;
 	
 	while (timeLeft > 0) {
-		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty)*healthBarUnits);
-		timeLeft -= 1;
+		if (timeLeft < dTime) {
+			dTime = timeLeft;
+		}
+		score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty)*healthBarUnits) * dTime;
+		timeLeft -= dTime;
 		audio.PlayOneShot(sndSelect, 1.0f);
 		yield WaitForSeconds(dt);
 	}
@@ -233,6 +239,7 @@ function HandleCountTimeLeftFinished() {
 	}
 	
 	updateHighScoreLabel();
+	yield WaitForSeconds(2.0f);
 	gameManager.ShowEndOfGameOptions();
 	
 }
