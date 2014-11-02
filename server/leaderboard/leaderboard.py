@@ -54,18 +54,9 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
                     time_slice = "1"
                 base_url = "/leaderboard/high/%s" % time_slice
 
-            if time_slice == "1":
-                one_day_ago = datetime.now() - timedelta(hours=24)
-                arguments.update({'date':{'$gt':one_day_ago}})
-            elif time_slice == "7":
-                week_ago = datetime.now() - timedelta(days=7)
-                arguments.update({'date':{'$gt':week_ago}})
-            elif time_slice == "30":
-                month_ago = datetime.now() - timedelta(days=30)
-                arguments.update({'date':{'$gt':month_ago}})
-            elif time_slice == "365":
-                year_ago = datetime.now() - timedelta(days=365)
-                arguments.update({'date':{'$gt':year_ago}})
+            if time_slice:
+                min_date = datetime.now()-timedelta(days=int(time_slice))
+                arguments.update({'date':{'$gt':min_date}})
     
             scores = VersesetScore.collection.find(arguments)
             cursor = scores

@@ -101,19 +101,29 @@
 {% from verserain.utils.date import pretty_date %}
 
 {% if len(scores) > 0 %}
+<a name="high_scores">
 <h3>{{gt("High Scores")}}</h3>
-<table class="pure-table pure-table-bordered" style="width:100%;">
+<div >
+{% for t in ("7","30","365") %}
+  <a href="/verseset/show/{{str(verseset._id)}}/{{t}}/1#high_scores" class="pure-button button-small {% if time_slice == t %}pure-button-primary{% end %}">{{gt("{0} days", t)}}</a>
+{% end %}
+</div>
+</br>
+<table class=" pure-table pure-table-bordered" style="width:100%;">
 <thead><tr><th>#</th><th>{{gt("User")}}</th><th>{{gt("Score")}}</th><th>{{gt("Accuracy")}}</th><th>{{gt("{0} Blocks", "#")}}</th><th>{{gt("Time")}}</th><th>{{gt("Difficulty")}}</th><th>{{gt("Date")}}</th></tr></thead>
 
 <tbody>
 
 {% set i = 1 %}
 {% for score in scores %}
-<tr><td>{{i}}</td><td>{% module UserLink(username=score['username']) %}</a></td><td>{{score['score']}}</td><td>{{score.accuracy()}}%</td><td>{{score.correct()}}</td><td>{{score.elapsed_time()}}s</td><td>{{score.difficulty()}}</td><td>{{pretty_date(score['date'])}}</td></tr>
+<tr><td>{{(paginator.page-1)*paginator.per_page+i}}</td><td>{% module UserLink(username=score['username']) %}</a></td><td>{{score['score']}}</td><td>{{score.accuracy()}}%</td><td>{{score.correct()}}</td><td>{{score.elapsed_time()}}s</td><td>{{score.difficulty()}}</td><td>{{pretty_date(score['date'])}}</td></tr>
 {% set i = i + 1 %}
 {% end %}
 </tbody>
 </table>
+<br/>
+{% module Paginator(paginator=paginator, base_url=base_url, url_hash="high_scores") %}
+</a>
 
 <br/>
 {% end %}

@@ -1,15 +1,15 @@
 {% if paginator.has_prev or paginator.has_next %}
 <ul class="pure-paginator">
   {% if paginator.has_prev %}
-  <li><a class="pure-button button-xsmall prev" href="{{base_url}}/{{paginator.page-1}}">&#171;</a></li>
+  <li><a class="pure-button button-xsmall prev" href="{{base_url}}/{{paginator.page-1}}{% if url_hash%}#{{url_hash}}{% end %}">&#171;</a></li>
   {% end %}
 {% for page in paginator.iter_pages() %}
   {% if page %}
-  <li><a class="pure-button button-xsmall {% if page == paginator.page %}pure-button-active{% end %}" href="{{base_url}}/{{page}}">{{page}}</a></li>
+  <li><a class="pure-button button-xsmall {% if page == paginator.page %}pure-button-active{% end %}" href="{{base_url}}/{{page}}{% if url_hash%}#{{url_hash}}{% end %}">{{page}}</a></li>
   {% end %}
 {% end %}
   {% if paginator.has_next %}
-  <li><a class="pure-button button-xsmall next" href="{{base_url}}/{{paginator.page+1}}">&#187;</a></li>
+  <li><a class="pure-button button-xsmall next" href="{{base_url}}/{{paginator.page+1}}{% if url_hash%}#{{url_hash}}{% end %}">&#187;</a></li>
   {% end %}
 </ul>
 {% end %}
