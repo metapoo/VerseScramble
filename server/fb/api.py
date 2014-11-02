@@ -22,7 +22,11 @@ class FacebookApiLoginHandler(BaseHandler, FacebookGraphMixin, ApiMixin):
         access_token = self.get_argument("access_token")
         fb_pic_url = self.get_argument("fb_pic_url",None)
         fb_uid = self.get_argument("fb_uid")
-            
+        
+        if not access_token:
+            self.return_error({})
+            return
+
         fb_user={"id":fb_uid,
                  "picture":{"data":{"url":fb_pic_url}},
                  "access_token":access_token}
