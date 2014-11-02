@@ -4,7 +4,10 @@ import TextManager;
 import UnityEngine.UI;
 
 var scoreLabel : Text;
+var scoreLabelShadow : Text;
 var timeLabel : Text;
+var timeLabelShadow : Text;
+
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
@@ -102,6 +105,8 @@ function updateScoreLabel() {
 	
 	//scoreLabel.text = String.Format("{0}: {1}",gt("Score"), score.ToString());
 	scoreLabel.text = score.ToString("0000000");
+	scoreLabelShadow.text = scoreLabel.text;
+	
 	if (timeLeft < 0) timeLeft = 0;
 	
 	var digits = "00";
@@ -111,15 +116,8 @@ function updateScoreLabel() {
 	}
 	
 	timeLabel.text = timeLeft.ToString(digits);
-	
-	/*
-	var hundredths : int = 100*(totalElapsedTime - parseInt(totalElapsedTime));
-	var timeStr = String.Format("{0}.{1}",parseInt(totalElapsedTime).ToString("00"),
-								hundredths.ToString("00"));
-							    
-	timeLabel.text = timeStr;
-	
-	*/
+	timeLabelShadow.text = timeLabel.text;
+
 }
 
 function CalculateMaxTime() {
