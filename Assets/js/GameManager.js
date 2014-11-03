@@ -277,7 +277,6 @@ function SetupUI() {
 	feedbackLabel.enabled = false;
 	healthBar.SetPercentage(healthBar.targetPercentage);	
 	SyncSetProgressLabel();
-	wordLabelContainer.transform.position = Vector3.zero;
 }
 
 function SyncSetProgressLabel() {
@@ -676,6 +675,9 @@ function Cleanup () {
 }
 
 function BeginGame() {
+	line = 0;
+	wordLabelContainer.transform.position = Vector3.zero;
+
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
@@ -816,7 +818,6 @@ function AdjustWordScale() {
 }
 
 function SetupVerse() {
-	line = 0;
 	SyncSetProgressLabel();
 	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
 
