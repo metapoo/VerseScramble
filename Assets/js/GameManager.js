@@ -6,7 +6,7 @@ import UnityEngine.UI;
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
-var wordLabelContainer : Transform;
+var wordLabelContainer : PanCamera;
 var mainCam : Camera;
 var wordLabel : WordLabel;
 var topWall : BoxCollider2D;
@@ -137,6 +137,7 @@ function ShowSolution() {
 		var wordObject : WordLabel = wordLabels[i];
 		wordObject.returnToVerse();
 	}
+
 }
 
 function SetupWalls () {
@@ -277,7 +278,6 @@ function SetupUI() {
 	feedbackLabel.enabled = false;
 	healthBar.SetPercentage(healthBar.targetPercentage);	
 	SyncSetProgressLabel();
-	wordLabelContainer.transform.position = Vector3.zero;
 }
 
 function SyncSetProgressLabel() {
@@ -676,6 +676,9 @@ function Cleanup () {
 }
 
 function BeginGame() {
+	line = 0;
+	wordLabelContainer.Reset();
+
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
@@ -816,7 +819,6 @@ function AdjustWordScale() {
 }
 
 function SetupVerse() {
-	line = 0;
 	SyncSetProgressLabel();
 	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
 
@@ -874,7 +876,7 @@ function SetupVerse() {
 		clone.setWord(word);
 		clone.wordIndex = i;
 		wordLabels.push(clone);
-		clone.transform.SetParent(wordLabelContainer);
+		clone.transform.SetParent(wordLabelContainer.transform);
 		
 		var w = clone.totalSize.x;
 		var h = clone.totalSize.y;

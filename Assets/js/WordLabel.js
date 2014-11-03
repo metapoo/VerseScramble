@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 var label : TextMesh;
+var shadow : TextMesh;
 var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
@@ -250,15 +251,13 @@ function setWord(w : String) {
 	      }
 	}
 
-	label.fontStyle = FontStyle.Normal;
-	label.color = Color.black;
-	label.font = sceneSetup.GetCurrentFont();
-		
 	if (rightToLeft) {
 		label.text = reverseString(w);
 	} else {
 		label.text = w;
 	}
+	shadow.text = label.text;
+	
 	word = wOriginal;
 	
 	SyncFontSize();
@@ -273,6 +272,7 @@ function SyncFontSize() {
 
 function SetFontSize(size : int) {
 	label.fontSize = size;
+	shadow.fontSize = size;
 	ResetBubble();
 }
 
@@ -375,10 +375,15 @@ function handleReturnedToVerse() {
 			}
 		}
 	} else {
-		if ((gameManager.line > 2) && (!gameManager.showingSolution)) {
+		if (gameManager.line > 2) {
 		
-			var dPos : Vector3 = new Vector3(0.0f, totalSize.y, 0.0f);
-			AnimationManager.TranslationBy(transform.parent, dPos, 1.0f);
+			var panWordLabels : PanCamera = transform.parent.GetComponent(PanCamera);
+			if (gameManager.showingSolution) {
+				panWordLabels.maxY += totalSize.y;
+			} else {
+				panWordLabels.ScrollY(totalSize.y);
+			}
+			
 		}
 		gameManager.line += 1;
 	}
