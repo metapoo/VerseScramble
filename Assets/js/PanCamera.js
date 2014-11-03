@@ -94,7 +94,7 @@ function Update () {
 		var dPosY : float = delta.y * mouseSensitivity;
 		
 		curY = transform.position.y + dPosY;
-		velocityY = dPosY;
+		velocityY = dPosY*0.5f + velocityY*0.5f;
 		
 		SyncCurY();
 		targetY = curY;

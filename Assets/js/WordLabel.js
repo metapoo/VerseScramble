@@ -378,7 +378,11 @@ function handleReturnedToVerse() {
 		if (gameManager.line > 2) {
 		
 			var panWordLabels : PanCamera = transform.parent.GetComponent(PanCamera);
-			panWordLabels.ScrollY(totalSize.y);
+			if (gameManager.showingSolution) {
+				panWordLabels.maxY += totalSize.y;
+			} else {
+				panWordLabels.ScrollY(totalSize.y);
+			}
 			
 		}
 		gameManager.line += 1;
