@@ -299,9 +299,9 @@ function Awake () {
 
 static function ResetVersePosition() {
     var screenBounds = GameManager.screenBounds;
-    var startx = screenBounds.x+screenBounds.width*.05;
+    var startx = screenBounds.x+screenBounds.width*.075;
     if (VerseManager.rightToLeft) {
-    	startx = screenBounds.x+screenBounds.width*(0.95);
+    	startx = screenBounds.x+screenBounds.width*(0.925);
     }
     
 	startPosition = new Vector3(startx,screenBounds.y-screenBounds.height*0.25);
@@ -314,10 +314,10 @@ function Start () {
 
 function Update () {
 	if (gotoVerse) {
-		var distance = Vector3.Distance(transform.position, destination);
+		var distance = Vector3.Distance(transform.localPosition, destination);
 		var speed: float = 0.5;
 		var elapsedTime = (Time.time-startTime);
-		transform.position = new Vector3.Lerp(transform.position, destination, speed*elapsedTime);
+		transform.localPosition = new Vector3.Lerp(transform.localPosition, destination, speed*elapsedTime);
 		if (distance < 0.001) {
 			handleReturnedToVerse();
 		}
@@ -374,6 +374,13 @@ function handleReturnedToVerse() {
 				pw.ShrinkRightEdge(d);
 			}
 		}
+	} else {
+		if ((gameManager.line > 2) && (!gameManager.showingSolution)) {
+		
+			var dPos : Vector3 = new Vector3(0.0f, totalSize.y, 0.0f);
+			AnimationManager.TranslationBy(transform.parent, dPos, 1.0f);
+		}
+		gameManager.line += 1;
 	}
 }
 
@@ -395,7 +402,7 @@ function CalculateVersePosition () {
 	// z = 1 so placed words are drawn behind other wordlabels
 	destination = new Vector3(versePosition.x - dx*0.5f, versePosition.y, 1);
 	var screenBounds = GameManager.screenBounds;
-	var b : float = 0.98;
+	var b : float = 0.95;
 	var maxX = screenBounds.x + screenBounds.width*b;
 	var minX = screenBounds.x + screenBounds.width*(1-b);
 	

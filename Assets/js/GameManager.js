@@ -6,6 +6,7 @@ import UnityEngine.UI;
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
+var wordLabelContainer : Transform;
 var mainCam : Camera;
 var wordLabel : WordLabel;
 var topWall : BoxCollider2D;
@@ -41,7 +42,7 @@ var healthBar : HealthBar;
 var wordScale : float;
 var setProgressLabel : Text;
 var updateCount : int = 0;
-
+var line : int = 0;
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -276,6 +277,7 @@ function SetupUI() {
 	feedbackLabel.enabled = false;
 	healthBar.SetPercentage(healthBar.targetPercentage);	
 	SyncSetProgressLabel();
+	wordLabelContainer.transform.position = Vector3.zero;
 }
 
 function SyncSetProgressLabel() {
@@ -779,21 +781,6 @@ function scrambleWordLabels() {
   	}
 }
 
-function DetermineWordScale(verse : Verse) {
-	// initial guess
-	wordScale = 1.0f;
-	var ratio : float = (Screen.width+0.0f) / Screen.height;
-	var maxCharSize : float = 250.0f;
-	maxCharSize *= ratio;
-	var smoothing : float = 0.6f;
-	if (verse.text.length > maxCharSize) {
-		wordScale = 0.2f + 0.8f * (maxCharSize * (1.0f + smoothing) / 
-		(verse.text.length + maxCharSize * smoothing));
-	}
-	
-	Debug.Log("initial word scale = " + wordScale);
-}
-
 function AdjustWordScale() {
 	WordLabel.ResetVersePosition();
 	var minY = screenBounds.y - screenBounds.height;
@@ -829,6 +816,7 @@ function AdjustWordScale() {
 }
 
 function SetupVerse() {
+	line = 0;
 	SyncSetProgressLabel();
 	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
 
@@ -857,8 +845,6 @@ function SetupVerse() {
 		//difficulty = GetDifficultyFromInt(verseMetadata["difficulty"]);
 	}
 	
-	DetermineWordScale(verse);
-	
 	words = SplitVerse(verse.text);
 	wordIndex = 0;
 	currentWord = words[wordIndex];
@@ -882,11 +868,14 @@ function SetupVerse() {
 	var i = 0;
 	var rTL = verseManager.rightToLeft;
 	for (word in words) {
+		
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
 		clone.rightToLeft = rTL;
 		clone.setWord(word);
 		clone.wordIndex = i;
 		wordLabels.push(clone);
+		clone.transform.SetParent(wordLabelContainer);
+		
 		var w = clone.totalSize.x;
 		var h = clone.totalSize.y;
 		var x = Random.Range(screenBounds.x+w*0.5,screenBounds.x+screenBounds.width-w*0.5);
@@ -896,7 +885,7 @@ function SetupVerse() {
 		i += 1;
 	}
 	
-	AdjustWordScale();
+	//AdjustWordScale();
 	
 	scrambleWordLabels();
 	
