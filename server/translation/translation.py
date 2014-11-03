@@ -47,6 +47,9 @@ class SaveTranslationHandler(BaseHandler):
             if not self.current_user.is_admin():
                 return self.write("Only admin can change english")
 
+        if not self.current_user["email_verified"]:
+            return self.write("Verify your email first")
+
         tran = Translation.translate(language, msgid, msgstr, username=self.current_user['username'])
 
         if language == "en":
