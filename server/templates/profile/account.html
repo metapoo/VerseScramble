@@ -45,5 +45,12 @@
 
 <br/>
 
+<form class="pure-form pure-from-stacked" method="POST" action="/profile/username/update">
+<label for="username"><h3>{{gt("Username")}}</h3></label>
+<table><tr><td>
+<input type="text" name="username" value="{{user.get('username','')}}" /></td><td><input type="submit" value="{{gt("update")}}" class="pure-button"  />
+</td></tr></table>
+</form>
+
 
 {% end %}

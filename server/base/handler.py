@@ -90,7 +90,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         self.redirectWithProtocol(uri=uri,protocol="http")
 
     def user_agent(self):
-        return self.request.headers.get('User-Agent')
+        return self.request.headers.get('User-Agent','')
 
     def isIOS(self):
         if self.get_argument("test_ios", False):

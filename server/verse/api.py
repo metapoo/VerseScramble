@@ -22,11 +22,12 @@ class RecordPlayVerseSetApiHandler(BaseHandler, ApiMixin):
             return self.return_success({})
 
         vs = VerseSet.by_id(verseset_id)
+        result = {}
         if vs:
             vs["play_count"] = vs.play_count() + 1
             vs.save()
-        
-        result = {"play_count": vs.play_count()}
+            result.update({"play_count": vs.play_count()})
+
         return self.return_success(result)
 
 class ListVerseSetApiHandler(BaseHandler, ApiMixin):

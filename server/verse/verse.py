@@ -4,11 +4,13 @@ from verserain.verse.models import *
 from verserain.utils.encoding import *
 from verserain.utils.paging import *
 from verserain import settings
+from datetime import datetime, timedelta
 from bson.objectid import ObjectId
 import pymongo 
 
 def get_handlers():
     return ((r"/verseset/create", CreateVerseSetHandler),
+            (r"/verseset/show/(?P<verseset_id>[^/]+)/(?P<time_slice>\d+)/(?P<page>\d+)/?", ShowVerseSetHandler),
             (r"/verseset/show/([^/]+)/?", ShowVerseSetHandler),
             (r"/verseset/edit/([^/]+)/?", UpdateVerseSetHandler),
             (r"/verseset/remove/([^/]+)/?", RemoveVerseSetHandler),
@@ -279,11 +281,12 @@ class CreateVerseHandler(BaseHandler):
         self.redirect("/verseset/add_verse/%s" % str(verseset._id))
         
 class ShowVerseSetHandler(BaseHandler):
-    def get(self, verseset_id):
+    def get(self, verseset_id=None, time_slice=None, page=1):
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
 
         verseset_id = ObjectId(verseset_id)
         verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        page = int(page)
 
         if verseset is None:
             return self.write("verse set not found, possibly removed")
@@ -301,18 +304,32 @@ class ShowVerseSetHandler(BaseHandler):
             selected_nav = "verse sets"
 
         from verserain.leaderboard.models import VersesetScore
-        limit = 20
-        scores = VersesetScore.collection.find({'verseset_id':verseset_id}).sort('score', pymongo.DESCENDING)[0:limit]
+        per_page = 10
+        start_index = (page-1)*per_page
+        end_index = start_index + per_page
+        if time_slice is None:
+            time_slice = "7"
+        min_time = datetime.now()-timedelta(days=int(time_slice))
+            
+        scores = VersesetScore.collection.find({'date':{'$gt':min_time}, 
+                                                'verseset_id':verseset_id})
+        cursor = scores
+        scores = scores.sort('score', pymongo.DESCENDING)[start_index:end_index]
         scores = list(scores)
+
+        total_count = cursor.count()
+        paginator = Pagination(page,per_page,total_count)
+        base_url = "/verseset/show/%s/%s" % (str(verseset._id),time_slice)
+
         play_url = verseset.play_url()
         is_me = (user and ((verseset['user_id'] == user._id) or user.is_admin()))
 
         return self.render("verseset/show.html", verseset=verseset,
                            user=user, verses=verses, version=version, verse=None,
                            versions=versions, selected_nav=selected_nav, scores=scores,
-                           play_url=play_url, is_me=is_me,reference=None,
+                           play_url=play_url, is_me=is_me,reference=None, time_slice=time_slice,
+                           paginator=paginator, base_url=base_url
                            )
-
 
 class UpdateVerseSetHandler(BaseHandler):
     @require_login

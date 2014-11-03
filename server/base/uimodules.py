@@ -21,10 +21,11 @@ class UserLink(tornado.web.UIModule):
         return "<a class='link' href='/u/%s'>%s</a>" % (username, username)
 
 class Paginator(tornado.web.UIModule):
-    def render(self, paginator=None, base_url=None):
+    def render(self, paginator=None, base_url=None, url_hash=None):
         return self.render_string("paginator.html",
                                   paginator=paginator,
                                   base_url=base_url,
+                                  url_hash=url_hash,
         )
 
 class VerseSetLink(tornado.web.UIModule):
@@ -36,8 +37,9 @@ class VerseSetLink(tornado.web.UIModule):
         return "<a class='link' href='/verseset/show/%s'>%s</a>" % (verseset_id, verseset_name)
 
 class ScoresTable(tornado.web.UIModule):
-    def render(self, scores=None, start_index=0, gt=None):
-        return self.render_string("scores/table.html",scores=scores, start_index=start_index, gt=gt)
+    def render(self, scores=None, start_index=0, gt=None, selected_subnav=None):
+        return self.render_string("scores/table.html",scores=scores, start_index=start_index, gt=gt, 
+                                  selected_subnav=selected_subnav)
 
 class VerseSetsTable(tornado.web.UIModule):
     def render(self, versesets=None, paginator=None, language_code=None, start_index=0, gt=None):

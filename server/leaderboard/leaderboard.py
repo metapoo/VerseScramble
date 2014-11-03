@@ -7,16 +7,19 @@ from tornado.gen import coroutine
 from verserain.api.api import *
 from verserain.utils.paging import *
 from bson.objectid import ObjectId
+from datetime import datetime, timedelta
 import pymongo
 
 def get_handlers():
-    return ((r"/leaderboard/([^/]+)/(\d+)/?", LeaderboardUserListHandler),
+    return ((r"/leaderboard/(?P<selected_subnav>high)/(?P<time_slice>\d+)/(?P<page>\d+)/?", LeaderboardUserListHandler),
+            (r"/leaderboard/(?P<selected_subnav>high)/(?P<time_slice>\d+)/?", LeaderboardUserListHandler),
+            (r"/leaderboard/([^/]+)/(\d+)/?", LeaderboardUserListHandler),
             (r"/leaderboard/([^/]+)/?", LeaderboardUserListHandler),
             (r"/leaderboard/?", LeaderboardUserListHandler),
 )
 
 class LeaderboardUserListHandler(BaseHandler, ApiMixin):
-    def get(self, selected_subnav=None, page=1):
+    def get(self, selected_subnav=None, page=1, time_slice=None):
         username = self.get_argument("user",None)
         per_page = 20
         page = int(page)
@@ -27,30 +30,43 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
         user = self.current_user
 
         if selected_subnav is None:
-            selected_subnav = "total"
+            selected_subnav = "high"
+
+        if selected_subnav is "total":
             if user and user.has_key('rank'):
                 self.redirect(user.rank_url())
                 return
+
+        base_url = "/leaderboard/%s" % selected_subnav
 
         if selected_subnav == "total":
             users = User.collection.find()
             cursor = users
             users = users.sort("rank",pymongo.ASCENDING)[start_index:end_index]
         else:
-            scores = VersesetScore.collection.find({'score':{'$gt':0}})
-            cursor = scores
+            arguments = {'score':{'$gt':0}}
 
             if selected_subnav == "recent":
                 sort_field = "date"
             elif selected_subnav == "high":
                 sort_field = "score"
+                if time_slice is None:
+                    time_slice = "1"
+                base_url = "/leaderboard/high/%s" % time_slice
+
+            if time_slice:
+                min_date = datetime.now()-timedelta(days=int(time_slice))
+                arguments.update({'date':{'$gt':min_date}})
+    
+            scores = VersesetScore.collection.find(arguments)
+            cursor = scores
+
         
             scores = scores.sort(sort_field,pymongo.DESCENDING)[start_index:end_index]
         
         total_count = cursor.count()
         paginator = Pagination(page,per_page,total_count)
-        base_url = "/leaderboard/%s" % selected_subnav
 
         self.render("leaderboard/index.html", users=users, selected_nav="leaderboard", 
                     scores=scores, paginator=paginator, selected_subnav=selected_subnav,
-                    base_url=base_url, start_index=start_index, username=username)
+                    base_url=base_url, start_index=start_index, username=username, time_slice=time_slice)
