@@ -9,7 +9,7 @@ def is_valid_email(email):
     return (re.match(email_re,email) is not None)
 
 def is_valid_username(username):
-    if ("/" in username) or ("\\" in username):
+    if ("/" in username) or ("\\" in username) or ("@" in username):
         return False
     return True
 
