@@ -333,7 +333,7 @@ function Update () {
 	} else {
 		label.transform.eulerAngles.z = rotation;
 	}
-	
+	shadow.transform.eulerAngles = label.transform.eulerAngles;
 }
 
 function GetPreviousWordLabel() {
