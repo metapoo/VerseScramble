@@ -137,6 +137,8 @@ function ShowSolution() {
 		var wordObject : WordLabel = wordLabels[i];
 		wordObject.returnToVerse();
 	}
+	wordLabelContainer.Reset();
+
 }
 
 function SetupWalls () {

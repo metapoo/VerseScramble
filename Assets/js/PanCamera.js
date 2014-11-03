@@ -1,4 +1,4 @@
-var mouseSensitivity : float = 1.0f;
+var mouseSensitivity : float = 0.75f;
 var lastPosition : Vector3 ;
 var gameManager : GameManager;
 var minY : float = 0.0f;
@@ -9,6 +9,7 @@ var velocityY : float = 0.0f;
 var dragY : float = 10.0f;
 var mouseDown : boolean = false;
 var scrolling : boolean = false;
+var mainCamera : Camera;
 
 // Use this for initialization
 function Start () {
@@ -61,7 +62,7 @@ function Update () {
 		}
 		
 		if (Mathf.Abs(velocityY) > .01f) {
-			curY += velocityY*Time.deltaTime;	
+			curY += velocityY;	
 			if (velocityY > 0) {
 				velocityY -= dragY*Time.deltaTime;
 			} else {	
@@ -80,8 +81,8 @@ function Update () {
 	if (Input.GetMouseButtonDown(0))
 	{
 		mouseDown = true;
-		velocityY = 0.0f;
-		lastPosition = Input.mousePosition;
+		lastPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+		
 	}
 	if (Input.GetMouseButtonUp(0)) {
 		mouseDown = false;
@@ -89,11 +90,14 @@ function Update () {
 		
 	if (Input.GetMouseButton(0))
 	{
-		var delta : Vector3 = Input.mousePosition - lastPosition;
-		velocityY = delta.y * mouseSensitivity;
-		curY = transform.position.y + velocityY*Time.deltaTime;
+		var delta : Vector3 = mainCamera.ScreenToWorldPoint(Input.mousePosition) - lastPosition;
+		var dPosY : float = delta.y * mouseSensitivity;
+		
+		curY = transform.position.y + dPosY;
+		velocityY = dPosY;
+		
 		SyncCurY();
 		targetY = curY;
-		lastPosition = Input.mousePosition;
+		lastPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 	}
 }
