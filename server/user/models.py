@@ -17,6 +17,16 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
             Index("rank")
         )
 
+    def change_username(self, new_username):
+        if User.by_username(new_username):
+            return False
+        self["username"] = new_username
+        self.save()
+        for vss in self.versesetscores():
+            vss['username'] = new_username
+            vss.save()
+        return True
+
     def rank_url(self):
         rank = self["rank"]
         page = (rank-1)/20 + 1
@@ -123,9 +133,11 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
 
     def __new__(cls, *args, **kwargs):
         from verserain.verse.models import VerseSet, Verse
+        from verserain.leaderboard.models import VersesetScore
         from verserain.fb.models import FbUser
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(Verse,one_to_many=True)
         cls.register_foreign_key(VerseSet,one_to_many=True)
+        cls.register_foreign_key(VersesetScore,one_to_many=True)
         return new_instance
 

@@ -23,6 +23,7 @@ def get_handlers():
             (r"/profile/verify_email/send/?", SendVerifyEmailHandler),
             (r"/profile/verify_email/verify/?", ConfirmVerifyEmailHandler),
             (r"/profile/password/update/?", UpdatePasswordHandler),
+            (r"/profile/username/update/?", UpdateUsernameHandler),
             (r"/profile/?", ProfileIndexHandler),
     )
 
@@ -32,6 +33,22 @@ class AccountMixin:
         user = self.current_user
         self.render("profile/account.html", viewed_user=user, selected_subnav="account",
                     error_message=error_message, feedback_message=feedback_message)
+
+class UpdateUsernameHandler(BaseHandler, AccountMixin):
+    def post(self):
+        new_username = self.get_argument("username", None)
+        if not is_valid_username(new_username):
+            return self.render_account(error_message="Invalid username")
+        existing_user = User.by_username(new_username)
+        if existing_user:
+            return self.render_account(error_message="An account is already registered with that username")
+        user = self.current_user
+        success = user.change_username(new_username)
+        if not success:
+            return self.render_account(error_message="An account is already registered with that username")
+
+        return self.render_account()
+
 
 class UpdatePasswordHandler(BaseHandler, AccountMixin):
     @require_secure
