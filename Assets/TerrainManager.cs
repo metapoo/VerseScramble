@@ -10,6 +10,8 @@ public class TerrainManager : MonoBehaviour
 	private float[,] defaultAlphaMap = null;
 	private float progressGrassDetail = 0;
 	private int targetGrassDetail = 0;
+	private float rainProgress = 0;
+	private float rainTarget = 0;
 
 	void IncrementProgress() {
 		currentProgress += 0.1f;
@@ -23,9 +25,12 @@ public class TerrainManager : MonoBehaviour
 	void SetCurrentProgress(float progress) {
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
+	}
 
+	void SetRainProgress(float progress) {
 		rain.minEmission = progress*20.0f*(float)Mathf.Pow (3.0f,progress);
 		rain.maxEmission = rain.minEmission*1.5f;
+		rainProgress = progress;
 	}
 
 	void SetTargetProgress(float progress) {
@@ -37,6 +42,9 @@ public class TerrainManager : MonoBehaviour
 		} else if (progress == 0.0f) {
 			targetGrassDetail = 0;
 		}
+
+		rainTarget = progress;
+
 	}
 
 	void Start() {
@@ -95,6 +103,23 @@ public class TerrainManager : MonoBehaviour
 			SetCurrentProgress(currentProgress);
 		}
 
+		if (Mathf.Abs(rainTarget - rainProgress) > r) {
+			if (rainTarget > rainProgress) {
+				rainProgress += r;
+			} else {
+				rainProgress -= r;
+			}
+			
+			SetRainProgress(rainProgress);
+			
+		} else if (rainTarget != rainProgress) {
+			rainProgress = rainTarget;
+			SetCurrentProgress(rainProgress);
+			if (rainProgress == 3.0f) {
+				// reset the rain
+				rainTarget = 0.0f;
+			}
+		}
 	}
 
 	void SetGrassDetail(TerrainData terrainData, int layer, int detail, float progress) {
