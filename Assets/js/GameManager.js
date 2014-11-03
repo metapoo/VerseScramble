@@ -6,7 +6,7 @@ import UnityEngine.UI;
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
-var wordLabelContainer : Transform;
+var wordLabelContainer : PanCamera;
 var mainCam : Camera;
 var wordLabel : WordLabel;
 var topWall : BoxCollider2D;
@@ -676,7 +676,7 @@ function Cleanup () {
 
 function BeginGame() {
 	line = 0;
-	wordLabelContainer.transform.position = Vector3.zero;
+	wordLabelContainer.Reset();
 
 	SetupVerse();
 	
@@ -875,7 +875,7 @@ function SetupVerse() {
 		clone.setWord(word);
 		clone.wordIndex = i;
 		wordLabels.push(clone);
-		clone.transform.SetParent(wordLabelContainer);
+		clone.transform.SetParent(wordLabelContainer.transform);
 		
 		var w = clone.totalSize.x;
 		var h = clone.totalSize.y;

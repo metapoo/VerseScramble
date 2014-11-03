@@ -375,10 +375,11 @@ function handleReturnedToVerse() {
 			}
 		}
 	} else {
-		if ((gameManager.line > 2) && (!gameManager.showingSolution)) {
+		if (gameManager.line > 2) {
 		
-			var dPos : Vector3 = new Vector3(0.0f, totalSize.y, 0.0f);
-			AnimationManager.TranslationBy(transform.parent, dPos, 1.0f);
+			var panWordLabels : PanCamera = transform.parent.GetComponent(PanCamera);
+			panWordLabels.ScrollY(totalSize.y);
+			
 		}
 		gameManager.line += 1;
 	}
