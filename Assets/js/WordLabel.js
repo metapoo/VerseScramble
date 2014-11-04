@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 var label : TextMesh;
+var shadow : TextMesh;
 var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
@@ -250,15 +251,13 @@ function setWord(w : String) {
 	      }
 	}
 
-	label.fontStyle = FontStyle.Normal;
-	label.color = Color.black;
-	label.font = sceneSetup.GetCurrentFont();
-		
 	if (rightToLeft) {
 		label.text = reverseString(w);
 	} else {
 		label.text = w;
 	}
+	shadow.text = label.text;
+	
 	word = wOriginal;
 	
 	SyncFontSize();
@@ -267,12 +266,16 @@ function setWord(w : String) {
 }
 
 function SyncFontSize() {
-	var fontSize : int = 80.0f*gameManager.wordScale;
+	var fontSize : int = 75.0f;
+	if (SceneSetup.isPhone) {
+		fontSize = 90.0f;
+	}
 	SetFontSize(fontSize);
 }
 
 function SetFontSize(size : int) {
 	label.fontSize = size;
+	shadow.fontSize = size;
 	ResetBubble();
 }
 
@@ -282,7 +285,7 @@ function ResetBubble() {
 	var lsize = label.renderer.bounds.size;
 	var textWidth : float = lsize.x;
 	var textHeight : float  = lsize.y;
-	var padding : Vector2 = new Vector2(0,textHeight*0.5f);
+	var padding : Vector2 = new Vector2(0,textHeight*0.4f);
 	var l : float = textWidth;
 	var h : float = textHeight+2*padding.y;
 	
@@ -333,8 +336,23 @@ function Update () {
 	} else {
 		label.transform.eulerAngles.z = rotation;
 	}
-	
+	shadow.transform.eulerAngles = label.transform.eulerAngles;
 }
+/*
+function OnCollisionEnter2D(collision : Collision2D) {
+   if (collision) {
+   		var v : float = collision.relativeVelocity.magnitude;
+   		var snd : AudioClip;
+   		if (Random.RandomRange(0.0f,1.0f) > 0.5f) {
+   			snd = bumpSnd;
+   		} else {
+   			snd = bumpSnd2;
+   		}
+   		var vol : float = v/10.0f;
+   		if (vol > 1) vol = 1.0f;
+ 	   	audio.PlayOneShot(snd, vol);   		
+  }
+}*/
 
 function GetPreviousWordLabel() {
 	var wordLabel = gameManager.GetWordLabelAt(wordIndex-1);	
@@ -375,10 +393,15 @@ function handleReturnedToVerse() {
 			}
 		}
 	} else {
-		if ((gameManager.line > 2) && (!gameManager.showingSolution)) {
+		if (gameManager.line > 2) {
 		
-			var dPos : Vector3 = new Vector3(0.0f, totalSize.y, 0.0f);
-			AnimationManager.TranslationBy(transform.parent, dPos, 1.0f);
+			var panWordLabels : PanCamera = transform.parent.GetComponent(PanCamera);
+			if (gameManager.showingSolution) {
+				panWordLabels.maxY += totalSize.y;
+			} else {
+				panWordLabels.ScrollY(totalSize.y);
+			}
+			
 		}
 		gameManager.line += 1;
 	}

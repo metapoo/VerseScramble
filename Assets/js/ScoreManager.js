@@ -8,6 +8,7 @@ var scoreLabelShadow : Text;
 var timeLabel : Text;
 var timeLabelShadow : Text;
 
+var isHighScore : boolean = false;
 var score : int = 0;
 var streak : int = 0;
 var moves : int = 0;
@@ -145,6 +146,7 @@ function resetStatsForChallenge() {
 }
 
 function resetStats() {
+	isHighScore = false;
 	UpdateHealthBar(startingHealth);
 	moves = 0;
 	streak = 0;
@@ -217,6 +219,7 @@ function HandleCountTimeLeftFinished() {
 	if (gameManager.GetChallengeModeEnabled()) {
 		if (score > highScore) {
 			highScore = score;
+			isHighScore = true;
 			versesetMetadata["high_score"] = highScore;
 			var verseset : VerseSet = verseManager.GetCurrentVerseSet();
 			verseset.SaveMetadata(versesetMetadata);
@@ -228,6 +231,7 @@ function HandleCountTimeLeftFinished() {
 	} else {
 		if (score > highScore) {
 			highScore = score;
+			isHighScore = true;
 			var verse : Verse = verseManager.GetCurrentVerse();
 			verseMetadata["high_score"] = highScore;
 			verse.SaveMetadata(verseMetadata);
@@ -239,9 +243,7 @@ function HandleCountTimeLeftFinished() {
 	}
 	
 	updateHighScoreLabel();
-	yield WaitForSeconds(2.0f);
-	gameManager.ShowEndOfGameOptions();
-	
+	gameManager.HandleCountTimeFinished();	
 }
 
 function resetTimeForChallenge() {

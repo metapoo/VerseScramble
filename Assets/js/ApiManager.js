@@ -148,7 +148,7 @@ class ApiManager extends MonoBehaviour {
     	var json : String = PlayerPrefs.GetString(url);
     	if (json == null) return null;
     	var resultData : Hashtable = ParseJSON(json);
-    	return resultData;
+	    return resultData;
     }
     
     public function UrlForApi(apiName : String, arguments : String, options : Hashtable) {
@@ -163,7 +163,11 @@ class ApiManager extends MonoBehaviour {
     public function GetApiCache(apiName: String, arguments : Hashtable, options : Hashtable) : void {
     	var serializedArguments : String = SerializeArguments(arguments);
     	var url : String = UrlForApi(apiName, serializedArguments, options);
-    	var resultData : Hashtable = GetApiCache(url);
+    	try {
+	    	var resultData : Hashtable = GetApiCache(url);
+	    } catch (err) {
+	    	return;
+	    }
     	var handler : Function = options["handler"];
     	if (resultData != null) {
     		handler(resultData);
@@ -246,7 +250,12 @@ class ApiManager extends MonoBehaviour {
 		}
 		
 		var data = www.text;
-		var apiData : Hashtable = JSONUtils.ParseJSON(data);
+		try {
+			var apiData : Hashtable = JSONUtils.ParseJSON(data);
+		} catch (err) {
+			errorHandler();
+			return;
+		}
 		var status = apiData["status"];
 		if (status == "OK") {
 			resultData = apiData["result"];
