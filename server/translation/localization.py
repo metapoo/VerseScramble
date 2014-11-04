@@ -23,6 +23,11 @@ class TranslationManager:
     def load_translation(cls, language, force=False):
         
         translations = cls.translations
+
+        if cls.translation_string_count <= 1.0:
+            if translations.has_key('en'):
+                cls.translation_string_count = len(translations['en'])
+
         if translations.has_key(language) and not force:
             return translations[language]
 
@@ -55,9 +60,6 @@ class TranslationManager:
 
         
         translations[language] = transdict
-
-        if cls.translation_string_count <= 1.0:
-            cls.translation_string_count = len(translations['en'])
 
         return transdict
     
