@@ -8,8 +8,14 @@ def get_handlers():
     return ((r"/translation/save/?", SaveTranslationHandler),
             (r"/translation/([^/]+)/?", ShowTranslationHandler),
             (r"/translation/remove/([^/]+)/?", RemoveTranslationHandler),
+            (r"/translations/show/?", ShowTranslationsHandler),
             (r"/translation/?", ShowTranslationHandler),
     )
+
+class ShowTranslationsHandler(BaseHandler):
+    def get(self):
+        self.load_all_translations()
+        self.render("_languages.html")
 
 class RemoveTranslationHandler(BaseHandler):
     def get(self, tran_id=None):
