@@ -8,7 +8,7 @@ function GetIsPhone() : boolean {
 	var w : float = Screen.width;
 	var h : float = Screen.height;
 	var dpi : float = Screen.dpi;
-	if (dpi == 0) dpi = 200.0f;
+	if (dpi == 0) dpi = 128.0f;
 	
 	Debug.Log("Screen.dpi = " + dpi);
 	var l : float = Mathf.Sqrt(w*w+h*h);
