@@ -6,8 +6,6 @@ var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
 var word : String;
-var bumpSnd : AudioClip;
-var bumpSnd2 : AudioClip;
 var destination : Vector3;
 var gotoVerse : boolean = false;
 var returnedToVerse : boolean = false;
@@ -340,7 +338,7 @@ function Update () {
 	}
 	shadow.transform.eulerAngles = label.transform.eulerAngles;
 }
-
+/*
 function OnCollisionEnter2D(collision : Collision2D) {
    if (collision) {
    		var v : float = collision.relativeVelocity.magnitude;
@@ -354,7 +352,7 @@ function OnCollisionEnter2D(collision : Collision2D) {
    		if (vol > 1) vol = 1.0f;
  	   	audio.PlayOneShot(snd, vol);   		
   }
-}
+}*/
 
 function GetPreviousWordLabel() {
 	var wordLabel = gameManager.GetWordLabelAt(wordIndex-1);	
