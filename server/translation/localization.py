@@ -16,6 +16,7 @@ class TranslationManager:
     @classmethod
     def load_all_translations(cls):
         from verserain.verse.language import LANGUAGE_CODES
+        cls.load_translation('en')
         for code in LANGUAGE_CODES:
             cls.load_translation(code)
 
@@ -31,14 +32,9 @@ class TranslationManager:
         if translations.has_key(language) and not force:
             return translations[language]
 
-        load_all = not cls.translations.has_key('en')
-
         if not translations.has_key('en') and (language != 'en'):
             cls.load_translation('en')
     
-        if load_all and (language != 'en'):
-            cls.load_all_translations()
-            
         translations[language] = {}
         transdict = translations[language]
         trans = list(Translation.collection.find({"language":language}))
