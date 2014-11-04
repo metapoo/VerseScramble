@@ -341,13 +341,16 @@ function Update () {
 function OnCollisionEnter2D(collision : Collision2D) {
    if (collision) {
    		var v : float = collision.relativeVelocity.magnitude;
-   		
-   		if (v > 2) {
-	   		audio.PlayOneShot(bumpSnd, v/10.0f);   		
-	   	} else if (v > 5) {
-	   		audio.PlayOneShot(bumpSnd2, v/10.0f);   		
-	   	}
-   }
+   		var snd : AudioClip;
+   		if (Random.RandomRange(0.0f,1.0f) > 0.5f) {
+   			snd = bumpSnd;
+   		} else {
+   			snd = bumpSnd2;
+   		}
+   		var vol : float = v/10.0f;
+   		if (vol > 1) vol = 1.0f;
+ 	   	audio.PlayOneShot(snd, vol);   		
+  }
 }
 
 function GetPreviousWordLabel() {
