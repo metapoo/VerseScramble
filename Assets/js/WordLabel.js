@@ -6,8 +6,6 @@ var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
 var word : String;
-var bumpSnd : AudioClip;
-var bumpSnd2 : AudioClip;
 var destination : Vector3;
 var gotoVerse : boolean = false;
 var returnedToVerse : boolean = false;
@@ -268,7 +266,10 @@ function setWord(w : String) {
 }
 
 function SyncFontSize() {
-	var fontSize : int = 80.0f*gameManager.wordScale;
+	var fontSize : int = 75.0f;
+	if (SceneSetup.isPhone) {
+		fontSize = 90.0f;
+	}
 	SetFontSize(fontSize);
 }
 
@@ -284,7 +285,7 @@ function ResetBubble() {
 	var lsize = label.renderer.bounds.size;
 	var textWidth : float = lsize.x;
 	var textHeight : float  = lsize.y;
-	var padding : Vector2 = new Vector2(0,textHeight*0.5f);
+	var padding : Vector2 = new Vector2(0,textHeight*0.4f);
 	var l : float = textWidth;
 	var h : float = textHeight+2*padding.y;
 	
@@ -337,7 +338,7 @@ function Update () {
 	}
 	shadow.transform.eulerAngles = label.transform.eulerAngles;
 }
-
+/*
 function OnCollisionEnter2D(collision : Collision2D) {
    if (collision) {
    		var v : float = collision.relativeVelocity.magnitude;
@@ -351,7 +352,7 @@ function OnCollisionEnter2D(collision : Collision2D) {
    		if (vol > 1) vol = 1.0f;
  	   	audio.PlayOneShot(snd, vol);   		
   }
-}
+}*/
 
 function GetPreviousWordLabel() {
 	var wordLabel = gameManager.GetWordLabelAt(wordIndex-1);	

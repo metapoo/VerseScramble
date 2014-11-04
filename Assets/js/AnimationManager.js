@@ -1,5 +1,16 @@
 import UnityEngine.UI;
 
+static function ZoomTo(camera : Camera, endFOV: float, duration : float) {
+	var rate : float = 1.0/duration;
+	var t : float = 0.0;
+	var startFOV = camera.fieldOfView;
+	while (t < 1.0) {
+		t += Time.deltaTime * rate;
+		camera.fieldOfView = startFOV + (endFOV - startFOV)*t;
+		yield; 
+	}
+}
+
 static function Rotation(thisTransform : Transform, endRotation : Quaternion, duration : float) {
 	var rate : float = 1.0/duration;
 	var t : float = 0.0;
