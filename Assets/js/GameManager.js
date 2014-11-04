@@ -6,6 +6,8 @@ import UnityEngine.UI;
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
+var victorySnd : AudioClip;
+var skyManager : SkyManager;
 var wordLabelContainer : PanCamera;
 var mainCam : Camera;
 var wordLabel : WordLabel;
@@ -109,6 +111,20 @@ function ExitToVerseList() {
 
 function CanShowSolution() {
 	return ((wordIndex < wordLabels.length) && !finished && gameStarted && !GetChallengeModeEnabled());	
+}
+
+function HandleCountTimeFinished() {
+	if (scoreManager.isHighScore) {
+		audio.PlayOneShot(victorySnd, 1.0f);
+		yield WaitForSeconds(0.5f);
+		skyManager.LookAtRainbow();
+		skyManager.ShowRainbow();
+		yield WaitForSeconds(3.0f);
+	} else {
+		yield WaitForSeconds(2.0f);
+	}
+	
+	ShowEndOfGameOptions();
 }
 
 function ShowSolution() {
@@ -678,7 +694,9 @@ function Cleanup () {
 function BeginGame() {
 	line = 0;
 	wordLabelContainer.Reset();
-
+	skyManager.LookAtTerrain();
+	skyManager.HideRainbow();
+	
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
@@ -722,7 +740,7 @@ function UpdateGravityScale() : float {
 		pct = fellDownEnough / numWords;
 	} 
 	
-	var gravity : float = 0.1 / pct;
+	var gravity : float = 0.1 / (pct*pct);
 	
 	for (i = wordIndex;i<maxWords;i++) {
 		wordLabel = scrambledWordLabels[i];

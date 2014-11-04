@@ -6,6 +6,7 @@ var bgMiddle : SpriteRenderer;
 var bgLeft : SpriteRenderer;
 var bgRight : SpriteRenderer;
 var word : String;
+var bumpSnd : AudioClip;
 var destination : Vector3;
 var gotoVerse : boolean = false;
 var returnedToVerse : boolean = false;
@@ -333,7 +334,15 @@ function Update () {
 	} else {
 		label.transform.eulerAngles.z = rotation;
 	}
-	
+	shadow.transform.eulerAngles = label.transform.eulerAngles;
+}
+
+function OnCollisionEnter2D(collision : Collision2D) {
+   if (collision) {
+   		if (collision.relativeVelocity.magnitude > 2) {
+	   		audio.PlayOneShot(bumpSnd, 1.0f);   		
+	   	}
+   }
 }
 
 function GetPreviousWordLabel() {
