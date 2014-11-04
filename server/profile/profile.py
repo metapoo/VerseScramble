@@ -76,7 +76,7 @@ class UpdatePasswordHandler(BaseHandler, AccountMixin):
 
 class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
     def get(self):
-        hash_code = self.get_argument("h")
+        hash_code = self.get_argument("h","")
 
         user = self.current_user
         
