@@ -6,6 +6,7 @@ import UnityEngine.UI;
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
+var victorySnd : AudioClip;
 var skyManager : SkyManager;
 var wordLabelContainer : PanCamera;
 var mainCam : Camera;
@@ -114,6 +115,7 @@ function CanShowSolution() {
 
 function HandleCountTimeFinished() {
 	if (scoreManager.isHighScore) {
+		audio.PlayOneShot(victorySnd, 1.0f);
 		yield WaitForSeconds(0.5f);
 		skyManager.LookAtRainbow();
 		skyManager.ShowRainbow();
