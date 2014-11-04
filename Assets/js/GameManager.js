@@ -694,6 +694,7 @@ function Cleanup () {
 function BeginGame() {
 	line = 0;
 	wordLabelContainer.Reset();
+	skyManager.ZoomOut();
 	skyManager.LookAtTerrain();
 	skyManager.HideRainbow();
 	
