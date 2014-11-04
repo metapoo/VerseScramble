@@ -91,8 +91,10 @@ class ShowVerseSetApiHandler(BaseHandler, ApiMixin):
 
         if verseset is None:
             self.return_error("verse set is not found")
-        
-        verses_json = [verse.json() for verse in verseset.sorted_verses()]
+
+        verses = verseset.sorted_verses()
+
+        verses_json = [verse.json() for verse in verses]
 
         high_score = 0
         difficulty = 0
