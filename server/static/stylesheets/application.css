@@ -64,8 +64,35 @@ table.profile img {
 }
 
 #languages a {
-  margin:2px 0px 2px 0px; 
-  width:113px;
+  overflow:hidden;
+  background-color:#e6e6e6;
+  display:inline-block;
+  width:160px;
+  height:27px;
+  border: 1px solid #eee;
+}
+
+#languages .selected {
+  background-color:#9999ff;
+}
+
+#languages div {
+  height:27px;
+  background-color:#99ff66;
+  position:absolute;
+  z-index:0;
+}
+
+#languages span {
+  width:250px; 
+  height:17px; 
+  padding: 5px; 
+  vertical-align: middle;
+  display:inline-block; 
+  text-align:left;
+  overflow:hidden;
+  position:relative;
+  z-index:1;
 }
 
 #top_buttons {
