@@ -1,14 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
 .verseset_show {
-  padding-bottom: 20px;
+  padding-bottom: 15px;
 }
 
 .vs_and_comm {
   background-color: #f3f3f3;
   padding: 12px 12px 12px 12px;
-  border: 1px solid #ddd;
-  
+  border: 1px solid #ddd; 
 }
 
 .vs_and_comm .verse {
@@ -186,8 +185,11 @@ form.centered {
   border-bottom: 1px solid #ccc;
 }
 
-.heading {
+.heading, .reference {
   font-family: Constantia, Georgia, serif;
+}
+ 
+.heading {
   font-size: 2.4em;
 }
 
