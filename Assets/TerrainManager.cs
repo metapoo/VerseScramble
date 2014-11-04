@@ -25,12 +25,18 @@ public class TerrainManager : MonoBehaviour
 	void SetCurrentProgress(float progress) {
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
+
+		if (progress == 0) {
+			ResetTerrainTexture(terrain.terrainData);
+		}
 	}
 
 	void SetRainProgress(float progress) {
 		rain.minEmission = progress*20.0f*(float)Mathf.Pow (3.0f,progress);
 		rain.maxEmission = rain.minEmission*1.5f;
 		rainProgress = progress;
+		audio.volume = Mathf.Min (0.5f, 0.001f*rain.minEmission);
+		audio.loop = (progress > 0);
 	}
 
 	void SetTargetProgress(float progress) {
@@ -114,7 +120,6 @@ public class TerrainManager : MonoBehaviour
 			
 		} else if (rainTarget != rainProgress) {
 			rainProgress = rainTarget;
-			SetCurrentProgress(rainProgress);
 			if (rainProgress == 3.0f) {
 				// reset the rain
 				rainTarget = 0.0f;
