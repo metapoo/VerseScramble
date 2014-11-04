@@ -33,7 +33,7 @@ class TranslationManager:
     
         if load_all and (language != 'en'):
             cls.load_all_translations()
-
+            
         translations[language] = {}
         transdict = translations[language]
         trans = list(Translation.collection.find({"language":language}))
@@ -54,10 +54,11 @@ class TranslationManager:
                 transdict[msgid.lower()]=msgstr
 
         
-        if (language == 'en'):
-            cls.translation_string_count = len(transdict)
-
         translations[language] = transdict
+
+        if cls.translation_string_count <= 1.0:
+            cls.translation_string_count = len(translations['en'])
+
         return transdict
     
     @classmethod

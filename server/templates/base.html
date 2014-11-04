@@ -120,8 +120,8 @@
 <a  class="" hreflang="{{code}}" rel="alternate" href="{{language_uri.replace("%s",code)}}">
 {% set pct = (1.0*len(translations.get(code,{}))/translation_string_count) %}
 <div {% if code == current_language %}class="selected"{% end %} style="width:{{160*pct}}px;"></div>
-<span >
-{{LANGUAGE_BY_CODE[code]}} ({{int(pct*100)}}%)
+<span {% if code == current_language %}class="selected"{% end %}  >
+{{LANGUAGE_BY_CODE[code]}} ({{int(pct*100)}}% )
 </span>
 </a> 
 {% end %}

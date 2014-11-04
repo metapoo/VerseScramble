@@ -73,12 +73,12 @@ table.profile img {
 }
 
 #languages .selected {
-  background-color:#9999ff;
+  background-color:#0078e7;
 }
 
 #languages div {
   height:27px;
-  background-color:#99ff66;
+  background-color:#99ff77;
   position:absolute;
   z-index:0;
 }
@@ -94,6 +94,11 @@ table.profile img {
   position:relative;
   z-index:1;
 }
+
+#languages span.selected {
+  color: #fff;
+}
+
 
 #top_buttons {
   z-index:2;
