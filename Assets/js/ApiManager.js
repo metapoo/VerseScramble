@@ -250,7 +250,12 @@ class ApiManager extends MonoBehaviour {
 		}
 		
 		var data = www.text;
-		var apiData : Hashtable = JSONUtils.ParseJSON(data);
+		try {
+			var apiData : Hashtable = JSONUtils.ParseJSON(data);
+		} catch (err) {
+			errorHandler();
+			return;
+		}
 		var status = apiData["status"];
 		if (status == "OK") {
 			resultData = apiData["result"];
