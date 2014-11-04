@@ -17,6 +17,15 @@ class CommentaryMixin:
     def has_commentary(self):
         return self.has_key("commentary_id")
 
+    def has_commentary_text(self):
+        text = self.get_commentary_text()
+        if text is None:
+            return False
+        text = text.strip()
+        if text == "":
+            return False
+        return True
+
     def set_commentary_text(self, text):
         commentary = self.commentary()
         if commentary is None:

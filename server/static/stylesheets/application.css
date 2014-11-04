@@ -1,5 +1,23 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+.verseset_show {
+  padding-bottom: 20px;
+}
+
+.vs_and_comm {
+  background-color: #f3f3f3;
+  padding: 12px 12px 12px 12px;
+  border: 1px solid #ddd;
+  
+}
+
+.vs_and_comm .verse {
+  border: 1px solid #ddd;
+  padding: 8px;
+  background-color: #fff;
+  margin-top:8px;
+}
+
 label.example, span.example {
   color: #666;
   font-size: 0.9em;
@@ -79,9 +97,17 @@ body h1, body h2,body h3,body h4 {
   margin-bottom: 0.15em;
 }
 
+.vs_and_comm .commentary_text h1, .vs_and_comm .commentary_text h2, .vs_and_comm .commentary_text h3, .vs_and_comm .commentary_text h4 {
+  margin-top: 0.0em;
+}
+
 #device_badges img {
   height: 45px;
   padding: 0px 10px 0px 10px;
+}
+
+.verse .reference {
+  font-weight: bold;
 }
 
 textarea#message {
@@ -146,9 +172,6 @@ form.centered {
   float:right;
 }
 
-.verseset_show {
-  padding-bottom: 20px;
-}
 
 .verseset_show .links {
   padding-top: 4px;

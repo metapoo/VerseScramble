@@ -1,0 +1,28 @@
+<div class="verse">
+<div ><span class="reference" >{{i+1}}. {{v['reference'] }}</span>
+
+{% if v.has_key('version') %}
+({{v['version']}})
+{% end %}
+</div>
+
+<div class="verse_text">{{v['text']}}</div>
+<div class="links">
+
+<a class="link" href="/verse/play/{{v._id}}">{{gt("Practice Verse").lower()}}</a>
+
+{% if user and ((verseset['user_id'] == user._id) or user.is_admin()) %}
+ |  <a class="link" href="/verse/edit/{{v._id}}">{{gt("edit")}}</a> |
+ <a class="link" onclick="return vr.confirm_delete();" href="/verse/remove/{{v._id}}">{{gt("remove")}}</a> |
+
+{% if i > 0 %}
+ <a class="pure-button button-xsmall" onclick="vr.move_verse('up','{{v._id}}'); return false;" href="/verse/moveup/{{v._id}}">↑</a> &nbsp;
+{% end %}
+
+{% if i < (len(verses)) %}
+ <a class="pure-button button-xsmall" onclick="vr.move_verse('down','{{v._id}}'); return false;" href="/verse/movedown/{{v._id}}">↓</a> &nbsp;
+{% end %}
+
+{% end %}
+</div>
+</div>
