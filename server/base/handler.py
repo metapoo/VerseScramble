@@ -270,6 +270,9 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
     def get_int_argument(self, key, default=0):
         arg = self.get_argument(key, default)
+        if type(arg) is basestring:
+            args = args.replace("/","")
+
         arg = int(arg)
         return arg
 
