@@ -268,7 +268,10 @@ function setWord(w : String) {
 }
 
 function SyncFontSize() {
-	var fontSize : int = 80.0f*gameManager.wordScale;
+	var fontSize : int = 75.0f;
+	if (SceneSetup.isPhone) {
+		fontSize = 90.0f;
+	}
 	SetFontSize(fontSize);
 }
 
@@ -284,7 +287,7 @@ function ResetBubble() {
 	var lsize = label.renderer.bounds.size;
 	var textWidth : float = lsize.x;
 	var textHeight : float  = lsize.y;
-	var padding : Vector2 = new Vector2(0,textHeight*0.5f);
+	var padding : Vector2 = new Vector2(0,textHeight*0.4f);
 	var l : float = textWidth;
 	var h : float = textHeight+2*padding.y;
 	
