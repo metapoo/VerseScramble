@@ -183,7 +183,7 @@ function EndGameWindow () {
 	
     if (!scoreManager.WasVerseMastered()) {
 		description = String.Format(gt("You made {0} mistakes"), scoreManager.mistakes);
-	} else if (scoreManager.highScore == scoreManager.score) {
+	} else if (scoreManager.isHighScore) {
 		description = String.Format(gt("New high score {0}!"), scoreManager.score);
 	} 
 	

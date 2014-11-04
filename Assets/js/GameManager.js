@@ -114,7 +114,7 @@ function CanShowSolution() {
 }
 
 function HandleCountTimeFinished() {
-	if (scoreManager.isHighScore) {
+	if (scoreManager.isHighScore && scoreManager.WasVerseMastered()) {
 		audio.PlayOneShot(victorySnd, 1.0f);
 		yield WaitForSeconds(0.5f);
 		skyManager.LookAtRainbow();
