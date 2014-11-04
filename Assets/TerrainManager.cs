@@ -26,9 +26,6 @@ public class TerrainManager : MonoBehaviour
 		UpdateTerrainTexture(terrain.terrainData, progress);
 		currentProgress = progress;
 
-		if (progress == 0) {
-			ResetTerrainTexture(terrain.terrainData);
-		}
 	}
 
 	void SetRainProgress(float progress) {
