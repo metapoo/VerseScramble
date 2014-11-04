@@ -1,7 +1,7 @@
 {% if commentary_parent.has_commentary() %}
 {% set commentary_text = commentary_parent.get_commentary_text() %}
 {% if commentary_text %}
-<div class="commentary_text pad_bottom">
+<div class="commentary_text">
 {% from verserain.utils.text import remove_script %}
 {% raw remove_script(commentary_text) %}
 </div>
