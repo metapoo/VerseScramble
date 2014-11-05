@@ -37,7 +37,7 @@ function Metadata() : Hashtable {
 
 function SetVerseSet(vs : VerseSet) {
 	verseset = vs;
-	label.text = String.Format("{0}", vs.setname);
+	label.text = String.Format("{0} ({1})", vs.setname, vs.verseCount);
 }
 
 function Highlight() {
