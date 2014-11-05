@@ -27,8 +27,8 @@ function ZoomOut() {
 }
 
 function Start () {
-	bgCamCam.fieldOfView = 4;
-	
+	bgCamCam.fieldOfView = 50;
+	bgCamera.rotation = new Quaternion.Euler(-25,0,0);
 	rainbow.active = false;
 }
 

@@ -6,6 +6,7 @@
 <div class="pad_bottom subnav">
         <a class="pure-button {% if selected_subnav=="popular" %}pure-button-primary{% end %}" href="/versesets/popular/{{language_code}}">{{gt("Popular")}}</a>
         <a class="pure-button {% if selected_subnav=="new" %}pure-button-primary{% end %}" href="/versesets/new/{{language_code}}">{{gt("Recent")}}</a>
+        <a class="pure-button {% if selected_subnav=="top" %}pure-button-primary{% end %}" href="/versesets/top/{{language_code}}">{{gt("Top")}}</a>
 <form style="display:inline;padding:7px 0px 0px 5px;">
 &nbsp; {{gt("Language:")}} &nbsp; <select name="language" onchange="location.href='/versesets/{{selected_subnav}}/'+this.value;">
 <option value="all" {% if language_code.lower() == "all" %}selected {% end %}>All Languages</option>

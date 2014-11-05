@@ -456,7 +456,7 @@ class ListVerseSetHandler(BaseHandler):
 
         args = {}
         
-        if (option in ("new","popular")):
+        if (option in ("new","popular","top")):
             template_name = "verseset/list.html"
             selected_nav = "verse sets"
             if (language_code.lower() != "all") and (language_code):
@@ -470,7 +470,9 @@ class ListVerseSetHandler(BaseHandler):
                 versesets = versesets.sort("_id",pymongo.DESCENDING)
             elif option == "popular":
                 versesets = versesets.sort("hotness",pymongo.DESCENDING)
-            
+            elif option == "top":
+                versesets = versesets.sort("play_count",pymongo.DESCENDING)
+
             base_url = "/versesets/%s/%s" % (option, language_code)
         else:
             template_name = "profile/versesets.html"

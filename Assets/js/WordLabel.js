@@ -41,6 +41,12 @@ function GetPercentFell() : float {
 	var y : float = transform.position.y;
 	var range : float = (maxY - minY)*.8f;
 	var pct : float = (maxY - y) / range;
+	var v : float = rigidbody2D.velocity.magnitude;
+	
+	//Debug.Log(" v = " + v + " pct = " + pct + " y = " + y + " minY = " + minY);
+	
+	if (v < 0.2f) return 1.0f;
+	
 	if (pct < 0) pct = 0;
 	if (pct > 1) pct = 1;
 	return pct;
@@ -475,7 +481,10 @@ function returnToVerse () {
 	gotoVerse = true;
 	
 	startTime = Time.time;
+	
+	gameManager.HandleWordInactive(this);
 	gameManager.nextWord();
+	
 }
 
 function HintAt() {
@@ -494,7 +503,7 @@ function Blink() {
 	SetColor(Color.white);
 }
 
-function OnMouseDown() { 
+function OnMouseDown() : IEnumerator { 
 	/*
     var ray : Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     var hit : RaycastHit2D = Physics2D.GetRayIntersection(ray,Mathf.Infinity);
@@ -525,6 +534,12 @@ function OnMouseDown() {
 		scoreCredited = dScore;
 		returnToVerse();
 	} else {
+		var wordLabel : WordLabel = gameManager.CheckForActiveDuplicate(this);
+		if (wordLabel != null) {
+			wordLabel.OnMouseDown();
+			return;
+		}
+		
 		str = scoreManager.HandleWordWrong();
 		gameManager.HandleWordWrong();
 		SetColor(Color(0.8,0.3,0.3,1.0));

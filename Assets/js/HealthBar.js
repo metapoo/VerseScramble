@@ -16,15 +16,15 @@ function IsEmpty() {
 }
 
 function IsRed() {
-	return targetPercentage < 0.33f;
+	return targetPercentage < 0.50f;
 }
 
 function IsYellow() {
-	return targetPercentage < 0.66f;
+	return targetPercentage < 1.00f;
 }
 
 function IsGreen() {
-	return targetPercentage >= 0.66f;
+	return targetPercentage >= 1.00f;
 }
 
 function SetColor(color : Color) {
