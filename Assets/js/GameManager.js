@@ -810,6 +810,16 @@ function SwapWords(index1:int, index2:int) {
 	wordLabels[index2] = word1;
 }
 
+function OrderedIndexOfWord(wordLabel : WordLabel) : int {
+	
+	for (var i : int = wordLabels.length-1;i>= 0;i--) {
+		var wLabel : WordLabel = wordLabels[i];
+		if (wLabel == wordLabel) return i;
+	}
+	
+	return -1;
+}
+
 function scrambleWordLabels() {
 	scrambledWordLabels = new Array();
 	for (var i : int=0;i<wordLabels.length;i++) {
@@ -825,11 +835,16 @@ function scrambleWordLabels() {
 
   	// While there remain elements to shuffle...
   	while (0 != currentIndex) {
-
     	// Pick a remaining element...
     	randomIndex = (currentIndex - g) + Mathf.Floor(Random.RandomRange(0,1.0f) * g);
     	if (randomIndex < 0) randomIndex = 0;
     	currentIndex -= 1;
+		var realIndex : int = OrderedIndexOfWord(scrambledWordLabels[currentIndex]);
+		// don't let words get too far away
+		if (Mathf.Abs(realIndex - currentIndex) > g*2) {
+			Debug.Log("skip swap, real index: " + realIndex + " curIndex: " + currentIndex);
+			continue;
+		}
 
     	// And swap it with the current element.
     	temporaryValue = scrambledWordLabels[currentIndex];
