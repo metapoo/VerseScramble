@@ -14,15 +14,27 @@ class TranslationManager:
         return len(cls.translations[cls.current_language]) * 1.0 / (cls.translation_string_count * 1.0)
 
     @classmethod
+    def load_all_translations(cls):
+        from verserain.verse.language import LANGUAGE_CODES
+        cls.load_translation('en')
+        for code in LANGUAGE_CODES:
+            cls.load_translation(code)
+
+    @classmethod
     def load_translation(cls, language, force=False):
         
         translations = cls.translations
+
+        if cls.translation_string_count <= 1.0:
+            if translations.has_key('en'):
+                cls.translation_string_count = len(translations['en'])
+
         if translations.has_key(language) and not force:
             return translations[language]
 
         if not translations.has_key('en') and (language != 'en'):
             cls.load_translation('en')
-            
+    
         translations[language] = {}
         transdict = translations[language]
         trans = list(Translation.collection.find({"language":language}))
@@ -43,10 +55,8 @@ class TranslationManager:
                 transdict[msgid.lower()]=msgstr
 
         
-        if (language == 'en'):
-            cls.translation_string_count = len(transdict)
-
         translations[language] = transdict
+
         return transdict
     
     @classmethod

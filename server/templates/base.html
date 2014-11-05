@@ -115,10 +115,6 @@
 </table>
 
 <div id="languages">
-{% from verserain.verse.language import LANGUAGE_CODES, LANGUAGE_BY_CODE %}
-{% for code in LANGUAGE_CODES %}
-<a class="pure-button {% if code == current_language %}pure-button-primary{% end %}" hreflang="{{code}}" rel="alternate" href="{{language_uri.replace("%s",code)}}">{{LANGUAGE_BY_CODE[code]}}</a>
-{% end %}
 </div>
 
 </div>
@@ -153,7 +149,7 @@ Hope of Glory Publishing LLC
 </div>
 </div>
 
-<script src="/javascripts/application.js?v=1"></script>
+<script src="/javascripts/application.js?v=1.1"></script>
 <script src="/javascripts/jquery-2.1.1.min.js"></script>
 <script>
 {% block script_content %}

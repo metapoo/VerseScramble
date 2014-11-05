@@ -254,6 +254,8 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             self.set_secure_cookie('selected_nav',selected_nav)
         
         kwargs['selected_nav'] = selected_nav
+        kwargs['translations'] = self.translations
+        kwargs['translation_string_count'] = self.translation_string_count
 
         super(BaseHandler, self).render(*args, **kwargs)
 
