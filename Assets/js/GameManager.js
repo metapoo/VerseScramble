@@ -71,6 +71,7 @@ static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
 static var challengeModeState : int = -1;
+static var activeWordLabels : Array = new Array();
 
 private var windowRect : Rect;
 
@@ -686,6 +687,7 @@ function Cleanup () {
 	for (wObject in wordLabels) {
 		Destroy(wObject.gameObject);
 	}
+	activeWordLabels.Clear();
 	wordLabels.Clear();
 	scrambledWordLabels.Clear();
 	needToRecordPlay = true;
@@ -713,38 +715,42 @@ function BeginGame() {
 	AnimateIntro();
 }
 
-function UpdateGravityScale() : float {
+function GetMaxActiveWordIndex() : int {
 	var maxActiveWords : int = GetMaxWordsActive();
 	var maxWords : int = scrambledWordLabels.length;
 	if ((wordIndex + maxActiveWords) < maxWords) {
 		maxWords = wordIndex + maxActiveWords;
 	}
+	return maxWords;
+}
+
+function UpdateGravityScale() : float {
 	
 	var fellDownEnough : float = 0.0;
-	var numWords : float = maxWords - wordIndex;
 	
-	if (wordIndex >= maxWords) return;
-	if (wordIndex < 0) return;
+	if (wordIndex <= 0) return;
+	if (activeWordLabels.length == 0) return;
+	if (wordIndex >= wordLabels.length) return;
 	
-	for (var i : int = wordIndex;i<maxWords;i++) {
-		var wordLabel : WordLabel = scrambledWordLabels[i];
+	var currWordLabel : WordLabel = wordLabels[wordIndex];
+	
+	for (var wordLabel : WordLabel in activeWordLabels) {
 		fellDownEnough += wordLabel.GetPercentFell();
 	}
 	
+	fellDownEnough = 0.5f*currWordLabel.GetPercentFell() + 0.5f*fellDownEnough;
+			
 	if (fellDownEnough == 0) {
-		fellDownEnough = 1;
+		fellDownEnough = .1;
 	}
-		
+	
 	var pct : float = 1.0f;
 	
-	if ((numWords > 0) && (wordIndex > 0)) {
-		pct = fellDownEnough / numWords;
-	} 
+	pct = fellDownEnough / activeWordLabels.length;
 	
-	var gravity : float = 0.1 / (pct*pct);
-	
-	for (i = wordIndex;i<maxWords;i++) {
-		wordLabel = scrambledWordLabels[i];
+	var gravity : float = 0.1 / (pct);
+	Debug.Log(" pct = " + pct + " gravity = " + gravity);
+	for (var wordLabel : WordLabel in activeWordLabels) {
 		wordLabel.rigidbody2D.gravityScale = gravity;
 	}
 	
@@ -913,28 +919,25 @@ function SetupVerse() {
 	yield WaitForSeconds(2.5f);
 	
 	numWordsReleased = 0;	
-	var numWordsActive = 0;
 	var groupSize = GetGroupSize();
 
 	var dt = 0.1f;
 	
 	while (numWordsReleased < wordLabels.length) {
-		numWordsActive = (numWordsReleased - wordIndex);
-		
 		// don't allow more than maxWordsActive words on screen at the same time
-		while (numWordsActive >= maxWordsActive) {
-			yield WaitForSeconds(0.1f);
-			numWordsActive = (numWordsReleased - wordIndex);
+		while (activeWordLabels.length >= maxWordsActive) {
+			yield WaitForSeconds(1.0f);
+			
 		}		
-		
-		numWordsReleased = releaseWords(numWordsReleased, 1);
-		numWordsActive = (numWordsReleased - wordIndex);
+		if (showingSolution || finished) {
+			break;
+		}
+		numWordsReleased = ReleaseWords(numWordsReleased, 1);
 		
 		yield WaitForSeconds(dt);
 
 	}
 
-	
 	numWordsReleased = wordLabels.length;
 	
 }
@@ -967,7 +970,31 @@ function GetGroupSize() {
 	return groupSize;
 }
 
-function releaseWords(index: int, numWords : int) {
+function IndexOfActiveWord(wordLabel:WordLabel) : int {
+	var index : int = 0;
+	var found : boolean = false;
+	for (var wLabel : WordLabel in activeWordLabels) {
+		if (wLabel == wordLabel) {
+			found = true;
+			break;
+		}
+		index += 1;
+	}
+	if (found) {
+		return index;
+	}
+	return -1;
+}
+
+function HandleWordInactive(wordLabel:WordLabel) {
+	var index : int = IndexOfActiveWord(wordLabel);
+	if (index >= 0) {
+		Debug.Log("remove " + wordLabel.word);
+		activeWordLabels.RemoveAt(index);
+	}
+}
+
+function ReleaseWords(index: int, numWords : int) {
  	//Debug.Log("release words index = " + index);
  
 	var c : int  = 0;
@@ -977,6 +1004,7 @@ function releaseWords(index: int, numWords : int) {
 		var h = wordObject.boxCollider2D().size.y;
 		wordObject.transform.position.y = screenBounds.y+h*2;
 		wordObject.rigidbody2D.isKinematic = false;
+		activeWordLabels.push(wordObject);
 		c += 1;	
 		if (c == numWords) {
 			break;
@@ -1035,13 +1063,12 @@ function ShowHintFromButton() {
 
 function ShowHint() {
 	wordHinted = true;	
-	var wObject : WordLabel;
-	
-	for (wObject in wordLabels) {
-		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
-			wObject.HintAt();
-		}
+	if ((wordIndex <= 0) || (wordIndex >= wordLabels.length)) return;
+	var wObject : WordLabel = wordLabels[wordIndex];
+	if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
+		wObject.HintAt();
 	}
+	
 }
 
 function Update () {

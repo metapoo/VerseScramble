@@ -475,7 +475,10 @@ function returnToVerse () {
 	gotoVerse = true;
 	
 	startTime = Time.time;
+	
+	gameManager.HandleWordInactive(this);
 	gameManager.nextWord();
+	
 }
 
 function HintAt() {
