@@ -119,12 +119,13 @@ function DoLogin(sessionKey : String, afterLogin : Function) {
 			afterLogin();
 		}
 	};
-		
+	
 	var apiManager : ApiManager = ApiManager.GetInstance();
 	
 	apiManager.CallApi("login/login",
 		new Hashtable({"session_key":sessionKey}), 
 		new Hashtable({"handler":onLogin,
+					   "errorHandler":null,
 					   "cacheEnabled":false,
 					   "protocol":"https",
 					   "method":"post"}));

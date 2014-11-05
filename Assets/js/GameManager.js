@@ -45,6 +45,7 @@ var wordScale : float;
 var setProgressLabel : Text;
 var updateCount : int = 0;
 var line : int = 0;
+var separators : String[] = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -71,6 +72,7 @@ static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
 static var challengeModeState : int = -1;
+static var activeWordLabels : Array = new Array();
 
 private var windowRect : Rect;
 
@@ -197,21 +199,43 @@ function HandleWordWrong() {
 	if (finished) return;
 	
 }
-	
-function ExplodeWords() {
-	
-	for (var wordLabel : WordLabel in wordLabels) {
-		wordLabel.hinting = false;
-		wordLabel.Explode();
+
+function CheckWordSubsetMatches(wLabel1 : WordLabel, wLabel2 : WordLabel) : boolean {
+	var minLength :int = Mathf.Min(wLabel1.word.Length, wLabel2.word.Length);
+	for (var i:int =0;i<minLength;i++) {
+		var c1 : String = wLabel1.word[i].ToString();
+		var c2 : String = wLabel2.word[i].ToString();
+		// ignore separators
+		var hasSep : boolean = false;
+		if (c1 != c2) {
+			for (var s:String in separators) {
+				if ((s == c1) || (s == c2)) {
+					hasSep = true;
+					break;
+				}
+			}
+			if (hasSep) {
+				continue;
+			}
+			return false;
+		}
 	}
-	
-	if (!GetChallengeModeEnabled()) {
-		scoreManager.maxTime += wordIndex;
-	}
-	
-	wordIndex = 0;
-	currentWord = words[wordIndex];
+	return true;
 }
+
+function CheckForActiveDuplicate(wordLabel : WordLabel) : WordLabel {
+	
+	var wLabel : WordLabel = wordLabels[wordIndex];
+	
+	if (wLabel == wordLabel) return null;
+	
+	if (CheckWordSubsetMatches(wLabel, wordLabel)) {
+		return wLabel;
+	}
+	
+	return null;
+}
+
 
 function GetProgress() : float {
 	var verseProgress : float = 0.0f;
@@ -472,7 +496,6 @@ function SplitVerse(verse : String) {
 	//Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
-	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
@@ -528,7 +551,7 @@ function SplitVerse(verse : String) {
 		if (i < (verse.Length-1)) {
 			n = verse[i+1];
 		}
-		for (var s : String in seps) {
+		for (var s : String in separators) {
 			if (isSeparator(s,c,n)	) {
 				if ((clause != "") && (clause != " ")) {
 					//Debug.Log("process " + clause);
@@ -559,7 +582,7 @@ function SplitVerse(verse : String) {
 	var isCharacterBased = verseManager.IsCharacterBased(language) && (spaceSepRatio > 1.5f);
 	
 	var phraseHasPunctuation = function(phrase : String) {
-		for (var sc in seps) {
+		for (var sc in separators) {
 			if (phrase.Contains(sc)) {
 				return true;
 			}
@@ -686,6 +709,7 @@ function Cleanup () {
 	for (wObject in wordLabels) {
 		Destroy(wObject.gameObject);
 	}
+	activeWordLabels.Clear();
 	wordLabels.Clear();
 	scrambledWordLabels.Clear();
 	needToRecordPlay = true;
@@ -713,38 +737,48 @@ function BeginGame() {
 	AnimateIntro();
 }
 
-function UpdateGravityScale() : float {
+function GetMaxActiveWordIndex() : int {
 	var maxActiveWords : int = GetMaxWordsActive();
 	var maxWords : int = scrambledWordLabels.length;
 	if ((wordIndex + maxActiveWords) < maxWords) {
 		maxWords = wordIndex + maxActiveWords;
 	}
+	return maxWords;
+}
+
+function UpdateGravityScale() : float {
 	
 	var fellDownEnough : float = 0.0;
-	var numWords : float = maxWords - wordIndex;
 	
-	if (wordIndex >= maxWords) return;
-	if (wordIndex < 0) return;
+	if (wordIndex <= 0) return;
+	if (activeWordLabels.length == 0) return;
+	if (wordIndex >= wordLabels.length) return;
 	
-	for (var i : int = wordIndex;i<maxWords;i++) {
-		var wordLabel : WordLabel = scrambledWordLabels[i];
+	var currWordLabel : WordLabel = wordLabels[wordIndex];
+	
+	for (var wordLabel : WordLabel in activeWordLabels) {
 		fellDownEnough += wordLabel.GetPercentFell();
 	}
+	var f :float = currWordLabel.GetPercentFell();
 	
+			
 	if (fellDownEnough == 0) {
-		fellDownEnough = 1;
+		fellDownEnough = .1;
 	}
-		
+	
 	var pct : float = 1.0f;
 	
-	if ((numWords > 0) && (wordIndex > 0)) {
-		pct = fellDownEnough / numWords;
-	} 
-	
+	pct = fellDownEnough / activeWordLabels.length;
+
+	if (f < pct) {
+		pct = 0.5f*f + 0.5f*pct;
+	}
+	if (pct < .1f) {
+		pct = .1f;
+	}
 	var gravity : float = 0.1 / (pct*pct);
-	
-	for (i = wordIndex;i<maxWords;i++) {
-		wordLabel = scrambledWordLabels[i];
+	//Debug.Log(" pct = " + pct + " gravity = " + gravity);
+	for (var wordLabel : WordLabel in activeWordLabels) {
 		wordLabel.rigidbody2D.gravityScale = gravity;
 	}
 	
@@ -758,7 +792,7 @@ function GetMaxWordsActive() {
 		case Difficulty.Medium:
 			return 7;
 		case Difficulty.Hard:
-			return 10;
+			return 12;
 	}
 	return 10;
 }
@@ -773,6 +807,16 @@ function SwapWords(index1:int, index2:int) {
 	
 	wordLabels[index1] = word2;
 	wordLabels[index2] = word1;
+}
+
+function OrderedIndexOfWord(wordLabel : WordLabel) : int {
+	
+	for (var i : int = wordLabels.length-1;i>= 0;i--) {
+		var wLabel : WordLabel = wordLabels[i];
+		if (wLabel == wordLabel) return i;
+	}
+	
+	return -1;
 }
 
 function scrambleWordLabels() {
@@ -790,11 +834,16 @@ function scrambleWordLabels() {
 
   	// While there remain elements to shuffle...
   	while (0 != currentIndex) {
-
     	// Pick a remaining element...
     	randomIndex = (currentIndex - g) + Mathf.Floor(Random.RandomRange(0,1.0f) * g);
     	if (randomIndex < 0) randomIndex = 0;
     	currentIndex -= 1;
+		var realIndex : int = OrderedIndexOfWord(scrambledWordLabels[currentIndex]);
+		// don't let words get too far away
+		if (Mathf.Abs(realIndex - currentIndex) > g*2) {
+			Debug.Log("skip swap, real index: " + realIndex + " curIndex: " + currentIndex);
+			continue;
+		}
 
     	// And swap it with the current element.
     	temporaryValue = scrambledWordLabels[currentIndex];
@@ -913,28 +962,25 @@ function SetupVerse() {
 	yield WaitForSeconds(2.5f);
 	
 	numWordsReleased = 0;	
-	var numWordsActive = 0;
 	var groupSize = GetGroupSize();
 
 	var dt = 0.1f;
 	
 	while (numWordsReleased < wordLabels.length) {
-		numWordsActive = (numWordsReleased - wordIndex);
-		
 		// don't allow more than maxWordsActive words on screen at the same time
-		while (numWordsActive >= maxWordsActive) {
-			yield WaitForSeconds(0.1f);
-			numWordsActive = (numWordsReleased - wordIndex);
+		while (activeWordLabels.length >= maxWordsActive) {
+			yield WaitForSeconds(1.0f);
+			
 		}		
-		
-		numWordsReleased = releaseWords(numWordsReleased, 1);
-		numWordsActive = (numWordsReleased - wordIndex);
+		if (showingSolution || finished) {
+			break;
+		}
+		numWordsReleased = ReleaseWords(numWordsReleased, 1);
 		
 		yield WaitForSeconds(dt);
 
 	}
 
-	
 	numWordsReleased = wordLabels.length;
 	
 }
@@ -967,7 +1013,31 @@ function GetGroupSize() {
 	return groupSize;
 }
 
-function releaseWords(index: int, numWords : int) {
+function IndexOfActiveWord(wordLabel:WordLabel) : int {
+	var index : int = 0;
+	var found : boolean = false;
+	for (var wLabel : WordLabel in activeWordLabels) {
+		if (wLabel == wordLabel) {
+			found = true;
+			break;
+		}
+		index += 1;
+	}
+	if (found) {
+		return index;
+	}
+	return -1;
+}
+
+function HandleWordInactive(wordLabel:WordLabel) {
+	var index : int = IndexOfActiveWord(wordLabel);
+	if (index >= 0) {
+		//Debug.Log("remove " + wordLabel.word);
+		activeWordLabels.RemoveAt(index);
+	}
+}
+
+function ReleaseWords(index: int, numWords : int) {
  	//Debug.Log("release words index = " + index);
  
 	var c : int  = 0;
@@ -977,6 +1047,7 @@ function releaseWords(index: int, numWords : int) {
 		var h = wordObject.boxCollider2D().size.y;
 		wordObject.transform.position.y = screenBounds.y+h*2;
 		wordObject.rigidbody2D.isKinematic = false;
+		activeWordLabels.push(wordObject);
 		c += 1;	
 		if (c == numWords) {
 			break;
@@ -1035,13 +1106,12 @@ function ShowHintFromButton() {
 
 function ShowHint() {
 	wordHinted = true;	
-	var wObject : WordLabel;
-	
-	for (wObject in wordLabels) {
-		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
-			wObject.HintAt();
-		}
+	if ((wordIndex <= 0) || (wordIndex >= wordLabels.length)) return;
+	var wObject : WordLabel = wordLabels[wordIndex];
+	if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
+		wObject.HintAt();
 	}
+	
 }
 
 function Update () {
