@@ -45,6 +45,8 @@ var wordScale : float;
 var setProgressLabel : Text;
 var updateCount : int = 0;
 var line : int = 0;
+//var separators = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
+var separators : String[] = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -202,7 +204,20 @@ function HandleWordWrong() {
 function CheckWordSubsetMatches(wLabel1 : WordLabel, wLabel2 : WordLabel) : boolean {
 	var minLength :int = Mathf.Min(wLabel1.word.Length, wLabel2.word.Length);
 	for (var i:int =0;i<minLength;i++) {
-		if (wLabel1.word[i] != wLabel2.word[i]) {
+		var c1 : String = wLabel1.word[i].ToString();
+		var c2 : String = wLabel2.word[i].ToString();
+		// ignore separators
+		var hasSep : boolean = false;
+		if (c1 != c2) {
+			for (var s:String in separators) {
+				if ((s == c1) || (s == c2)) {
+					hasSep = true;
+					break;
+				}
+			}
+			if (hasSep) {
+				continue;
+			}
 			return false;
 		}
 	}
@@ -482,7 +497,6 @@ function SplitVerse(verse : String) {
 	//Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : Array = new Array();
 	var phraseArray : Array = new Array();
-	var seps = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
@@ -538,7 +552,7 @@ function SplitVerse(verse : String) {
 		if (i < (verse.Length-1)) {
 			n = verse[i+1];
 		}
-		for (var s : String in seps) {
+		for (var s : String in separators) {
 			if (isSeparator(s,c,n)	) {
 				if ((clause != "") && (clause != " ")) {
 					//Debug.Log("process " + clause);
@@ -569,7 +583,7 @@ function SplitVerse(verse : String) {
 	var isCharacterBased = verseManager.IsCharacterBased(language) && (spaceSepRatio > 1.5f);
 	
 	var phraseHasPunctuation = function(phrase : String) {
-		for (var sc in seps) {
+		for (var sc in separators) {
 			if (phrase.Contains(sc)) {
 				return true;
 			}
