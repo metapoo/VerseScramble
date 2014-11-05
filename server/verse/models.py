@@ -73,6 +73,7 @@ class VerseSet(BaseModel, CommentaryMixin):
             Index("hotness",unique=False),
             Index("verse_count",unique=False),
             Index("published",unique=False),
+            Index("play_count",unique=False),
         )
 
     def is_published(self):
@@ -120,7 +121,7 @@ class VerseSet(BaseModel, CommentaryMixin):
         days = (age / 86400.0)
         if days < 1:
             days = 1
-        time_decay = 1.0 / (pow(days,1.2))
+        time_decay = 1.0 / (pow(days,1.1))
         hotness = self.play_count() * time_decay
         self["hotness"] = hotness
             
