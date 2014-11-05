@@ -210,12 +210,15 @@ function CheckWordSubsetMatches(wLabel1 : WordLabel, wLabel2 : WordLabel) : bool
 }
 
 function CheckForActiveDuplicate(wordLabel : WordLabel) : WordLabel {
-	for (var wLabel : WordLabel in activeWordLabels) {
-		if (wLabel == wordLabel) continue;
-		if (CheckWordSubsetMatches(wLabel, wordLabel)) {
-			return wLabel;
-		}
+	
+	var wLabel : WordLabel = wordLabels[wordIndex];
+	
+	if (wLabel == wordLabel) return null;
+	
+	if (CheckWordSubsetMatches(wLabel, wordLabel)) {
+		return wLabel;
 	}
+	
 	return null;
 }
 
@@ -761,7 +764,7 @@ function UpdateGravityScale() : float {
 		pct = .1f;
 	}
 	var gravity : float = 0.1 / (pct*pct);
-	Debug.Log(" pct = " + pct + " gravity = " + gravity);
+	//Debug.Log(" pct = " + pct + " gravity = " + gravity);
 	for (var wordLabel : WordLabel in activeWordLabels) {
 		wordLabel.rigidbody2D.gravityScale = gravity;
 	}
@@ -1001,7 +1004,7 @@ function IndexOfActiveWord(wordLabel:WordLabel) : int {
 function HandleWordInactive(wordLabel:WordLabel) {
 	var index : int = IndexOfActiveWord(wordLabel);
 	if (index >= 0) {
-		Debug.Log("remove " + wordLabel.word);
+		//Debug.Log("remove " + wordLabel.word);
 		activeWordLabels.RemoveAt(index);
 	}
 }
