@@ -198,21 +198,27 @@ function HandleWordWrong() {
 	if (finished) return;
 	
 }
-	
-function ExplodeWords() {
-	
-	for (var wordLabel : WordLabel in wordLabels) {
-		wordLabel.hinting = false;
-		wordLabel.Explode();
+
+function CheckWordSubsetMatches(wLabel1 : WordLabel, wLabel2 : WordLabel) : boolean {
+	var minLength :int = Mathf.Min(wLabel1.word.Length, wLabel2.word.Length);
+	for (var i:int =0;i<minLength;i++) {
+		if (wLabel1.word[i] != wLabel2.word[i]) {
+			return false;
+		}
 	}
-	
-	if (!GetChallengeModeEnabled()) {
-		scoreManager.maxTime += wordIndex;
-	}
-	
-	wordIndex = 0;
-	currentWord = words[wordIndex];
+	return true;
 }
+
+function CheckForActiveDuplicate(wordLabel : WordLabel) : WordLabel {
+	for (var wLabel : WordLabel in activeWordLabels) {
+		if (wLabel == wordLabel) continue;
+		if (CheckWordSubsetMatches(wLabel, wordLabel)) {
+			return wLabel;
+		}
+	}
+	return null;
+}
+
 
 function GetProgress() : float {
 	var verseProgress : float = 0.0f;
@@ -737,8 +743,8 @@ function UpdateGravityScale() : float {
 	for (var wordLabel : WordLabel in activeWordLabels) {
 		fellDownEnough += wordLabel.GetPercentFell();
 	}
+	var f :float = currWordLabel.GetPercentFell();
 	
-	fellDownEnough = 0.5f*currWordLabel.GetPercentFell() + 0.5f*fellDownEnough;
 			
 	if (fellDownEnough == 0) {
 		fellDownEnough = .1;
@@ -747,8 +753,14 @@ function UpdateGravityScale() : float {
 	var pct : float = 1.0f;
 	
 	pct = fellDownEnough / activeWordLabels.length;
-	
-	var gravity : float = 0.1 / (pct);
+
+	if (f < pct) {
+		pct = 0.5f*f + 0.5f*pct;
+	}
+	if (pct < .1f) {
+		pct = .1f;
+	}
+	var gravity : float = 0.1 / (pct*pct);
 	Debug.Log(" pct = " + pct + " gravity = " + gravity);
 	for (var wordLabel : WordLabel in activeWordLabels) {
 		wordLabel.rigidbody2D.gravityScale = gravity;
@@ -764,7 +776,7 @@ function GetMaxWordsActive() {
 		case Difficulty.Medium:
 			return 7;
 		case Difficulty.Hard:
-			return 10;
+			return 12;
 	}
 	return 10;
 }
