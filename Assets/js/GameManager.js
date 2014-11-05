@@ -45,7 +45,6 @@ var wordScale : float;
 var setProgressLabel : Text;
 var updateCount : int = 0;
 var line : int = 0;
-//var separators = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 var separators : String[] = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 
 public var needToSelectDifficulty : boolean = true;
