@@ -1,5 +1,3 @@
-namespace CSDEP
-{
 using UnityEngine;
 using System;
 using UnityEngine.UI;
@@ -66,5 +64,4 @@ public class LanguageButton:MonoBehaviour{
 	public void Update() {
 	}
 
-}
 }

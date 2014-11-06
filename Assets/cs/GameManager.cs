@@ -78,7 +78,9 @@ public class GameManager:MonoBehaviour{
 	public static float lastWordTime;
 	public static int challengeModeState = -1;
 	public static List<WordLabel> activeWordLabels = new System.Collections.Generic.List<WordLabel>();
-	
+
+	private static Hashtable langConfig = new Hashtable();
+
 	Rect windowRect;
 	
 	public static void SetChallengeModeEnabled(bool enabled) {
@@ -433,6 +435,13 @@ public class GameManager:MonoBehaviour{
 	}
 	
 	public IEnumerator Start() {
+		if (langConfig.Count == 0) {
+			langConfig.Add("en",new System.Collections.Generic.List<int>(new int[]{20,10,5}));
+			langConfig.Add("zh",new System.Collections.Generic.List<int>(new int[]{10,6,3}));
+			langConfig.Add("ko",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
+			langConfig.Add("ja",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
+		}
+
 		if (needToRecordPlay) {
 			StartCoroutine(RecordPlay());
 		}
@@ -510,17 +519,14 @@ public class GameManager:MonoBehaviour{
 	}
 		
 	public List<string> SplitVerse(string verse) {
-		Hashtable langConfig = new Hashtable();
-		langConfig.Add("en",new System.Collections.Generic.List<int>(new int[]{20,10,5}));
-		langConfig.Add("zh",new System.Collections.Generic.List<int>(new int[]{10,6,3}));
-		langConfig.Add("ko",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
-	    langConfig.Add("ja",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
+
 	    
 		string language = VerseManager.GetVerseLanguage();
 		bool isChinese = VerseManager.IsLanguageChinese(language);
 		
 		List<int> phraseLengths = (List<int>)langConfig["en"];
-		
+		Debug.Log ("lang config = " + JSONUtils.HashtableToJSON(langConfig));
+		Debug.Log ("lang config = " + langConfig.Count);
 		if (langConfig.Contains(language)) {
 			phraseLengths = (System.Collections.Generic.List<int>)langConfig[language];
 		} else {
@@ -544,10 +550,12 @@ public class GameManager:MonoBehaviour{
 		verse = Regex.Replace(verse, "\\(.*\\)","");
 		verse = Regex.Replace(verse, "\\（.*\\）","");
 		verse = Regex.Replace(verse, "\\[.*\\]","");
-		verse = Regex.Replace(verse, "」|「|『|』","");
+		//verse = Regex.Replace(verse, "」|「|『|』","");
 		verse = Regex.Replace(verse, "\n|\t|\r", " ");
 		verse = Regex.Replace(verse, "\\s+", " ");
-		
+
+		Debug.Log ("verse after regex filters = " + verse);
+
 		int i = 0;
 		bool languageIsWestern = VerseManager.IsLanguageWestern(language);
 	
