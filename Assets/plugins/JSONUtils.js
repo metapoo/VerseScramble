@@ -19,7 +19,7 @@ public class JSONUtils
 	private static var at : int;
 	
 	private static var ch : String;
-	
+	/*
 	private static var escapee = {
 		"\"": "\"",
 		"\\": "\\",
@@ -30,6 +30,9 @@ public class JSONUtils
 		"r": "\r",
 		"t": "\t"
 	};
+	*/
+	
+	private static var escapee2 = new Hashtable();
 	
 	private static var text : String;
 	
@@ -117,6 +120,18 @@ public class JSONUtils
 	
 	private static function string () : System.String
 	{
+		if (escapee2.Count == 0) {
+		                escapee2.Add("\"", "\"");
+escapee2.Add("\\", "\\");
+escapee2.Add("/", "/");
+escapee2.Add("b", "b");
+escapee2.Add("f", "\f");
+escapee2.Add("n", "\n");
+escapee2.Add("r", "\r");
+escapee2.Add("t", "\t");
+
+		}
+		
 		var hex : int;
 		var i : int;
 		var string : String = "";
@@ -149,9 +164,9 @@ public class JSONUtils
 						var m : char = uffff;
 						string += m;
 					}
-					else if(ch in escapee)
+					else if(escapee2.ContainsKey(ch))
 					{
-						string += escapee[ch];
+						string += escapee2[ch];
 					}
 					else
 					{
