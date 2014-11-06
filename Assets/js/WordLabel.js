@@ -193,7 +193,10 @@ function ShrinkLeftEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(-0.5f*dw,0,0), duration);
+	
+	//var endPos : Vector3 = bgMiddle.transform.localPosition + new Vector3(-0.5f*dw,0,0);
+	//AnimationManager.Translation(bgMiddle.transform, endPos, duration);
+	AnimationManager.GetInstance().TranslationBy(bgMiddle.transform, new Vector3(-0.5f*dw,0,0), duration);
 		
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
@@ -223,7 +226,11 @@ function ShrinkRightEdge(duration : float) {
 	
 	// scale middle to fill in gap, move right to compensate
 	AnimationManager.ScaleOverTime(bgMiddle.transform, endScale, duration);
-	AnimationManager.TranslationBy(bgMiddle.transform, new Vector3(0.5f*dw,0,0), duration);
+	
+	//var endPos : Vector3 = bgMiddle.transform.localPosition + new Vector3(0.5f*dw,0,0);
+	//AnimationManager.Translation(bgMiddle.transform, endPos, duration);
+
+	AnimationManager.GetInstance().TranslationBy(bgMiddle.transform, new Vector3(0.5f*dw,0,0), duration);
 	
 	yield WaitForSeconds(duration);
 	shrinkingEdges = false;
