@@ -1,8 +1,9 @@
+#pragma strict
 public var loginPanel : LoginPanel;
 public var curPanel : LoginPanel;
 public var loginLabel : Text;
 public var loginMode : boolean = true;
-var userPanel : UserPanel;
+public var userPanel : UserPanel;
 
 function ShowLogin() {
 	if (!loginMode) {

@@ -1,8 +1,10 @@
-var usernameField : InputField;
-var passwordField : InputField;
-var feedback : Text;
-var loginButton : LoginButton;
-var onLogin : Function;
+#pragma strict
+
+public var usernameField : InputField;
+public var passwordField : InputField;
+public var feedback : Text;
+public var loginButton : LoginButton;
+public var onLogin = function() {};
 
 function Start() {
 }
@@ -67,9 +69,16 @@ function SubmitLogin() {
 	var username = usernameField.value;
 	var password = passwordField.value;
 	var apiManager : ApiManager = ApiManager.GetInstance();
-	apiManager.CallApi("login/login",
-	new Hashtable({"username":username,"password":password}),
-	new Hashtable({"handler":HandleLogin, "method":"post", 
-	"cacheEnabled":false, "protocol":"https"}));
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("username",username);
+	arguments.Add("password",password);
+	
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleLogin);
+	options.Add("method","post");
+	options.Add("cacheEnabled",false);
+	options.Add("protocol","https");
+	
+	apiManager.CallApi("login/login",arguments,options);
 }
 
