@@ -11,19 +11,19 @@ public var healthLabel : Text;
 public var rectTransform : RectTransform;
 public var image : Image;
 
-function IsEmpty() {
+function IsEmpty() : boolean {
 	return targetPercentage == 0;
 }
 
-function IsRed() {
+function IsRed()  : boolean {
 	return targetPercentage < 0.50f;
 }
 
-function IsYellow() {
+function IsYellow()  : boolean {
 	return targetPercentage < 1.00f;
 }
 
-function IsGreen() {
+function IsGreen() : boolean  {
 	return targetPercentage >= 1.00f;
 }
 
@@ -31,7 +31,7 @@ function SetColor(color : Color) {
 	image.color = color;
 }
 
-function GetHeight() {
+function GetHeight() : float {
 	return rectTransform.sizeDelta[1];
 }
 
@@ -53,7 +53,7 @@ function SetProgress(p : float) {
 	}
 }
 
-function SetPercentage(p : float) {
+function SetPercentage(p : float) : IEnumerator {
 	//Debug.Log("set healthbar pct = " + p);
 	targetPercentage = p;
 	var endPercentage = targetPercentage;
@@ -75,7 +75,7 @@ function SetPercentage(p : float) {
 	while (t < 1.0) {
 		if (endPercentage != targetPercentage) {
 			// pct changed during animation, cancel it
-			return;
+			break;
 		}
 		t += Time.deltaTime * rate;
 		SetProgress(startPercentage + (endPercentage-startPercentage)*t);

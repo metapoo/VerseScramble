@@ -8,7 +8,7 @@ static function GetInstance() : DialogManager {
 	var instance : DialogManager;
 	if (go == null) {
 		go = new GameObject("DialogManager");
-    	instance = go.AddComponent(typeof(DialogManager));
+    	instance = go.AddComponent(DialogManager);
 	} else {
 	 	instance = go.GetComponent(DialogManager);
 	}

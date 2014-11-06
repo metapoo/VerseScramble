@@ -2,35 +2,30 @@
 
 import TextManager;
 
-public var showError : boolean = false;
-public var sndSelect : AudioClip;
-public var background : Transform;
 static public var stayInTitleScreen : boolean;
-
-private	var selectedDifficulty : Difficulty;
 
 function Awake() {
 	Application.targetFrameRate = 60;
 	var language : String = VerseManager.GetLanguage();
 	if (!TextManager.IsLoaded()) {
 		TextManager.LoadLanguageOffline(language);
-		TextManager.GetInstance().LoadLanguage(language, null);
+		var tm : TextManager = TextManager.GetInstance();
+		tm.LoadLanguage(language, null);
+	}
+}
+
+function LoadVerseSetsMenu() {
+	var us: UserSession = UserSession.GetUserSession();
+	if ((!us.verseId) && (!us.versesetId)) {			
+		Application.LoadLevel("versesets");
 	}
 }
 
 function Start () {
-	
 	if (PlayerPrefs.HasKey("language") && !stayInTitleScreen) {
 		var language : String = VerseManager.GetLanguage();
-		var onFinish : Function = function() {
-			
-			var us: UserSession = UserSession.GetUserSession();
-			if ((!us.verseId) && (!us.versesetId)) {			
-				Application.LoadLevel("versesets");
-			}
-		};
-		VerseManager.GetInstance().SwitchLanguage(language, onFinish);
-		
+		var vm : VerseManager = VerseManager.GetInstance();
+		vm.SwitchLanguage(language, LoadVerseSetsMenu);
 	}
 }
 

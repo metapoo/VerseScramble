@@ -1,6 +1,5 @@
 #pragma strict
 
-import UnityEngine;
 import System.IO;//using System.IO;
 import System.Collections;
 import JSONUtils;
