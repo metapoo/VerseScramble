@@ -2,8 +2,6 @@
 
 import System.IO;//using System.IO;
 import System.Collections;
-import JSONUtils;
-import TextManager;
 import System.Security.Cryptography;
 
 class ApiManager extends MonoBehaviour {

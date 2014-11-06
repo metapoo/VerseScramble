@@ -1,6 +1,4 @@
 ﻿#pragma strict
-import TextManager;
-
 public var scoreManager : ScoreManager;
 public var gameManager : GameManager;
 public var verseManager : VerseManager;

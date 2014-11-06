@@ -1,7 +1,5 @@
 ﻿#pragma strict
 
-import TextManager;
-
 static public var stayInTitleScreen : boolean;
 
 function Awake() {

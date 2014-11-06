@@ -1,6 +1,5 @@
 ﻿#pragma strict
 
-import TextManager;
 import UnityEngine.UI;
 
 var scoreLabel : Text;

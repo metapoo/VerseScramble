@@ -523,13 +523,12 @@ function GetCurrentDifficultyAllowed() : int {
 
 static function GetDifficultyFromInt(difficultyInt : int) : Difficulty {
 	switch(difficultyInt) {
-		case 0: return Difficulty.Easy; break;
-		case 1: return Difficulty.Medium; break;
-		case 2: return Difficulty.Hard; break;
-		case 3: return Difficulty.Impossible; break;
+		case 0: return Difficulty.Easy; 
+		case 1: return Difficulty.Medium; 
+		case 2: return Difficulty.Hard; 
+		case 3: return Difficulty.Impossible; 
 		default:
 			return Difficulty.Easy;
-			break;
 	}
 }
 
