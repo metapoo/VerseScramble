@@ -282,16 +282,12 @@ public class ScoreManager:MonoBehaviour{
 		switch(difficulty) {
 			case Difficulty.Easy:
 				return 1.0f*m;
-				break;
 			case Difficulty.Medium:
 				return 2.0f*m;
-				break;
 			case Difficulty.Hard:
 				return 3.0f*m;
-				break;
 			default:
 				return 1.0f;
-				break;
 		}
 	}
 	
