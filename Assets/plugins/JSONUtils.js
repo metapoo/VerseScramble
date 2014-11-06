@@ -13,8 +13,9 @@ Modified by Indiana MAGNIEZ
  
 */
 
-class JSONUtils
+public class JSONUtils
 {
+
 	private static var at : int;
 	
 	private static var ch : String;
@@ -32,7 +33,7 @@ class JSONUtils
 	
 	private static var text : String;
 	
-	private static function error (m) : void
+	private static function error (m: String) : void
 	{
 		throw new System.Exception("SyntaxError: \nMessage: "+m+
 		                           "\nAt: "+at+
@@ -365,29 +366,11 @@ class JSONUtils
 		return result;
 	}
 	
-	/**
-	 * Nom : EscapeString
-	 * Description :
-	 * Cette fonction traite les chaînes de caractère en échappant les anti-slashes et les double-guillements.
-	 * @param string:String
-	 * 		La chaîne de caractère qui doit être traitée.
-	 * @return String
-	 * 		La chaîne traitée avec les caractère échappés.
-	 **/
 	public static function EscapeString(string:String):String
 	{
 		return string.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
 	}
 	
-	/**
-	 * Nom : Vector3ToHashtable
-	 * Description :
-	 * 		Cette fonction transforme un Vector3 en Hashtable avec comme clés x, y et z.
-	 * @param vector3:Vector3
-	 * 		Le Vector3 à transformer en Hashtable.
-	 * @return Hashtable
-	 * 		La Hashtable correspondant au vecteur {"x":1;"y":1;"z":1}.
-	 **/
 	public static function Vector3ToHashtable(vector3:Vector3):Hashtable
 	{
 		var retour:Hashtable = new Hashtable();
@@ -397,15 +380,6 @@ class JSONUtils
 		return retour;
 	}
 	
-	/**
-	 * Nom : HashtableToVector3
-	 * Description :
-	 * 		Cette fonction transforme une Hashtable avec comme clés x, y et z en Vector3.
-	 * @param hashtable:Hashtable
-	 * 		La Hastable à retransformer en Vector3.
-	 * @return Vector3
-	 * 		Le Vector3 correspondant à la Hashtable de la forme {"x":1;"y":1;"z":1}.
-	 **/
 	public static function HashtableToVector3(hashtable:Hashtable):Vector3
 	{
 		var xParse:float = float.Parse(hashtable["x"].ToString());
@@ -414,15 +388,6 @@ class JSONUtils
 		return Vector3(xParse,yParse,zParse);
 	}
 	
-	/**
-	 * Nom : HashtableToJSON
-	 * Description :
-	 * Cette fonction transforme une Hashtable en chaîne de caractère pour l'écriture d'un fichier JSON.
-	 * @param hashtable:Hashtable
-	 * 		La Hashtable à transformer en string.
-	 * @return String
-	 * 		La chaîne de caractère correspondant à la Hashtable.
-	 **/
 	public static function HashtableToJSON(hashtable:Hashtable):String
 	{
 		var retour:Array = new Array();
@@ -471,15 +436,6 @@ class JSONUtils
 		return "{"+retour.Join(",")+"}";
 	}
 	
-	/**
-	 * Nom : Object
-	 * Description :
-	 * Cette fonction transforme un Object en chaîne de caractère pour l'écriture d'un fichier JSON.
-	 * @param object:Object
-	 * 		L'objet à transformer en string.
-	 * @return String
-	 * 		La chaîne de caractère correspondant à l'objet.
-	 **/
 	public static function ObjectToJSON( object:Object ):String
 	{
 		var retour:Array = new Array();
@@ -529,15 +485,6 @@ class JSONUtils
 		return "{"+retour.Join(",")+"}";
 	}
 	
-	/**
-	 * Nom : ArrayToJSON
-	 * Description :
-	 * Cette fonction transforme un Array en chaîne de caractère pour l'écriture d'un fichier JSON.
-	 * @param array:Array 
-	 * 		Le Array à transformer en string.
-	 * @return String
-	 * 		La chaîne de caractère correspondant à l'Array.
-	 **/
 	public static function ArrayToJSON(array:List.<Object>):String
 	{
 		var retour:Array = new Array();
@@ -590,4 +537,5 @@ class JSONUtils
 	{
 		return typeof(tempValue) == typeof(int) || typeof(tempValue) == typeof(float) || typeof(tempValue) == typeof(double);
 	}
+	
 }
