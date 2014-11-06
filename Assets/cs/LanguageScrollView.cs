@@ -2,14 +2,14 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Text;
 
 public class LanguageScrollView:MonoBehaviour{
 	public RectTransform scrollContent;
-	public Hashtable languageByCode;
-	public List<string> languageCodes;
+	public static Hashtable languageByCode = new Hashtable();
+	public static List<string> languageCodes;
 	public int languageIndex = 0;
-	public LanguageButton languageButton;
+	public  LanguageButton languageButton;
 	
 	public void AddLanguage(string languageCode,string languageDesc) {
 		LanguageButton clone = (LanguageButton)Instantiate(languageButton, Vector3.zero, Quaternion.identity);
@@ -24,9 +24,10 @@ public class LanguageScrollView:MonoBehaviour{
 		scrollContent.sizeDelta = tmp_cs2;
 		languageIndex += 1;
 	}
-	
+
+
 	public void Awake() {
-		languageByCode = new Hashtable();
+		if (languageByCode.Count > 0) return;
 		languageByCode.Add("ga","Gaeilge");
 		languageByCode.Add("la","Latina");
 		languageByCode.Add("hil","Ilonggo");
@@ -114,13 +115,15 @@ public class LanguageScrollView:MonoBehaviour{
 		languageByCode.Add("ky","Кыргызча, Кыргыз тили");
 		languageByCode.Add("sw","Kiswahili");
 		languageCodes = new List<string>(new string[]{"en", "zh-hant", "zh-hans", "ko", "ja", "es", "fr", "de", "it", "es-ES", "ru", "vi", "mn", "te", "mg", "ms", "af", "amu", "ckw", "ca", "ceb", "cco", "cy", "da", "eo", "tl", "ga", "hwc", "hr", "hil", "id", "jac", "kek", "kw", "sw", "ht", "la", "hu", "mvc", "mvj", "mi", "ppl", "nl", "no", "ngu", "nds", "pl", "pt", "pt-PT", "qu", "qut", "ro", "st", "sq", "sk", "so", "fi", "sv", "twi", "tr", "usp", "yo", "sn", "xh", "zu", "is", "cs", "grc", "bg", "ky", "mk", "sr", "uk", "he", "ur", "ar", "awa", "ne", "mr", "hi", "bn", "pa", "or", "ta", "th", "chr"});
+	}
+
+	public void Start() {
 		for(int i=0;i<languageCodes.Count;i++) {
 			string code = languageCodes[i];
 			object lang = languageByCode[code];
 			AddLanguage(code, "" + lang);
 		}
 	}
-	
 	public void Update() {
 	}
 	

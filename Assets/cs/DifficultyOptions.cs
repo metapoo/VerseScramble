@@ -31,7 +31,7 @@ public class DifficultyOptions:MonoBehaviour{
 		}	
 	
 		optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Easy),
-		                       () => { Debug.Log ("ASDF"); StartGame (Difficulty.Easy); });
+		                       () => { StartGame (Difficulty.Easy); });
 	
 	}
 	
