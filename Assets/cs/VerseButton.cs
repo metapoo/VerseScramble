@@ -37,9 +37,9 @@ public class VerseButton:MonoBehaviour{
 		
 		int highScore = 0;
 		
-		if (UnityEngine.Object.ReferenceEquals(v,null)) {
+		if (v == null) {
 			VerseSet verseset = VerseManager.GetCurrentVerseSet();
-			if (UnityEngine.Object.ReferenceEquals(verseset, null)) return;
+			if (verseset == null) return;
 			highScore = (int)verseset.GetMetadata()["high_score"];
 			label.text = String.Format("{0} - {1}: {2}",
 				TextManager.GetText("Play Challenge (All Verses)"),
@@ -88,7 +88,7 @@ public class VerseButton:MonoBehaviour{
 		GameManager.needToRecordPlay = true;
 		
 		Action playVerse = delegate() {
-			if (UnityEngine.Object.ReferenceEquals(verse,null)) {
+			if (verse == null) {
 				StartChallenge();
 				return;
 			}

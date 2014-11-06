@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-[System.Serializable]
 public class Verse
 {
 	public string onlineId;
@@ -28,7 +27,17 @@ public class Verse
 		version = version_;
 		verseset = verseset_;
 	}
+
+	public static bool operator == (Verse vs1, Verse vs2)
+	{
+		return UnityEngine.Object.ReferenceEquals(vs1, vs2);
+	}
 	
+	public static bool operator != (Verse vs1, Verse vs2)
+	{
+		return !UnityEngine.Object.ReferenceEquals(vs1, vs2);
+	}
+
 	public override string ToString() {
 		return String.Format("{0} - {1}", reference, text);
 	}

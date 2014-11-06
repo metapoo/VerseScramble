@@ -55,47 +55,8 @@ public class WordLabel:MonoBehaviour{
 		if (pct < 0) pct = 0.0f;
 		if (pct > 1) pct = 1.0f;
 		return pct;
-	}
-	
-	public IEnumerator Explode() {
-		if (exploding || !returnedToVerse) yield break;
-		
-		exploding = true;
-		bool wasReturnedToVerse = returnedToVerse;
-		
-		if (scoreCredited > 0) {
-			FloatingPoints clone = null;
-			clone = (FloatingPoints)Instantiate(floatingPoints, transform.position, Quaternion.identity);
-			clone.SetPoints(-1*scoreCredited, false);
-			scoreManager.score -= (int)scoreCredited;
-			scoreCredited = 0.0f;
-		}
-		
-		versePosition = startPosition;
-		hinting = false;
-		gotoVerse = false;
-		returnedToVerse = false;
-		
-		yield return new WaitForSeconds(UnityEngine.Random.RandomRange(0.0f,0.5f));
-		
-		while (shrinkingEdges) {
-			yield return new WaitForSeconds(0.1f);
-		}
-	
-		ResetBubble();
-		collider2D.enabled = true;
-		rigidbody2D.fixedAngle = false;
-		rigidbody2D.isKinematic = false;
-		
-		rigidbody2D.AddForce ((Vector2)new Vector3((float)UnityEngine.Random.Range(-100,100), (float)UnityEngine.Random.Range(300,400), 0.0f));
-		rigidbody2D.gravityScale = 1.0f;
-		rigidbody2D.AddTorque((float)UnityEngine.Random.Range(-100,100));
-		audio.PlayOneShot(sndPop, UnityEngine.Random.RandomRange(0.5f,1.0f));
-		yield return new WaitForSeconds(2.5f);
-		exploding = false;
-		rigidbody2D.gravityScale = 0.1f;
-	}
-	
+	}	
+
 	public void FixedUpdate() {
 	}
 	
@@ -160,17 +121,12 @@ public class WordLabel:MonoBehaviour{
 		Vector3 sm = bgMiddle.renderer.bounds.size;
 		
 		Vector3 sr = Vector3.zero;
-		Vector3 sl = Vector3.zero;
-		
+
 		if (bgLeft != null) {
 			sr = bgLeft.renderer.bounds.size;
 			edgeSize = sr;
 		}
-		
-		if (bgRight != null) {
-			sl = bgRight.renderer.bounds.size;
-		}
-		
+
 		totalSize = new Vector3(edgeSize.x*2.0f+sm.x, sm.y, sm.z);
 		nonEdgeSize = new Vector3(sm.x,sm.y,sm.z);
 		boxCollider2D().size = new Vector2(totalSize.x,totalSize.y);

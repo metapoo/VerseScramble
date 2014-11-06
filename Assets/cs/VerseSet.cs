@@ -15,7 +15,17 @@ public class VerseSet
 	public bool isOnline;
 	public string version;
 	public int playCount;
+
+	public static bool operator == (VerseSet vs1, VerseSet vs2)
+	{
+		return UnityEngine.Object.ReferenceEquals(vs1, vs2);
+	}
 	
+	public static bool operator != (VerseSet vs1, VerseSet vs2)
+	{
+		return !UnityEngine.Object.ReferenceEquals(vs1, vs2);
+	}
+
 	public static VerseSet GetVerseSet(string saveKey) {
 		if (versesetBySaveKey.Contains(saveKey)) {
 			return (VerseSet)versesetBySaveKey[saveKey];
@@ -29,7 +39,7 @@ public class VerseSet
                                        string language_,
                                        string version_) {
 		VerseSet verseset = GetVerseSet(onlineId_);
-		if (UnityEngine.Object.ReferenceEquals(verseset, null)) {
+		if (verseset == null) {
 			return new VerseSet(onlineId_, setname_, language_, version_);
 		} else {
 			verseset.setname = setname_;

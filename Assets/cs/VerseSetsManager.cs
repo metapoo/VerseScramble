@@ -53,12 +53,11 @@ public class VerseSetsManager:MonoBehaviour{
 		
 		for(i=startIndex;i<versesets.Count+startIndex;i++) {
 			VerseSet verseset = versesets[i-startIndex];
-			Debug.Log (i + ". add vs " + verseset.setname);
 			clone = (VerseSetButton)Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 			clone.SetVerseSet(verseset);
 			clone.AddToScrollView(verseSetScrollContent, i);
 
-			if (UnityEngine.Object.ReferenceEquals(verseset, currentVerseSet)) currentButton = clone;
+			if (verseset == currentVerseSet) currentButton = clone;
 			
 			rt = clone.GetComponent<RectTransform>();
 			
@@ -66,7 +65,6 @@ public class VerseSetsManager:MonoBehaviour{
             tmp_cs2.x = 0.0f;
             tmp_cs2.y = (-1*i)*(rowHeight + rowPadding) - rowPadding;
             rt.anchoredPosition = tmp_cs2;	
-			Debug.Log ("y = " + tmp_cs2.y);
 		}
 	
 		Vector3 tmp_cs3 = verseSetScrollContent.sizeDelta;
@@ -131,7 +129,7 @@ public class VerseSetsManager:MonoBehaviour{
         verseScrollContent.anchoredPosition = tmp_cs7;
 		
 		VerseSet currentVerseSet = VerseManager.GetCurrentVerseSet();
-		if (!UnityEngine.Object.ReferenceEquals(currentVerseSet, null)) {
+		if (currentVerseSet != null) {
 			string label = currentVerseSet.setname;
 			if (currentVerseSet.version != null) {
 				label += String.Format(" ({0})", currentVerseSet.version);
@@ -144,7 +142,7 @@ public class VerseSetsManager:MonoBehaviour{
 	
 	public void OnGlobeClick() {
 		VerseSet verseset = VerseManager.currentVerseSet;
-		if (UnityEngine.Object.ReferenceEquals(verseset, null)) {
+		if (verseset == null) {
 			return;
 		}
 		if (verseset.onlineId == null) {

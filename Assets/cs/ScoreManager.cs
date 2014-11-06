@@ -267,7 +267,7 @@ public class ScoreManager:MonoBehaviour{
 			highScore = (int)verseMetadata["high_score"];
 		} else {
 			VerseSet verseset = VerseManager.GetCurrentVerseSet();
-			if (!UnityEngine.Object.ReferenceEquals(verseset, null)) {
+			if (verseset != null) {
 				versesetMetadata = verseset.GetMetadata();
 				highScore = (int)versesetMetadata["high_score"];
 			}

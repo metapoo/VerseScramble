@@ -70,7 +70,7 @@ public class VerseManager:MonoBehaviour{
 		verseIndex = 0;
 		List<VerseSet> versesets = GetCurrentVerseSets();
 		
-		if (!UnityEngine.Object.ReferenceEquals(currentVerseSet, null)) {
+		if (currentVerseSet != null) {
 			for(int i=0;i<versesets.Count;i++) {
 				VerseSet verseset = versesets[i];
 				if (verseset.SaveKey() == currentVerseSet.SaveKey()) {
@@ -106,7 +106,7 @@ public class VerseManager:MonoBehaviour{
 	
 	public static VerseSet GetCurrentVerseSet() {
 	
-		if (!UnityEngine.Object.ReferenceEquals(currentVerseSet, null)) {
+		if (currentVerseSet != null) {
 			//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
 			return currentVerseSet;
 	 	}
@@ -144,7 +144,7 @@ public class VerseManager:MonoBehaviour{
 	public static List<Verse> GetCurrentVerses() {
 		VerseSet vs = GetCurrentVerseSet();
 		
-		if (UnityEngine.Object.ReferenceEquals(vs, null)) {
+		if (vs == null) {
 			return new System.Collections.Generic.List<Verse>();
 		}
 		return vs.verses;
@@ -480,7 +480,7 @@ public class VerseManager:MonoBehaviour{
 		Difficulty selectedDifficulty = GetSelectedDifficulty();
 		VerseSet verseset = currentVerseSet;
 		Verse verse = GetCurrentVerse();
-		if (UnityEngine.Object.ReferenceEquals(verse, null)) {
+		if (verse == null) {
 			return Difficulty.Easy;
 		}
 	
@@ -566,7 +566,7 @@ public class VerseManager:MonoBehaviour{
 			if (verseset.SaveKey() == vs.SaveKey()) {
 				versesets.RemoveAt(i);
 				
-				if (!(UnityEngine.Object.ReferenceEquals(vs, verseset))) {
+				if (vs != verseset) {
 					vs.HandleRemoved();
 				}
 				
@@ -626,12 +626,11 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public static VerseSet LoadVerseSetData(Hashtable versesetData) {
-		string versesetJson = JSONUtils.HashtableToJSON(versesetData);
-		string language = "" + versesetData["language"];
-		string version = "" + versesetData["version"];
-		string setname = "" + versesetData["name"];
-		string versesetId = "" + versesetData["_id"];
-		int verseCount = Convert.ToInt32 (versesetData["verse_count"]);
+		string language = versesetData["language"] as string;
+		string version = versesetData["version"] as string;
+		string setname = versesetData["name"] as string;
+		string versesetId = versesetData["_id"] as string;
+		int verseCount = (int) versesetData["verse_count"];
 		//Debug.Log("setname = " + setname + " verse count = " + verseCount);
 		VerseSet verseset = VerseSet.GetVerseSet(versesetId, setname, language, version);
 		verseset.verseCount = verseCount;

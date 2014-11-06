@@ -260,7 +260,7 @@ public class ApiManager: MonoBehaviour {
 		}
 		
 		string data = www.text;
-		Debug.Log ("www.text = " + data);
+		//Debug.Log ("www.text = " + data);
 		Hashtable apiData = null;
 		try {
 			apiData = JSONUtils.ParseJSON(data);
@@ -271,8 +271,8 @@ public class ApiManager: MonoBehaviour {
 		}
 		resultData = (Hashtable)apiData["result"];
 
-		Debug.Log ("result = " + JSONUtils.HashtableToJSON(resultData));
-		Debug.Log ("apiData = " + JSONUtils.HashtableToJSON(apiData));
+		//Debug.Log ("result = " + JSONUtils.HashtableToJSON(resultData));
+		//Debug.Log ("apiData = " + JSONUtils.HashtableToJSON(apiData));
 
 		string status = (string) apiData["status"];
 		if (status == "OK") {

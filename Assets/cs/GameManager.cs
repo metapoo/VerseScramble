@@ -414,7 +414,7 @@ public class GameManager:MonoBehaviour{
 		}
 	
 		VerseSet verseset = VerseManager.currentVerseSet;
-		if (UnityEngine.Object.ReferenceEquals(verseset, null)) {
+		if (verseset == null) {
 			return false;
 		}
 		string versesetId = verseset.onlineId;
