@@ -41,7 +41,12 @@ public class UserSession:MonoBehaviour{
 		DontDestroyOnLoad(this.gameObject);
 		LoadUserLogin();
 	}
-	
+
+	public bool IsUrlDirected() {
+		return !(((verseId.Length == 0) || (verseId == null)) && 
+				((versesetId == null) || (versesetId.Length == 0)));
+	}
+
 	public void HandleFbLogin(Hashtable parameters) {
 		object accessToken = parameters["accessToken"];
 		object fbUid = parameters["fbUid"];

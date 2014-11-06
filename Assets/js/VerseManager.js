@@ -651,7 +651,7 @@ function HandleShowVerseSet(resultData : Hashtable) {
 	verseIndex = verseset.IndexOfVerseId(apiVerseId);
 	if (verseIndex < 0) verseIndex = 0;
 		
-	GameManager.SetChallengeModeEnabled((apiVerseId == null));
+	GameManager.SetChallengeModeEnabled((apiVerseId.Length == 0));
 	var gm : GameManager = GameManager.GetInstance();
 	if (gm != null) {
 		gm.SyncSetProgressLabel();

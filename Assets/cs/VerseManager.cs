@@ -603,8 +603,8 @@ public class VerseManager:MonoBehaviour{
 	
 	public void HandleVerseShow(Hashtable resultData) {
 		Hashtable verseData = (Hashtable)resultData["verse"];
-		string versesetId = "" + verseData["verseset_id"];
-		string verseId = "" + verseData["_id"];
+		string versesetId = verseData["verseset_id"].ToString ();
+		string verseId = verseData["_id"].ToString ();
 		LoadOnlineVerseSet(versesetId, verseId);
 	}
 		
@@ -655,7 +655,7 @@ public class VerseManager:MonoBehaviour{
 		}
 		loaded = true;
 		UserSession.GetUserSession().ClearUrlOptions();
-		UnityEngine.Debug.Log("finished loading verse set");
+//		UnityEngine.Debug.Log("finished loading verse set");
 	}
 		
 	public void LoadOnlineVerseSet(string versesetId,string verseId) {

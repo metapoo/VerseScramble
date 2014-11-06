@@ -17,7 +17,7 @@ public class TitleManager:MonoBehaviour{
 	
 	public void LoadVerseSetsMenu(string language) {
 		UserSession us = UserSession.GetUserSession();
-		if ((us.verseId == null) && (us.versesetId == null)) {			
+		if (!us.IsUrlDirected()) {			
 			Application.LoadLevel("versesets");
 		}
 	}
