@@ -108,7 +108,7 @@ public class JSONUtils
 	}
 	
 	
-	private static function string () : System.String
+	private static function _string () : System.String
 	{
 		if (escapee2.Count == 0) {
 		                escapee2.Add("\"", "\"");
@@ -124,7 +124,7 @@ escapee2.Add("t", "\t");
 		
 		var hex : int;
 		var i : int;
-		var string : String = "";
+		var str : String = "";
 		var uffff : int;
 		
 		if(ch == "\"")
@@ -134,7 +134,7 @@ escapee2.Add("t", "\t");
 				if(ch == "\"")
 				{
 					_next();
-					return string;
+					return str;
 				}
 				else if (ch == "\\")
 				{
@@ -152,11 +152,11 @@ escapee2.Add("t", "\t");
 							uffff = uffff * 16 + hex;
 						}
 						var m : char = uffff;
-						string += m;
+						str += m;
 					}
 					else if(escapee2.ContainsKey(ch))
 					{
-						string += escapee2[ch];
+						str += escapee2[ch];
 					}
 					else
 					{
@@ -165,15 +165,13 @@ escapee2.Add("t", "\t");
 				}
 				else
 				{
-					string += ch;
+					str += ch;
 				}
 			}
 		}
 		error("Bad string");
 		return "";
 	}
-	
-	
 	
 	private static function white () : void
 	{
@@ -193,7 +191,7 @@ escapee2.Add("t", "\t");
 		} else if(ch == "[") {
 			return array();
 		} else if(ch == "\"") {
-			return string();
+			return _string();
 		} else if(ch == "-") {
 			return number();
 		} else {
@@ -300,7 +298,7 @@ escapee2.Add("t", "\t");
 	//	        }
 	//	        while(ch)
 	//	        {
-	//	            key = string();
+	//	            key = _string();
 	//	            white();
 	//	            _next(":");
 	//	            object[key] = value();
@@ -335,7 +333,7 @@ escapee2.Add("t", "\t");
 			}
 			while(ch)
 			{
-				key = string();
+				key = _string();
 				white();
 				_next(":");
 				object.Add( key, value() );
