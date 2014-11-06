@@ -1,6 +1,7 @@
 ﻿#pragma strict
 
 import System.Collections.Generic;
+import Boo.Lang.Hash;
 
 /*
  
@@ -20,9 +21,10 @@ public class JSONUtils
 	
 	private static var ch : String;
 	
-	private static var escapee2 = new Hashtable();
+	private static var escapee2 : Hashtable = new Hashtable();
 	
 	private static var text : String;
+	private static var digits : List.<String> =  new List.<String>(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 	
 	private static function error (m: String) : void
 	{
@@ -60,7 +62,6 @@ public class JSONUtils
 	{
 		var number:double;
 		var str : String = "";
-		var digits : List.<String> = new List.<String>(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 		if(ch == "-")
 		{
 			str = "-";
@@ -195,12 +196,12 @@ escapee2.Add("t", "\t");
 		} else if(ch == "-") {
 			return number();
 		} else {
-			return (ch in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) ? number() : word();
+			return (digits.Contains(ch)) ? number() : word();
 		}
 		
 	}
 	
-	private static function word ()
+	private static function word () 
 	{
 		// We don't use a switch() statement because
 		// otherwise Unity will complain about
@@ -251,7 +252,7 @@ escapee2.Add("t", "\t");
 		error("Unexpected '" + ch + "'");
 		return null;
 	}
-	
+
 	private static function array () : List.<Object>
 	{
 		var array : List.<Object> = new List.<Object>();
@@ -320,7 +321,7 @@ escapee2.Add("t", "\t");
 		white();
 		
 		var key : String;
-		var object = new Hashtable();
+		var obj = new Hashtable();
 		
 		if(ch == "{")
 		{
@@ -329,19 +330,19 @@ escapee2.Add("t", "\t");
 			if(ch == "}")
 			{
 				_next("}");
-				return object; // empty object
+				return obj; // empty object
 			}
 			while(ch)
 			{
 				key = _string();
 				white();
 				_next(":");
-				object.Add( key, value() );
+				obj.Add( key, value() );
 				white();
 				if (ch == "}")
 				{
 					_next("}");
-					return object;
+					return obj;
 				}
 				_next(",");
 				white();
@@ -369,9 +370,13 @@ escapee2.Add("t", "\t");
 		return result;
 	}
 	
-	public static function EscapeString(string:String):String
+	public static function EscapeString(str:String):String
 	{
-		return string.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
+		str = str.Replace("\\","\\\\");
+		// crashes csharpanator
+		//str = str.Replace("\"","\\\"");
+		str = str.Replace("\n","\\n");
+		return str;
 	}
 	
 	public static function Vector3ToHashtable(vector3:Vector3):Hashtable
@@ -393,8 +398,8 @@ escapee2.Add("t", "\t");
 	
 	public static function HashtableToJSON(hashtable:Hashtable):String
 	{
-		var retour:Array = new Array();
-		for(var key in hashtable.Keys)
+		var retour:List.<String> = new List.<String>();
+		for(var key : Object in hashtable.Keys)
 		{
 			var tempValue = hashtable[key];
 			if( typeof(tempValue) == typeof(Hashtable) )
@@ -436,14 +441,16 @@ escapee2.Add("t", "\t");
 				//				retour.Add('"'+key+'" : "'+EscapeString(tempValue.ToString())+'"');
 			}
 		}
-		return "{"+retour.Join(",")+"}";
+		
+		var str : String = String.Join(",",retour.ToArray());
+		return "{"+str+"}";
 	}
 	
 	public static function ObjectToJSON( object:Object ):String
 	{
-		var retour:Array = new Array();
+		var retour:List.<String> = new List.<String>();
 		var objectForJSON = object as Boo.Lang.Hash;
-		for(var key in objectForJSON.Keys)
+		for(var key : Object in objectForJSON.Keys)
 		{
 			var tempValue = objectForJSON[key];
 			if( typeof(tempValue) == typeof(Hashtable) )
@@ -485,13 +492,14 @@ escapee2.Add("t", "\t");
 				//				retour.Add('"'+key+'" : "'+EscapeString(tempValue.ToString())+'"');
 			}
 		}
-		return "{"+retour.Join(",")+"}";
+		var str : String = String.Join(",",retour.ToArray());
+		return "{"+str+"}";
 	}
 	
 	public static function ArrayToJSON(array:List.<Object>):String
 	{
-		var retour:Array = new Array();
-		for(var tempValue in array)
+		var retour:List.<String> = new List.<String>();
+		for(var tempValue : Object in array)
 		{
 			if( typeof(tempValue) == typeof(Hashtable) )
 			{
@@ -533,12 +541,13 @@ escapee2.Add("t", "\t");
 				//				retour.Add('"'+EscapeString(tempValue.ToString())+'"');
 			}
 		}
-		return "["+retour.Join(",")+"]";
+		var str : String = String.Join(",",retour.ToArray());
+		return "["+str+"]";
 	}
 	
-	public static function IsNumeric( tempValue )
+	public static function IsNumeric( tempValue : Object )
 	{
 		return typeof(tempValue) == typeof(int) || typeof(tempValue) == typeof(float) || typeof(tempValue) == typeof(double);
 	}
-	
+
 }
