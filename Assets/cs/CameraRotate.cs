@@ -5,7 +5,6 @@ public class CameraRotate : MonoBehaviour {
 	public float rate;
 	public float rotateX = 0;
 	public static Vector3 cameraRotation;
-	bool started = false;
 
 	// Use this for initialization
 	void Start () {

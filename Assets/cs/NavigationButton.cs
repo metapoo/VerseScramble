@@ -38,7 +38,6 @@ public class NavigationButton:MonoBehaviour{
 		VerseManager.ClearVerseSets(view);
 		
 		List<object> versesetDatas = (List<object>)resultData["versesets"];
-		Debug.Log ("vs data length = "+versesetDatas.Count);
 
 		for(int i=0;i<versesetDatas.Count;i++) {
 			Hashtable versesetData = versesetDatas[i] as Hashtable;
@@ -83,8 +82,6 @@ public class NavigationButton:MonoBehaviour{
 			VerseManager.SetCurrentView(view);
 		}
 		
-		List<VerseSet> versesets = VerseManager.GetCurrentVerseSets();
-		string apiDomain = ApiManager.GetApiDomain();
 		ApiManager apiManager = ApiManager.GetInstance();
 		Hashtable arguments = null;
 		Hashtable options = null;

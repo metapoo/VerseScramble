@@ -17,7 +17,7 @@ public class SkyManager:MonoBehaviour{
 	}
 	
 	public void ShowRainbow() {
-		rainbow.active = true;
+		rainbow.gameObject.SetActive(true);
 		StartCoroutine(AnimationManager.FadeMeshRenderer(rainbow, 1.0f, 2.0f));
 	}
 	
@@ -32,7 +32,7 @@ public class SkyManager:MonoBehaviour{
 	public void Start() {
 		bgCamCam.fieldOfView = 50.0f;
 		bgCamera.rotation = Quaternion.Euler(-25.0f,0.0f,0.0f);
-		rainbow.active = false;
+		rainbow.gameObject.SetActive(false);
 	}
 	
 	public void Update() {

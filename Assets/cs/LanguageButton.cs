@@ -31,8 +31,8 @@ public class LanguageButton:MonoBehaviour{
 		Vector2 oldAPosition = rt.anchoredPosition;
 		
 		Vector3 oldScale = rt.localScale;
-		Vector2 oldMin = rt.offsetMin;
-		Vector2 oldMax = rt.offsetMax;
+		//Vector2 oldMin = rt.offsetMin;
+		//Vector2 oldMax = rt.offsetMax;
 		
 	//	Debug.Log("offset min = " + oldMin);
 	//	Debug.Log("offset max = " + oldMax);

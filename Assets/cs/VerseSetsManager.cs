@@ -25,7 +25,6 @@ public class VerseSetsManager:MonoBehaviour{
 		verseSetScrollContent.DetachChildren();
 		
 		List<VerseSet> versesets = VerseManager.GetCurrentVerseSets();
-		Debug.Log ("versesets.Count = " + versesets.Count);
 		VerseSetButton clone = null;
 		VerseSetButton currentButton = null;
 		RectTransform vsButtonTransform = verseSetButton.GetComponent<RectTransform>();

@@ -45,12 +45,7 @@ public class ScoreManager:MonoBehaviour{
 		if (dHealth < 0.01f) dHealth = 0.01f;
 		
 		UpdateHealthBar(healthBarUnits + dHealth);
-		
-		int baseTime = 5;
-		if (moves == 0) {
-			baseTime = 10;
-		}
-		
+
 		if (timeSinceLast < 3) {
 			streak += 1;
 			if (streak == 5) {
@@ -77,7 +72,6 @@ public class ScoreManager:MonoBehaviour{
 	
 	public string HandleWordWrong() {
 		streak = 0;
-		int dScore = 0;
 		Difficulty difficulty = gameManager.difficulty;
 	
 		float dHealth = 0.2f*healthBarUnits;
