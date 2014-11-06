@@ -117,7 +117,7 @@ class TextManager extends MonoBehaviour {
  
         var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
  
-        var textAsset:TextAsset =  Resources.Load(fullpath, typeof(TextAsset));
+        var textAsset:TextAsset =  Resources.Load(fullpath, TextAsset);
         if (textAsset == null) 
         {
             Debug.Log("[TextManager] "+ fullpath +" file not found.");

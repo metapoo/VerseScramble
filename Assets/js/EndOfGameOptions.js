@@ -208,7 +208,6 @@ function EndGameWindow () {
 	
 	var difficulty : Difficulty = verseManager.GetCurrentDifficulty();
 	var nextDifficulty : Difficulty = verseManager.GetNextDifficulty();
-	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
 	var diffString = VerseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
 	var description = String.Format(TextManager.GetText("You scored {0}"), scoreManager.score);

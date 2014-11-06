@@ -3,9 +3,9 @@
 import JSONUtils;
 import System.Collections.Generic;
 
-var versesetLanguage : String;
-var numVerses = 0;
-var totalScore : int = -1;
+public var versesetLanguage : String;
+public var numVerses : int = 0;
+public var totalScore : int = -1;
 
 static var verseText : TextAsset;
 static var defaultView : String = "popular";
@@ -13,23 +13,26 @@ static var languageChosen : boolean = false;
 static var versesetsByView : Hashtable = new Hashtable();
 static var currentView : String = null;
 static var currentVerseSet : VerseSet = null;
-static var verseIndex = 0;
+static var verseIndex : int  = 0;
+static var apiVerseId : String;
 static var rightToLeft : boolean = false;
 static var loaded : boolean = false;
 static var offlineVersesLoaded : boolean = false;
 static var started : boolean = false;
 static var historyLoaded : boolean = false;
+static var countries : Hashtable = new Hashtable();
 
 private static var RTL_LANGUAGE_CODES : List.<String> = new List.<String>(['ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi']);
 
 static function Unload() {
-	for (var view in versesetsByView.Keys) {
-		var versesets : List.<VerseSet> = versesetsByView[view];
+	for (var view : String in versesetsByView.Keys) {
+		var versesets : List.<VerseSet> = versesetsByView[view] as List.<VerseSet>;
 		
 		for (var vs : VerseSet in versesets) {
 			vs.HandleRemoved();
 		}
 		versesets.Clear();
+
 	}
 	loaded = false;
 	offlineVersesLoaded = false;
@@ -49,7 +52,7 @@ function Reload() {
 	Start();
 }
 
-static function GetCurrentView(withLanguage : boolean) {
+static function GetCurrentView(withLanguage : boolean) : String {
 	var parts = currentView.Split("_"[0]);
 	if (withLanguage) return currentView;
 	return parts[0];
@@ -219,17 +222,47 @@ function SpeakUtterance(word : String, language: String) {
 }
 
 // get language localized with region
-static function GetVoiceLanguage() {
+static function GetVoiceLanguage() : String {
 	var language : String = GetVerseLanguage();
 	return GetVoiceLanguage(language);
 }
 
-static function GetCountryCodeFromLanguage(language : String) {
-	var countries : Hashtable = new Hashtable({"en":"US","zh-hant":"TW","zh":"TW","zh-hans":"CN",
-	"he":"IL","ur":"PK","ja":"JP","ko":"KR","th":"TH","vi":"VN","mn":"MN",
-	"ar":"SA","cs":"CZ","da":"DK","de":"DE","nl":"NL","fi":"FI","fr":"FR","hi":"IN",
-	"hu":"HU","id":"ID","it":"IT","no":"NO","pl":"PL","pt":"BR","ro":"RO",
-	"ru":"RU","sk":"SK","es":"MX","es-ES":"ES","sv":"SE","tr":"TR"});
+static function GetCountryCodeFromLanguage(language : String) : String {
+	if (countries.Count == 0) {
+	countries.Add('fr','FR');
+	countries.Add('en','US');
+	countries.Add('zh','TW');
+	countries.Add('vi','VN');
+	countries.Add('de','DE');
+	countries.Add('it','IT');
+	countries.Add('da','DK');
+	countries.Add('ar','SA');
+	countries.Add('cs','CZ');
+	countries.Add('fi','FI');
+	countries.Add('ur','PK');
+	countries.Add('es-ES','ES');
+	countries.Add('ja','JP');
+	countries.Add('es','MX');
+	countries.Add('he','IL');
+	countries.Add('ru','RU');
+	countries.Add('nl','NL');
+	countries.Add('pt','BR');
+	countries.Add('no','NO');
+	countries.Add('zh-hans','CN');
+	countries.Add('id','ID');
+	countries.Add('mn','MN');
+	countries.Add('ko','KR');
+	countries.Add('sv','SE');
+	countries.Add('zh-hant','TW');
+	countries.Add('sk','SK');
+	countries.Add('hi','IN');
+	countries.Add('th','TH');
+	countries.Add('tr','TR');
+	countries.Add('hu','HU');
+	countries.Add('ro','RO');
+	countries.Add('pl','PL');
+	}
+	
 	if (countries.ContainsKey(language)) {
 		return countries[language];
 	}
@@ -237,10 +270,10 @@ static function GetCountryCodeFromLanguage(language : String) {
 }
 
 // get language localized with region
-static function GetVoiceLanguage(language : String) {
+static function GetVoiceLanguage(language : String) : String {
 	var country = GetCountryCodeFromLanguage(language);
 	if (country != null) {
-		var parts : Array = language.Split("-"[0]);
+		var parts : String[] = language.Split("-"[0]);
 		language = parts[0];
 		return String.Format("{0}-{1}", language, country);
 	}
@@ -293,16 +326,16 @@ static function GetSystemLanguage() : String {
 	var sl : SystemLanguage = Application.systemLanguage;
 	var fullLang : String = sl.ToString();
 	switch(fullLang) {
-		case "English": return "en";
-		case "Chinese": return "zh-hans";
-		case "Korean": return "ko";
-		case "Russian": return "ru";
-		case "Mongolian": return "mn";
-		case "French": return "fr";
-		case "Spanish": return "es";
-		case "Italian": return "it";
-		case "German": return "de";
-		default: return "en";
+		case "English": return "en"; break;
+		case "Chinese": return "zh-hant";break;
+		case "Korean": return "ko";break;
+		case "Russian": return "ru";break;
+		case "Mongolian": return "mn";break;
+		case "French": return "fr";break;
+		case "Spanish": return "es";break;
+		case "Italian": return "it";break;
+		case "German": return "de";break;
+		default: return "en";break;
 	}
 }
 
@@ -310,21 +343,20 @@ static function GetLanguage() : String {
 	return PlayerPrefs.GetString("language", GetSystemLanguage());
 }
 
-function SetLanguage(language : String, finishHandler : Function) : String {
+function SetLanguage(language : String, finishHandler : Function) {
 	PlayerPrefs.SetString("language", language);
 	TextManager.LoadLanguageOffline(language);
 	var tm : TextManager = TextManager.GetInstance();
 	StartCoroutine(tm.LoadLanguage(language, finishHandler));
 }
 
-function IsAtFinalVerseOfChallenge() {
+function IsAtFinalVerseOfChallenge() : boolean {
 	var verses = GetCurrentVerses();
 	return (GetChallengeModeEnabled()) && (verseIndex >= (verses.Count-1));
 }
 
 function GotoNextVerse() {
 	var difficulty : Difficulty = GetCurrentDifficulty();
-	var masteredPct = GetMasteredVersesPercentage();
 	var verses = GetCurrentVerses();
 	verseIndex = verseIndex + 1;
 
@@ -341,7 +373,7 @@ function Save() {
 	PlayerPrefs.SetInt("verseIndex_"+language, verseIndex);
 }
 
-function MasteredVersesKey(difficulty : Difficulty) {
+function MasteredVersesKey(difficulty : Difficulty) : String {
 	var diffkey = "easy";
 	switch(difficulty) {
 		case Difficulty.Easy:
@@ -353,12 +385,14 @@ function MasteredVersesKey(difficulty : Difficulty) {
 		case difficulty.Hard:
 			diffkey = "hard";
 			break;
+		default:
+			break;
 	}
 	var key = diffkey + "_verses_mastered_"+GetLanguage();
 	return key;
 }
 
-static function GetNextDifficulty(difficulty : Difficulty) {
+static function GetNextDifficulty(difficulty : Difficulty) : Difficulty {
 	switch(difficulty) {
 		case(Difficulty.Easy):
 			difficulty = difficulty.Medium;
@@ -368,6 +402,8 @@ static function GetNextDifficulty(difficulty : Difficulty) {
 			break;
 		case(difficulty.Hard):
 			difficulty = difficulty.Impossible;
+			break;
+		default:
 			break;
 	}
 	return difficulty;
@@ -417,22 +453,31 @@ function SetMasteredVerses(difficulty : Difficulty, numVerses : int) {
 	PlayerPrefs.SetInt(diffkey, numVerses);
 }
 
-static function DifficultyToString(difficulty : Difficulty) {
-	var gt = TextManager.GetText;
+static function DifficultyToString(difficulty : Difficulty) : String {
 	switch (difficulty) {
-		case Difficulty.Easy: return gt("easy");
-		case Difficulty.Medium: return gt("medium");
-		case Difficulty.Hard: return gt("hard");
-		case difficulty.Impossible: return gt("impossible");
-		default: return "easy";
+		case Difficulty.Easy: 
+			return TextManager.GetText("easy");
+			break;
+		case Difficulty.Medium: 
+			return TextManager.GetText("medium");
+			break;
+		case Difficulty.Hard: 
+			return TextManager.GetText("hard");
+			break;
+		case difficulty.Impossible: 
+			return TextManager.GetText("impossible");	
+			break;
+		default: 
+			return "easy";
+			break;
 	}		
 }
 
-static function GetChallengeModeEnabled() {
+static function GetChallengeModeEnabled() : boolean {
 	return PlayerPrefs.GetInt("challenge_mode") == 1;
 }
 
-function GetCurrentDifficulty() {
+function GetCurrentDifficulty() : Difficulty {
 	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
 	var verseset : VerseSet = currentVerseSet;
 	var verses : List.<Verse> = GetCurrentVerses();
@@ -459,7 +504,7 @@ function GetCurrentDifficulty() {
 	}
 }
 
-function IsDifficultyAllowed(difficulty : Difficulty) {
+function IsDifficultyAllowed(difficulty : Difficulty) : boolean {
 	return parseInt(difficulty) <= parseInt(GetCurrentDifficultyAllowed());
 }
 
@@ -476,14 +521,15 @@ function GetCurrentDifficultyAllowed() : int {
 	return GetDifficultyFromInt(maxDifficultyInt);
 }
 
-static function GetDifficultyFromInt(difficultyInt : int) {
+static function GetDifficultyFromInt(difficultyInt : int) : Difficulty {
 	switch(difficultyInt) {
-		case 0: return Difficulty.Easy;
-		case 1: return Difficulty.Medium;
-		case 2: return Difficulty.Hard;
-		case 3: return Difficulty.Impossible;
+		case 0: return Difficulty.Easy; break;
+		case 1: return Difficulty.Medium; break;
+		case 2: return Difficulty.Hard; break;
+		case 3: return Difficulty.Impossible; break;
 		default:
-		return Difficulty.Easy;
+			return Difficulty.Easy;
+			break;
 	}
 }
 
@@ -491,48 +537,19 @@ function SetDifficulty(difficulty:Difficulty) {
 	PlayerPrefs.SetInt("selected_difficulty_"+GetLanguage(),parseInt(difficulty));	
 }
 
-function GetSelectedDifficulty() {
+function GetSelectedDifficulty() : Difficulty {
 	var result : int = PlayerPrefs.GetInt("selected_difficulty_"+GetLanguage(),0);
 	return GetDifficultyFromInt(result);
 }
 
-function GetCachedTotalScore() {
-	if (totalScore == -1) {
-		totalScore = 0;
-		var verses = GetCurrentVerses();
-		for (var verse : Verse in verses) {
-			var verseMetadata : Hashtable =	verse.GetMetadata();
-			var highScore : int = verseMetadata["high_score"];
-			totalScore +=  highScore;
-		}
-	} 
-	return totalScore;
-}
-
-function GetMasteredVersesPercentage() {
-	//var numMastered : float = GetMasteredVerses(GetCurrentDifficulty());
-	var verses : List.<Verse> = GetCurrentVerseSet().verses;
-	var numMastered : float = GetMasteredVerses();
-	return parseInt(100.0f * numMastered / (1.0f*verses.Count));
-}
-
-function GetNextDifficulty() {
+function GetNextDifficulty() : Difficulty {
 	var difficulty = GetCurrentDifficulty();
 	return GetNextDifficulty(difficulty);
 }
 
-function GetMasteredVerses() {
-	return GetMasteredVerses(Difficulty.Hard);
-}
-
-function GetMasteredVerses(difficulty : Difficulty) {
-	var diffkey = MasteredVersesKey(difficulty);
-	return PlayerPrefs.GetInt(diffkey);
-}
-
 function SyncMasteredVerses(difficulty : Difficulty) {
 	var masteredVerses = 0;
-	var verses = GetCurrentVerses();
+	var verses : List.<Verse> = GetCurrentVerses();
 	
 	for (var verse : Verse in verses) {
 		var verseMetadata =	verse.GetMetadata();
@@ -544,7 +561,7 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 	SetMasteredVerses(difficulty, masteredVerses);
 }
 
-static function AddOnlineVerseSet(verseset : VerseSet) {
+static function AddOnlineVerseSet(verseset : VerseSet) : VerseSet {
 	var versesets : List.<VerseSet> = GetCurrentVerseSets();
 	// if verse set already exists, replace the old one and return the new
 	for (var i=0;i<versesets.Count;i++) {
@@ -565,7 +582,7 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 	return verseset;
 }
 
-static function CreateVerseSet(name : String) {
+static function CreateVerseSet(name : String) : VerseSet {
 	var versesets : List.<VerseSet> = GetCurrentVerseSets();
 	var vs : VerseSet = VerseSet(name);
 	vs.language = GetLanguage();
@@ -587,40 +604,23 @@ function LoadOnlineVerse(verseId : String) {
 	LoadOnlineVerse(verseId, true);
 }
 
+function HandleVerseShow(resultData : Hashtable) {
+	var verseData : Hashtable = resultData["verse"];
+	var versesetId : String = verseData["verseset_id"];
+	var verseId : String = verseData["_id"];
+	LoadOnlineVerseSet(versesetId, verseId);
+}
+	
 function LoadOnlineVerse(verseId : String, includeSet : boolean) {
-
-	var handleApi : Function = function(resultData : Hashtable) {
 	
-		var verseData : Hashtable = resultData["verse"];
-		var versesetId = verseData["verseset_id"];
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("verse_id",verseId);
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleVerseShow);
 	
-		if (includeSet) {
-			LoadOnlineVerseSet(versesetId, verseId);
-			return;
-		}
-	
-		GameManager.SetChallengeModeEnabled(false);
-
-		var reference = verseData["reference"];
-		var text = verseData["text"];
-		var language = verseData["language"];
-		var version = verseData["version"];
-		var versesetName = verseData["verseset_name"];
-	
-		var verseset : VerseSet = VerseSet.GetVerseSet(versesetId, versesetName, language, version);
-		AddOnlineVerseSet(verseset);
-	
-		var verse : Verse = Verse(verseId, reference, text, version, verseset);
-		verseset.AddVerse(verse);
-	
-		SetCurrentVerseSet(verseset);
-		verseIndex = 0;
-		loaded = true;
-		UserSession.GetUserSession().ClearUrlOptions();
-	};
-	
-	ApiManager.GetInstance().CallApi("verse/show", new Hashtable({"verse_id":verseId}), 
-	new Hashtable({"handler":handleApi}));
+	ApiManager.GetInstance().CallApi("verse/show", 
+	arguments, 
+	options);
 	
 }
 
@@ -642,30 +642,37 @@ static function LoadVerseSetData(versesetData : Hashtable) : VerseSet {
 	return verseset;
 }
 
+function HandleShowVerseSet(resultData : Hashtable) {
+	var versesetData : Hashtable = resultData["verseset"];
+	var versesData : List.<Object> = resultData["verses"];
+	var verseset : VerseSet = LoadVerseSetData(versesetData);
+	SetCurrentVerseSet(verseset);
+	verseIndex = 0;
+	verseset.LoadVersesData(versesData);
+	verseIndex = verseset.IndexOfVerseId(apiVerseId);
+	if (verseIndex < 0) verseIndex = 0;
+		
+	GameManager.SetChallengeModeEnabled((apiVerseId == null));
+	var gm : GameManager = GameManager.GetInstance();
+	if (gm != null) {
+		gm.SyncSetProgressLabel();
+	}
+	loaded = true;
+	UserSession.GetUserSession().ClearUrlOptions();
+	Debug.Log("finished loading verse set");
+};
+	
 function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	SetCurrentView("history");
-	var handleApi : Function = function(resultData : Hashtable) {
-		var versesetData : Hashtable = resultData["verseset"];
-		var versesData : List.<Object> = resultData["verses"];
-		var verseset : VerseSet = LoadVerseSetData(versesetData);
-		SetCurrentVerseSet(verseset);
-		verseIndex = 0;
-		verseset.LoadVersesData(versesData);
-		verseIndex = verseset.IndexOfVerseId(verseId);
-		if (verseIndex < 0) verseIndex = 0;
-		
-		GameManager.SetChallengeModeEnabled((verseId == null));
-		var gm : GameManager = GameManager.GetInstance();
-		if (gm != null) {
-			gm.SyncSetProgressLabel();
-		}
-		loaded = true;
-		UserSession.GetUserSession().ClearUrlOptions();
-		Debug.Log("finished loading verse set");
-	};
+	apiVerseId = verseId;
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("verseset_id", versesetId);
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleShowVerseSet);
 	
-	ApiManager.GetInstance().CallApi("verseset/show",new Hashtable({"verseset_id":versesetId}),
-	new Hashtable({"handler":handleApi}));
+	ApiManager.GetInstance().CallApi("verseset/show",
+	arguments,
+	options);
 }
 
 function LoadVerses() {
@@ -692,15 +699,15 @@ static function LoadVersesLocally() {
 	}
 	Debug.Log("Loading verses locally..");
 	
-	var language = GetLanguage();
+	var language : String = GetLanguage();
 	
-	var filename = String.Format("verses_{0}", language.ToLower());
+	var filename : String = String.Format("verses_{0}", language.ToLower());
 	
 	var fullpath:String = "Languages/" +  filename ; // the file is actually ".txt" in the end
  
  	Debug.Log(fullpath);
  	
-    verseText =  Resources.Load(fullpath, typeof(TextAsset));
+    verseText =  UnityEngine.Resources.Load(fullpath, TextAsset);
     
     if (verseText == null) {
     	Debug.Log(fullpath + " not found");
@@ -713,34 +720,35 @@ static function LoadVersesLocally() {
  	SetCurrentView("history");
 
 	offlineVersesLoaded = true;
-	var lang = GetLanguage();
+	var lang : String = GetLanguage();
 	SetVerseLanguage(lang);
   	var lines : List.<String> = new List.<String>(verseText.text.Split("\n"[0]));
-  	var line : String;
   	var sep : String = "|";
   	var name : String;
   	var verseset : VerseSet;
   	var verse : Verse;
   	
-  	for (line in lines) {
+  	for (var line : String in lines) {
   		if ((line.Length > 0) && (line[0] == '|')) {
   			name = line.Replace("|","");
   			verseset = CreateVerseSet(name);
   			continue;
   		}
-  		var parts : List.<String> = new List.<String>(line.Split([sep], System.StringSplitOptions.None));
-  		if (parts.Count != 2) continue;
+  		var parts : String[] = line.Split([sep], System.StringSplitOptions.None);
+  		if (parts.Length != 2) continue;
   		
-  		var text = parts[1];
-  		var badLetter : String;
-  		for (badLetter in ["“","”"]) {
+  		var text : String = parts[1];
+  		var deleteLetters : String[] = ["“","”"];
+  		var spaceLetters : String[] = ["-","—","  ","\t"];
+  		
+  		for (var badLetter : String in deleteLetters) {
 	  		text = text.Replace(badLetter,"");
 	  	}
-	  	for (badLetter in ["-","—","  ","\t"]) {
+	  	for (badLetter in spaceLetters) {
 	  		text = text.Replace(badLetter," ");
 	  	}
 	  	
-  		var reference = parts[0];
+  		var reference : String  = parts[0];
   		verse = Verse(reference, text, verseset);
   		
   		verseset.AddVerse(verse);  	
@@ -750,6 +758,7 @@ static function LoadVersesLocally() {
   	if (previousView != null) {
   		SetCurrentView(previousView);
   	}
+  	
 }
 
 static function GetCurrentVerseSets() : List.<VerseSet> {
