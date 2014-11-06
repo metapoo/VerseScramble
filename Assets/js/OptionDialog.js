@@ -9,7 +9,7 @@ var numOptions : int = 0;
 var descriptionPanel : RectTransform;
 var windowPadding = 60;
 var buttonPadding = 30;
-var onClose : Function = null;
+var onClose = function() {};
 	
 function HandleOkayButtonClick() {
 	CloseDialog();
@@ -62,7 +62,8 @@ function AddOption(label : String, handler : Function) {
 	optButton.SetLabel(label);
 	
 	var button : Button = optButton.GetComponent(Button);
-	button.onClick.AddListener(function() {handler();});
+	var funcWrapper = function() { handler(); };
+	button.onClick.AddListener(funcWrapper);
 	button.onClick.AddListener(CloseDialog);
 	var rt : RectTransform = optButton.GetComponent(RectTransform);
 	

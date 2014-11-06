@@ -1,4 +1,6 @@
-var labelText : Text;
+#pragma strict
+
+public var labelText : UnityEngine.UI.Text;
 
 function SetLabel(label : String) {
 	labelText.text = label;
