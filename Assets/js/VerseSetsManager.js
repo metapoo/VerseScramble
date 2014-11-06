@@ -17,7 +17,7 @@ function ShowVerseSets() {
 	}
 	verseSetScrollContent.DetachChildren();
 	
-	var versesets : Array = verseManager.GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = verseManager.GetCurrentVerseSets();
 	var clone : VerseSetButton;
 	var currentButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
@@ -25,7 +25,7 @@ function ShowVerseSets() {
 	var rowHeight = vsButtonTransform.sizeDelta.y;
 	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
 	var currentView = VerseManager.GetCurrentView(false);
-	var numRows = versesets.length;
+	var numRows = versesets.Count;
 	var startIndex : int = 0;
 	var rt : RectTransform;
 	
@@ -42,7 +42,7 @@ function ShowVerseSets() {
 		rt.anchoredPosition.y = -(i)*(rowHeight + rowPadding) - rowPadding;	
 	}
 	
-	for (i=startIndex;i<versesets.length+startIndex;i++) {
+	for (i=startIndex;i<versesets.Count+startIndex;i++) {
 		var verseset : VerseSet = versesets[i-startIndex];
 		clone = Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 		clone.SetVerseSet(verseset);
@@ -69,7 +69,7 @@ function ShowVerseSets() {
 }
 
 function ShowVerses() {
-	var verses = verseManager.GetCurrentVerses();
+	var verses : List.<Verse> = verseManager.GetCurrentVerses();
 	var clone : VerseButton;
 	var verseButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vButtonTransform : RectTransform = verseButton.GetComponent(RectTransform);
@@ -92,16 +92,16 @@ function ShowVerses() {
 		rt.anchoredPosition.y = -index*(rowHeight + rowPadding) - rowPadding;	
 	};
 	
-	if (verses.length > 0) {
+	if (verses.Count > 0) {
 		addVerseButton(null,0);
 	}
 
-	for ( i=0;i<verses.length;i++) {
+	for ( i=0;i<verses.Count;i++) {
 		var verse : Verse = verses[i];
 		addVerseButton(verse,i+1);
 	}
 		
-	verseScrollContent.sizeDelta.y = (verses.length+1)*(rowHeight+rowPadding);
+	verseScrollContent.sizeDelta.y = (verses.Count+1)*(rowHeight+rowPadding);
 	
 	yield WaitForSeconds(0);
 	verseScrollContent.anchoredPosition.y = 0;

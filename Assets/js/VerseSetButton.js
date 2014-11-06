@@ -122,7 +122,7 @@ function HandleOnClick() {
 		new Hashtable({"handler":HandleApiVerseSetShow}));
 	};
 	
-	if (verseset.isOnline && (verseset.verses.length == 0)) {
+	if (verseset.isOnline && (verseset.verses.Count == 0)) {
 		apiManager.CallApi("verseset/show",
 		new Hashtable({"verseset_id":verseset.onlineId}),
 		new Hashtable({"handler":HandleApiVerseSetShow, 

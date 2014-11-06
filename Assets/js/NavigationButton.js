@@ -45,7 +45,7 @@ function HandleOnClick() {
 		VerseManager.SetCurrentView(view);
 	}
 	
-	var versesets : Array = VerseManager.GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = VerseManager.GetCurrentVerseSets();
 	var apiDomain : String = ApiManager.GetApiDomain();
 	var apiManager : ApiManager = ApiManager.GetInstance();
 	var us : UserSession = UserSession.GetUserSession();

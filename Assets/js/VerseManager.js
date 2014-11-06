@@ -1,6 +1,7 @@
 #pragma strict
 
 import JSONUtils;
+import System.Collections.Generic;
 
 var versesetLanguage : String;
 var numVerses = 0;
@@ -19,11 +20,11 @@ static var offlineVersesLoaded : boolean = false;
 static var started : boolean = false;
 static var historyLoaded : boolean = false;
 
-private static var RTL_LANGUAGE_CODES : Array = new Array('ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi');
+private static var RTL_LANGUAGE_CODES : List.<String> = new List.<String>(['ar','arc','bcc','bqi','ckb','dv','fa','glk','he','ku','mzn','pnb','ps','sd','ug','ur','yi']);
 
 static function Unload() {
 	for (var view in versesetsByView.Keys) {
-		var versesets : Array = versesetsByView[view];
+		var versesets : List.<VerseSet> = versesetsByView[view];
 		
 		for (var vs : VerseSet in versesets) {
 			vs.HandleRemoved();
@@ -40,7 +41,7 @@ function SwitchLanguage(language : String, finishHandler : Function) {
 	SetLanguage(language, finishHandler);
 	SetCurrentView(defaultView);
 	var versesets = GetCurrentVerseSets();
-	offlineVersesLoaded = (versesets.length > 0);
+	offlineVersesLoaded = (versesets.Count > 0);
 }
 
 function Reload() {
@@ -60,10 +61,10 @@ static function SetCurrentView(view : String) {
 	}
 	currentView = view;
 	verseIndex = 0;
-	var versesets : Array = GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = GetCurrentVerseSets();
 	
 	if (!Object.ReferenceEquals(currentVerseSet, null)) {
-		for (var i=0;i<versesets.length;i++) {
+		for (var i=0;i<versesets.Count;i++) {
 			var verseset : VerseSet = versesets[i];
 			if (verseset.SaveKey() == currentVerseSet.SaveKey()) {
 				// current verse set is in view so leave it alone
@@ -72,7 +73,7 @@ static function SetCurrentView(view : String) {
 		}
 	}
 	
-	if (versesets.length > 0) {
+	if (versesets.Count > 0) {
 		currentVerseSet = versesets[0];
 	} else {
 		currentVerseSet = null;
@@ -85,10 +86,11 @@ static function AddOnlineVerseSetToHistory(verseset : VerseSet) {
 	var oldIndex : int = verseIndex;
 	var oldVerseSet : VerseSet = currentVerseSet;
 	SetCurrentView("history");
-	var versesets : Array = GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = GetCurrentVerseSets();
 	AddOnlineVerseSet(verseset);
-	var vs : VerseSet = versesets.Pop();
-	versesets.Unshift(vs);
+	var vs : VerseSet = versesets[versesets.Count-1];
+	
+	versesets.Insert(0,vs);
 	SetCurrentView(oldView);
 	verseIndex = oldIndex;
 	currentVerseSet = oldVerseSet;
@@ -101,8 +103,8 @@ static function GetCurrentVerseSet() : VerseSet {
 		//Debug.Log("current verse set = " + currentVerseSet.SaveKey());
 		return currentVerseSet;
  	}
-	var versesets : Array = GetCurrentVerseSets();
-	if (versesets.length == 0) return null;
+	var versesets : List.<VerseSet> = GetCurrentVerseSets();
+	if (versesets.Count == 0) return null;
 	var verseset : VerseSet = versesets[0];
 	
 	var versesetSaveKey = PlayerPrefs.GetString(String.Format("current_verseset_{0}",GetLanguage()), verseset.SaveKey());
@@ -132,11 +134,11 @@ static function SetCurrentVerseSet(verseset : VerseSet) {
 	PlayerPrefs.SetString(String.Format("current_verseset_{0}",language), verseset.SaveKey());
 }
 
-static function GetCurrentVerses() : Array {
+static function GetCurrentVerses() : List.<Verse> {
 	var vs : VerseSet = GetCurrentVerseSet();
 	
 	if (Object.ReferenceEquals(vs, null)) {
-		return new Array();
+		return new List.<Verse>();
 	}
 	return vs.verses;
 }
@@ -144,15 +146,15 @@ static function GetCurrentVerses() : Array {
 static function GetCurrentVerse() : Verse {
 	var verses = GetCurrentVerses();
 	
-	if (verseIndex >= verses.length) {
+	if (verseIndex >= verses.Count) {
 		verseIndex = 0;
 	}
 
-	if (verses.length == 0) {
+	if (verses.Count == 0) {
 		SetCurrentView("history");
 		LoadVersesLocally();
 		verses = GetCurrentVerses();
-		if (verses.length > 0) {
+		if (verses.Count > 0) {
 			verseIndex = 0;
 			return verses[verseIndex];
 		} else {
@@ -176,14 +178,14 @@ function SayVerseReference() {
 
 	var verse : Verse = GetCurrentVerse();
 	var reference : String = verse.reference;
-	var refParts = reference.Split(":"[0]);
+	var refParts : List.<String> = new List.<String>(reference.Split(":"[0]));
 
 	var language = GetVoiceLanguage();	
 	if (IsLanguageChinese(language)) {
-		if (refParts.Length < 2) {
-			refParts = reference.Split("："[0]);
+		if (refParts.Count < 2) {
+			refParts = new List.<String>(reference.Split("："[0]));
 		}
-		if (refParts.length == 2) {
+		if (refParts.Count == 2) {
 			refParts[0] += "章";
 			refParts[1] += "節";
 		}
@@ -317,7 +319,7 @@ function SetLanguage(language : String, finishHandler : Function) : String {
 
 function IsAtFinalVerseOfChallenge() {
 	var verses = GetCurrentVerses();
-	return (GetChallengeModeEnabled()) && (verseIndex >= (verses.length-1));
+	return (GetChallengeModeEnabled()) && (verseIndex >= (verses.Count-1));
 }
 
 function GotoNextVerse() {
@@ -326,7 +328,7 @@ function GotoNextVerse() {
 	var verses = GetCurrentVerses();
 	verseIndex = verseIndex + 1;
 
-	if (verseIndex >= verses.length) {
+	if (verseIndex >= verses.Count) {
 		verseIndex = 0;
 	}
 	
@@ -433,7 +435,7 @@ static function GetChallengeModeEnabled() {
 function GetCurrentDifficulty() {
 	var selectedDifficulty : Difficulty = GetSelectedDifficulty();
 	var verseset : VerseSet = currentVerseSet;
-	var verses : Array = GetCurrentVerses();
+	var verses : List.<Verse> = GetCurrentVerses();
 	var verse : Verse = GetCurrentVerse();
 	if (Object.ReferenceEquals(verse, null)) {
 		return Difficulty.Easy;
@@ -509,9 +511,9 @@ function GetCachedTotalScore() {
 
 function GetMasteredVersesPercentage() {
 	//var numMastered : float = GetMasteredVerses(GetCurrentDifficulty());
-	var verses : Array = GetCurrentVerseSet().verses;
+	var verses : List.<Verse> = GetCurrentVerseSet().verses;
 	var numMastered : float = GetMasteredVerses();
-	return parseInt(100 * numMastered / verses.length);
+	return parseInt(100.0f * numMastered / (1.0f*verses.Count));
 }
 
 function GetNextDifficulty() {
@@ -543,9 +545,9 @@ function SyncMasteredVerses(difficulty : Difficulty) {
 }
 
 static function AddOnlineVerseSet(verseset : VerseSet) {
-	var versesets : Array = GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = GetCurrentVerseSets();
 	// if verse set already exists, replace the old one and return the new
-	for (var i=0;i<versesets.length;i++) {
+	for (var i=0;i<versesets.Count;i++) {
 		var vs : VerseSet = versesets[i];
 		if (verseset.SaveKey() == vs.SaveKey()) {
 			versesets.RemoveAt(i);
@@ -554,25 +556,25 @@ static function AddOnlineVerseSet(verseset : VerseSet) {
 				vs.HandleRemoved();
 			}
 			
-			versesets.push(verseset);
+			versesets.Add(verseset);
 			
 			return verseset;
 		}
 	}
-	versesets.push(verseset);
+	versesets.Add(verseset);
 	return verseset;
 }
 
 static function CreateVerseSet(name : String) {
-	var versesets : Array = GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = GetCurrentVerseSets();
 	var vs : VerseSet = VerseSet(name);
 	vs.language = GetLanguage();
-	versesets.push(vs);
+	versesets.Add(vs);
 	return vs;
 }
 
 static function CheckRightToLeft(language : String) {
-	for (var i=0;i<RTL_LANGUAGE_CODES.length;i++) {
+	for (var i=0;i<RTL_LANGUAGE_CODES.Count;i++) {
 		if (language == RTL_LANGUAGE_CODES[i]) {
 			rightToLeft = true;
 			return;
@@ -713,7 +715,7 @@ static function LoadVersesLocally() {
 	offlineVersesLoaded = true;
 	var lang = GetLanguage();
 	SetVerseLanguage(lang);
-  	var lines = verseText.text.Split("\n"[0]);
+  	var lines : List.<String> = new List.<String>(verseText.text.Split("\n"[0]));
   	var line : String;
   	var sep : String = "|";
   	var name : String;
@@ -726,15 +728,15 @@ static function LoadVersesLocally() {
   			verseset = CreateVerseSet(name);
   			continue;
   		}
-  		var parts = line.Split([sep], System.StringSplitOptions.None);
-  		if (parts.Length != 2) continue;
+  		var parts : List.<String> = new List.<String>(line.Split([sep], System.StringSplitOptions.None));
+  		if (parts.Count != 2) continue;
   		
   		var text = parts[1];
   		var badLetter : String;
-  		for (badLetter in new Array("“","”")) {
+  		for (badLetter in ["“","”"]) {
 	  		text = text.Replace(badLetter,"");
 	  	}
-	  	for (badLetter in new Array("-","—","  ","\t")) {
+	  	for (badLetter in ["-","—","  ","\t"]) {
 	  		text = text.Replace(badLetter," ");
 	  	}
 	  	
@@ -750,7 +752,7 @@ static function LoadVersesLocally() {
   	}
 }
 
-static function GetCurrentVerseSets() : Array {
+static function GetCurrentVerseSets() : List.<VerseSet> {
 	return GetVerseSets(currentView);
 }
 
@@ -758,17 +760,17 @@ static function ClearVerseSets(view : String) {
 	if (view != "history") {
 		view = view + "_" + GetLanguage();
 	}
-	var vs : Array = versesetsByView[view];
+	var vs : List.<VerseSet> = versesetsByView[view];
 	if (vs != null) {
 		vs.Clear();
 	}
 }
 
-static function GetVerseSets(view : String) : Array {
+static function GetVerseSets(view : String) : List.<VerseSet> {
 	if (versesetsByView.ContainsKey(view)) {
 		return versesetsByView[view];
 	}
-	versesetsByView[view] = new Array();
+	versesetsByView[view] = new List.<VerseSet>();
 	return versesetsByView[view];
 }
 

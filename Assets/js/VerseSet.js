@@ -1,3 +1,5 @@
+import System.Collections.Generic;
+
 static var versesetBySaveKey : Hashtable = new Hashtable();
 
 public class VerseSet
@@ -5,7 +7,7 @@ public class VerseSet
 	public var onlineId : String;
 	public var setname : String;
 	public var language : String;
-	public var verses : Array;
+	public var verses : List.<Verse>;
 	public var verseCount : int;
 	public var isOnline : boolean;
 	public var version : String;
@@ -33,7 +35,7 @@ public class VerseSet
 	
 	public function GetVerseCount() {
 		if (isOnline) return verseCount;
-		return verses.length;
+		return verses.Count;
 	}
 
 	
@@ -43,14 +45,14 @@ public class VerseSet
 		setname = setname_;
 		language = language_;
 		version = version_;
-		verses = new Array();
+		verses = new List.<Verse>();
 		versesetBySaveKey[SaveKey()] = this;
 	}
 	
 	public function VerseSet(setname_ : String) {
 		isOnline = false;
 		setname = setname_;
-		verses = new Array();
+		verses = new List.<Verse>();
 		versesetBySaveKey[SaveKey()] = this;
 	}
 	
@@ -59,7 +61,7 @@ public class VerseSet
 	}
 	
 	public function AddVerse(verse_ : Verse) {
-		verses.push(verse_);
+		verses.Add(verse_);
 	}
 	
 	public function ToString() {
@@ -112,7 +114,7 @@ public class VerseSet
 	}
 	
 	public function IndexOfVerseId(verseId : String) {
-		for (var i=0;i<verses.length;i++) {
+		for (var i=0;i<verses.Count;i++) {
 			var verse : Verse = verses[i];
 			if (verse.SaveKey() == verseId) {
 				return i;

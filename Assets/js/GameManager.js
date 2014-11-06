@@ -83,7 +83,7 @@ static function SetChallengeModeEnabled(enabled : boolean) {
 	PlayerPrefs.SetInt("challenge_mode", enabledInt);
 }
 
-static function GetChallengeModeEnabled() {
+static function GetChallengeModeEnabled() : boolean {
 	if (challengeModeState == -1) {
 		return PlayerPrefs.GetInt("challenge_mode") == 1;
 	} else {
@@ -96,7 +96,7 @@ function OnGUI() {
 
 }
 
-static function GetReviewURL() {
+static function GetReviewURL() : String {
 	var url : String = "https://itunes.apple.com/us/app/verse-rain-fun-bible-verse/id928732025?ls=1&mt=8";
 				
 	if (Application.platform == RuntimePlatform.Android) {
@@ -111,7 +111,7 @@ function ExitToVerseList() {
 	Application.LoadLevel("versesets");
 }
 
-function CanShowSolution() {
+function CanShowSolution() : boolean {
 	return ((wordIndex < wordLabels.Count) && !finished && gameStarted && !GetChallengeModeEnabled());	
 }
 
@@ -250,7 +250,7 @@ function GetProgress() : float {
 		}
 	}
 	if (GetChallengeModeEnabled()) {
-		var versesCount : int = verseManager.GetCurrentVerses().length;
+		var versesCount : int = verseManager.GetCurrentVerses().Count;
 		if (versesCount == 0) {
 			return 0.0f;
 		}
@@ -322,7 +322,7 @@ function SetupUI() {
 
 function SyncSetProgressLabel() {
 	setProgressLabel.active = GetChallengeModeEnabled();
-	setProgressLabel.text = String.Format("{0}/{1}", verseManager.verseIndex+1, verseManager.GetCurrentVerses().length);
+	setProgressLabel.text = String.Format("{0}/{1}", verseManager.verseIndex+1, verseManager.GetCurrentVerses().Count);
 }
 
 function showFeedback(feedbackText : String, time : float) {
