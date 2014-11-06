@@ -5,12 +5,10 @@ var title : String;
 var description : String;
 var titleText : Text;
 var descriptionText : Text;
-var OnClose : Function = null;
+var OnClose = function() {};
 
 function HandleOkayButtonClick() {
-	if (OnClose != null) {
-		OnClose();
-	}
+	OnClose();
 	Destroy(this.gameObject);
 }
 

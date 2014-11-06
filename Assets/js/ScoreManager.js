@@ -37,7 +37,7 @@ function GetAccuracy() : float {
 	return accuracy;
 }
 
-function HandleWordCorrect(timeSinceLast : float) {
+function HandleWordCorrect(timeSinceLast : float) : int {
 	var dHealth = (5.0f-healthBarUnits)*0.01f;
 	if (dHealth < 0.01) dHealth = 0.01f;
 	
@@ -47,16 +47,15 @@ function HandleWordCorrect(timeSinceLast : float) {
 	if (moves == 0) {
 		baseTime = 10;
 	}
-	var gt = TextManager.GetText;
 	
 	if (timeSinceLast < 3) {
 		streak += 1;
 		if (streak == 5) {
-			gameManager.showFeedback(gt("Nice Streak!"), 1);
+			gameManager.showFeedback(TextManager.GetText("Nice Streak!"), 1);
 		} else if (streak == 10) {
-			gameManager.showFeedback(gt("You're doing great!"), 1);
+			gameManager.showFeedback(TextManager.GetText("You're doing great!"), 1);
 		} else if (streak == 15) {
-			gameManager.showFeedback(gt("Hallelujah!"), 1);
+			gameManager.showFeedback(TextManager.GetText("Hallelujah!"), 1);
 		}
 	}
 	moves = moves + 1;
@@ -73,7 +72,7 @@ function UpdateHealthBar(newHealth : float) {
 	healthBar.SetPercentage(healthBarUnits);
 }
 
-function HandleWordWrong() {
+function HandleWordWrong() : String {
 	streak = 0;
 	var dScore = 0;
 	var difficulty = gameManager.difficulty;
@@ -112,7 +111,7 @@ function updateScoreLabel() {
 	
 	var digits = "00";
 	
-	if (gameManager.GetChallengeModeEnabled()) {
+	if (GameManager.GetChallengeModeEnabled()) {
 		digits = "000";
 	}
 	
@@ -121,8 +120,8 @@ function updateScoreLabel() {
 
 }
 
-function CalculateMaxTime() {
-	var n = gameManager.words.Count;
+function CalculateMaxTime() : int {
+	var n = GameManager.words.Count;
 	if (n == 0) return 0;
 	
 	var secondsPerBlock : int = 3.0f;
@@ -210,18 +209,18 @@ function HandleFinished() {
 	}
 }
 
-function WasVerseMastered() {
+function WasVerseMastered() : boolean {
 	return (healthBar.IsGreen() || (mistakes == 0));
 }
 
 function HandleCountTimeLeftFinished() {
 	
-	if (gameManager.GetChallengeModeEnabled()) {
+	if (GameManager.GetChallengeModeEnabled()) {
 		if (score > highScore) {
 			highScore = score;
 			isHighScore = true;
 			versesetMetadata["high_score"] = highScore;
-			var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+			var verseset : VerseSet = VerseManager.GetCurrentVerseSet();
 			verseset.SaveMetadata(versesetMetadata);
 		}
 		
@@ -232,7 +231,7 @@ function HandleCountTimeLeftFinished() {
 		if (score > highScore) {
 			highScore = score;
 			isHighScore = true;
-			var verse : Verse = verseManager.GetCurrentVerse();
+			var verse : Verse = VerseManager.GetCurrentVerse();
 			verseMetadata["high_score"] = highScore;
 			verse.SaveMetadata(verseMetadata);
 		}
@@ -253,19 +252,19 @@ function resetTimeForChallenge() {
 function resetTime() {
 	startTime = Time.time;
 	if (GameManager.GetChallengeModeEnabled()) {
-		if (verseManager.verseIndex == 0) {
+		if (VerseManager.verseIndex == 0) {
 			resetTimeForChallenge();
 		}
 	}
 }
 
 function reset() {
-	if (!gameManager.GetChallengeModeEnabled()) {
-		var verse : Verse = verseManager.GetCurrentVerse();
+	if (!GameManager.GetChallengeModeEnabled()) {
+		var verse : Verse = VerseManager.GetCurrentVerse();
 		verseMetadata = verse.GetMetadata();
 		highScore = verseMetadata["high_score"];
 	} else {
-		var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+		var verseset : VerseSet = VerseManager.GetCurrentVerseSet();
 		if (!Object.ReferenceEquals(verseset, null)) {
 			versesetMetadata = verseset.GetMetadata();
 			highScore = versesetMetadata["high_score"];
@@ -275,18 +274,22 @@ function reset() {
 	resetTime();	
 }
 
-function difficultyMultiplier(difficulty : Difficulty) {
+function difficultyMultiplier(difficulty : Difficulty) : float {
 	var m : float = 1.0f;
 	
 	switch(difficulty) {
 		case Difficulty.Easy:
 			return 1.0*m;
+			break;
 		case Difficulty.Medium:
 			return 2.0*m;
+			break;
 		case Difficulty.Hard:
 			return 3.0*m;
+			break;
 		default:
 			return 1;
+			break;
 	}
 }
 

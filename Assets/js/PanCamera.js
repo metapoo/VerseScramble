@@ -1,3 +1,5 @@
+#pragma strict
+
 var mouseSensitivity : float = 0.75f;
 var lastPosition : Vector3 ;
 var gameManager : GameManager;
