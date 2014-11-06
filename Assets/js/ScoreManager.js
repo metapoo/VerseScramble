@@ -122,7 +122,7 @@ function updateScoreLabel() {
 }
 
 function CalculateMaxTime() {
-	var n = gameManager.words.length;
+	var n = gameManager.words.Count;
 	if (n == 0) return 0;
 	
 	var secondsPerBlock : int = 3.0f;

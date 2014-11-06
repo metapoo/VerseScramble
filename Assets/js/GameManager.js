@@ -1,51 +1,51 @@
 ﻿#pragma strict
 import UnityEngine;
 import UnityEngine.UI;
+import System.Collections.Generic;
 
 @script RequireComponent(AudioSource);
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
-var victorySnd : AudioClip;
-var skyManager : SkyManager;
-var wordLabelContainer : PanCamera;
-var mainCam : Camera;
-var wordLabel : WordLabel;
-var topWall : BoxCollider2D;
-var bottomWall: BoxCollider2D;
-var leftWall : BoxCollider2D;
-var rightWall : BoxCollider2D;
-var medWall : BoxCollider2D;
-var finished : boolean = false;
-var references : Array = new Array();
-var difficulty : Difficulty = Difficulty.Easy;
-var scoreManager : ScoreManager;
-var verseManager : VerseManager;
-var verseMetadata : Hashtable;
-var timeUntilHint : int ;
-var background : SpriteRenderer;
-var sndSuccess1 : AudioClip;
-var sndSuccess2 : AudioClip;
-var sndSuccess75 : AudioClip;
-var sndSuccess50 : AudioClip;
-var sndSuccess25 : AudioClip;
-var sndSuccess12 : AudioClip;
+public var victorySnd : AudioClip;
+public var skyManager : SkyManager;
+public var wordLabelContainer : PanCamera;
+public var mainCam : Camera;
+public var wordLabel : WordLabel;
+public var topWall : BoxCollider2D;
+public var bottomWall: BoxCollider2D;
+public var leftWall : BoxCollider2D;
+public var rightWall : BoxCollider2D;
+public var medWall : BoxCollider2D;
+public var finished : boolean = false;
+public var difficulty : Difficulty = Difficulty.Easy;
+public var scoreManager : ScoreManager;
+public var verseManager : VerseManager;
+public var verseMetadata : Hashtable;
+public var timeUntilHint : int ;
+public var background : SpriteRenderer;
+public var sndSuccess1 : AudioClip;
+public var sndSuccess2 : AudioClip;
+public var sndSuccess75 : AudioClip;
+public var sndSuccess50 : AudioClip;
+public var sndSuccess25 : AudioClip;
+public var sndSuccess12 : AudioClip;
 
-var sndFailure1 : AudioClip;
-var sndExplode1 : AudioClip;
-var sndSelect : AudioClip;
-var refreshButton : Button;
-var hintButton : Button;
-var feedbackLabel : Text;
-var introReferenceLabel : Text;
-var panelReferenceLabel : Text;
-var difficultyLabel : Text;
-var healthBar : HealthBar;
-var wordScale : float;
-var setProgressLabel : Text;
-var updateCount : int = 0;
-var line : int = 0;
-var separators : String[] = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
+public var sndFailure1 : AudioClip;
+public var sndExplode1 : AudioClip;
+public var sndSelect : AudioClip;
+public var refreshButton : Button;
+public var hintButton : Button;
+public var feedbackLabel : Text;
+public var introReferenceLabel : Text;
+public var panelReferenceLabel : Text;
+public var difficultyLabel : Text;
+public var healthBar : HealthBar;
+public var wordScale : float;
+public var setProgressLabel : Text;
+public var updateCount : int = 0;
+public var line : int = 0;
+public var separators : String[] = ["、","，", "，","。","！","；","：","?",",",";",":","？",".","’","”","!"];
 
 public var needToSelectDifficulty : boolean = true;
 public var difficultyOptions : DifficultyOptions;
@@ -60,9 +60,9 @@ private var wordHinted : boolean = false;
 static var lastDiffSpoken : String;
 static var needToRecordPlay : boolean = true;
 static var currentWord : String;
-static var words : Array = new Array();
-static var wordLabels : Array = new Array();
-static var scrambledWordLabels : Array = new Array();
+static var words : List.<String> = new List.<String>();
+static var wordLabels : List.<WordLabel> = new List.<WordLabel>();
+static var scrambledWordLabels : List.<WordLabel> = new List.<WordLabel>();
 static var wordIndex : int;
 static var score = 0;
 static var highScore = 0;
@@ -72,7 +72,7 @@ static var streak : int = 0;
 static var moves : int = 0;
 static var lastWordTime : float;
 static var challengeModeState : int = -1;
-static var activeWordLabels : Array = new Array();
+static var activeWordLabels : List.<WordLabel> = new List.<WordLabel>();
 
 private var windowRect : Rect;
 
@@ -112,7 +112,7 @@ function ExitToVerseList() {
 }
 
 function CanShowSolution() {
-	return ((wordIndex < wordLabels.length) && !finished && gameStarted && !GetChallengeModeEnabled());	
+	return ((wordIndex < wordLabels.Count) && !finished && gameStarted && !GetChallengeModeEnabled());	
 }
 
 function HandleCountTimeFinished() {
@@ -151,7 +151,7 @@ function ShowSolution() {
 	
 	if (wordIndex < 0) return;
 	
-	for (var i=wordIndex;i<wordLabels.length;i++) {
+	for (var i=wordIndex;i<wordLabels.Count;i++) {
 		var wordObject : WordLabel = wordLabels[i];
 		wordObject.returnToVerse();
 	}
@@ -243,8 +243,8 @@ function GetProgress() : float {
 	if (finished) {
 		verseProgress = 1.0f;
 	} else {
-		if (wordLabels.length > 0) {
-			verseProgress = (wordIndex*1.0f) / (1.0f*wordLabels.length);
+		if (wordLabels.Count > 0) {
+			verseProgress = (wordIndex*1.0f) / (1.0f*wordLabels.Count);
 		} else {
 			verseProgress = 0.0f;
 		}
@@ -359,7 +359,7 @@ function nextWord() {
 	if (wordIndex == -1) return null;
 	wordHinted = false;
 	wordIndex += 1;
-	if (wordIndex >= words.length) {
+	if (wordIndex >= words.Count) {
 		currentWord = null;
 		wordIndex = -1;
 		
@@ -469,15 +469,15 @@ function SetVerseReference (reference : String, version : String) {
 }
 
 
-function SplitVerse(verse : String) {
-	var langConfig : Hashtable = new Hashtable({'en':[20,10,5],
-								  				'zh':[10,6,3],
-								  				'ko':[11,6,3],
-								  				'ja':[11,6,3]});
+function SplitVerse(verse : String) : List.<String> {
+	var langConfig : Hashtable = new Hashtable({'en':new List.<int>([20,10,5]),
+								  				'zh':new List.<int>([10,6,3]),
+								  				'ko':new List.<int>([11,6,3]),
+								  				'ja':new List.<int>([11,6,3])});
 	var language : String = VerseManager.GetVerseLanguage();
 	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
 	
-	var phraseLengths : Array = langConfig['en'];
+	var phraseLengths : List.<int> = langConfig['en'];
 	
 	if (langConfig.Contains(language)) {
 		phraseLengths = langConfig[language];
@@ -494,8 +494,8 @@ function SplitVerse(verse : String) {
 	//Debug.Log("SplitVerse = " + verse );
 	
 	//Debug.Log("phrase length = " + phraseLength);
-	var clauseArray : Array = new Array();
-	var phraseArray : Array = new Array();
+	var clauseArray : List.<String> = new List.<String>();
+	var phraseArray : List.<String> = new List.<String>();
 	var clause = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
@@ -510,19 +510,19 @@ function SplitVerse(verse : String) {
 	
 	var processClause = function(clause : String) {
 		var combined : boolean = false;
-		if (clauseArray.length > 0) {
+		if (clauseArray.Count > 0) {
 			// combine with previous clause if too small
-			var previousClause : String = clauseArray[clauseArray.length-1];
+			var previousClause : String = clauseArray[clauseArray.Count-1];
 			//Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
 			
 			// if clause length is 2 or less just glob it on
 			if (clause.Length <= 2) {
-				clauseArray[clauseArray.length-1] += clause;
+				clauseArray[clauseArray.Count-1] += clause;
 				combined = true;
 			}	
 		}
 		if (!combined) {
-			clauseArray.push(clause);
+			clauseArray.Add(clause);
 		}
 	};
 	
@@ -667,7 +667,7 @@ function SplitVerse(verse : String) {
 				
 				if ((phrase != "") && (phrase != " ") && (phrase != "  ")) {
 					if (isChinese) {phrase = phrase.Replace(" ","");}
-					phraseArray.push(phrase);
+					phraseArray.Add(phrase);
 					
 				}
 			}	
@@ -676,12 +676,12 @@ function SplitVerse(verse : String) {
 			clause = clause.Replace("／","");
 			clause = clause.Replace("/","");
 			if (isChinese) {clause = clause.Replace(" ","");}
-			phraseArray.push(clause);
+			phraseArray.Add(clause);
 		}
 		
 		// combine phrases for long laundry lists
-		if (phraseArray.length > 1) {
-			l = phraseArray.length;
+		if (phraseArray.Count > 1) {
+			l = phraseArray.Count;
 			var curPhrase : String = phraseArray[l-1];
 			var prevPhrase : String = phraseArray[l-2];
 			
@@ -694,12 +694,15 @@ function SplitVerse(verse : String) {
 			 
 			if ((difficulty != difficulty.Hard) && hasCommas && ((curPhrase.Length + prevPhrase.Length - 2) < phraseLength*2.0f)) {
 			 Debug.Log("COMBINE(" + prevPhrase + " | " + curPhrase + ")");
-				prevPhrase += " " + phraseArray.pop();
+			 	var lastPhrase : String = phraseArray[phraseArray.Count-1];
+			 	phraseArray.RemoveAt(phraseArray.Count-1);
+			 
+				prevPhrase += " " + lastPhrase;
 				phraseArray[l-2] = prevPhrase;
 			}
 		}
 	}
-	Debug.Log("# blocks = " + phraseArray.length);
+	Debug.Log("# blocks = " + phraseArray.Count);
 	return phraseArray;
 
 }
@@ -739,7 +742,7 @@ function BeginGame() {
 
 function GetMaxActiveWordIndex() : int {
 	var maxActiveWords : int = GetMaxWordsActive();
-	var maxWords : int = scrambledWordLabels.length;
+	var maxWords : int = scrambledWordLabels.Count;
 	if ((wordIndex + maxActiveWords) < maxWords) {
 		maxWords = wordIndex + maxActiveWords;
 	}
@@ -751,8 +754,8 @@ function UpdateGravityScale() : float {
 	var fellDownEnough : float = 0.0;
 	
 	if (wordIndex <= 0) return;
-	if (activeWordLabels.length == 0) return;
-	if (wordIndex >= wordLabels.length) return;
+	if (activeWordLabels.Count == 0) return;
+	if (wordIndex >= wordLabels.Count) return;
 	
 	var currWordLabel : WordLabel = wordLabels[wordIndex];
 	
@@ -768,7 +771,7 @@ function UpdateGravityScale() : float {
 	
 	var pct : float = 1.0f;
 	
-	pct = fellDownEnough / activeWordLabels.length;
+	pct = fellDownEnough / (1.0f*activeWordLabels.Count);
 
 	if (f < pct) {
 		pct = 0.5f*f + 0.5f*pct;
@@ -810,25 +813,19 @@ function SwapWords(index1:int, index2:int) {
 }
 
 function OrderedIndexOfWord(wordLabel : WordLabel) : int {
-	
-	for (var i : int = wordLabels.length-1;i>= 0;i--) {
-		var wLabel : WordLabel = wordLabels[i];
-		if (wLabel == wordLabel) return i;
-	}
-	
-	return -1;
+	return wordLabels.LastIndexOf(wordLabel);	
 }
 
 function scrambleWordLabels() {
-	scrambledWordLabels = new Array();
-	for (var i : int=0;i<wordLabels.length;i++) {
-		scrambledWordLabels.push(wordLabels[i]);
+	scrambledWordLabels = new List.<WordLabel>();
+	for (var i : int=0;i<wordLabels.Count;i++) {
+		scrambledWordLabels.Add(wordLabels[i]);
 	}
 	var maxWordsActive = GetMaxWordsActive();
 	var g = Mathf.RoundToInt(GetGroupSize() * 1.25);
 	if (g >= (maxWordsActive-1)) g = (maxWordsActive-1);
 	
-	var currentIndex : int = scrambledWordLabels.length;
+	var currentIndex : int = scrambledWordLabels.Count;
 	var temporaryValue : WordLabel;
 	var randomIndex : int;
 
@@ -850,6 +847,7 @@ function scrambleWordLabels() {
     	scrambledWordLabels[currentIndex] = scrambledWordLabels[randomIndex];
     	scrambledWordLabels[randomIndex] = temporaryValue;
   	}
+  	
 }
 
 function AdjustWordScale() {
@@ -859,7 +857,7 @@ function AdjustWordScale() {
 	Debug.Log("minY = " + minY);
 	
 	var h : float = 0.0f;
-	for (var i=0;i<wordLabels.length;i++) {
+	for (var i=0;i<wordLabels.Count;i++) {
 		var wordLabel : WordLabel = wordLabels[i];
 		wordLabel.CalculateVersePosition();
 		wordLabel.isLastInLine = false;
@@ -874,7 +872,7 @@ function AdjustWordScale() {
 	if ((wordY) < minY) {
 		wordScale -= 0.025f;
 		Debug.Log("adjust word scale to " + wordScale);
-		for (i=0;i<wordLabels.length;i++) {
+		for (i=0;i<wordLabels.Count;i++) {
 			wordLabel = wordLabels[i];
 			wordLabel.SyncFontSize();
 		}
@@ -943,7 +941,7 @@ function SetupVerse() {
 		clone.rightToLeft = rTL;
 		clone.setWord(word);
 		clone.wordIndex = i;
-		wordLabels.push(clone);
+		wordLabels.Add(clone);
 		clone.transform.SetParent(wordLabelContainer.transform);
 		
 		var w = clone.totalSize.x;
@@ -966,9 +964,9 @@ function SetupVerse() {
 
 	var dt = 0.1f;
 	
-	while (numWordsReleased < wordLabels.length) {
+	while (numWordsReleased < wordLabels.Count) {
 		// don't allow more than maxWordsActive words on screen at the same time
-		while (activeWordLabels.length >= maxWordsActive) {
+		while (activeWordLabels.Count >= maxWordsActive) {
 			yield WaitForSeconds(1.0f);
 			
 		}		
@@ -981,7 +979,7 @@ function SetupVerse() {
 
 	}
 
-	numWordsReleased = wordLabels.length;
+	numWordsReleased = wordLabels.Count;
 	
 }
 
@@ -992,7 +990,7 @@ function StartGame() {
 
 function GetWordLabelAt(index : int) : WordLabel {
 	if (index < 0) return null;
-	if (index >= wordLabels.length) return null;
+	if (index >= wordLabels.Count) return null;
 	return wordLabels[index];
 }
 
@@ -1042,12 +1040,12 @@ function ReleaseWords(index: int, numWords : int) {
  
 	var c : int  = 0;
 	
-	for (var i : int=index;i<scrambledWordLabels.length;i++) {
+	for (var i : int=index;i<scrambledWordLabels.Count;i++) {
 		var wordObject : WordLabel = scrambledWordLabels[i];
 		var h = wordObject.boxCollider2D().size.y;
 		wordObject.transform.position.y = screenBounds.y+h*2;
 		wordObject.rigidbody2D.isKinematic = false;
-		activeWordLabels.push(wordObject);
+		activeWordLabels.Add(wordObject);
 		c += 1;	
 		if (c == numWords) {
 			break;
@@ -1106,7 +1104,7 @@ function ShowHintFromButton() {
 
 function ShowHint() {
 	wordHinted = true;	
-	if ((wordIndex <= 0) || (wordIndex >= wordLabels.length)) return;
+	if ((wordIndex <= 0) || (wordIndex >= wordLabels.Count)) return;
 	var wObject : WordLabel = wordLabels[wordIndex];
 	if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 		wObject.HintAt();
