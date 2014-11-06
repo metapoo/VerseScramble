@@ -39,7 +39,7 @@ def get_versenums_from_reference(reference):
 
     parts = reference.split(":")
     if len(parts) > 2:
-        return
+        verse_numbers = parts[1]
     elif len(parts) == 1:
         numlist = range(0,99)
         return numlist
