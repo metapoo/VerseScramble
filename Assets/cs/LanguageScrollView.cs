@@ -1,5 +1,3 @@
-namespace CSDEP
-{
 using UnityEngine;
 using System;
 using System.Collections;
@@ -19,11 +17,11 @@ public class LanguageScrollView:MonoBehaviour{
 		clone.SetParent(scrollContent);
 		float height = clone.GetComponent<RectTransform>().sizeDelta.y;
 		var tmp_cs1 = clone.GetComponent<RectTransform>().anchoredPosition;
-        tmp_cs1.y = -1*languageIndex*height;
-        clone.GetComponent<RectTransform>().anchoredPosition = tmp_cs1;
+		tmp_cs1.y = -1*languageIndex*height;
+		clone.GetComponent<RectTransform>().anchoredPosition = tmp_cs1;
 		var tmp_cs2 = scrollContent.sizeDelta;
-        tmp_cs2.y = height*(languageIndex + 1);
-        scrollContent.sizeDelta = tmp_cs2;
+		tmp_cs2.y = height*(languageIndex + 1);
+		scrollContent.sizeDelta = tmp_cs2;
 		languageIndex += 1;
 	}
 	
@@ -115,7 +113,6 @@ public class LanguageScrollView:MonoBehaviour{
 		languageByCode.Add("sn","chiShona");
 		languageByCode.Add("ky","Кыргызча, Кыргыз тили");
 		languageByCode.Add("sw","Kiswahili");
-		
 		languageCodes = new List<string>(new string[]{"en", "zh-hant", "zh-hans", "ko", "ja", "es", "fr", "de", "it", "es-ES", "ru", "vi", "mn", "te", "mg", "ms", "af", "amu", "ckw", "ca", "ceb", "cco", "cy", "da", "eo", "tl", "ga", "hwc", "hr", "hil", "id", "jac", "kek", "kw", "sw", "ht", "la", "hu", "mvc", "mvj", "mi", "ppl", "nl", "no", "ngu", "nds", "pl", "pt", "pt-PT", "qu", "qut", "ro", "st", "sq", "sk", "so", "fi", "sv", "twi", "tr", "usp", "yo", "sn", "xh", "zu", "is", "cs", "grc", "bg", "ky", "mk", "sr", "uk", "he", "ur", "ar", "awa", "ne", "mr", "hi", "bn", "pa", "or", "ta", "th", "chr"});
 		for(int i=0;i<languageCodes.Count;i++) {
 			string code = languageCodes[i];
@@ -126,6 +123,5 @@ public class LanguageScrollView:MonoBehaviour{
 	
 	public void Update() {
 	}
-
-}
+	
 }

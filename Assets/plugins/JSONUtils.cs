@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Globalization;
+using System.Linq;
 
 /*
  
@@ -436,13 +437,13 @@ escapee2.Add("t", "\t");
 			{
 				retour.Add("\""+key+"\" : "+HashtableToJSON(tempValue as Hashtable));
 			}
-/*			else if( tempValue.GetType() == Boo.Lang.Hash[].GetType() )
-			{
-				tempValue = new System.Collections.Generic.List<object>(tempValue as Boo.Lang.Hash[]);
-				retour.Add("\""+key+"\" : "+ArrayToJSON((List<UnityEngine.Object>)tempValue));
-			}*/
+			else if (tempValue.GetType() == typeof(List<int>)) {
+				List<object>arr = (tempValue as List<int>).Cast<object>().ToList();
+				retour.Add("\""+key+"\" : "+ArrayToJSON(arr));
+			}
 			else
 			{
+				retour.Add ("\""+key+"\" : "+tempValue.ToString ());
 				//				Debug.Log("HashtableToJSON "+tempValue.ToString()+" of type "+typeof(tempValue));
 				//				retour.Add('"'+key+'" : "'+EscapeString(tempValue.ToString())+'"');
 			}
@@ -504,6 +505,7 @@ escapee2.Add("t", "\t");
 	}
 	*/
 
+
 	public static string ArrayToJSON(List<object> array)
 	{
 		List<string> retour = new System.Collections.Generic.List<string>();
@@ -537,8 +539,13 @@ escapee2.Add("t", "\t");
 			{
 				retour.Add(HashtableToJSON(tempValue as Hashtable));
 			}
+			else if (tempValue.GetType() == typeof(List<int>)) {
+				List<object>arr = (tempValue as List<int>).Cast<object>().ToList();
+				retour.Add(ArrayToJSON (arr));
+			}
 			else
 			{
+				retour.Add (tempValue.ToString());
 				//				Debug.Log("ArrayToJSON "+tempValue.ToString()+" of type "+typeof(tempValue));
 				//				retour.Add('"'+EscapeString(tempValue.ToString())+'"');
 			}

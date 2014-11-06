@@ -35,12 +35,11 @@ public class ApiManager: MonoBehaviour {
 
 		if (result == ConnectionTesterStatus.PublicIPIsConnectable) {
 			isConnectedToInternet = true;
-		}
-    	
-		if ((ipAddress == "127.0.0.1") || (ipAddress == "0.0.0.0"))
+		} else if ((ipAddress == "127.0.0.1") || (ipAddress == "0.0.0.0"))
     	{
         	isConnectedToInternet = false;      
     	} else {
+			isConnectedToInternet = true;
     	}
 
 		UnityEngine.Debug.Log("Connected to the internet: " + isConnectedToInternet + " ip= " + ipAddress);

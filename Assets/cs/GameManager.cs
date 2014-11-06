@@ -78,7 +78,9 @@ public class GameManager:MonoBehaviour{
 	public static float lastWordTime;
 	public static int challengeModeState = -1;
 	public static List<WordLabel> activeWordLabels = new System.Collections.Generic.List<WordLabel>();
-	
+
+	private static Hashtable langConfig = new Hashtable();
+
 	Rect windowRect;
 	
 	public static void SetChallengeModeEnabled(bool enabled) {
@@ -433,6 +435,13 @@ public class GameManager:MonoBehaviour{
 	}
 	
 	public IEnumerator Start() {
+		if (langConfig.Count == 0) {
+			langConfig.Add("en",new System.Collections.Generic.List<int>(new int[]{20,10,5}));
+			langConfig.Add("zh",new System.Collections.Generic.List<int>(new int[]{10,6,3}));
+			langConfig.Add("ko",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
+			langConfig.Add("ja",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
+		}
+
 		if (needToRecordPlay) {
 			StartCoroutine(RecordPlay());
 		}
@@ -508,19 +517,23 @@ public class GameManager:MonoBehaviour{
 			return true;
 		}
 	}
-		
+
+	public static string ReplaceInputWithPattern(string input, string pattern, string replacement) {
+		Regex rgx = new Regex(pattern);
+		string result = rgx.Replace(input, replacement);
+		Debug.Log ("result = " + result + " pattern = " + pattern);
+		return result;
+	}
+
 	public List<string> SplitVerse(string verse) {
-		Hashtable langConfig = new Hashtable();
-		langConfig.Add("en",new System.Collections.Generic.List<int>(new int[]{20,10,5}));
-		langConfig.Add("zh",new System.Collections.Generic.List<int>(new int[]{10,6,3}));
-		langConfig.Add("ko",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
-	    langConfig.Add("ja",new System.Collections.Generic.List<int>(new int[]{11,6,3}));
+
 	    
 		string language = VerseManager.GetVerseLanguage();
 		bool isChinese = VerseManager.IsLanguageChinese(language);
 		
 		List<int> phraseLengths = (List<int>)langConfig["en"];
-		
+		Debug.Log ("lang config = " + JSONUtils.HashtableToJSON(langConfig));
+		Debug.Log ("lang config = " + langConfig.Count);
 		if (langConfig.Contains(language)) {
 			phraseLengths = (System.Collections.Generic.List<int>)langConfig[language];
 		} else {
@@ -541,13 +554,15 @@ public class GameManager:MonoBehaviour{
 		string localClause = "";
 		
 		// filter out paranthesis, unwanted characters
-		verse = Regex.Replace(verse, "\\(.*\\)","");
-		verse = Regex.Replace(verse, "\\（.*\\）","");
-		verse = Regex.Replace(verse, "\\[.*\\]","");
-		verse = Regex.Replace(verse, "」|「|『|』","");
-		verse = Regex.Replace(verse, "\n|\t|\r", " ");
-		verse = Regex.Replace(verse, "\\s+", " ");
-		
+		verse = ReplaceInputWithPattern(verse, "\\(.*\\)","");
+		//verse = ReplaceInputWithPattern(verse, "\\（.*\\）","");
+		verse = ReplaceInputWithPattern(verse, "\\[.*\\]","");
+		//verse = Regex.Replace(verse, "」|「|『|』","");
+		verse = ReplaceInputWithPattern(verse, "\n|\t|\r", " ");
+		verse = ReplaceInputWithPattern(verse, "\\s+", " ");
+
+		Debug.Log ("verse after regex filters = " + verse);
+
 		int i = 0;
 		bool languageIsWestern = VerseManager.IsLanguageWestern(language);
 	
@@ -1109,7 +1124,7 @@ public class GameManager:MonoBehaviour{
 	
 	public void ShowHint() {
 		wordHinted = true;	
-		if ((wordIndex <= 0) || (wordIndex >= wordLabels.Count)) return;
+		if ((wordIndex < 0) || (wordIndex >= wordLabels.Count)) return;
 		WordLabel wObject = wordLabels[wordIndex];
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 			StartCoroutine(wObject.HintAt());
