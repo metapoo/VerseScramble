@@ -38,7 +38,8 @@ public class NavigationButton:MonoBehaviour{
 		VerseManager.ClearVerseSets(view);
 		
 		List<object> versesetDatas = (List<object>)resultData["versesets"];
-		
+		Debug.Log ("vs data length = "+versesetDatas.Count);
+
 		for(int i=0;i<versesetDatas.Count;i++) {
 			Hashtable versesetData = versesetDatas[i] as Hashtable;
 			VerseManager.LoadVerseSetData(versesetData);

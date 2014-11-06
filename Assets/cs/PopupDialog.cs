@@ -57,7 +57,7 @@ public class PopupDialog:MonoBehaviour{
 	}
 	
 	public void Start() {
-		okayButton.onClick.AddListener((UnityAction)HandleOkayButtonClick);
+		okayButton.onClick.AddListener(() => {HandleOkayButtonClick();});
 		CenterOnScreen();
 	}
 	

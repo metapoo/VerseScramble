@@ -8,23 +8,23 @@ using System.Collections.Generic;
 
 public class VerseSetButton:MonoBehaviour{
 	
-	public Button button;
-	public VerseSet verseset;
+	private Button button;
+	private VerseSet verseset;
+	private VerseSetsManager verseSetsManager;
+
 	public Text label;
 	public Color normalColor;
-	public VerseSetsManager verseSetsManager;
 	public bool createVerseSet = false;
 	public static VerseSetButton selectedButton = null;
 	
 	public void Awake() {
+		button = GetComponent<Button>();
+		button.onClick.AddListener(() => {HandleOnClick();});
 		normalColor = button.colors.normalColor;
-		verseSetsManager = GameObject.Find("VerseSetsManager").GetComponent<VerseSetsManager>();
-			
+		verseSetsManager = GameObject.Find("VerseSetsManager").GetComponent<VerseSetsManager>();			
 	}
 	
 	public void Start() {
-		button = GetComponent<Button>();
-		button.onClick.AddListener((UnityAction)HandleOnClick);
 	}
 	
 	public void AddToScrollView(RectTransform scrollContent,int index) {

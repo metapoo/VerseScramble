@@ -271,9 +271,9 @@ public class ApiManager: MonoBehaviour {
 		}
 		resultData = (Hashtable)apiData["result"];
 
-		Debug.Log ("result size = " + resultData.Count);
 		Debug.Log ("result = " + JSONUtils.HashtableToJSON(resultData));
 		Debug.Log ("apiData = " + JSONUtils.HashtableToJSON(apiData));
+
 		string status = (string) apiData["status"];
 		if (status == "OK") {
 			resultData = (Hashtable)apiData["result"];

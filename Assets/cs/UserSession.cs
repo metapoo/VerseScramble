@@ -33,6 +33,7 @@ public class UserSession:MonoBehaviour{
 		if (us != null) {
 			return us;
 		}
+		Debug.Log ("UserSession = " + us);
 		return null;
 	}
 	
@@ -225,7 +226,7 @@ public class UserSession:MonoBehaviour{
 	public void LoadUserLogin() {
 		if ((sessionKey != null) && (userId != null)) return;
 		string json = PlayerPrefs.GetString("user_data");
-		if (json != null) {
+		if ((json != null) && (json != "")) {
 			UnityEngine.Debug.Log("loaded user json = " + json);
 			Hashtable userData = JSONUtils.ParseJSON(json);
 			HandleLogin(userData);

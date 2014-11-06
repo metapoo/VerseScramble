@@ -25,6 +25,7 @@ public class VerseSetsManager:MonoBehaviour{
 		verseSetScrollContent.DetachChildren();
 		
 		List<VerseSet> versesets = VerseManager.GetCurrentVerseSets();
+		Debug.Log ("versesets.Count = " + versesets.Count);
 		VerseSetButton clone = null;
 		VerseSetButton currentButton = null;
 		RectTransform vsButtonTransform = verseSetButton.GetComponent<RectTransform>();
@@ -44,29 +45,31 @@ public class VerseSetsManager:MonoBehaviour{
 			clone.createVerseSet = true;
 			clone.label.text = TextManager.GetText("Create Verse Set");
 			rt = clone.GetComponent<RectTransform>();		
-			var tmp_cs1 = rt.anchoredPosition;
+			Vector3 tmp_cs1 = rt.anchoredPosition;
             tmp_cs1.x = 0.0f;
-            tmp_cs1.y = (i)*(rowHeight + rowPadding) - rowPadding;
+            tmp_cs1.y = (-1*i)*(rowHeight + rowPadding) - rowPadding;
             rt.anchoredPosition = tmp_cs1;	
 		}
 		
 		for(i=startIndex;i<versesets.Count+startIndex;i++) {
 			VerseSet verseset = versesets[i-startIndex];
+			Debug.Log (i + ". add vs " + verseset.setname);
 			clone = (VerseSetButton)Instantiate(verseSetButton, Vector3.zero, Quaternion.identity);
 			clone.SetVerseSet(verseset);
 			clone.AddToScrollView(verseSetScrollContent, i);
-			
+
 			if (UnityEngine.Object.ReferenceEquals(verseset, currentVerseSet)) currentButton = clone;
 			
 			rt = clone.GetComponent<RectTransform>();
 			
-			var tmp_cs2 = rt.anchoredPosition;
+			Vector3 tmp_cs2 = rt.anchoredPosition;
             tmp_cs2.x = 0.0f;
-            tmp_cs2.y = (i)*(rowHeight + rowPadding) - rowPadding;
+            tmp_cs2.y = (-1*i)*(rowHeight + rowPadding) - rowPadding;
             rt.anchoredPosition = tmp_cs2;	
+			Debug.Log ("y = " + tmp_cs2.y);
 		}
 	
-		var tmp_cs3 = verseSetScrollContent.sizeDelta;
+		Vector3 tmp_cs3 = verseSetScrollContent.sizeDelta;
         tmp_cs3.y = numRows*(rowHeight+rowPadding);
         verseSetScrollContent.sizeDelta = tmp_cs3;
 		
@@ -76,7 +79,7 @@ public class VerseSetsManager:MonoBehaviour{
 			
 			// maintain scroll position from previous when loading menu again from beginning
 			float y = (float)PlayerPrefs.GetInt("verse_scroll_content_anchored_y",0);
-			var tmp_cs4 = verseScrollContent.anchoredPosition;
+			Vector3 tmp_cs4 = verseScrollContent.anchoredPosition;
             tmp_cs4.y = y;
             verseScrollContent.anchoredPosition = tmp_cs4;
 		}	
@@ -91,7 +94,7 @@ public class VerseSetsManager:MonoBehaviour{
 		clone.AddToScrollView(verseScrollContent, index);
 			
 		RectTransform rt = clone.GetComponent<RectTransform>();
-		var tmp_cs5 = rt.anchoredPosition;
+		Vector3 tmp_cs5 = rt.anchoredPosition;
         tmp_cs5.x = 0.0f;
         tmp_cs5.y = -index*(rowHeight + rowPadding) - rowPadding;
         rt.anchoredPosition = tmp_cs5;	
@@ -118,12 +121,12 @@ public class VerseSetsManager:MonoBehaviour{
 			AddVerseButton(verse,i+1);
 		}
 			
-		var tmp_cs6 = verseScrollContent.sizeDelta;
+		Vector3 tmp_cs6 = verseScrollContent.sizeDelta;
         tmp_cs6.y = (verses.Count+1)*(rowHeight+rowPadding);
         verseScrollContent.sizeDelta = tmp_cs6;
 		
 		yield return new WaitForSeconds(0.0f);
-		var tmp_cs7 = verseScrollContent.anchoredPosition;
+		Vector3 tmp_cs7 = verseScrollContent.anchoredPosition;
         tmp_cs7.y = 0.0f;
         verseScrollContent.anchoredPosition = tmp_cs7;
 		

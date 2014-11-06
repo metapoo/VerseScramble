@@ -15,7 +15,7 @@ public class VerseButton:MonoBehaviour{
 	
 	public void Awake() {
 		button = GetComponent<Button>();
-		button.onClick.AddListener((UnityAction)HandleOnClick);
+		button.onClick.AddListener(() => {HandleOnClick(); });
 		verseManager = (VerseManager)GameObject.FindObjectOfType(typeof(VerseManager));
 	}
 	

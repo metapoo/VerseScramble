@@ -349,7 +349,6 @@ escapee2.Add("t", "\t");
 				if (ch == "}")
 				{
 					_next("}");
-					Debug.Log ("hashtable size = " + obj.Count);
 					return obj;
 				}
 				_next(",");
