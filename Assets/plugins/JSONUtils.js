@@ -19,18 +19,6 @@ public class JSONUtils
 	private static var at : int;
 	
 	private static var ch : String;
-	/*
-	private static var escapee = {
-		"\"": "\"",
-		"\\": "\\",
-		"/": "/",
-		"b": "b",
-		"f": "\f",
-		"n": "\n",
-		"r": "\r",
-		"t": "\t"
-	};
-	*/
 	
 	private static var escapee2 = new Hashtable();
 	
@@ -38,12 +26,14 @@ public class JSONUtils
 	
 	private static function error (m: String) : void
 	{
+	/*
 		throw new System.Exception("SyntaxError: \nMessage: "+m+
 		                           "\nAt: "+at+
 		                           "\nText: "+text);
+	*/	                           
 	}
 	
-	private static function next (c) : String
+	private static function _next (c : String) : String
 	{
 		if(c && c != ch) {
 			error("Expected '" + c + "' instead of '" + ch + "'");
@@ -61,50 +51,50 @@ public class JSONUtils
 		return ch;
 	}
 	
-	private static function next () : String
+	private static function _next () : String
 	{
-		return next(null);
+		return _next(null);
 	}
 	
 	private static function number () : Number
 	{
 		var number:double;
-		var string = "";
-		
+		var str : String = "";
+		var digits : List.<String> = new List.<String>(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 		if(ch == "-")
 		{
-			string = "-";
-			next("-");
+			str = "-";
+			_next("-");
 		}
-		while(ch in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+		while(digits.Contains(ch))
 		{
-			string += ch;
-			next();
+			str += ch;
+			_next();
 		}
 		if(ch == ".")
 		{
-			string += ".";
-			while(next() && ch in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+			str += ".";
+			while(_next() && digits.Contains(ch))
 			{
-				string += ch;
+				str += ch;
 			}
 		}
 		if(ch == "e" || ch == "E")
 		{
-			string += ch;
-			next();
+			str += ch;
+			_next();
 			if(ch == "-" || ch == "+")
 			{
-				string += ch;
-				next();
+				str += ch;
+				_next();
 			}
-			while(ch in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+			while(digits.Contains(ch))
 			{
-				string += ch;
-				next();
+				str += ch;
+				_next();
 			}
 		}
-		number = Number.Parse(string);
+		number = Number.Parse(str);
 		
 		if( System.Double.IsNaN(number) )
 		{
@@ -139,22 +129,22 @@ escapee2.Add("t", "\t");
 		
 		if(ch == "\"")
 		{
-			while( next() )
+			while( _next() )
 			{
 				if(ch == "\"")
 				{
-					next();
+					_next();
 					return string;
 				}
 				else if (ch == "\\")
 				{
-					next();
+					_next();
 					if(ch == "u")
 					{
 						uffff = 0;
 						for(i = 0; i < 4; i++)
 						{
-							hex = System.Convert.ToInt32(next(), 16);
+							hex = System.Convert.ToInt32(_next(), 16);
 							if (hex == Mathf.Infinity || hex == Mathf.NegativeInfinity)
 							{
 								break;
@@ -188,7 +178,7 @@ escapee2.Add("t", "\t");
 	private static function white () : void
 	{
 		while(ch && (ch.length >= 1 && ch.Chars[0] <= 32)) { // if it's whitespace
-			next();
+			_next();
 		}   
 	}
 	
@@ -219,42 +209,42 @@ escapee2.Add("t", "\t");
 		// unreachable code (in reality it's not unreachable).
 		
 		if(ch == "t") {
-			next("t");
-			next("r");
-			next("u");
-			next("e");
+			_next("t");
+			_next("r");
+			_next("u");
+			_next("e");
 			return true;
 		} else if (ch == "f") {
-			next("f");
-			next("a");
-			next("l");
-			next("s");
-			next("e");
+			_next("f");
+			_next("a");
+			_next("l");
+			_next("s");
+			_next("e");
 			return false;
 		} if(ch == "T") {
-			next("T");
-			next("r");
-			next("u");
-			next("e");
+			_next("T");
+			_next("r");
+			_next("u");
+			_next("e");
 			return true;
 		} else if (ch == "F") {
-			next("F");
-			next("a");
-			next("l");
-			next("s");
-			next("e");
+			_next("F");
+			_next("a");
+			_next("l");
+			_next("s");
+			_next("e");
 			return false;
 		} else if (ch == "n") {
-			next("n");
-			next("u");
-			next("l");
-			next("l");
+			_next("n");
+			_next("u");
+			_next("l");
+			_next("l");
 			return null;
 		} else if (ch == "N") {
-			next("N");
-			next("u");
-			next("l");
-			next("l");
+			_next("N");
+			_next("u");
+			_next("l");
+			_next("l");
 			return null;
 		} else if (ch == "") { 
 			return null; // Todo: why is it doing this?
@@ -270,11 +260,11 @@ escapee2.Add("t", "\t");
 		
 		if(ch == "[")
 		{
-			next("[");
+			_next("[");
 			white();
 			if(ch == "]")
 			{
-				next("]");
+				_next("]");
 				return array; // empty array
 			}
 			while(ch)
@@ -283,10 +273,10 @@ escapee2.Add("t", "\t");
 				white();
 				if(ch == "]")
 				{
-					next("]");
+					_next("]");
 					return array;
 				}
-				next(",");
+				_next(",");
 				white();
 			}
 		}
@@ -301,26 +291,26 @@ escapee2.Add("t", "\t");
 	//	    
 	//	    if(ch == "{")
 	//	    {
-	//	        next("{");
+	//	        _next("{");
 	//	        white();
 	//	        if(ch == "}")
 	//	        {
-	//	            next("}");
+	//	            _next("}");
 	//	            return object; // empty object
 	//	        }
 	//	        while(ch)
 	//	        {
 	//	            key = string();
 	//	            white();
-	//	            next(":");
+	//	            _next(":");
 	//	            object[key] = value();
 	//	            white();
 	//	            if (ch == "}")
 	//	            {
-	//	                next("}");
+	//	                _next("}");
 	//	                return object;
 	//	            }
-	//	            next(",");
+	//	            _next(",");
 	//	            white();
 	//	        }
 	//	    }
@@ -336,26 +326,26 @@ escapee2.Add("t", "\t");
 		
 		if(ch == "{")
 		{
-			next("{");
+			_next("{");
 			white();
 			if(ch == "}")
 			{
-				next("}");
+				_next("}");
 				return object; // empty object
 			}
 			while(ch)
 			{
 				key = string();
 				white();
-				next(":");
+				_next(":");
 				object.Add( key, value() );
 				white();
 				if (ch == "}")
 				{
-					next("}");
+					_next("}");
 					return object;
 				}
-				next(",");
+				_next(",");
 				white();
 			}
 		}
