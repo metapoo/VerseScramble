@@ -58,14 +58,14 @@ public class FacebookManager : MonoBehaviour {
 					}
 				}
 
-				var userSession = GameObject.Find("UserSession");
-				var parameters = new Hashtable();
+				UserSession userSession = UserSession.GetUserSession();
+				Hashtable parameters = new Hashtable();
 				parameters.Add("name", _name);
 				parameters.Add("email",_email);
 				parameters.Add("fbUid",FB.UserId);
 				parameters.Add("fbPicUrl",_picUrl);
 				parameters.Add("accessToken",FB.AccessToken);
-				userSession.SendMessage("HandleFbLogin", parameters);
+				userSession.HandleFbLogin(parameters);
 			});
 		});
 

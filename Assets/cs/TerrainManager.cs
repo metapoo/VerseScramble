@@ -36,7 +36,7 @@ public class TerrainManager : MonoBehaviour
 		audio.loop = (progress > 0);
 	}
 
-	void SetTargetProgress(float progress) {
+	public void SetTargetProgress(float progress) {
 		targetProgress = progress;
 		Debug.Log ("target progress set to " + progress.ToString());
 		
