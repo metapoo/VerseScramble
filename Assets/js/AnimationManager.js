@@ -24,7 +24,7 @@ static function Rotation(thisTransform : Transform, endRotation : Quaternion, du
 	}
 }
 
-static function Translation(thisTransform : Transform, endPos : Vector3, duration : float) {
+static function Translation(thisTransform : Transform, endPos : Vector3, duration : float) : IEnumerator {
 	var rate : float = 1.0/duration;
 	var t : float = 0.0;
 	var startPos = thisTransform.localPosition;
@@ -35,9 +35,9 @@ static function Translation(thisTransform : Transform, endPos : Vector3, duratio
 	}
 }
 
-static function TranslationBy(thisTransform : Transform, dPos : Vector3, duration : float)  {
+static function TranslationBy(thisTransform : Transform, dPos : Vector3, duration : float) : IEnumerator  {
 	var endPos = thisTransform.localPosition + dPos;
-	Translation(thisTransform, endPos, duration);
+	yield Translation(thisTransform, endPos, duration);
 }
 
 
