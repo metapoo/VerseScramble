@@ -10,20 +10,20 @@ public var rowPadding : float = 15;
 public var verseHeaderLabel : Text;
 
 function ShowVerseSets() {
-	var children : Array = verseSetScrollContent.GetComponentsInChildren(VerseSetButton);
-	for (var i=0;i<children.length;i++) {
+	var children : Component[] = verseSetScrollContent.GetComponentsInChildren(VerseSetButton);
+	for (var i=0;i<children.Length;i++) {
 		var vsButton : VerseSetButton = children[i];
 		Destroy(vsButton.gameObject);
 	}
 	verseSetScrollContent.DetachChildren();
 	
-	var versesets : List.<VerseSet> = verseManager.GetCurrentVerseSets();
+	var versesets : List.<VerseSet> = VerseManager.GetCurrentVerseSets();
 	var clone : VerseSetButton;
 	var currentButton : VerseSetButton = null;
 	var vsButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vsButtonTransform : RectTransform = verseSetButton.GetComponent(RectTransform);
 	var rowHeight = vsButtonTransform.sizeDelta.y;
-	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
+	var currentVerseSet : VerseSet = VerseManager.GetCurrentVerseSet();
 	var currentView = VerseManager.GetCurrentView(false);
 	var numRows = versesets.Count;
 	var startIndex : int = 0;
@@ -68,37 +68,39 @@ function ShowVerseSets() {
 	}	
 }
 
+function AddVerseButton(verse : Verse, index: int) {
+	var vButtonTransform : RectTransform = verseButton.GetComponent(RectTransform);
+	var rowHeight = vButtonTransform.sizeDelta.y;
+	var clone : VerseButton = Instantiate(verseButton, Vector3.zero, Quaternion.identity) as VerseButton;
+	clone.SetVerse(verse);
+	clone.verseIndex = index-1;
+	clone.AddToScrollView(verseScrollContent, index);
+		
+	var rt : RectTransform = clone.GetComponent(RectTransform);
+	rt.anchoredPosition.x = 0;
+	rt.anchoredPosition.y = -index*(rowHeight + rowPadding) - rowPadding;	
+};
+	
 function ShowVerses() {
-	var verses : List.<Verse> = verseManager.GetCurrentVerses();
-	var clone : VerseButton;
+	var verses : List.<Verse> = VerseManager.GetCurrentVerses();
+	
 	var verseButtonLabel : RectTransform = verseSetButton.label.GetComponent(RectTransform);
 	var vButtonTransform : RectTransform = verseButton.GetComponent(RectTransform);
 	var rowHeight = vButtonTransform.sizeDelta.y;
-	var children : Array = verseScrollContent.GetComponentsInChildren(VerseButton);
-	for (var i=0;i<children.length;i++) {
+	var children : Component[] = verseScrollContent.GetComponentsInChildren(VerseButton);
+	for (var i=0;i<children.Length;i++) {
 		var vButton : VerseButton = children[i];
 		Destroy(vButton.gameObject);
 	}
 	verseScrollContent.DetachChildren();
 	
-	var addVerseButton = function(verse : Verse, index: int) {
-		clone = Instantiate(verseButton, Vector3.zero, Quaternion.identity);
-		clone.SetVerse(verse);
-		clone.verseIndex = index-1;
-		clone.AddToScrollView(verseScrollContent, index);
-		
-		var rt = clone.GetComponent(RectTransform);
-		rt.anchoredPosition.x = 0;
-		rt.anchoredPosition.y = -index*(rowHeight + rowPadding) - rowPadding;	
-	};
-	
 	if (verses.Count > 0) {
-		addVerseButton(null,0);
+		AddVerseButton(null,0);
 	}
 
 	for ( i=0;i<verses.Count;i++) {
 		var verse : Verse = verses[i];
-		addVerseButton(verse,i+1);
+		AddVerseButton(verse,i+1);
 	}
 		
 	verseScrollContent.sizeDelta.y = (verses.Count+1)*(rowHeight+rowPadding);
@@ -106,7 +108,7 @@ function ShowVerses() {
 	yield WaitForSeconds(0);
 	verseScrollContent.anchoredPosition.y = 0;
 	
-	var currentVerseSet : VerseSet = verseManager.GetCurrentVerseSet();
+	var currentVerseSet : VerseSet = VerseManager.GetCurrentVerseSet();
 	if (!Object.ReferenceEquals(currentVerseSet, null)) {
 		var label : String = currentVerseSet.setname;
 		if (currentVerseSet.version != null) {
@@ -146,10 +148,10 @@ function Awake () {
 
 function Start () {
 	verseManager.LoadVerses();
-	var navButtons : Array = GameObject.FindObjectsOfType(NavigationButton);
-	Debug.Log("current view = " +verseManager.GetCurrentView(false));
+	var navButtons : NavigationButton[] = GameObject.FindObjectsOfType(NavigationButton);
+	Debug.Log("current view = " +VerseManager.GetCurrentView(false));
 	var currentViewNoLanguage = VerseManager.GetCurrentView(false);
-	for (var i=0;i<navButtons.length;i++) {
+	for (var i=0;i<navButtons.Length;i++) {
 		var navButton : NavigationButton = navButtons[i];
 		if (navButton.view == currentViewNoLanguage) {
 			navButton.HandleOnClick();
