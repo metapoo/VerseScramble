@@ -470,7 +470,7 @@ function IsAvailable() : boolean {
 function returnToVerse () {
 	// sync word index incase there is another word label which is duplicate of this one
 	if (wordIndex != GameManager.wordIndex) {
-		GameManager.SwapWords(wordIndex, GameManager.wordIndex);
+		gameManager.SwapWords(wordIndex, GameManager.wordIndex);
 	}
 	hinting = false;
 	collider2D.enabled = false;
