@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import System.Collections.Generic;
+
 public var button : Button;
 public var label : Text;
 public var view : String;
@@ -29,10 +31,11 @@ function HandleApiVerseSetList(resultData : Hashtable) {
 		VerseManager.historyLoaded = true;
 	}
 	VerseManager.ClearVerseSets(view);
-
-	var versesetsData : Array = resultData["versesets"];
-	for (var i=0;i<versesetsData.length;i++) {
-		var versesetData : Hashtable = versesetsData[i];
+	
+	var versesetDatas : List.<Object> = resultData["versesets"];
+	
+	for (var i=0;i<versesetDatas.Count;i++) {
+		var versesetData : Hashtable = versesetDatas[i] as Hashtable;
 		VerseManager.LoadVerseSetData(versesetData);
 	}
 	verseSetsManager.ShowVerseSets();

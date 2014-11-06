@@ -98,10 +98,10 @@ public class VerseSet
 		verses.Clear();
 	}
 	
-	public function LoadVersesData(versesData : Array) {
+	public function LoadVersesData(versesData : List.<Object>) {
 		UnloadVerses();
 		
-		for (var i=0;i<versesData.length;i++) {
+		for (var i=0;i<versesData.Count;i++) {
 			var verseData : Hashtable = versesData[i];
 			var verseId_ = verseData["_id"];
 			var reference = verseData["reference"];
@@ -110,7 +110,7 @@ public class VerseSet
 			var verse : Verse = Verse(verseId_, reference, text, version, this);
 			AddVerse(verse);	
 		}
-		verseCount = versesData.length;
+		verseCount = versesData.Count;
 	}
 	
 	public function IndexOfVerseId(verseId : String) {

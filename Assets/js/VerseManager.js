@@ -646,7 +646,7 @@ function LoadOnlineVerseSet(versesetId : String, verseId : String) {
 	SetCurrentView("history");
 	var handleApi : Function = function(resultData : Hashtable) {
 		var versesetData : Hashtable = resultData["verseset"];
-		var versesData : Array = resultData["verses"];
+		var versesData : List.<Object> = resultData["verses"];
 		var verseset : VerseSet = LoadVerseSetData(versesetData);
 		SetCurrentVerseSet(verseset);
 		verseIndex = 0;

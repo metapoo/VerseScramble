@@ -1,5 +1,7 @@
 ﻿#pragma strict
 
+import System.Collections.Generic;
+
 /*
  
 JSONUtils.js
@@ -246,9 +248,9 @@ class JSONUtils
 		return null;
 	}
 	
-	private static function array () : Array
+	private static function array () : List.<Object>
 	{
-		var array : Array = new Array();
+		var array : List.<Object> = new List.<Object>();
 		
 		if(ch == "[")
 		{
@@ -261,7 +263,7 @@ class JSONUtils
 			}
 			while(ch)
 			{
-				array.Push(value());
+				array.Add(value());
 				white();
 				if(ch == "]")
 				{
@@ -431,9 +433,9 @@ class JSONUtils
 			{
 				retour.Add('"'+key+'" : '+HashtableToJSON(tempValue as Hashtable));
 			}
-			else if( typeof(tempValue) == typeof(Array) )
+			else if( typeof(tempValue) == typeof(List.<Object>) )
 			{
-				retour.Add('"'+key+'" : '+ArrayToJSON(tempValue as Array));
+				retour.Add('"'+key+'" : '+ArrayToJSON(tempValue as List.<Object>));
 			}
 			else if( typeof(tempValue) == typeof(String) )
 			{
@@ -457,7 +459,8 @@ class JSONUtils
 			}
 			else if( typeof(tempValue) == typeof(Boo.Lang.Hash[]) )
 			{
-				retour.Add('"'+key+'" : '+ArrayToJSON(new Array(tempValue)));
+				tempValue = new List.<Object>(tempValue as Boo.Lang.Hash[]);
+				retour.Add('"'+key+'" : '+ArrayToJSON(tempValue));
 			}
 			else
 			{
@@ -488,9 +491,9 @@ class JSONUtils
 			{
 				retour.Add('"'+key+'" : '+HashtableToJSON(tempValue as Hashtable));
 			}
-			else if( typeof(tempValue) == typeof(Array) )
+			else if( typeof(tempValue) == typeof(List.<Object>) )
 			{
-				retour.Add('"'+key+'" : '+ArrayToJSON(tempValue as Array));
+				retour.Add('"'+key+'" : '+ArrayToJSON(tempValue as List.<Object>));
 			}
 			else if( typeof(tempValue) == typeof(String) )
 			{
@@ -514,7 +517,8 @@ class JSONUtils
 			}
 			else if( typeof(tempValue) == typeof(Boo.Lang.Hash[]) )
 			{
-				retour.Add('"'+key+'" : '+ArrayToJSON(new Array(tempValue)));
+				tempValue = new List.<Object>(tempValue as Boo.Lang.Hash[]);
+				retour.Add('"'+key+'" : '+ArrayToJSON(tempValue));
 			}
 			else
 			{
@@ -534,7 +538,7 @@ class JSONUtils
 	 * @return String
 	 * 		La chaîne de caractère correspondant à l'Array.
 	 **/
-	public static function ArrayToJSON(array:Array):String
+	public static function ArrayToJSON(array:List.<Object>):String
 	{
 		var retour:Array = new Array();
 		for(var tempValue in array)
@@ -543,9 +547,9 @@ class JSONUtils
 			{
 				retour.Add(HashtableToJSON(tempValue as Hashtable));
 			}
-			else if( typeof(tempValue) == typeof(Array) )
+			else if( typeof(tempValue) == typeof(List.<Object>) )
 			{
-				retour.Add(ArrayToJSON(tempValue as Array));
+				retour.Add(ArrayToJSON(tempValue as List.<Object>));
 			}
 			else if( typeof(tempValue) == typeof(String) )
 			{
@@ -567,9 +571,11 @@ class JSONUtils
 			{
 				retour.Add(HashtableToJSON(tempValue as Hashtable));
 			}
-			else if( typeof(tempValue) == typeof(Boo.Lang.Hash[]) )
+			else if( typeof(tempValue) == typeof(Boo.Lang.Hash[]))
 			{
-				retour.Add(ArrayToJSON(new Array(tempValue)));
+				var list : List.<Object> = new List.<Object>(tempValue as Boo.Lang.Hash[]);
+				Debug.Log(list.Count);
+				retour.Add(ArrayToJSON(tempValue));
 			}
 			else
 			{

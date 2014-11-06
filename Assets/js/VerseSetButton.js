@@ -61,7 +61,7 @@ function HandleApiVerseSetShow(resultData : Hashtable) {
 	if (this == null) return;
 	
 	var versesetData : Hashtable = resultData["verseset"];
-	var versesData : Array = resultData["verses"];
+	var versesData : List.<Object> = resultData["verses"];
 	var highScore : int = 0;
 	var difficulty : int = 0;
 	var mastered : boolean = false;
