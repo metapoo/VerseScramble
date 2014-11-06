@@ -15,6 +15,25 @@ public class VerseSet
 	public string version;
 	public int playCount;
 
+	public override bool Equals(System.Object obj)
+	{
+		// If parameter is null return false.
+		if (obj == null)
+		{
+			return false;
+		}
+		
+		// If parameter cannot be cast to Verse return false.
+		VerseSet vs = obj as VerseSet;
+		if ((System.Object)vs == null)
+		{
+			return false;
+		}
+		
+		// Return true if the fields match:
+		return (this == vs);
+	}
+
 	public static bool operator == (VerseSet vs1, VerseSet vs2)
 	{
 		if (System.Object.ReferenceEquals(vs1, vs2)) {

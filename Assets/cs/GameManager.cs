@@ -521,6 +521,7 @@ public class GameManager:MonoBehaviour{
 	public static string ReplaceInputWithPattern(string input, string pattern, string replacement) {
 		Regex rgx = new Regex(pattern);
 		string result = rgx.Replace(input, replacement);
+		Debug.Log ("result = " + result + " pattern = " + pattern);
 		return result;
 	}
 
@@ -554,7 +555,7 @@ public class GameManager:MonoBehaviour{
 		
 		// filter out paranthesis, unwanted characters
 		verse = ReplaceInputWithPattern(verse, "\\(.*\\)","");
-		verse = ReplaceInputWithPattern(verse, "\\（.*\\）","");
+		//verse = ReplaceInputWithPattern(verse, "\\（.*\\）","");
 		verse = ReplaceInputWithPattern(verse, "\\[.*\\]","");
 		//verse = Regex.Replace(verse, "」|「|『|』","");
 		verse = ReplaceInputWithPattern(verse, "\n|\t|\r", " ");

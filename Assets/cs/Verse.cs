@@ -45,7 +45,26 @@ public class Verse
 		
 		return vs1.SaveKey() == vs2.SaveKey();	
 	}
-	
+
+	public override bool Equals(System.Object obj)
+	{
+		// If parameter is null return false.
+		if (obj == null)
+		{
+			return false;
+		}
+		
+		// If parameter cannot be cast to Verse return false.
+		Verse vs = obj as Verse;
+		if ((System.Object)vs == null)
+		{
+			return false;
+		}
+		
+		// Return true if the fields match:
+		return (this == vs);
+	}
+
 	public static bool operator != (Verse vs1, Verse vs2)
 	{
 		return !(vs1 == vs2);

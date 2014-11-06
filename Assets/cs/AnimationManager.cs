@@ -57,7 +57,6 @@ public class AnimationManager: MonoBehaviour {
 		float t = 0.0f;
 		Vector3 startPos = thisTransform.localPosition;
 		while (t < 1.0f) {
-			Debug.Log(t);
 			t += Time.deltaTime * rate;
 			thisTransform.localPosition = Vector3.Lerp(startPos, endPos, t);
 			yield return null; 
