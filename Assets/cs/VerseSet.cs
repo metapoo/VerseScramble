@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 
-[System.Serializable]
 public class VerseSet
 {
 	public static Hashtable versesetBySaveKey = new Hashtable();
@@ -18,12 +17,21 @@ public class VerseSet
 
 	public static bool operator == (VerseSet vs1, VerseSet vs2)
 	{
-		return UnityEngine.Object.ReferenceEquals(vs1, vs2);
+		if (System.Object.ReferenceEquals(vs1, vs2)) {
+			return true;
+		}
+		// If one is null, but not both, return false.
+		if (((object)vs1 == null) || ((object)vs2 == null))
+		{
+			return false;
+		}
+
+		return vs1.SaveKey() == vs2.SaveKey();
 	}
 	
 	public static bool operator != (VerseSet vs1, VerseSet vs2)
 	{
-		return !UnityEngine.Object.ReferenceEquals(vs1, vs2);
+		return !(vs1 == vs2);
 	}
 
 	public static VerseSet GetVerseSet(string saveKey) {
@@ -83,7 +91,11 @@ public class VerseSet
 	public override string ToString() {
 		return String.Format("verseset: {0}", setname);
 	}
-	
+
+	public override int GetHashCode() {
+		return SaveKey().GetHashCode();
+	}
+
 	public string SaveKey() {
 		if (onlineId != null) {
 			return onlineId;

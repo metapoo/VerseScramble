@@ -517,7 +517,13 @@ public class GameManager:MonoBehaviour{
 			return true;
 		}
 	}
-		
+
+	public static string ReplaceInputWithPattern(string input, string pattern, string replacement) {
+		Regex rgx = new Regex(pattern);
+		string result = rgx.Replace(input, replacement);
+		return result;
+	}
+
 	public List<string> SplitVerse(string verse) {
 
 	    
@@ -547,12 +553,12 @@ public class GameManager:MonoBehaviour{
 		string localClause = "";
 		
 		// filter out paranthesis, unwanted characters
-		verse = Regex.Replace(verse, "\\(.*\\)","");
-		verse = Regex.Replace(verse, "\\（.*\\）","");
-		verse = Regex.Replace(verse, "\\[.*\\]","");
+		verse = ReplaceInputWithPattern(verse, "\\(.*\\)","");
+		verse = ReplaceInputWithPattern(verse, "\\（.*\\）","");
+		verse = ReplaceInputWithPattern(verse, "\\[.*\\]","");
 		//verse = Regex.Replace(verse, "」|「|『|』","");
-		verse = Regex.Replace(verse, "\n|\t|\r", " ");
-		verse = Regex.Replace(verse, "\\s+", " ");
+		verse = ReplaceInputWithPattern(verse, "\n|\t|\r", " ");
+		verse = ReplaceInputWithPattern(verse, "\\s+", " ");
 
 		Debug.Log ("verse after regex filters = " + verse);
 
