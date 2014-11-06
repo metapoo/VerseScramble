@@ -45,7 +45,7 @@ function GetPercentFell() : float {
 	
 	//Debug.Log(" v = " + v + " pct = " + pct + " y = " + y + " minY = " + minY);
 	
-	if (v < 0.2f) return 1.0f;
+	if ((pct > 0.5f) && (v < 0.2f)) return 1.0f;
 	
 	if (pct < 0) pct = 0;
 	if (pct > 1) pct = 1;
