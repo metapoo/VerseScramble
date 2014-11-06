@@ -13,26 +13,30 @@ function Awake() {
 	verseManager = GameObject.FindObjectOfType(VerseManager);
 }
 
-function GetColorForDifficulty(difficultyInt : int) {
+function GetColorForDifficulty(difficultyInt : int) : Color {
 	switch(difficultyInt) {
 		case 1:
 			return Color(0.5f,1.0f,0.5f,1.0f);
+			break;
 		case 2:
 			return Color(1.0f,1.0f,0.5f);
+			break;
 		case 3:
 			return Color(1.0f,0.5f,0.5f);
+			break;
 		default:
 			return Color.white;	
+			break;
 	}
 }
 
 function SetVerse(v : Verse) {
 	verse = v;
 	
-	var highScore;
+	var highScore : int;
 	
 	if (Object.ReferenceEquals(v,null)) {
-		var verseset : VerseSet = verseManager.GetCurrentVerseSet();
+		var verseset : VerseSet = VerseManager.GetCurrentVerseSet();
 		if (Object.ReferenceEquals(verseset, null)) return;
 		highScore = verseset.GetMetadata()["high_score"];
 		label.text = String.Format("{0} - {1}: {2}",
@@ -71,16 +75,16 @@ function  HandleOnClick() {
 	if (loginPanel != null) {
 		return;
 	}
-	var versesetId = verseManager.currentVerseSet.onlineId;
+	var versesetId : String = VerseManager.currentVerseSet.onlineId;
 	GameManager.needToRecordPlay = true;
 	
-	var playVerse : Function = function() {
+	var playVerse = function() {
 		if (Object.ReferenceEquals(verse,null)) {
 			StartChallenge();
 			return;
 		}
 	
-		verseManager.verseIndex = verseIndex;
+		VerseManager.verseIndex = verseIndex;
 		verseManager.Save();
 		GameManager.SetChallengeModeEnabled(false);
 		PlayerPrefs.SetInt("verse_scroll_content_anchored_y",

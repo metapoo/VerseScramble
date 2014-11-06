@@ -1,3 +1,5 @@
+#pragma strict
+
 public class Verse
 {
 	public var onlineId : String;
@@ -20,7 +22,7 @@ public class Verse
 		verseset = verseset_;
 	}
 	
-	public function ToString() {
+	override public function ToString() : String {
 		return String.Format("{0} - {1}", reference, text);
 	}
 	
@@ -31,7 +33,7 @@ public class Verse
 		verseset = verseset_;
 	}
 	
-	public function SaveKey() {
+	public function SaveKey() : String {
 		if (isOnline) {
 			return onlineId;
 		} else {
@@ -44,7 +46,7 @@ public class Verse
 		PlayerPrefs.SetString("vm_"+SaveKey(), metadataJSON);
 	}
 
-	public function GetMetadata() {
+	public function GetMetadata() : Hashtable {
 		var key = "vm_"+SaveKey();
 		var metadataJSON : String = null;
 	
