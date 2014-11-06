@@ -1,3 +1,5 @@
+#pragma strict
+
 import UnityEngine.UI;
 
 static function ZoomTo(camera : Camera, endFOV: float, duration : float) {
@@ -33,9 +35,9 @@ static function Translation(thisTransform : Transform, endPos : Vector3, duratio
 	}
 }
 
-static function TranslationBy(thisTransform : Transform, dPos : Vector3, duration : float) {
+static function TranslationBy(thisTransform : Transform, dPos : Vector3, duration : float)  {
 	var endPos = thisTransform.localPosition + dPos;
-	return Translation(thisTransform, endPos, duration);
+	Translation(thisTransform, endPos, duration);
 }
 
 
@@ -51,12 +53,13 @@ static function FadeMeshRenderer(meshRenderer : MeshRenderer, endAlpha : float, 
 }
 
 
-static function FadeOverTime(text : Text, startAlpha : float, endAlpha : float, duration : float) {
+static function FadeOverTime(text : UnityEngine.UI.Text, startAlpha : float, endAlpha : float, duration : float) {
 	var rate : float = 1.0/duration;
 	var t : float = 0.0f;
 	while (t < 1.0) {
 		t += Time.deltaTime * rate;
-		text.color.a = startAlpha + (endAlpha - startAlpha) * t;
+		text.color = new Color(text.color.r,text.color.b, text.color.g,
+							   startAlpha + (endAlpha - startAlpha) * t);
 		yield;
 	}
 }

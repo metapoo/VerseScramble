@@ -7,8 +7,6 @@ public var verseManager : VerseManager;
 public var loginPanel : LoginPanel;
 public var needToSelectDifficulty : boolean = false;
 
-private var gt = TextManager.GetText;
-
 function BackToMenu() {
 	gameManager.Cleanup();
 	Destroy(this.gameObject);
@@ -35,7 +33,7 @@ function ShowHighScores(resultData : Hashtable) {
 		text += i + ". " + score["username"] + " - " + score["score"] + "\n";
 		i += 1;
 	}
-	var popupDialog : PopupDialog = DialogManager.CreatePopupDialog(gt("High Scores"), text);
+	var popupDialog : PopupDialog = DialogManager.CreatePopupDialog(TextManager.GetText("High Scores"), text);
 	popupDialog.SetHeight(1200);
 	popupDialog.CenterOnScreen();
 	popupDialog.OnClose = ShowEndOfGameOptions;
@@ -90,9 +88,9 @@ function SubmitScore(showPopup: boolean) {
 
 function GetStatsMessage() : String {
 
-	var text : String = String.Format("\n{0}: {1}%", gt("Accuracy"), scoreManager.GetAccuracy());
-	text += String.Format("\n{0}: {1}s\n", gt("Time"), Mathf.RoundToInt(scoreManager.totalElapsedTime*100.0)/100.0);
-	text += String.Format(gt("{0} Blocks"), scoreManager.correct);
+	var text : String = String.Format("\n{0}: {1}%", TextManager.GetText("Accuracy"), scoreManager.GetAccuracy());
+	text += String.Format("\n{0}: {1}s\n", TextManager.GetText("Time"), Mathf.RoundToInt(scoreManager.totalElapsedTime*100.0)/100.0);
+	text += String.Format(TextManager.GetText("{0} Blocks"), scoreManager.correct);
 	return text;
 }
 
@@ -130,7 +128,7 @@ function SubmitScoreWithLogin() {
 	if (UserSession.IsLoggedIn()) {
 		SubmitScore(true);
 	} else {
-		var clone : LoginPanel = loginPanel.ShowLoginPanel(loginPanel, null);
+		var clone : LoginPanel = LoginPanel.ShowLoginPanel(loginPanel, null);
 		clone.onLogin = SubmitScoreWithPopup;
 	}
 }
@@ -141,17 +139,17 @@ function EndGameWindowForChallenge () {
 	
 	var diffString : String = VerseManager.DifficultyToString(difficulty);
 	var nextDifficultyString : String = VerseManager.DifficultyToString(nextDifficulty);
-	var text = String.Format(gt("You scored {0}"), scoreManager.score);
-	var title = gt("Challenge completed!");
+	var text = String.Format(TextManager.GetText("You scored {0}"), scoreManager.score);
+	var title = TextManager.GetText("Challenge completed!");
 	
 	needToSelectDifficulty = true;
 	
 	if (gameManager.DidRanOutOfTime) {
-		text = gt("You ran out of time.");
-		title = gt("Game Over");
+		text = TextManager.GetText("You ran out of time.");
+		title = TextManager.GetText("Game Over");
 		
 	} else if (scoreManager.isHighScore) {
-		text = String.Format(gt("New high score {0}!"), scoreManager.score);
+		text = String.Format(TextManager.GetText("New high score {0}!"), scoreManager.score);
 	}	
 	
 	text += GetStatsMessage();
@@ -162,17 +160,17 @@ function EndGameWindowForChallenge () {
 	&& scoreManager.WasVerseMastered();
 	
 	if (scoreManager.WasVerseMastered()) {
-		optionDialog.AddOption(gt("Review Verse Rain!"),
+		optionDialog.AddOption(TextManager.GetText("Review Verse Rain!"),
 								ReviewVerseRain);
 	} else {
-		optionDialog.AddOption(gt("Back to menu"),BackToMenu);
+		optionDialog.AddOption(TextManager.GetText("Back to menu"),BackToMenu);
 		
 	}
 
 	if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
-		optionDialog.AddOption(gt("Try again"), TryAgainForChallenge);
+		optionDialog.AddOption(TextManager.GetText("Try again"), TryAgainForChallenge);
 	} else {
-		optionDialog.AddOption(String.Format(gt("Next level"), nextDifficultyString), NextLevelForChallenge);
+		optionDialog.AddOption(String.Format(TextManager.GetText("Next level"), nextDifficultyString), NextLevelForChallenge);
 	}
 	
 	if (VerseManager.currentVerseSet.onlineId == null) return;
@@ -181,9 +179,9 @@ function EndGameWindowForChallenge () {
 		SubmitScore(false);
 	}
 	
-	var scoreText : String = gt("Submit Score");
+	var scoreText : String = TextManager.GetText("Submit Score");
 	if (UserSession.IsLoggedIn()) {
-		scoreText = gt("View High Scores");
+		scoreText = TextManager.GetText("View High Scores");
 	}
 	
 	optionDialog.AddOption(scoreText,SubmitScoreWithLogin);
@@ -213,19 +211,19 @@ function EndGameWindow () {
 	var masteredVerses = verseManager.GetMasteredVerses(difficulty);
 	var diffString = VerseManager.DifficultyToString(difficulty);
 	var nextDifficultyString = VerseManager.DifficultyToString(nextDifficulty);
-	var description = String.Format(gt("You scored {0}"), scoreManager.score);
-	var title : String = gt("Verse completed!");
+	var description = String.Format(TextManager.GetText("You scored {0}"), scoreManager.score);
+	var title : String = TextManager.GetText("Verse completed!");
 	
 	needToSelectDifficulty = true;
 	
 	if (gameManager.showingSolution) {
-		title = gt("Game Over");
+		title = TextManager.GetText("Game Over");
 	}
 	
     if (!scoreManager.WasVerseMastered()) {
-		description = String.Format(gt("You made {0} mistakes"), scoreManager.mistakes);
+		description = String.Format(TextManager.GetText("You made {0} mistakes"), scoreManager.mistakes);
 	} else if (scoreManager.isHighScore) {
-		description = String.Format(gt("New high score {0}!"), scoreManager.score);
+		description = String.Format(TextManager.GetText("New high score {0}!"), scoreManager.score);
 	} 
 	
 	description += GetStatsMessage();
@@ -236,16 +234,16 @@ function EndGameWindow () {
 	(scoreManager.WasVerseMastered());
 	optionDialog.onClose = DestroySelf;
 	
-	optionDialog.AddOption(String.Format(gt("Play Challenge (All Verses)"), nextDifficultyString),
+	optionDialog.AddOption(String.Format(TextManager.GetText("Play Challenge (All Verses)"), nextDifficultyString),
 				PlayChallenge);
 				
 	if ((difficulty == difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
-		optionDialog.AddOption(gt("Try again"), TryAgain);
+		optionDialog.AddOption(TextManager.GetText("Try again"), TryAgain);
 	} else {
-		optionDialog.AddOption(String.Format(gt("Next level"), nextDifficultyString), NextLevel);
+		optionDialog.AddOption(String.Format(TextManager.GetText("Next level"), nextDifficultyString), NextLevel);
 	}
 	
-	optionDialog.AddOption(gt("Next verse"), NextVerse);
+	optionDialog.AddOption(TextManager.GetText("Next verse"), NextVerse);
 	
 	if (UserSession.IsLoggedIn()) {
 		SubmitScore(false);
@@ -277,9 +275,9 @@ function Start() {
 }
 
 function Awake () {
-	scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
-	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
-	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
+	scoreManager = GameObject.Find("ScoreManager").GetComponent(ScoreManager);
+	gameManager = GameObject.Find("GameManager").GetComponent(GameManager);
+	verseManager = GameObject.Find("VerseManager").GetComponent(VerseManager);
 }
 
 function Update () {

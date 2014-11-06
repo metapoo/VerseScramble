@@ -1,7 +1,11 @@
-import System.IO;//using System.IO;
+#pragma strict
+
 import UnityEngine;
+import System.IO;//using System.IO;
 import System.Collections;
 import JSONUtils;
+import TextManager;
+import System.Security.Cryptography;
 
 class ApiManager extends MonoBehaviour {
  
@@ -48,13 +52,13 @@ class ApiManager extends MonoBehaviour {
 		return isConnectedToInternet;
 	}
 	
-	static function Md5(strToEncrypt: String)
+	static function Md5(strToEncrypt: String) : String
 	{
 		var encoding = System.Text.UTF8Encoding();
 		var bytes = encoding.GetBytes(strToEncrypt);
  
 		// encrypt bytes
-		var md5 = System.Security.Cryptography.MD5CryptoServiceProvider();
+		var md5 : MD5CryptoServiceProvider = System.Security.Cryptography.MD5CryptoServiceProvider();
 		var hashBytes:byte[] = md5.ComputeHash(bytes);
  
 		// Convert the encrypted bytes back to a string (base 16)
@@ -68,7 +72,7 @@ class ApiManager extends MonoBehaviour {
 		return hashString.PadLeft(32, "0"[0]);
 	}
 	
-    static function Instance() 
+    static function Instance() : ApiManager
     {
             if (instance == null) 
             {
@@ -78,22 +82,22 @@ class ApiManager extends MonoBehaviour {
                 if (notificationObject == null) {
 	                notificationObject = new GameObject("ApiManager");
 	                // Add the DynamicObjectManager component, and set it as the defaultCenter
-    		      	instance = notificationObject.AddComponent(typeof(ApiManager));
+    		      	instance = notificationObject.AddComponent(ApiManager);
  				}
             }
             return instance;
     }
 
-    public static function GetInstance()
+    public static function GetInstance() : ApiManager
     {
         return Instance();
     }
 
 	public function CallApi(apiName : String, arguments : Hashtable) {
-		CallApi(apiName, arguments, new Hashtable({}));
+		CallApi(apiName, arguments, new Hashtable());
 	}
 	
-	public function SerializeArguments(arguments : Hashtable) {
+	public function SerializeArguments(arguments : Hashtable) : String {
 		SetFullArguments(arguments);
 
     	var serializedArguments : String = "";
@@ -124,7 +128,7 @@ class ApiManager extends MonoBehaviour {
 
 	}
 	
-	public function GetWWWForm(arguments : Hashtable) {
+	public function GetWWWForm(arguments : Hashtable) : WWWForm {
 		SetFullArguments(arguments);
 		var form : WWWForm = new WWWForm();
 		
@@ -144,14 +148,14 @@ class ApiManager extends MonoBehaviour {
     	PlayerPrefs.SetString(url, json);
     }
 
-    public function GetApiCache(url : String) {
+    public function GetApiCache(url : String) : Hashtable {
     	var json : String = PlayerPrefs.GetString(url);
     	if (json == null) return null;
     	var resultData : Hashtable = ParseJSON(json);
 	    return resultData;
     }
     
-    public function UrlForApi(apiName : String, arguments : String, options : Hashtable) {
+    public function UrlForApi(apiName : String, arguments : String, options : Hashtable) : String {
     	var protocol : String = "http";
     	if (options.ContainsKey("protocol")) {
     		protocol = options["protocol"];
@@ -163,17 +167,29 @@ class ApiManager extends MonoBehaviour {
     public function GetApiCache(apiName: String, arguments : Hashtable, options : Hashtable) : void {
     	var serializedArguments : String = SerializeArguments(arguments);
     	var url : String = UrlForApi(apiName, serializedArguments, options);
+    	var resultData : Hashtable;
     	try {
-	    	var resultData : Hashtable = GetApiCache(url);
+	    	resultData = GetApiCache(url);
 	    } catch (err) {
 	    	return;
 	    }
-    	var handler : Function = options["handler"];
+    	var handler = function(resultData : Hashtable) {};
+    	
+    	if (options.ContainsKey("handler")) {
+	    	handler = options["handler"];
+	    }
+	    
     	if (resultData != null) {
     		handler(resultData);
     	}
     }
     
+    
+	public function ShowErrorPopup() {
+		DialogManager.CreatePopupDialog(TextManager.GetText("Error"),
+		TextManager.GetText("Sorry we encountered a network error. Is your network connection enabled?"));
+	}
+		
     public function CallApi(apiName : String, arguments : Hashtable, options : Hashtable) {
     	var serializedArguments : String = SerializeArguments(arguments);
     	var url : String;
@@ -203,15 +219,13 @@ class ApiManager extends MonoBehaviour {
 			cacheEnabled = options["cacheEnabled"];
 		}
 		
-		var handler : Function = function() {};
+		var handler = function(resultData : Hashtable) {};
+		
 		if (options.ContainsKey("handler")) {
 			handler = options["handler"];
 		}
 		
-		var errorHandler : Function = function() {
-			var gt : Function = TextManager.GetText;
-			DialogManager.CreatePopupDialog(gt("Error"),gt("Sorry we encountered a network error. Is your network connection enabled?") + "\nAPI: " + apiName);
-		};
+		var errorHandler = function() {ShowErrorPopup();};
 		
 		if (options.ContainsKey("errorHandler")) {
 			errorHandler = options["errorHandler"];
@@ -250,8 +264,9 @@ class ApiManager extends MonoBehaviour {
 		}
 		
 		var data = www.text;
+		var apiData : Hashtable;
 		try {
-			var apiData : Hashtable = JSONUtils.ParseJSON(data);
+			apiData = JSONUtils.ParseJSON(data);
 		} catch (err) {
 			errorHandler();
 			return;
