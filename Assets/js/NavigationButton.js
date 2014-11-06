@@ -42,6 +42,35 @@ function HandleApiVerseSetList(resultData : Hashtable) {
 	
 }
 
+function HandleError() {
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("order_by",view);
+	arguments.Add("page",1);
+	arguments.Add("language_code",VerseManager.GetLanguage());
+
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleApiVerseSetList);
+	var api : ApiManager = ApiManager.GetInstance();
+	api.GetApiCache("verseset/list",
+	arguments,
+	options);
+};
+
+function ShowMySets() {
+	var us : UserSession = UserSession.GetUserSession();
+	var arguments : Hashtable = new Hashtable();
+	var apiManager : ApiManager = ApiManager.GetInstance();
+	arguments.Add("user_id",us.userId);
+	arguments.Add("page",1);
+	arguments.Add("language_code",VerseManager.GetLanguage());
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleApiVerseSetList);
+	apiManager.CallApi("verseset/list",
+	arguments,
+	options);
+};
+
+
 function HandleOnClick() {
 	if ((view == "popular") || (view == "new") || (view == "history") || (view == "mysets")) {
 		Highlight();
@@ -51,42 +80,39 @@ function HandleOnClick() {
 	var versesets : List.<VerseSet> = VerseManager.GetCurrentVerseSets();
 	var apiDomain : String = ApiManager.GetApiDomain();
 	var apiManager : ApiManager = ApiManager.GetInstance();
-	var us : UserSession = UserSession.GetUserSession();
 	var arguments : Hashtable;
-	arguments = new Hashtable({"order_by":view,"page":1,"language_code":VerseManager.GetLanguage()});
+	var options : Hashtable;
 	
-	var handleError : Function = function() {
-		apiManager.GetApiCache("verseset/list",
-		arguments,
-		new Hashtable({"handler":HandleApiVerseSetList}));
-	};
+	arguments = new Hashtable();
+	arguments.Add("order_by",view);
+	arguments.Add("page",1);
+	arguments.Add("language_code",VerseManager.GetLanguage());
 	
+
 	if ((view == "popular") || (view == "new")) {
+		options = new Hashtable();
+		options.Add("handler",HandleApiVerseSetList);
+		options.Add("errorHandler",HandleError);
+		
 		apiManager.CallApi("verseset/list",
 		arguments,
-		new Hashtable({"handler":HandleApiVerseSetList, "errorHandler":handleError}));
+		options);
 	} else if (view == "history") {
+		options = new Hashtable();
+		options.Add("handler",HandleApiVerseSetList);
 		if (UserSession.IsLoggedIn() && (!VerseManager.historyLoaded)) {
 			apiManager.CallApi("profile/versesets/history",
-			new Hashtable({}),
-			new Hashtable({"handler":HandleApiVerseSetList}));
+			new Hashtable(),
+			options);
 		}
 	} else if (view == "mysets") {
-		var showMySets : Function = function() {
-			Debug.Log("show my sets");
-			apiManager.CallApi("verseset/list",
-			new Hashtable({"user_id":us.userId,"page":1,"language_code":VerseManager.GetLanguage()}),
-			new Hashtable({"handler":HandleApiVerseSetList}));
-			
-		};
+		
 		
 		if (!UserSession.IsLoggedIn()) {
 			var clone : LoginPanel = LoginPanel.ShowLoginPanel(loginPanel, null);
-				clone.onLogin = function() {
-					showMySets();
-				};
+				clone.onLogin = ShowMySets;
 		} else {	
-			showMySets();
+			ShowMySets();
 		}
 	} else if (view == "profile") {
 		Application.OpenURL(ApiManager.GetUrl("/profile"));
