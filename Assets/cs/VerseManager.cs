@@ -631,10 +631,10 @@ public class VerseManager:MonoBehaviour{
 		string version = "" + versesetData["version"];
 		string setname = "" + versesetData["name"];
 		string versesetId = "" + versesetData["_id"];
-		object verseCount = versesetData["verse_count"];
+		int verseCount = Convert.ToInt32 (versesetData["verse_count"]);
 		//Debug.Log("setname = " + setname + " verse count = " + verseCount);
 		VerseSet verseset = VerseSet.GetVerseSet(versesetId, setname, language, version);
-		verseset.verseCount = (int)verseCount;
+		verseset.verseCount = verseCount;
 		AddOnlineVerseSet(verseset);
 		return verseset;
 	}
@@ -677,11 +677,11 @@ public class VerseManager:MonoBehaviour{
 		UserSession us = UserSession.GetUserSession();
 		
 		if (us != null) {
-			if (us.verseId != null) {
+			if ((us.verseId != null) && (us.verseId != "")) {
 				LoadOnlineVerse(us.verseId);
 				return;
 			}
-			if (us.versesetId != null) {
+			if ((us.versesetId != null) && (us.verseId != "")) {
 				LoadOnlineVerseSet(us.versesetId);
 				return;
 			}

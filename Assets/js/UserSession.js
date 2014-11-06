@@ -27,7 +27,7 @@ static function GetUserSession() : UserSession {
 	}
 	
 	var us : UserSession = usGO.GetComponent(UserSession);
-	if (us) {
+	if (us != null) {
 		return us;
 	}
 	return null;

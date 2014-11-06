@@ -6,6 +6,7 @@ public class TitleManager:MonoBehaviour{
 	public static bool stayInTitleScreen;
 	
 	public void Awake() {
+		PlayerPrefs.DeleteAll();
 		Application.targetFrameRate = 60;
 		string language = VerseManager.GetLanguage();
 		if (!TextManager.IsLoaded()) {

@@ -25,15 +25,13 @@ public class JSONUtils
 	static Hashtable escapee2 = new Hashtable();
 	
 	static string text;
-	static List<string> digits =  new System.Collections.Generic.List<string>(new string[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"});
+	static List<string> digits =  new List<string>(new string[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"});
 	
 	static void error(string m)
 	{
-	/*
 		throw new System.Exception("SyntaxError: \nMessage: "+m+
 		                           "\nAt: "+at+
 		                           "\nText: "+text);
-	*/	                           
 	}
 	
 	static string _next(string c)
@@ -41,8 +39,7 @@ public class JSONUtils
 		if((c != null) && c != ch) {
 			error("Expected '" + c + "' instead of '" + ch + "'");
 		}
-		
-		
+
 		if(text.Length >= at+1) {
 			ch = text.Substring(at, 1);
 		}
@@ -51,6 +48,7 @@ public class JSONUtils
 		}
 		
 		at++;
+
 		return ch;
 	}
 	
@@ -59,7 +57,7 @@ public class JSONUtils
 		return _next(null);
 	}
 	
-	static double number()
+	static object number()
 	{
 		double number = 0.0;
 		string str = "";
@@ -105,6 +103,11 @@ public class JSONUtils
 		}
 		else
 		{
+//			Debug.Log ("number % 1 = " + (number % 1) + " test = " + ((number % 1) == 0));
+			if ((number % 1) == 0) {
+				int integer = Convert.ToInt32 (number);
+				return integer;
+			} 
 			return number;
 		}
 	}
@@ -177,7 +180,7 @@ escapee2.Add("t", "\t");
 	
 	static void white()
 	{
-		while((ch != null) && (ch.Length >= 1 && ch[0] <= 32)) { // if it's whitespace
+		while((ch != null) && (ch.Length >= 1 && Char.IsWhiteSpace(ch[0]))) { // if it's whitespace
 			_next();
 		}   
 	}
@@ -256,7 +259,7 @@ escapee2.Add("t", "\t");
 
 	static List<object> array()
 	{
-		List<object> array = new System.Collections.Generic.List<object>();
+		List<object> array = new List<object>();
 		
 		if(ch == "[")
 		{
@@ -338,11 +341,15 @@ escapee2.Add("t", "\t");
 				key = _string();
 				white();
 				_next(":");
-				obj.Add( key, value() );
+				object val = value ();
+				//Debug.Log ("key = " + key + " val = " + val + " hashtable size = " + obj.Count);
+
+				obj.Add( key, val );
 				white();
 				if (ch == "}")
 				{
 					_next("}");
+					Debug.Log ("hashtable size = " + obj.Count);
 					return obj;
 				}
 				_next(",");
@@ -364,9 +371,9 @@ escapee2.Add("t", "\t");
 		ch = " ";
 		result = hashtable();
 		white();
-		if (ch != null)
+		if ((ch != null) && (ch != ""))
 		{
-			error("Syntax error");
+			error("Syntax error: " + ch.Length);
 		}
 		return result;
 	}
@@ -399,17 +406,20 @@ escapee2.Add("t", "\t");
 	
 	public static string HashtableToJSON(Hashtable hashtable)
 	{
-		List<string> retour = new System.Collections.Generic.List<string>();
+		List<string> retour = new List<string>();
 		foreach(object key in hashtable.Keys)
 		{
 			object tempValue = hashtable[key];
-			if( tempValue.GetType() == typeof(Hashtable) )
+			//Debug.Log ("key = " + key + " tmpValue = " + tempValue);
+			if (tempValue == null) {
+				retour.Add ("\""+key+"\" : "+"null");
+			} else if( tempValue.GetType() == typeof(Hashtable) )
 			{
 				retour.Add("\""+key+"\" : "+HashtableToJSON(tempValue as Hashtable));
 			}
-			else if( tempValue.GetType() == typeof(List<UnityEngine.Object>) )
+			else if( tempValue.GetType() == typeof(List<object>) )
 			{
-				retour.Add("\""+key+"\" : "+ArrayToJSON(tempValue as List<UnityEngine.Object>));
+				retour.Add("\""+key+"\" : "+ArrayToJSON(tempValue as List<object>));
 			}
 			else if( tempValue.GetType() == typeof(String) )
 			{
@@ -495,18 +505,22 @@ escapee2.Add("t", "\t");
 	}
 	*/
 
-	public static string ArrayToJSON(List<UnityEngine.Object> array)
+	public static string ArrayToJSON(List<object> array)
 	{
 		List<string> retour = new System.Collections.Generic.List<string>();
 		foreach(object tempValue in array)
 		{
-			if( tempValue.GetType() == typeof(Hashtable) )
+
+			if (tempValue == null) {
+				retour.Add (null);
+		    }
+			else if( tempValue.GetType() == typeof(Hashtable) )
 			{
 				retour.Add(HashtableToJSON(tempValue as Hashtable));
 			}
-			else if( tempValue.GetType() == typeof(List<UnityEngine.Object>) )
+			else if( tempValue.GetType() == typeof(List<object> ))
 			{
-				retour.Add(ArrayToJSON(tempValue as List<UnityEngine.Object>));
+				retour.Add(ArrayToJSON(tempValue as List<object>));
 			}
 			else if( tempValue.GetType() == typeof(String) )
 			{

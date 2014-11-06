@@ -1,5 +1,3 @@
-namespace CSDEP
-{
 using UnityEngine;
 using System;
 using UnityEngine.UI;
@@ -160,5 +158,4 @@ public class VerseSetButton:MonoBehaviour{
 	public void Update() {
 	
 	}
-}
 }
