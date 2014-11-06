@@ -104,6 +104,17 @@ function HandleApiVerseSetShow(resultData : Hashtable) {
 	
 }
 
+function HandleError() {
+	var apiManager : ApiManager = ApiManager.GetInstance();
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("verseset_id",verseset.onlineId);
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleApiVerseSetShow);
+	apiManager.GetApiCache("verseset/show",
+	arguments,
+	options);
+};
+
 function HandleOnClick() {
 	if (createVerseSet) {
 		var url : String = ApiManager.GetUrl("/verseset/create");
@@ -115,18 +126,16 @@ function HandleOnClick() {
 	VerseManager.SetCurrentVerseSet(verseset);
 	Highlight();
 	var apiManager : ApiManager = ApiManager.GetInstance();
-	
-	var handleError : Function = function() {
-		apiManager.GetApiCache("verseset/show",
-		new Hashtable({"verseset_id":verseset.onlineId}),
-		new Hashtable({"handler":HandleApiVerseSetShow}));
-	};
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("verseset_id",verseset.onlineId);
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",HandleApiVerseSetShow);
+	options.Add("errorHandler",HandleError);
 	
 	if (verseset.isOnline && (verseset.verses.Count == 0)) {
 		apiManager.CallApi("verseset/show",
-		new Hashtable({"verseset_id":verseset.onlineId}),
-		new Hashtable({"handler":HandleApiVerseSetShow, 
-		"errorHandler":handleError}));
+		arguments,
+		options);
 	} else {
 		verseSetsManager.ShowVerses();
 	}

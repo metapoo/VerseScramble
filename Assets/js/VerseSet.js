@@ -1,9 +1,9 @@
+#pragma strict
 import System.Collections.Generic;
-
-static var versesetBySaveKey : Hashtable = new Hashtable();
 
 public class VerseSet
 {
+	static var versesetBySaveKey : Hashtable = new Hashtable();
 	public var onlineId : String;
 	public var setname : String;
 	public var language : String;
@@ -13,7 +13,7 @@ public class VerseSet
 	public var version : String;
 	public var playCount : int;
 	
-	public static function GetVerseSet(saveKey : String) {
+	public static function GetVerseSet(saveKey : String) : VerseSet {
 		if (versesetBySaveKey.Contains(saveKey)) {
 			return versesetBySaveKey[saveKey];
 		}
@@ -21,7 +21,7 @@ public class VerseSet
 	}
 	
 		
-	public static function GetVerseSet(onlineId_ : String, setname_ : String, language_ : String, version_: String) {
+	public static function GetVerseSet(onlineId_ : String, setname_ : String, language_ : String, version_: String) : VerseSet {
 		var verseset : VerseSet = GetVerseSet(onlineId_);
 		if (Object.ReferenceEquals(verseset, null)) {
 			return VerseSet(onlineId_, setname_, language_, version_);
@@ -33,7 +33,7 @@ public class VerseSet
 		}
 	}
 	
-	public function GetVerseCount() {
+	public function GetVerseCount() : int {
 		if (isOnline) return verseCount;
 		return verses.Count;
 	}
@@ -64,18 +64,18 @@ public class VerseSet
 		verses.Add(verse_);
 	}
 	
-	public function ToString() {
+	override public function ToString() : String {
 		return String.Format("verseset: {0}", setname);
 	}
 	
-	public function SaveKey() {
+	public function SaveKey() : String {
 		if (onlineId != null) {
 			return onlineId;
 		}
 		return String.Format("{0}_{1}",setname,language);
 	}
 	
-	public function GetMetadata() {
+	public function GetMetadata() : Hashtable {
 		var key = "vs_"+SaveKey();
 		var metadataJSON : String = null;
 	
@@ -113,7 +113,7 @@ public class VerseSet
 		verseCount = versesData.Count;
 	}
 	
-	public function IndexOfVerseId(verseId : String) {
+	public function IndexOfVerseId(verseId : String) : int {
 		for (var i=0;i<verses.Count;i++) {
 			var verse : Verse = verses[i];
 			if (verse.SaveKey() == verseId) {
