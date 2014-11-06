@@ -48,7 +48,7 @@ public class VerseSetButton:MonoBehaviour{
 	
 	public void SetVerseSet(VerseSet vs) {
 		verseset = vs;
-		label.text = String.Format("{0} ({1})", vs.setname, vs.verseCount);
+		label.text = String.Format("{0} ({1})", vs.setname, vs.GetVerseCount());
 	}
 	
 	public void Highlight() {
