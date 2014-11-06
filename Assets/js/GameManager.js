@@ -1,8 +1,10 @@
 ﻿#pragma strict
 import UnityEngine;
 import UnityEngine.UI;
+import UnityEngine.Random;
 import System.Collections.Generic;
-
+import System.Text.RegularExpressions;
+ 
 @script RequireComponent(AudioSource);
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
@@ -250,11 +252,11 @@ function GetProgress() : float {
 		}
 	}
 	if (GetChallengeModeEnabled()) {
-		var versesCount : int = verseManager.GetCurrentVerses().Count;
+		var versesCount : int = VerseManager.GetCurrentVerses().Count;
 		if (versesCount == 0) {
 			return 0.0f;
 		}
-		var setProgress : float = (verseManager.verseIndex+verseProgress) / (1.0f* versesCount);
+		var setProgress : float = (VerseManager.verseIndex+verseProgress) / (1.0f* versesCount);
 		return setProgress;
 	} else {
 		return verseProgress;
@@ -267,7 +269,7 @@ function HandleProgress() {
 	terrain.SendMessage("SetTargetProgress", p);
 }
 
-function HandleWordCorrect(wordLabel : WordLabel) {
+function HandleWordCorrect(wordLabel : WordLabel) : int {
 
 	var timeSinceLastWord : float = Time.time - lastWordTime;
 	lastWordTime = Time.time;
@@ -322,7 +324,7 @@ function SetupUI() {
 
 function SyncSetProgressLabel() {
 	setProgressLabel.active = GetChallengeModeEnabled();
-	setProgressLabel.text = String.Format("{0}/{1}", verseManager.verseIndex+1, verseManager.GetCurrentVerses().Count);
+	setProgressLabel.text = String.Format("{0}/{1}", VerseManager.verseIndex+1, VerseManager.GetCurrentVerses().Count);
 }
 
 function showFeedback(feedbackText : String, time : float) {
@@ -348,14 +350,13 @@ function ShowDifficultyOptions() {
 }
 
 function EnableWordColliders() {
-	var wordLabel : WordLabel;
-
-	for (wordLabel in wordLabels) {
+	
+	for (var wordLabel : WordLabel in wordLabels) {
 		wordLabel.collider2D.enabled = true;
 	}
 }
 
-function nextWord() {
+function nextWord() : String {
 	if (wordIndex == -1) return null;
 	wordHinted = false;
 	wordIndex += 1;
@@ -381,7 +382,7 @@ function AnimateIntro() {
 	
 	var duration : float = 0.25f;
 	var endScale : Vector3 = new Vector3(1.0f,1.0f,1.0f);
-	var verse : Verse = verseManager.GetCurrentVerse();
+	var verse : Verse = VerseManager.GetCurrentVerse();
 	SetVerseReference(verse.reference, verse.version);	
 	introReferenceLabel.enabled = true;
 	introReferenceLabel.color.a = 1.0f;
@@ -411,8 +412,10 @@ function RecordPlay() {
 	}
 	var versesetId = verseset.onlineId;
 	if (versesetId != null) {
-		var options : Hashtable = new Hashtable({"errorHandler":null});
-		var arguments : Hashtable = new Hashtable({"verseset_id":versesetId});
+		var options : Hashtable = new Hashtable();
+		options.Add("errorHandler",null);
+		var arguments : Hashtable = new Hashtable();
+		arguments.Add("verseset_id",versesetId);
 		ApiManager.GetInstance().CallApi("verseset/record_play", arguments);
 	}
 	needToRecordPlay = false;
@@ -456,7 +459,7 @@ function Start() {
 }
 
 function SetVerseReference (reference : String, version : String) {
-	var diffString = verseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
+	var diffString : String = VerseManager.DifficultyToString(verseManager.GetCurrentDifficulty());
 	var label : String = reference;
 	
 	if (version != null) {
@@ -468,12 +471,44 @@ function SetVerseReference (reference : String, version : String) {
 	difficultyLabel.text = diffString;
 }
 
+function ProcessClause(clause : String, clauseArray : List.<String>) {
+	var combined : boolean = false;
+	if (clauseArray.Count > 0) {
+		// combine with previous clause if too small
+		var previousClause : String = clauseArray[clauseArray.Count-1];
+		//Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
+			
+		// if clause length is 2 or less just glob it on
+		if (clause.Length <= 2) {
+			clauseArray[clauseArray.Count-1] += clause;
+			combined = true;
+		}	
+	}
+	
+	if (!combined) {
+		clauseArray.Add(clause);
+	}
+};
 
+	
+function IsSeparator(s : String, c : char, n : char, languageIsWestern : boolean) : boolean {
+	if (s[0] != c) return false;
+		
+	if (languageIsWestern) {
+		// make sure space is after separator
+		return (n == " ");
+	} else {
+		return true;
+	}
+};
+	
 function SplitVerse(verse : String) : List.<String> {
-	var langConfig : Hashtable = new Hashtable({'en':new List.<int>([20,10,5]),
-								  				'zh':new List.<int>([10,6,3]),
-								  				'ko':new List.<int>([11,6,3]),
-								  				'ja':new List.<int>([11,6,3])});
+	var langConfig : Hashtable = new Hashtable();
+	langConfig.Add('en',new List.<int>([20,10,5]));
+	langConfig.Add('zh',new List.<int>([10,6,3]));
+	langConfig.Add('ko',new List.<int>([11,6,3]));
+    langConfig.Add('ja',new List.<int>([11,6,3]));
+    
 	var language : String = VerseManager.GetVerseLanguage();
 	var isChinese : boolean = VerseManager.IsLanguageChinese(language);
 	
@@ -487,8 +522,8 @@ function SplitVerse(verse : String) : List.<String> {
 		}
 	}
 	
-	var clauseBreakMultiplier = 1.0f;
-	var difficultyInt = verseManager.GetDifficultyFromInt(difficulty);
+	var clauseBreakMultiplier : float = 1.0f;
+	var difficultyInt : int = VerseManager.GetDifficultyFromInt(difficulty);
 	var phraseLength : int = phraseLengths[difficultyInt];
 		
 	//Debug.Log("SplitVerse = " + verse );
@@ -496,7 +531,7 @@ function SplitVerse(verse : String) : List.<String> {
 	//Debug.Log("phrase length = " + phraseLength);
 	var clauseArray : List.<String> = new List.<String>();
 	var phraseArray : List.<String> = new List.<String>();
-	var clause = "";
+	var localClause : String = "";
 	
 	var paransRe:Regex = new Regex("(.*)");
 	
@@ -508,56 +543,27 @@ function SplitVerse(verse : String) : List.<String> {
 	verse = Regex.Replace(verse, "\n|\t|\r", " ");
 	verse = Regex.Replace(verse, "\\s+", " ");
 	
-	var processClause = function(clause : String) {
-		var combined : boolean = false;
-		if (clauseArray.Count > 0) {
-			// combine with previous clause if too small
-			var previousClause : String = clauseArray[clauseArray.Count-1];
-			//Debug.Log("phraseLength = " + phraseLength + " clause length = " + clause.Length + " prev clause length = " + previousClause.Length);
-			
-			// if clause length is 2 or less just glob it on
-			if (clause.Length <= 2) {
-				clauseArray[clauseArray.Count-1] += clause;
-				combined = true;
-			}	
-		}
-		if (!combined) {
-			clauseArray.Add(clause);
-		}
-	};
-	
 	var i = 0;
 	var languageIsWestern : boolean = VerseManager.IsLanguageWestern(language);
-	
-	var isSeparator : Function = function(s : String, c : char, n : char ) {
-		
-		if (s[0] != c) return false;
-		
-		if (languageIsWestern) {
-			// make sure space is after separator
-			return (n == " ");
-		} else {
-			return true;
-		}
-	};
+
 	
 	var numSeps : int = 0;
 	var numSpaces : int = 0;
 	
 	for (var c : char in verse) {	
 		
-		clause = clause + c;
+		localClause = localClause + c;
 		var n : char = " "[0];
 		if (i < (verse.Length-1)) {
 			n = verse[i+1];
 		}
 		for (var s : String in separators) {
-			if (isSeparator(s,c,n)	) {
-				if ((clause != "") && (clause != " ")) {
+			if (IsSeparator(s,c,n,languageIsWestern)	) {
+				if ((localClause != "") && (localClause != " ")) {
 					//Debug.Log("process " + clause);
-					processClause(clause);
+					ProcessClause(localClause, clauseArray);
 				}
-				clause = "";
+				localClause = "";
 				numSeps += 1;
 			}
 		}
@@ -571,30 +577,21 @@ function SplitVerse(verse : String) : List.<String> {
 	
 	var spaceSepRatio : float = (numSeps+1.0f)/(numSpaces+1.0f);
 	
-	if ((clause != "") && (clause != " ") && (clause != "  ")) {
-		processClause(clause);
+	if ((localClause != "") && (localClause != " ") && (localClause != "  ")) {
+		ProcessClause(localClause, clauseArray);
 	}
 	
 		
 	var phrase : String = "";
 	var newPhrase : String = "";
 	var phraseLengthForClause : int;
-	var isCharacterBased = verseManager.IsCharacterBased(language) && (spaceSepRatio > 1.5f);
-	
-	var phraseHasPunctuation = function(phrase : String) {
-		for (var sc in separators) {
-			if (phrase.Contains(sc)) {
-				return true;
-			}
-		}
-		return false;
-	};
-	
+	var isCharacterBased = VerseManager.IsCharacterBased(language) && (spaceSepRatio > 1.5f);
+
 	//Debug.Log("clause array = " + clauseArray);
 	
 	for (clause in clauseArray) {
 		// check for special '\' marker which we cannot split on
-		var nobreakMarkers : Array = new Array();
+		var nobreakMarkers : List.<int> = new List.<int>();
 		var numPhrase : float = Mathf.RoundToInt((clause.Length + 0.0f)/phraseLength);
 		if (numPhrase == 0) numPhrase = 1;
 		var breakLength : int = Mathf.RoundToInt((clause.Length + 0.0f)/numPhrase);
@@ -629,7 +626,7 @@ function SplitVerse(verse : String) : List.<String> {
 				}
 								
 				// glob onto the closest no break marker
-				if (nobreakMarkers.length > 0) {
+				if (nobreakMarkers.Count > 0) {
 					var best = 100;
 					var bestIndex = -1;
 					for (var index : int in nobreakMarkers) {
@@ -673,10 +670,11 @@ function SplitVerse(verse : String) : List.<String> {
 			}	
 		} else {
 			// filter out no break markers
-			clause = clause.Replace("／","");
-			clause = clause.Replace("/","");
-			if (isChinese) {clause = clause.Replace(" ","");}
-			phraseArray.Add(clause);
+			
+			var clauseCopy : String = clause.Replace("／","");
+			clauseCopy = clauseCopy.Replace("/","");
+			if (isChinese) {clauseCopy = clauseCopy.Replace(" ","");}
+			phraseArray.Add(clauseCopy);
 		}
 		
 		// combine phrases for long laundry lists
@@ -708,8 +706,7 @@ function SplitVerse(verse : String) : List.<String> {
 }
 
 function Cleanup () {
-	var wObject : WordLabel;
-	for (wObject in wordLabels) {
+	for (var wObject : WordLabel in wordLabels) {
 		Destroy(wObject.gameObject);
 	}
 	activeWordLabels.Clear();
@@ -728,7 +725,7 @@ function BeginGame() {
 	SetupVerse();
 	
 	introReferenceLabel.enabled = false;
-	var diffString : String = verseManager.DifficultyToString(difficulty);
+	var diffString : String = VerseManager.DifficultyToString(difficulty);
 	var diffSpoken : String = TextManager.GetText(diffString);
 	
 	if (lastDiffSpoken != diffSpoken) {
@@ -749,7 +746,7 @@ function GetMaxActiveWordIndex() : int {
 	return maxWords;
 }
 
-function UpdateGravityScale() : float {
+function UpdateGravityScale() : void {
 	
 	var fellDownEnough : float = 0.0;
 	
@@ -787,17 +784,22 @@ function UpdateGravityScale() : float {
 	
 }
 
-function GetMaxWordsActive() {
+function GetMaxWordsActive() : int {
 	
 	switch(difficulty) {
 		case Difficulty.Easy:
 			return 4;
+			break;
 		case Difficulty.Medium:
 			return 7;
+			break;
 		case Difficulty.Hard:
 			return 12;
+			break;
+		default:
+			return 10;
+			break;
 	}
-	return 10;
 }
 
 function SwapWords(index1:int, index2:int) {
@@ -886,7 +888,7 @@ function AdjustWordScale() {
 
 function SetupVerse() {
 	SyncSetProgressLabel();
-	VerseManager.AddOnlineVerseSetToHistory(verseManager.GetCurrentVerseSet());
+	VerseManager.AddOnlineVerseSetToHistory(VerseManager.GetCurrentVerseSet());
 
 	gameStarted = false;
 	showingSolution = false;
@@ -905,7 +907,7 @@ function SetupVerse() {
 	
 	var clone : WordLabel;
 	
-	var verse : Verse = verseManager.GetCurrentVerse();
+	var verse : Verse = VerseManager.GetCurrentVerse();
 	SetVerseReference(verse.reference, verse.version);
 	verseMetadata = verse.GetMetadata();
 	//Debug.Log("verse difficulty is " + verseMetadata["difficulty"]);	
@@ -917,7 +919,7 @@ function SetupVerse() {
 	wordIndex = 0;
 	currentWord = words[wordIndex];
 	
-	if (GetChallengeModeEnabled() && (verseManager.verseIndex > 0)) {
+	if (GetChallengeModeEnabled() && (VerseManager.verseIndex > 0)) {
 		var extraTime = scoreManager.CalculateMaxTime();
 		var newTime = extraTime + scoreManager.timeLeft;		
 		
@@ -934,7 +936,7 @@ function SetupVerse() {
 	
 	var dy = screenBounds.y;
 	var i = 0;
-	var rTL = verseManager.rightToLeft;
+	var rTL = VerseManager.rightToLeft;
 	for (word in words) {
 		
 		clone = Instantiate(wordLabel, new Vector3(0,0,0), Quaternion.identity);
@@ -994,7 +996,7 @@ function GetWordLabelAt(index : int) : WordLabel {
 	return wordLabels[index];
 }
 
-function GetGroupSize() {
+function GetGroupSize() : int {
  	// try group size = 1
 	var groupSize : int = 3;
 	
@@ -1035,7 +1037,7 @@ function HandleWordInactive(wordLabel:WordLabel) {
 	}
 }
 
-function ReleaseWords(index: int, numWords : int) {
+function ReleaseWords(index: int, numWords : int) : int {
  	//Debug.Log("release words index = " + index);
  
 	var c : int  = 0;
@@ -1130,7 +1132,7 @@ function Update () {
 
 static function StartChallenge() {
 	var vm : VerseManager = GameObject.FindObjectOfType(VerseManager);
-	vm.verseIndex = 0;
+	VerseManager.verseIndex = 0;
 	vm.Save();
 	SetChallengeModeEnabled(true);
 	
