@@ -71,16 +71,19 @@ public class OptionDialog:MonoBehaviour{
 		}
 	}
 	
-	public void AddOption(string label,Action handler) {
-		handler = delegate() {};
+	public void AddOption(string label, Action handler) {
 		numOptions += 1;
 		OptionButton optButton = (OptionButton)Instantiate(optionButton, Vector3.zero, Quaternion.identity);
 		optButton.SetParent(GetComponent<RectTransform>());
 		optButton.SetLabel(label);
 
 		Button button = optButton.GetComponent<Button>();
-		button.onClick.AddListener(() => {handler(); } );
-		button.onClick.AddListener(() => {CloseDialog(); });
+		button.onClick.AddListener(() => {
+			Debug.Log ("Chose option: " + label);
+			handler();
+			CloseDialog();
+		} );
+
 		RectTransform rt = optButton.GetComponent<RectTransform>();
 		
 		float height = (rt.sizeDelta.y + buttonPadding);

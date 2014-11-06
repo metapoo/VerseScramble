@@ -7,22 +7,10 @@ public class DifficultyOptions:MonoBehaviour{
 	public GameManager gameManager;
 	public VerseManager verseManager;
 	
-	public void StartGame(Difficulty difficulty) {	
+	public void StartGame(Difficulty difficulty) {
 		verseManager.SetDifficulty(difficulty);
 		gameManager.BeginGame();
 		Destroy(this.gameObject);
-	}
-	
-	public void StartHard() {
-		StartGame(Difficulty.Hard);
-	}
-	
-	public void StartMedium() {
-		StartGame(Difficulty.Hard);
-	}
-	
-	public void StartEasy() {
-		StartGame(Difficulty.Hard);
 	}
 	
 	// Make the contents of the window
@@ -34,16 +22,16 @@ public class DifficultyOptions:MonoBehaviour{
 		
 		if (verseManager.IsDifficultyAllowed(Difficulty.Hard) ) {
 			optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Hard),
-			StartHard);
+			                       () => { StartGame (Difficulty.Hard); });
 		}
 	
 		if (verseManager.IsDifficultyAllowed(Difficulty.Medium) ) {
 			optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Medium),
-			StartMedium);
+			                       () => { StartGame (Difficulty.Medium); });
 		}	
 	
 		optionDialog.AddOption(VerseManager.DifficultyToString(Difficulty.Easy),
-			StartEasy);
+		                       () => { Debug.Log ("ASDF"); StartGame (Difficulty.Easy); });
 	
 	}
 	

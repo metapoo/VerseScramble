@@ -1124,7 +1124,7 @@ public class GameManager:MonoBehaviour{
 	
 	public void ShowHint() {
 		wordHinted = true;	
-		if ((wordIndex <= 0) || (wordIndex >= wordLabels.Count)) return;
+		if ((wordIndex < 0) || (wordIndex >= wordLabels.Count)) return;
 		WordLabel wObject = wordLabels[wordIndex];
 		if ((wObject.word == currentWord) && !wObject.returnedToVerse && !wObject.gotoVerse) {
 			StartCoroutine(wObject.HintAt());
