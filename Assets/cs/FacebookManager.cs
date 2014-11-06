@@ -53,6 +53,7 @@ public class FacebookManager : MonoBehaviour {
 					if (meResult.ContainsKey("name")) {
 						_name = (string) meResult["name"];
 					}
+
 					if (meResult.ContainsKey("email")) {
 						_email = (string) meResult["email"];
 					}

@@ -48,10 +48,15 @@ public class UserSession:MonoBehaviour{
 	}
 
 	public void HandleFbLogin(Hashtable parameters) {
-		object accessToken = parameters["accessToken"];
-		object fbUid = parameters["fbUid"];
-		object fbPicUrl = parameters["fbPicUrl"];
-		
+		string accessToken = parameters["accessToken"] as String;
+		string fbUid = parameters["fbUid"] as String;
+		string fbPicUrl = parameters["fbPicUrl"] as String;
+
+		if (fbUid.Length == 0) {
+			Debug.Log ("No FB UID, FB login failed");
+			return;
+		}
+
 		Action<Hashtable> onLogin = delegate( Hashtable userData) {
 			HandleLogin(userData);	
 			LoginPanel loginPanel = (LoginPanel)GameObject.FindObjectOfType(typeof(LoginPanel));
@@ -229,7 +234,7 @@ public class UserSession:MonoBehaviour{
 	}
 	
 	public void LoadUserLogin() {
-		if ((sessionKey != null) && (userId != null)) return;
+		if ((sessionKey.Length > 0) && (userId.Length > 0)) return;
 		string json = PlayerPrefs.GetString("user_data");
 		if ((json != null) && (json != "")) {
 			UnityEngine.Debug.Log("loaded user json = " + json);

@@ -19,7 +19,7 @@ public class ApiManager: MonoBehaviour {
 		string sessionKeyString = "";
 		if (UserSession.IsLoggedIn()) {
 			UserSession us = UserSession.GetUserSession();
-			if (us.sessionKey != null) {
+			if (us.sessionKey.Length > 0) {
 				sessionKeyString = String.Format("?session_key={0}", us.sessionKey);
 			}
 		}
@@ -115,7 +115,7 @@ public class ApiManager: MonoBehaviour {
 	public void SetFullArguments(Hashtable arguments) {
 		if (UserSession.IsLoggedIn()) {
 			string sessionKey = UserSession.GetUserSession().sessionKey;
-			if (sessionKey != null) {
+			if ((sessionKey != null) && (sessionKey.Length > 0)) {
 				arguments["session_key"] = sessionKey;
 			}
 		}
