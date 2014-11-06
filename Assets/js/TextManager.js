@@ -1,3 +1,5 @@
+#pragma strict
+
 import System.IO;//using System.IO;
 import UnityEngine;
 import System.Collections;
@@ -29,11 +31,11 @@ class TextManager extends MonoBehaviour {
  	static var currentFilename : String = "";
  	static var loading : boolean = false;
  	
- 	static function IsLoaded() {
+ 	static function IsLoaded() : boolean {
  		return (textTable != null);
  	}
  	
-    static function Instance() 
+    static function Instance()  : TextManager
     {
  
             if (instance == null) 
@@ -44,14 +46,14 @@ class TextManager extends MonoBehaviour {
                 if (notificationObject == null) {
 	                notificationObject = new GameObject("TextManager");
 	                // Add the DynamicObjectManager component, and set it as the defaultCenter
-    		      	instance = notificationObject.AddComponent(typeof(TextManager));
+    		      	instance = notificationObject.AddComponent(TextManager);
  				}
             }
             return instance;
  
     }
  
-    public static function GetInstance ()
+    public static function GetInstance () : TextManager
     {
         return Instance();
     }   
@@ -100,7 +102,7 @@ class TextManager extends MonoBehaviour {
  	 	
     public static function LoadLanguageFile (filename:String) : boolean
     {
-    	if (filename == currentFilename) return;
+    	if (filename == currentFilename) return true;
     	
     	currentFilename = filename;
     	
@@ -176,7 +178,7 @@ class TextManager extends MonoBehaviour {
     }
  
  
-    public static function GetText (key:String)
+    public static function GetText (key:String) : String
     {
     	var originalKey:String = key;
     	

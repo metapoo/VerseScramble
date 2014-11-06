@@ -1,30 +1,32 @@
 ﻿#pragma strict
 
-var verseId : String = null;
-var versesetId : String = null;
-var apiDomain : String = null;
-var userId : String = null;
-var sessionKey : String = null;
-var username : String = null;
-var email : String = null;
-var fbUid : String = null;
-var _name : String = null;
-var fbPicUrl : String = null;
+import JSONUtils;
 
-var totalScore : int = 0;
-var isLoggedIn : boolean = false;
+public var verseId : String = null;
+public var versesetId : String = null;
+public var apiDomain : String = null;
+public var userId : String = null;
+public var sessionKey : String = null;
+public var username : String = null;
+public var email : String = null;
+public var fbUid : String = null;
+public var _name : String = null;
+public var fbPicUrl : String = null;
 
-static var started : boolean = false;
+public var totalScore : int = 0;
+public var isLoggedIn : boolean = false;
 
-static function GetUserSession() {
+public static var started : boolean = false;
+
+static function GetUserSession() : UserSession {
 	
 	var usGO : GameObject = GameObject.Find("UserSession");
 	if (usGO == null) {
 		usGO = new GameObject("UserSession");
-		usGO.AddComponent(typeof(UserSession));
+		usGO.AddComponent(UserSession);
 	}
 	
-	var us : UserSession = usGO.GetComponent("UserSession");
+	var us : UserSession = usGO.GetComponent(UserSession);
 	if (us) {
 		return us;
 	}
@@ -49,14 +51,20 @@ function HandleFbLogin(parameters : Hashtable) {
 		}
 	};
 	
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("access_token",accessToken);
+	arguments.Add("fb_uid",fbUid);
+	arguments.Add("fb_pic_url",fbPicUrl);
+	
+	var options : Hashtable = new Hashtable();
+	options.Add("cacheEnabled",false);
+	options.Add("protocol","https");
+	options.Add("method","post");
+	options.Add("handler",onLogin);
+	
 	ApiManager.GetInstance().CallApi("fb/login", 
-	new Hashtable({"access_token":accessToken,
-				   "fb_uid":fbUid,
-				   "fb_pic_url":fbPicUrl}),
-	new Hashtable({"cacheEnabled":false,
-	               "protocol":"https",
-	               "method":"post",
-	               "handler":onLogin}));
+	arguments,
+	options);
 }
 
 // example URL: verserain://com.hopeofglory.verserain/verse/53ebe35da2ff372bfb9b91f4/www.verserain.com
@@ -64,11 +72,11 @@ function HandleURL(url : String) {
 	verseId = null;
 	versesetId = null;
 	
-	var parts = url.Split("/"[0]);
-	var subject = parts[3];
-	var idstr = parts[4];
-	var apiDom = parts[5];
-	var sessionKey = parts[6];
+	var parts : String[] = url.Split("/"[0]);
+	var subject : String = parts[3];
+	var idstr : String = parts[4];
+	var apiDom : String = parts[5];
+	var sessionKey : String = parts[6];
 
 	if ((idstr == "None") || (idstr == "null")) {
 		idstr = null;
@@ -83,16 +91,16 @@ function HandleURL(url : String) {
 	apiDomain = apiDom;	
 	Debug.Log("api domain set to " + apiDom);
 	
-	var _startGame : Function = function() {
+	if (!IsLoggedIn() && (sessionKey != "None")) {
+		if (idstr != null) {
+			DoLogin(sessionKey, StartGame);
+		} else {
+			DoLogin(sessionKey, null);
+		}
+	} else {
 		if (idstr != null) {
 			StartGame();
-		}		
-	};
-	
-	if (!IsLoggedIn() && (sessionKey != "None")) {
-		DoLogin(sessionKey, _startGame);
-	} else {
-		_startGame();
+		}
 	}
 }
 
@@ -100,7 +108,7 @@ var StartGame = function() {
 	var gmObject = GameObject.Find("GameManager");	
 	
 	if (gmObject) {
-		var gameManager : GameManager = gmObject.GetComponent("GameManager");
+		var gameManager : GameManager = gmObject.GetComponent(GameManager);
 		gameManager.Cleanup();
 	}
 	
@@ -121,14 +129,18 @@ function DoLogin(sessionKey : String, afterLogin : Function) {
 	};
 	
 	var apiManager : ApiManager = ApiManager.GetInstance();
-	
+	var arguments : Hashtable = new Hashtable();
+	arguments.Add("session_key",sessionKey);
+	var options : Hashtable = new Hashtable();
+	options.Add("handler",onLogin);
+	options.Add("errorHandler",null);
+	options.Add("cacheEnabled",false);
+	options.Add("protocol","https");
+	options.Add("method","post");
+					   
 	apiManager.CallApi("login/login",
-		new Hashtable({"session_key":sessionKey}), 
-		new Hashtable({"handler":onLogin,
-					   "errorHandler":null,
-					   "cacheEnabled":false,
-					   "protocol":"https",
-					   "method":"post"}));
+		arguments, 
+		options);
 }
 
 function SetVerseId(verseId_ : String) {
@@ -193,9 +205,16 @@ function HandleLogin(userData : Hashtable) {
 
 function Save() {
 	
-	var userData : Hashtable = new Hashtable({"email":email,"username":username,
-	"_id":userId,"session_key":sessionKey,"total_score":totalScore,"logged_in":isLoggedIn,
-	"fb_uid":fbUid, "name":_name, "fb_pic_url":fbPicUrl});
+	var userData : Hashtable = new Hashtable();
+	userData.Add("email",email);
+	userData.Add("username",username);
+	userData.Add("_id",userId);
+	userData.Add("session_key",sessionKey);
+	userData.Add("total_score",totalScore);
+	userData.Add("logged_in",isLoggedIn);
+	userData.Add("fb_uid",fbUid);
+	userData.Add("name",_name);
+	userData.Add("fb_pic_url",fbPicUrl);
 	var json : String = HashtableToJSON(userData);
 	PlayerPrefs.SetString("user_data", json);
 }
@@ -213,7 +232,7 @@ function LoadUserLogin() {
 	}
 }
 
-static function IsLoggedIn() {
+static function IsLoggedIn() : boolean {
 	var us : UserSession = GetUserSession();
 	//Debug.Log("user logged in: " + us.isLoggedIn);
 	return (us.isLoggedIn);
