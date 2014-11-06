@@ -105,17 +105,17 @@ function SetColor(color : Color) {
 	}
 }
 
-function GetColor() {
+function GetColor() : Color {
 	return bgMiddle.renderer.material.color;
 }
 
-function boxCollider2D() {
+function boxCollider2D() : BoxCollider2D {
 	var boxCollider2D : BoxCollider2D = GetComponent(BoxCollider2D);
 	return boxCollider2D;
 }
 
 function SetBlockLength(l : float, h : float) {
-	var elements : Array = [bgLeft, bgRight, bgMiddle];
+	var elements : SpriteRenderer[] = [bgLeft, bgRight, bgMiddle];
 
 	for (var el : SpriteRenderer in elements) {
 		if (el) {
@@ -240,7 +240,7 @@ function ShrinkRightEdge(duration : float) {
 	//ResetBubble();
 }
 
-function reverseString(s : String) {
+function ReverseString(s : String) : String {
 	var str : String = "";
 	for (var i=s.Length-1;i>=0;i--) {
 		str += s[i];
@@ -265,7 +265,7 @@ function setWord(w : String) {
 	}
 
 	if (rightToLeft) {
-		label.text = reverseString(w);
+		label.text = ReverseString(w);
 	} else {
 		label.text = w;
 	}
@@ -307,10 +307,10 @@ function ResetBubble() {
 }
 
 function Awake () {
-	sceneSetup = GameObject.Find("SceneSetup").GetComponent("SceneSetup");
-    scoreManager = GameObject.Find("ScoreManager").GetComponent("ScoreManager");
-	gameManager = GameObject.Find("GameManager").GetComponent("GameManager");
-	verseManager = GameObject.Find("VerseManager").GetComponent("VerseManager");
+	sceneSetup = GameObject.Find("SceneSetup").GetComponent(SceneSetup);
+    scoreManager = GameObject.Find("ScoreManager").GetComponent(ScoreManager);
+	gameManager = GameObject.Find("GameManager").GetComponent(GameManager);
+	verseManager = GameObject.Find("VerseManager").GetComponent(VerseManager);
 }
 
 static function ResetVersePosition() {
@@ -367,12 +367,12 @@ function OnCollisionEnter2D(collision : Collision2D) {
   }
 }*/
 
-function GetPreviousWordLabel() {
+function GetPreviousWordLabel() : WordLabel {
 	var wordLabel = gameManager.GetWordLabelAt(wordIndex-1);	
 	// make sure the word label is returned to verse
 	if (!wordLabel.returnedToVerse && !wordLabel.gotoVerse) {
-		for (var i=0;i<gameManager.wordLabels.Count;i++) {
-			var w:WordLabel = gameManager.wordLabels[i];
+		for (var i=0;i<GameManager.wordLabels.Count;i++) {
+			var w:WordLabel = GameManager.wordLabels[i];
 			if ((w.returnedToVerse || w.gotoVerse) && (w.word == wordLabel.word)) {
 				return w;
 			}
@@ -381,7 +381,7 @@ function GetPreviousWordLabel() {
 	return wordLabel;
 }
 
-function GetNextWordLabel() {
+function GetNextWordLabel() : WordLabel {
 	return gameManager.GetWordLabelAt(wordIndex+1);	
 }
 
@@ -463,14 +463,14 @@ function CalculateVersePosition () {
 	}
 }
 
-function IsAvailable() {
+function IsAvailable() : boolean {
 	return collider2D.enabled;
 }
 
 function returnToVerse () {
 	// sync word index incase there is another word label which is duplicate of this one
-	if (wordIndex != gameManager.wordIndex) {
-		gameManager.SwapWords(wordIndex, gameManager.wordIndex);
+	if (wordIndex != GameManager.wordIndex) {
+		GameManager.SwapWords(wordIndex, GameManager.wordIndex);
 	}
 	hinting = false;
 	collider2D.enabled = false;
