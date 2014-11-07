@@ -14,8 +14,10 @@ def get_handlers():
 
 class ShowTranslationsHandler(BaseHandler):
     def get(self):
+        uri = self.get_argument("uri","/")
+        language_uri = self.language_uri(uri)
         self.load_all_translations()
-        self.render("_languages.html")
+        self.render("_languages.html", language_uri=language_uri)
 
 class RemoveTranslationHandler(BaseHandler):
     def get(self, tran_id=None):

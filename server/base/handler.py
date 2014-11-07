@@ -10,8 +10,10 @@ from verserain.translation.localization import *
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
 
-    def language_uri(self):
-        uri = self.request.uri
+    def language_uri(self, uri=None):
+        if uri is None:
+            uri = self.request.uri
+
         l = None
 
         if ("/versesets/popular" in uri):
