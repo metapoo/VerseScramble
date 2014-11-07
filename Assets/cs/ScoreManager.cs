@@ -257,6 +257,9 @@ public class ScoreManager:MonoBehaviour{
 	public void reset() {
 		if (!GameManager.GetChallengeModeEnabled()) {
 			Verse verse = VerseManager.GetCurrentVerse();
+			if (verse == null) {
+				return;
+			}
 			verseMetadata = verse.GetMetadata();
 			highScore = (int)verseMetadata["high_score"];
 		} else {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Globalization;
-
+using System.Linq;
 
 public class VerseManager:MonoBehaviour{
 	
@@ -588,7 +588,7 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public static bool CheckRightToLeft(string language) {
-		rightToLeft = RTL_LANGUAGE_CODES.Contains(language);
+		rightToLeft = RTL_LANGUAGE_CODES.Contains(language, StringComparer.InvariantCultureIgnoreCase);
 		return rightToLeft;
 	}
 	
