@@ -233,15 +233,15 @@ public class EndOfGameOptions:MonoBehaviour{
 		
 		optionDialog.AddOption(String.Format(TextManager.GetText("Play Challenge (All Verses)"), nextDifficultyString),
 					PlayChallenge);
-					
+
+		optionDialog.AddOption(TextManager.GetText("Next verse"), NextVerse);
+
 		if ((difficulty == Difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
 			optionDialog.AddOption(TextManager.GetText("Try again"), TryAgain);
 		} else {
 			optionDialog.AddOption(String.Format(TextManager.GetText("Next level"), nextDifficultyString), NextLevel);
 		}
-		
-		optionDialog.AddOption(TextManager.GetText("Next verse"), NextVerse);
-		
+
 		if (UserSession.IsLoggedIn()) {
 			SubmitScore(false);
 		}
