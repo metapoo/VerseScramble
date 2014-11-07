@@ -52,6 +52,7 @@ class UpdateUsernameHandler(BaseHandler, AccountMixin):
 
 class UpdatePasswordHandler(BaseHandler, AccountMixin):
     @require_secure
+    @require_login
     def post(self):
         current_pw = self.get_argument("current_password", None)
         new_pw = self.get_argument("new_password", None)
