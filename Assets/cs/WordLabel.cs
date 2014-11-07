@@ -201,7 +201,7 @@ public class WordLabel:MonoBehaviour{
 		//ResetBubble();
 	}
 	
-	public string ReverseString(string s) {
+	static public string ReverseString(string s) {
 		string str = "";
 		for(int i=s.Length-1;i>=0;i--) {
 			str += s[i];

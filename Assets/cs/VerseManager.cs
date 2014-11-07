@@ -587,14 +587,9 @@ public class VerseManager:MonoBehaviour{
 		return vs;
 	}
 	
-	public static void CheckRightToLeft(string language) {
-		for(int i=0;i<RTL_LANGUAGE_CODES.Count;i++) {
-			if (language == RTL_LANGUAGE_CODES[i]) {
-				rightToLeft = true;
-				return;
-			}
-		}
-		rightToLeft = false;
+	public static bool CheckRightToLeft(string language) {
+		rightToLeft = RTL_LANGUAGE_CODES.Contains(language);
+		return rightToLeft;
 	}
 	
 	public void LoadOnlineVerse(string verseId) {
