@@ -47,7 +47,7 @@ class LeaderboardUserListHandler(BaseHandler, ApiMixin):
             arguments = {'score':{'$gt':0}}
 
             if selected_subnav == "recent":
-                sort_field = "date"
+                sort_field = "last_played_date"
             elif selected_subnav == "high":
                 sort_field = "score"
                 if time_slice is None:

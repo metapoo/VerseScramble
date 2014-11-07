@@ -52,6 +52,7 @@ class UpdateUsernameHandler(BaseHandler, AccountMixin):
 
 class UpdatePasswordHandler(BaseHandler, AccountMixin):
     @require_secure
+    @require_login
     def post(self):
         current_pw = self.get_argument("current_password", None)
         new_pw = self.get_argument("new_password", None)
@@ -139,7 +140,10 @@ class ProfileAccountHandler(BaseHandler):
 class ProfileOtherIndexHandler(BaseHandler):
     def get(self, username=None):
         user = User.collection.find_one({'username':username})
-        
+        if user is None:
+            self.redirect("/")
+            return
+
         if self.current_user and (user._id == self.current_user._id):
             if self.current_user.account_incomplete():
                 self.redirect("/profile/account")
