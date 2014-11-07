@@ -140,7 +140,10 @@ class ProfileAccountHandler(BaseHandler):
 class ProfileOtherIndexHandler(BaseHandler):
     def get(self, username=None):
         user = User.collection.find_one({'username':username})
-        
+        if user is None:
+            self.redirect("/")
+            return
+
         if self.current_user and (user._id == self.current_user._id):
             if self.current_user.account_incomplete():
                 self.redirect("/profile/account")
