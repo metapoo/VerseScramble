@@ -465,6 +465,7 @@ public class WordLabel:MonoBehaviour{
 		hinting = true;
 		
 		while (hinting) {
+			if (this == null) yield break;
 			StartCoroutine(Blink());
 			yield return new WaitForSeconds(0.4f);
 		}		
