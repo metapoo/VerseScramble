@@ -56,7 +56,7 @@ public class EndOfGameOptions:MonoBehaviour{
 		int score = scoreManager.score;
 		string versesetId = VerseManager.currentVerseSet.onlineId;
 		
-		if ((versesetId == null) || (versesetId.Length == 0)) return;
+		if (String.IsNullOrEmpty(versesetId)) return;
 		
 		string userId = UserSession.GetUserSession().userId;
 		string hashTarget = String.Format("{0}-{1}-{2}-{3}",userId,versesetId,score,ApiManager.secretKey);
