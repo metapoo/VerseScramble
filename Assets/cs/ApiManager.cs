@@ -19,7 +19,7 @@ public class ApiManager: MonoBehaviour {
 		string sessionKeyString = "";
 		if (UserSession.IsLoggedIn()) {
 			UserSession us = UserSession.GetUserSession();
-			if (us.sessionKey.Length > 0) {
+			if (!String.IsNullOrEmpty(us.sessionKey)) {
 				sessionKeyString = String.Format("?session_key={0}", us.sessionKey);
 			}
 		}

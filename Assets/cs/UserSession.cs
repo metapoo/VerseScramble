@@ -43,8 +43,7 @@ public class UserSession:MonoBehaviour{
 	}
 
 	public bool IsUrlDirected() {
-		return !(((verseId.Length == 0) || (verseId == null)) && 
-				((versesetId == null) || (versesetId.Length == 0)));
+		return !(String.IsNullOrEmpty(verseId) && String.IsNullOrEmpty(versesetId));
 	}
 
 	public void HandleFbLogin(Hashtable parameters) {
@@ -52,7 +51,7 @@ public class UserSession:MonoBehaviour{
 		string fbUid = parameters["fbUid"] as String;
 		string fbPicUrl = parameters["fbPicUrl"] as String;
 
-		if (fbUid.Length == 0) {
+		if (String.IsNullOrEmpty(fbUid)) {
 			Debug.Log ("No FB UID, FB login failed");
 			return;
 		}
@@ -234,9 +233,9 @@ public class UserSession:MonoBehaviour{
 	}
 	
 	public void LoadUserLogin() {
-		if ((sessionKey != null) && (sessionKey.Length > 0) && (userId.Length > 0)) return;
+		if (!String.IsNullOrEmpty(sessionKey) && !String.IsNullOrEmpty(userId)) return;
 		string json = PlayerPrefs.GetString("user_data");
-		if ((json != null) && (json != "")) {
+		if (!String.IsNullOrEmpty(json)) {
 			UnityEngine.Debug.Log("loaded user json = " + json);
 			Hashtable userData = JSONUtils.ParseJSON(json);
 			HandleLogin(userData);
@@ -280,7 +279,7 @@ public class UserSession:MonoBehaviour{
 	    SetVerseId("542afb763f7ab0224bd53e33");
 	    */
 	    //HandleURL("verserain://com.hopeofglory.verserain/verse/None/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
-	    //HandleURL("verserain://com.hopeofglory.verserain/verse/544a600b3f7ab063b3c5839b/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
+		//HandleURL("verserain://com.hopeofglory.verserain/verseset/5458332e3f7ab05c7847c25b/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 		//HandleURL("verserain://com.hopeofglory.verserain/verse/542afb763f7ab0224bd53e33/www.verserain.com/bb70d2a9cd8ff9a226b74af7b61d231f151a7cb2-53e42f6da2ff374cfa320f32");
 	}
 	

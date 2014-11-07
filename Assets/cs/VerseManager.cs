@@ -643,7 +643,7 @@ public class VerseManager:MonoBehaviour{
 		verseIndex = verseset.IndexOfVerseId(apiVerseId);
 		if (verseIndex < 0) verseIndex = 0;
 			
-		GameManager.SetChallengeModeEnabled((apiVerseId.Length == 0));
+		GameManager.SetChallengeModeEnabled(String.IsNullOrEmpty(apiVerseId));
 		GameManager gm = GameManager.GetInstance();
 		if (gm != null) {
 			gm.SyncSetProgressLabel();
