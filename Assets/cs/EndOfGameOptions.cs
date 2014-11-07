@@ -219,9 +219,7 @@ public class EndOfGameOptions:MonoBehaviour{
 			title = TextManager.GetText("Game Over");
 		}
 		
-	    if (!scoreManager.WasVerseMastered()) {
-			description = String.Format(TextManager.GetText("You made {0} mistakes"), scoreManager.mistakes);
-		} else if (scoreManager.isHighScore) {
+	    if (scoreManager.WasVerseMastered()) {
 			description = String.Format(TextManager.GetText("New high score {0}!"), scoreManager.score);
 		} 
 		

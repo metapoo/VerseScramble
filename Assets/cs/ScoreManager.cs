@@ -206,7 +206,7 @@ public class ScoreManager:MonoBehaviour{
 	}
 	
 	public bool WasVerseMastered() {
-		return (healthBar.IsGreen() || (mistakes == 0));
+		return (healthBar.IsGreen() || (mistakes == 0) || (GetAccuracy() >= .95f));
 	}
 	
 	public void HandleCountTimeLeftFinished() {
