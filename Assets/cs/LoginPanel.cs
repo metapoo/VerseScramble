@@ -71,8 +71,8 @@ public class LoginPanel:MonoBehaviour{
 	}
 	
 	public void SubmitLogin() {
-		string username = usernameField.value;
-		string password = passwordField.value;
+		string username = usernameField.text;
+		string password = passwordField.text;
 		ApiManager apiManager = ApiManager.GetInstance();
 		Hashtable arguments = new Hashtable();
 		arguments.Add("username",username);
