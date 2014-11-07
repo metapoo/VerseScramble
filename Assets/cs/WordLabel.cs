@@ -460,6 +460,8 @@ public class WordLabel:MonoBehaviour{
 	}
 	
 	public IEnumerator HintAt() {
+		if (hinting) yield break;
+
 		hinting = true;
 		
 		while (hinting) {

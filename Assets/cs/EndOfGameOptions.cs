@@ -32,7 +32,7 @@ public class EndOfGameOptions:MonoBehaviour{
 		SaveTotalScore(resultData);
 	
 		string text = "";
-		List<Hashtable> scores = (List<Hashtable>)resultData["scores"];
+		List<object> scores = (List<object>)resultData["scores"];
 		int i = 1;
 		foreach(Hashtable score in scores) {
 			text += i + ". " + score["username"] + " - " + score["score"] + "\n";
