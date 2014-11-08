@@ -20,7 +20,11 @@ public class ApiManager: MonoBehaviour {
 		if (UserSession.IsLoggedIn()) {
 			UserSession us = UserSession.GetUserSession();
 			if (!String.IsNullOrEmpty(us.sessionKey)) {
-				sessionKeyString = String.Format("?session_key={0}", us.sessionKey);
+				if (Application.isWebPlayer) {
+					sessionKeyString = "";
+				} else {
+					sessionKeyString = String.Format("?s={0}", us.sessionKey);
+				}
 			}
 		}
 		string url = String.Format("http://{0}{1}{2}", apiDomain, path, sessionKeyString);
@@ -116,7 +120,7 @@ public class ApiManager: MonoBehaviour {
 		if (UserSession.IsLoggedIn()) {
 			string sessionKey = UserSession.GetUserSession().sessionKey;
 			if ((sessionKey != null) && (sessionKey.Length > 0)) {
-				arguments["session_key"] = sessionKey;
+				arguments["s"] = sessionKey;
 			}
 		}
 

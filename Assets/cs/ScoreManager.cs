@@ -159,9 +159,10 @@ public class ScoreManager:MonoBehaviour{
 	
 	public IEnumerator CountTimeUpTo(int newTime) {
 		float dt = 0.1f;
+		float maxDuration = 1.0f;
 		int diff = newTime-maxTime;
-		if (diff > 20) {
-			dt = 2.0f/diff;
+		if (diff > maxDuration/dt) {
+			dt = maxDuration/diff;
 		}
 		while (newTime > maxTime) {
 			maxTime += 1;
@@ -206,7 +207,7 @@ public class ScoreManager:MonoBehaviour{
 	}
 	
 	public bool WasVerseMastered() {
-		return (healthBar.IsGreen() || (mistakes == 0));
+		return (healthBar.IsGreen() || (mistakes == 0) || (GetAccuracy() >= .95f));
 	}
 	
 	public void HandleCountTimeLeftFinished() {
