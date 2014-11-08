@@ -309,13 +309,22 @@ class ShowVerseSetHandler(BaseHandler):
         end_index = start_index + per_page
         if time_slice is None:
             time_slice = "7"
-        min_time = datetime.now()-timedelta(days=int(time_slice))
+
+        while int(time_slice) <= 365:
+            min_time = datetime.now()-timedelta(days=int(time_slice))
             
-        scores = VersesetScore.collection.find({'date':{'$gt':min_time}, 
+            scores = VersesetScore.collection.find({'date':{'$gt':min_time}, 
                                                 'verseset_id':verseset_id})
-        cursor = scores
-        scores = scores.sort('score', pymongo.DESCENDING)[start_index:end_index]
-        scores = list(scores)
+            cursor = scores
+            scores = scores.sort('score', pymongo.DESCENDING)[start_index:end_index]
+            scores = list(scores)
+            if (len(scores) > 0) or (time_slice == "365"):
+                break
+            else:
+                if time_slice == "7":
+                    time_slice = "30"
+                else:
+                    time_slice = "365"
 
         total_count = cursor.count()
         paginator = Pagination(page,per_page,total_count)
