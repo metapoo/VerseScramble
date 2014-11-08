@@ -1,6 +1,7 @@
 import simplejson
 import logging
 from verserain import settings
+from simplejson import encoder
 
 _ARG_DEFAULT = []
 
@@ -42,6 +43,7 @@ class ApiMixin:
                          'api_name': self.api_name,
                          'latest_version': settings.LATEST_VERSION,
                          }
+        encoder.FLOAT_REPR = lambda o: format(o, '.3f')
         response = simplejson.dumps(response_dict, use_decimal=True)
         self.write(response)
         self.finish()
