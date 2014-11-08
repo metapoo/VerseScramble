@@ -143,11 +143,12 @@ public class ApiManager: MonoBehaviour {
 	
     public void SetApiCache(string url,Hashtable resultData) {
     	string json = JSONUtils.HashtableToJSON(resultData);
+
 		try {
 	    	PlayerPrefs.SetString(url, json);
 		} catch (System.Exception err) {
-			Debug.Log ("Failed to store json for " + url + " json: " + json);
-		}
+			return;
+		} 
     }
 
     public Hashtable GetApiCache(string url) {

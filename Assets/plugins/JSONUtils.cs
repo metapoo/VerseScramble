@@ -378,15 +378,6 @@ escapee2.Add("t", "\t");
 		return result;
 	}
 	
-	public static string EscapeString(string str)
-	{
-		str = str.Replace("\\","\\\\");
-		// crashes csharpanator
-		//str = str.Replace("\"","\\\"");
-		str = str.Replace("\n","\\n");
-		return str;
-	}
-	
 	public static Hashtable Vector3ToHashtable(Vector3 vector3)
 	{
 		Hashtable retour = new Hashtable();
@@ -403,7 +394,41 @@ escapee2.Add("t", "\t");
 		float zParse = float.Parse(hashtable["z"].ToString());
 		return new Vector3(xParse,yParse,zParse);
 	}
-	
+
+	internal static string Escape (string aText)
+	{
+		string result = "";
+		foreach (char c in aText) {
+			switch (c) {
+			case '\\':
+				result += "\\\\";
+				break;
+			case '\"':
+				result += "\\\"";
+				break;
+			case '\n':
+				result += "\\n";
+				break;
+			case '\r':
+				result += "\\r";
+				break;
+			case '\t':
+				result += "\\t";
+				break;
+			case '\b':
+				result += "\\b";
+				break;
+			case '\f':
+				result += "\\f";
+				break;
+			default   :
+				result += c;
+				break;
+			}
+		}
+		return result;
+	}
+
 	public static string HashtableToJSON(Hashtable hashtable)
 	{
 		List<string> retour = new List<string>();
@@ -423,7 +448,12 @@ escapee2.Add("t", "\t");
 			}
 			else if( tempValue.GetType() == typeof(String) )
 			{
-				retour.Add("\""+key+"\" : \""+EscapeString(tempValue.ToString())+"\"");
+				if ((tempValue as String).Contains("\"")) {
+					Debug.Log (tempValue);
+					Debug.Log (Escape(tempValue.ToString()));
+
+				}
+				retour.Add("\""+key+"\" : \""+Escape(tempValue.ToString())+"\"");
 			}
 			else if( IsNumeric(tempValue) )
 			{
@@ -447,7 +477,7 @@ escapee2.Add("t", "\t");
 			{
 				retour.Add ("\""+key+"\" : "+tempValue.ToString ());
 				//				Debug.Log("HashtableToJSON "+tempValue.ToString()+" of type "+typeof(tempValue));
-				//				retour.Add('"'+key+'" : "'+EscapeString(tempValue.ToString())+'"');
+				//				retour.Add('"'+key+'" : "'+Escape(tempValue.ToString())+'"');
 			}
 		}
 		
@@ -473,7 +503,7 @@ escapee2.Add("t", "\t");
 			}
 			else if( tempValue.GetType() == typeof(String) )
 			{
-				retour.Add("\""+key+"\" : \""+EscapeString(tempValue.ToString())+"\"");
+				retour.Add("\""+key+"\" : \""+Escape(tempValue.ToString())+"\"");
 			}
 			else if( IsNumeric(tempValue) )
 			{
@@ -499,7 +529,7 @@ escapee2.Add("t", "\t");
 			else
 			{
 				//				Debug.Log("ObjectToJSON "+tempValue.ToString()+" of type "+typeof(tempValue));
-				//				retour.Add('"'+key+'" : "'+EscapeString(tempValue.ToString())+'"');
+				//				retour.Add('"'+key+'" : "'+Escape(tempValue.ToString())+'"');
 			}
 		}
 		string str = String.Join(",",retour.ToArray());
@@ -539,7 +569,7 @@ escapee2.Add("t", "\t");
 			}
 			else if( tempValue.GetType() == typeof(String) )
 			{
-				retour.Add("\""+EscapeString(tempValue.ToString())+"\"");
+				retour.Add("\""+Escape(tempValue.ToString())+"\"");
 			}
 			else if( IsNumeric(tempValue) )
 			{
@@ -563,7 +593,7 @@ escapee2.Add("t", "\t");
 			{
 				retour.Add (tempValue.ToString());
 				//				Debug.Log("ArrayToJSON "+tempValue.ToString()+" of type "+typeof(tempValue));
-				//				retour.Add('"'+EscapeString(tempValue.ToString())+'"');
+				//				retour.Add('"'+Escape(tempValue.ToString())+'"');
 			}
 		}
 		string str = String.Join(",",retour.ToArray());
