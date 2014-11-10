@@ -208,8 +208,10 @@ class UpdateVerseHandler(BaseHandler):
 
         commentary = self.get_argument("commentary",None)
         if commentary is not None:
-            verse.set_commentary_text(commentary)
-        
+            if commentary.strip() == '':
+                verse.remove_commentary_text()
+            else:
+                verse.set_commentary_text(commentary)
         self.redirect(verseset.url())
 
 class CreateVerseHandler(BaseHandler):
