@@ -26,6 +26,14 @@ class CommentaryMixin:
             return False
         return True
 
+    def remove_commentary_text(self):
+        if self.has_key('commentary_id'):
+            commentary = Commentary.by_id(self["commentary_id"])
+            if commentary:
+                commentary.remove()
+            del self["commentary_id"]
+            self.save()
+
     def set_commentary_text(self, text):
         commentary = self.commentary()
         if commentary is None:
