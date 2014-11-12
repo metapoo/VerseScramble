@@ -229,7 +229,9 @@ public class ApiManager: MonoBehaviour {
 			handler = (Action<Hashtable>) options["handler"];
 		}
 		
-		Action errorHandler = delegate() {ShowErrorPopup();};
+		Action errorHandler = delegate() {
+		//	ShowErrorPopup();
+		};
 		
 		if (options.ContainsKey("errorHandler")) {
 			errorHandler = (Action)options["errorHandler"];
