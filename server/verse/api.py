@@ -38,7 +38,7 @@ class ListVerseSetApiHandler(BaseHandler, ApiMixin):
         language_code = self.get_argument("language_code", "ALL")
 
         page = self.get_int_argument("page",1)
-        per_page = 100
+        per_page = self.get_int_argument("per_page",100)
         args = {}
 
         if (language_code != "ALL") and (user_id == None):

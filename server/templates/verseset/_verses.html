@@ -16,6 +16,7 @@
 <tr><td class="verseset_show ">
 {% if v.has_commentary() or using_commentary %}{% set using_commentary = True %}<div class="vs_and_comm">{% end %}
 {% set commentary_parent = v %}
+
 {% include "_commentary.html" %}
 
 {% include "_verse.html" %}
