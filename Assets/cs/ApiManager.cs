@@ -230,7 +230,7 @@ public class ApiManager: MonoBehaviour {
 		}
 		
 		Action errorHandler = delegate() {
-		//	ShowErrorPopup();
+			ShowErrorPopup();
 		};
 		
 		if (options.ContainsKey("errorHandler")) {
