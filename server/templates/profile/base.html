@@ -6,7 +6,7 @@
 {% module ProfilePhoto(viewed_user, current_user=user, gt=gt) %}
 
 <div class="pad_bottom">
-{{gt("{0} points") % viewed_user.total_score()}}, {{viewed_user.accuracy()}}% {{gt("Accuracy")}}, {{gt("{0} Blocks") % viewed_user.total_blocks()}}
+{{gt("{0} points", viewed_user.total_score())}}, {{viewed_user.accuracy()}}% {{gt("Accuracy")}}, {{gt("{0} Blocks", viewed_user.total_blocks())}}
 </div>
 
 <div class="pad_bottom subnav">
