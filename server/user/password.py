@@ -23,7 +23,7 @@ def get_hexdigest(algorithm, salt, raw_password):
     """
     import hashlib
 
-    raw_password, salt = smart_text(raw_password), smart_text(salt)
+    raw_password, salt = smart_text(raw_password).encode('utf-8'), smart_text(salt)
     if algorithm == 'crypt':
         try:
             import crypt
