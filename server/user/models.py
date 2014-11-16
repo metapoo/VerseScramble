@@ -56,6 +56,12 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
         else:
             return self.gravatar_pic_url()
 
+    def profile_url(self, username=None):
+        if username is None:
+            username = self.get("username")
+        from tornado.escape import url_escape
+        return "/u/%s" % (url_escape(username),)
+
     @classmethod
     def by_username(cls, username):
         return cls.collection.find_one({"username":username})

@@ -1,4 +1,5 @@
 import tornado.web
+from tornado.escape import *
 from verserain.translation.localization import *
 
 class ProfilePhoto(tornado.web.UIModule):
@@ -18,7 +19,7 @@ class UserLink(tornado.web.UIModule):
     def render(self, user=None, username=None):
         if username is None:
             username = user['username']
-        return "<a class='link' href='/u/%s'>%s</a>" % (username, username)
+        return "<a class='link' href='/u/%s'>%s</a>" % (url_escape(username), username)
 
 class Paginator(tornado.web.UIModule):
     def render(self, paginator=None, base_url=None, url_hash=None):
