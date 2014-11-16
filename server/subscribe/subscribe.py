@@ -4,6 +4,7 @@ from verserain.login.auth import *
 from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
+from tornado.escape import *
 from verserain.utils.paging import *
 from bson.objectid import ObjectId
 import pymongo
@@ -17,6 +18,7 @@ def get_handlers():
 
 class SubscriptionsHandler(BaseHandler):
     def get(self, username):
+        username = url_unescape(username)
         viewed_user = User.by_username(username)
         if not viewed_user:
             return self.write("user not found")
@@ -30,6 +32,7 @@ class SubscriptionsHandler(BaseHandler):
 
 class SubscribersHandler(BaseHandler):
     def get(self, username):
+        username = url_unescape(username)
         viewed_user = User.by_username(username)
         if not viewed_user:
             return self.write("user not found")
@@ -44,6 +47,8 @@ class SubscribersHandler(BaseHandler):
 class UnsubscribeHandler(BaseHandler):
     @require_login
     def get(self, username=None):
+        if username:
+            username = url_unescape(username)
         user = User.by_username(username)
         if user is None:
             return self.write("User not found")
@@ -57,6 +62,8 @@ class UnsubscribeHandler(BaseHandler):
 class SubscribeHandler(BaseHandler):
     @require_login
     def get(self, username=None):
+        if username:
+            username = url_unescape(username)
         user = User.by_username(username)
         if user is None:
             return self.write("User not found")

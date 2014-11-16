@@ -9,6 +9,8 @@
 {{gt("{0} points", viewed_user.total_score())}}, {{viewed_user.accuracy()}}% {{gt("Accuracy")}}, {{gt("{0} Blocks", viewed_user.total_blocks())}}
 </div>
 
+{% set viewed_username = url_escape(viewed_user['username']) %}
+
 <div class="pad_bottom subnav">
 {% if user and (selected_nav == "profile") and (viewed_user._id == user._id) %}
   <a class="pure-button {% if selected_subnav=='account'%}pure-button-primary{% end %}" href="/profile/account">{{gt("Account")}}</a>
@@ -17,14 +19,14 @@
         <a class="pure-button {% if selected_subnav=='create'%}pure-button-primary{% end %}" href="/verseset/create">{{gt("Create Verse Set")}}</a>
 {% end %}
 
-  <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/versesets">{{gt("Verse Sets")}}</a>
+  <a class="pure-button {% if selected_subnav=='versesets'%}pure-button-primary{% end %}" href="/u/{{viewed_username}}/versesets">{{gt("Verse Sets")}}</a>
 
-  <a class="pure-button {% if selected_subnav=='scores'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/scores">{{gt("Recently Played")}}</a>
+  <a class="pure-button {% if selected_subnav=='scores'%}pure-button-primary{% end %}" href="/u/{{viewed_username}}/scores">{{gt("Recently Played")}}</a>
 
 
 {% if user and (user._id == viewed_user._id) %} 
-  <a class="pure-button {% if selected_subnav=='subscriptions'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/subscriptions">{{gt("Subscriptions")}}</a>
-  <a class="pure-button {% if selected_subnav=='subscribers'%}pure-button-primary{% end %}" href="/u/{{viewed_user['username']}}/subscribers">{{gt("Subscribers")}}</a>
+  <a class="pure-button {% if selected_subnav=='subscriptions'%}pure-button-primary{% end %}" href="/u/{{viewed_username}}/subscriptions">{{gt("Subscriptions")}}</a>
+  <a class="pure-button {% if selected_subnav=='subscribers'%}pure-button-primary{% end %}" href="/u/{{viewed_username}}/subscribers">{{gt("Subscribers")}}</a>
 {% end %}
 
 

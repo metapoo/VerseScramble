@@ -4,6 +4,7 @@ from verserain.verse.models import *
 from verserain.utils.encoding import *
 from verserain.utils.paging import *
 from verserain import settings
+from tornado.escape import *
 from datetime import datetime, timedelta
 from bson.objectid import ObjectId
 import pymongo 
@@ -490,6 +491,7 @@ class ListVerseSetHandler(BaseHandler):
             selected_nav = "verse sets"
             if self.current_user and (self.current_user['username'] == option):
                 selected_nav = "profile"
+            option = url_unescape(option)
             viewed_user = User.collection.find_one({'username':option})
             selected_subnav = "versesets"
             if viewed_user:

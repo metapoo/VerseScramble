@@ -5,6 +5,7 @@ from verserain.login.auth import *
 from tornado.auth import GoogleMixin, FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
+from tornado.escape import *
 from verserain.api.api import *
 from verserain.utils.paging import Pagination
 from verserain.utils.text import *
@@ -139,6 +140,8 @@ class ProfileAccountHandler(BaseHandler):
 
 class ProfileOtherIndexHandler(BaseHandler):
     def get(self, username=None):
+        if username:
+            username = url_unescape(username)
         user = User.collection.find_one({'username':username})
         if user is None:
             self.redirect("/")
@@ -151,9 +154,9 @@ class ProfileOtherIndexHandler(BaseHandler):
 
         has_versesets = VerseSet.collection.find_one({'user_id':user._id}) is not None
         if has_versesets:
-            self.redirect("/u/%s/versesets/"%username)
+            self.redirect("/u/%s/versesets/"%url_escape(username))
         else:
-            self.redirect("/u/%s/scores/"%username)
+            self.redirect("/u/%s/scores/"%url_escape(username))
 
 class ProfileIndexHandler(BaseHandler):
     @require_login
@@ -162,6 +165,8 @@ class ProfileIndexHandler(BaseHandler):
 
 class ProfileListScoresHandler(BaseHandler):
     def get(self, username=None, page=1):
+        if username:
+            username = url_unescape(username)
         page = int(page)
         per_page = 15
         start_index = (page-1)*per_page
@@ -171,7 +176,7 @@ class ProfileListScoresHandler(BaseHandler):
         viewed_user = User.collection.find_one({'username':username})
 
         if viewed_user is None:
-            return self.write("user not found")
+            return self.write("user not found: %s" % username)
 
         scores = VersesetScore.collection.find({'user_id':viewed_user._id}).sort("last_played_date",pymongo.DESCENDING)
         total_count = scores.count()
