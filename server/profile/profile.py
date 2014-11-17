@@ -77,6 +77,7 @@ class UpdatePasswordHandler(BaseHandler, AccountMixin):
         return self.render_account(error_message=error_message, feedback_message=feedback_message)
 
 class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
+    @require_login
     def get(self):
         hash_code = self.get_argument("h","")
 
