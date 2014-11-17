@@ -119,6 +119,11 @@ public class ApiManager: MonoBehaviour {
 	public void SetFullArguments(Hashtable arguments) {
 		if (UserSession.IsLoggedIn()) {
 			string sessionKey = UserSession.GetUserSession().sessionKey;
+			if (arguments.ContainsKey("session_key") ||
+			    arguments.ContainsKey("s")) {
+				// don't set session key if api is already doing it
+				return;
+			}
 			if ((sessionKey != null) && (sessionKey.Length > 0)) {
 				arguments["s"] = sessionKey;
 			}
