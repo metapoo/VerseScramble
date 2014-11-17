@@ -187,10 +187,10 @@ public class UserSession:MonoBehaviour{
 			return;
 		}
 		
-		userId = "" + userData["_id"];
-		sessionKey = "" + userData["session_key"];
-		username = "" + userData["username"];
-		email = "" + userData["email"];
+		userId = userData["_id"].ToString();
+		sessionKey = userData["session_key"].ToString();
+		username = userData["username"].ToString();
+		email = userData["email"].ToString();
 		if (userData.ContainsKey("total_score")) {
 			totalScore = (int)userData["total_score"];
 		} else {

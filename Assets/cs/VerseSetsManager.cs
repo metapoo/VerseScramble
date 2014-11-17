@@ -131,7 +131,7 @@ public class VerseSetsManager:MonoBehaviour{
 		if (currentVerseSet != null) {
 			string label = currentVerseSet.setname;
 			if (currentVerseSet.version != null) {
-				label += String.Format(" ({0})", currentVerseSet.version);
+				label = String.Format("{0} - {1}", label, currentVerseSet.version);
 			}
 			verseHeaderLabel.text = label;
 		} else {
