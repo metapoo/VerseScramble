@@ -42,7 +42,7 @@ public class VerseButton:MonoBehaviour{
 			if (verseset == null) return;
 			highScore = (int)verseset.GetMetadata()["high_score"];
 			label.text = String.Format("{0} - {1}: {2}",
-				TextManager.GetText("Play Challenge (All Verses)"),
+				TextManager.GetText("Play Challenge"),
 				TextManager.GetText("High"),
 				highScore); //this is what will be written in the rows
 			int versesetDifficulty = (int)verseset.GetMetadata()["difficulty"];

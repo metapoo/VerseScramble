@@ -229,7 +229,7 @@ public class EndOfGameOptions:MonoBehaviour{
 			
 		optionDialog.onClose = DestroySelf;
 		
-		optionDialog.AddOption(String.Format(TextManager.GetText("Play Challenge (All Verses)"), nextDifficultyString),
+		optionDialog.AddOption(String.Format(TextManager.GetText("Play Challenge"), nextDifficultyString),
 					PlayChallenge);
 
 		optionDialog.AddOption(TextManager.GetText("Next verse"), NextVerse);
