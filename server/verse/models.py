@@ -144,11 +144,13 @@ class VerseSet(BaseModel, CommentaryMixin):
 
     def __new__(cls, *args, **kwargs):
         from verserain.leaderboard.models import VersesetScore
+        from verserain.comment.models import Comment
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(User)
         cls.register_foreign_key(Verse,one_to_many=True)
         cls.register_foreign_key(VersesetScore,one_to_many=True)
         cls.register_foreign_key(Commentary)
+        cls.register_foreign_key(Comment,one_to_many=True)
         return new_instance
 
     def url(self):
