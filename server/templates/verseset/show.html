@@ -121,6 +121,10 @@
 </table>
 <br/>
 {% module Paginator(paginator=paginator, base_url=base_url, url_hash="high_scores") %}
+{% if paginator.total_count >= paginator.per_page %}
+<br/>
+{% end %}
+
 </a>
 
 {% end %}
