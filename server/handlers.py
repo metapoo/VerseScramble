@@ -12,12 +12,13 @@ from verserain.play import play
 from verserain.subscribe import subscribe
 from verserain.fb import fb
 from verserain.fb import api as fb_api
+from verserain.comment import comment
 
 def get_handlers():
     handlers = []
     mods = [base,login,verse, verse_api, page, login_api, leaderboard_api,
             leaderboard, profile, profile_api, translation, play, user_api,
-            fb, fb_api, subscribe]
+            fb, fb_api, subscribe, comment]
 
     for mod in mods:
         handlers.extend(mod.get_handlers())

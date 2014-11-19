@@ -1,0 +1,24 @@
+<a name="comments"><h3>{{gt("Comments")}}</h3></a>
+
+{% for comment in verseset.comments().sort("_id",-1) %}
+<div>
+{% set cuser = comment.user() %}
+<table cellspacing="0" cellpadding="0" class="comment">
+<tr><td valign="top">
+<img src="{{cuser.pic_url()}}" />
+</td><td valign="top">
+{% from verserain.utils.date import pretty_date %}
+<div class="header">{% module UserLink(cuser) %}  ({{pretty_date(comment.date())}}) </div>
+<div>{{comment.text}}</div>
+
+</td></tr></table>
+
+</div>
+{% end %}
+
+<form class="pure-form pure-form-stacked centered" style="margin-top:0px;" method="POST" action="/comment/create" >
+<input type="hidden" name="verseset_id" value="{{str(verseset._id)}}" />
+<label for="text">{{gt("Post a comment")}}</label>
+<textarea name="text"></textarea>
+<input type="submit" class="pure-button" />
+</form>

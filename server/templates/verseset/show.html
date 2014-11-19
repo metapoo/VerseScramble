@@ -84,6 +84,12 @@
 </div>
 
 
+{% if is_me %}
+{% include "../verse/_form.html" %}
+<br/>
+{% end %}
+
+
 <br/>
 
 <div id="verses">
@@ -117,12 +123,9 @@
 {% module Paginator(paginator=paginator, base_url=base_url, url_hash="high_scores") %}
 </a>
 
-<br/>
 {% end %}
 
-{% if is_me %}
-{% include "../verse/_form.html" %}
-{% end %}
 
+{% include "_comments.html" %}
 
 {% end %}

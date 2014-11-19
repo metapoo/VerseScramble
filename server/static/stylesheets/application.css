@@ -1,5 +1,21 @@
 @import url(http://fonts.googleapis.com/css?family=PT Sans:300,500);
 
+.comment img {
+  margin-right: 8px;
+}
+
+.comment .header {
+  margin-bottom: 3px;
+}
+
+.comment {
+  border: 1px solid #ddd;
+  display:block;
+  padding: 10px;
+  margin-bottom:15px;
+}
+
+
 .verseset_show {
   padding-bottom: 15px;
 }
@@ -29,6 +45,7 @@ table.profile tr td {
 table.profile img {
   width: 50px;
   height: 50px;
+  margin-bottom: 5px;
 }
 
 .links .fb-like {

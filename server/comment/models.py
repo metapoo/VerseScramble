@@ -18,6 +18,7 @@ class Comment(BaseModel):
 
     def __new__(cls, *args, **kwargs):
         from verserain.verse.models import VerseSet
+        from verserain.user.models import User
         new_instance = BaseModel.__new__(cls, *args, **kwargs)
         cls.register_foreign_key(User)
         cls.register_foreign_key(VerseSet)
