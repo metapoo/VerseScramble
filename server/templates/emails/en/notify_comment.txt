@@ -1,0 +1,6 @@
+Dear {{user.display_name()}},
+
+{{cuser.display_name()}} has commented on your verse set. To see the comment visit this url:
+
+{{settings.SITE_URL}}{{verseset.url()+"#comments"}}
+

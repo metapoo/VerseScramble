@@ -15,6 +15,19 @@ def get_handlers():
 )
 
 class CreateCommentHandler(BaseHandler):
+
+    def send_email(self, comment, verseset):
+        from verserain.email.models import EmailQueue
+        from verserain.translation.localization import gt
+        user = verseset.user()
+        cuser = comment.user()
+        language = user.language()
+        email = user['email']
+        subject = "%s commented on %s" % (cuser.display_name(), verseset['name'])
+        message = self.get_email_message("notify_comment", verseset=verseset, gt=gt, settings=settings,
+                                         user=user, cuser=cuser)
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+
     @require_login
     def post(self):
         user = self.current_user
@@ -37,4 +50,5 @@ class CreateCommentHandler(BaseHandler):
                           text=text,
                           user_id=user._id)
         comment.save()
+        self.send_email(comment, verseset)
         self.redirect(url)
