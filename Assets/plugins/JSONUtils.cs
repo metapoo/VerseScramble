@@ -448,11 +448,6 @@ escapee2.Add("t", "\t");
 			}
 			else if( tempValue.GetType() == typeof(String) )
 			{
-				if ((tempValue as String).Contains("\"")) {
-					Debug.Log (tempValue);
-					Debug.Log (Escape(tempValue.ToString()));
-
-				}
 				retour.Add("\""+key+"\" : \""+Escape(tempValue.ToString())+"\"");
 			}
 			else if( IsNumeric(tempValue) )

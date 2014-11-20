@@ -148,18 +148,34 @@ public class ApiManager: MonoBehaviour {
 	
     public void SetApiCache(string url,Hashtable resultData) {
     	string json = JSONUtils.HashtableToJSON(resultData);
+		string hash = Md5 (url);
+		string realPath = String.Format ("{0}/Web/{1}.txt", Application.persistentDataPath, hash);
+		string dirPath = String.Format ("{0}/Web/", Application.persistentDataPath);
+		
+		if (!System.IO.File.Exists(realPath))
+		{
+			if (!System.IO.Directory.Exists(dirPath))
+			{
+				System.IO.Directory.CreateDirectory(dirPath);
+			}
+		}
+		System.IO.File.WriteAllText(realPath, json);
+		Debug.Log ("saved api cache for url: " + url + " file: " + realPath);
 
-		try {
-	    	PlayerPrefs.SetString(url, json);
-		} catch (System.Exception err) {
-			return;
-		} 
     }
 
     public Hashtable GetApiCache(string url) {
-    	string json = PlayerPrefs.GetString(url);
-    	if (json == null) return null;
-    	Hashtable resultData = JSONUtils.ParseJSON(json);
+		string hash = Md5 (url);
+		string realPath = String.Format ("{0}/Web/{1}.txt", Application.persistentDataPath, hash);
+		string json = null;
+		try {
+			json = System.IO.File.ReadAllText(realPath);
+		} catch (System.Exception err) {
+			Debug.Log (err);
+			return null;
+		}
+		Debug.Log ("api cache hit for url: " + url);
+		Hashtable resultData = JSONUtils.ParseJSON(json);
 	    return resultData;
     }
     
