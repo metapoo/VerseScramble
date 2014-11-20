@@ -18,7 +18,7 @@ class CreateCommentHandler(BaseHandler):
     @require_login
     def post(self):
         user = self.current_user
-        text = self.get_argument("text")
+        text = self.get_argument("text","").strip()
         verseset_id = self.get_argument("verseset_id")
         reply_to_comment_id = self.get_argument("reply_to_comment_id",None)
 
@@ -27,8 +27,14 @@ class CreateCommentHandler(BaseHandler):
             self.write("verse set not found")
             return
 
+        url = verseset.url()+"#comments"
+
+        if text == "":
+            self.redirect(url)
+            return
+
         comment = Comment(verseset_id=verseset._id,
                           text=text,
                           user_id=user._id)
         comment.save()
-        self.redirect(verseset.url()+"#comments")
+        self.redirect(url)
