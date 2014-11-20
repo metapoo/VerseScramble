@@ -147,6 +147,8 @@ public class ApiManager: MonoBehaviour {
 	}
 	
     public void SetApiCache(string url,Hashtable resultData) {
+		if (Application.isWebPlayer) return;
+
     	string json = JSONUtils.HashtableToJSON(resultData);
 		try {
 			PlayerPrefs.SetString(url, json);
@@ -189,6 +191,9 @@ public class ApiManager: MonoBehaviour {
 		}
 		Debug.Log ("api cache hit for url: " + url);
 		*/
+
+		if (Application.isWebPlayer) return null;
+
 		string json = null;
 		try {
 			json = PlayerPrefs.GetString(url);
