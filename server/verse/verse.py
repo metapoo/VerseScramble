@@ -6,7 +6,6 @@ from verserain.utils.paging import *
 from verserain import settings
 from tornado.escape import *
 from datetime import datetime, timedelta
-from bson.objectid import ObjectId
 import pymongo 
 
 def get_handlers():
@@ -141,9 +140,8 @@ class UpdateVersionSelectorHandler(BaseHandler):
 class RemoveVerseHandler(BaseHandler):
     @require_login
     def get(self, verse_id):
-        verse_id = ObjectId(verse_id)
         user = self.current_user
-        verse = Verse.collection.find_one({'_id':verse_id})
+        verse = Verse.by_id(verse_id)
         if verse is None:
             self.write("verse not found: %s" % verse_id)
             return
@@ -160,9 +158,8 @@ class UpdateVerseHandler(BaseHandler):
     def get(self, verse_id):
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
 
-        verse_id = ObjectId(verse_id)
         user = self.current_user
-        verse = Verse.collection.find_one({'_id':verse_id})
+        verse = Verse.by_id(verse_id)
         if verse is None:
             self.write("verse not found: %s" % verse_id)
             return
@@ -185,9 +182,8 @@ class UpdateVerseHandler(BaseHandler):
     @require_login
     def post(self):
         verse_id = self.get_argument("verse_id")
-        verse_id = ObjectId(verse_id)
         user = self.current_user
-        verse = Verse.collection.find_one({'_id':verse_id})
+        verse = Verse.by_id(verse_id)
         if verse is None:
             self.write("verse not found: %s" % verse_id)
             return
@@ -220,8 +216,7 @@ class CreateVerseHandler(BaseHandler):
     def get(self, verseset_id=None, error_message=None, text=None, reference=None,
             version=None):
         user = self.current_user
-        verseset_id = ObjectId(verseset_id)
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.by_id(verseset_id)
         if verseset is None:
             self.redirect("/verseset/create")
             return
@@ -242,8 +237,7 @@ class CreateVerseHandler(BaseHandler):
         version = self.get_argument("version")
         text = self.get_argument("text").strip()
         verseset_id = self.get_argument("verseset_id")
-        verseset_id = ObjectId(verseset_id)
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.by_id(verseset_id)
         error_message = None
 
         if verseset is None:
@@ -270,7 +264,7 @@ class CreateVerseHandler(BaseHandler):
         verse = Verse({'reference':reference,
                        'version':version,
                        'text':text,
-                       'verseset_id':verseset_id,
+                       'verseset_id':verseset._id,
                        'user_id':user._id,
                        'order':verseset.verse_count()+1,
                    })
@@ -286,9 +280,7 @@ class CreateVerseHandler(BaseHandler):
 class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id=None, time_slice=None, page=1):
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
-
-        verseset_id = ObjectId(verseset_id)
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.by_id(verseset_id)
         page = int(page)
 
         if verseset is None:
@@ -317,7 +309,7 @@ class ShowVerseSetHandler(BaseHandler):
             min_time = datetime.now()-timedelta(days=int(time_slice))
             
             scores = VersesetScore.collection.find({'date':{'$gt':min_time}, 
-                                                'verseset_id':verseset_id})
+                                                    'verseset_id':verseset._id})
             cursor = scores
             scores = scores.sort('score', pymongo.DESCENDING)[start_index:end_index]
             scores = list(scores)
@@ -348,9 +340,8 @@ class UpdateVerseSetHandler(BaseHandler):
     def get(self, verseset_id):
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE, LANGUAGE_BY_CODE, LANGUAGE_CODES
 
-        verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.by_id(verseset_id)
         if verseset is None:
             self.write("verse set not found")
             return
@@ -367,9 +358,8 @@ class UpdateVerseSetHandler(BaseHandler):
     def post(self):
         user = self.current_user
         verseset_id = self.get_argument("verseset_id")
-        verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.by_id(verseset_id)
 
         if ((verseset['user_id'] != user._id) and not user.is_admin()):
             self.write("not authorized")
@@ -393,9 +383,8 @@ class UpdateVerseSetHandler(BaseHandler):
 class RemoveVerseSetHandler(BaseHandler):
     @require_login
     def get(self, verseset_id):
-        verseset_id = ObjectId(verseset_id)
         user = self.current_user
-        verseset = VerseSet.collection.find_one({'_id':verseset_id})
+        verseset = VerseSet.by_id(verseset_id)
 
         if ((verseset['user_id'] != user._id) and not user.is_admin()):
             self.write("not authorized")
