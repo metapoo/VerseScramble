@@ -26,6 +26,7 @@ class CreateCommentHandler(BaseHandler):
         subject = "%s commented on %s" % (cuser.display_name(), verseset['name'])
         message = self.get_email_message("notify_comment", verseset=verseset, gt=gt, settings=settings,
                                          user=user, cuser=cuser)
+
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
 
     @require_login
@@ -36,6 +37,7 @@ class CreateCommentHandler(BaseHandler):
         reply_to_comment_id = self.get_argument("reply_to_comment_id",None)
 
         verseset = VerseSet.by_id(verseset_id)
+
         if verseset is None:
             self.write("verse set not found")
             return
@@ -50,5 +52,7 @@ class CreateCommentHandler(BaseHandler):
                           text=text,
                           user_id=user._id)
         comment.save()
-        self.send_email(comment, verseset)
+
+        if user._id != verseset.user_id:
+            self.send_email(comment, verseset)
         self.redirect(url)
