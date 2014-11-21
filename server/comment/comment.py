@@ -12,7 +12,26 @@ import re
 
 def get_handlers():
     return ((r"/comment/create/?", CreateCommentHandler),
+            (r"/comment/remove/(\w+)/?", RemoveCommentHandler),
 )
+
+class RemoveCommentHandler(BaseHandler):
+    @require_login
+    def get(self, comment_id):
+        return self.post(comment_id)
+
+    @require_login
+    def post(self, comment_id):
+        comment = Comment.by_id(comment_id)
+        if comment is None:
+            self.write("comment not found")
+            return
+        if comment.user_id != self.current_user._id:
+            if not self.is_admin():
+                self.write("you do not have permissions to delete that comment")
+        vs = comment.verseset()
+        comment.remove()
+        self.redirect(vs.url()+"#comments")
 
 class CreateCommentHandler(BaseHandler):
 

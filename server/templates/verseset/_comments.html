@@ -1,7 +1,7 @@
 <a name="comments"><h3>{{gt("Comments")}}</h3></a>
 
 {% for comment in verseset.comments().sort("_id",-1) %}
-<div>
+
 {% set cuser = comment.user() %}
 <table cellspacing="0" cellpadding="0" class="comment">
 <tr><td valign="top">
@@ -11,9 +11,12 @@
 <div class="header">{% module UserLink(cuser) %}  ({{pretty_date(comment.date())}}) </div>
 <div>{{comment.text}}</div>
 
-</td></tr></table>
+</td></tr>
+{% if (comment.user_id == user._id) or (user and user.is_admin()) %}
+<tr><td></td><td><a class="link" href="/comment/remove/{{str(comment._id)}}/">remove</a></td></tr>
+{% end %}
+</table>
 
-</div>
 {% end %}
 
 <form class="pure-form pure-form-stacked centered" style="margin-top:0px;" method="POST" action="/comment/create" >
