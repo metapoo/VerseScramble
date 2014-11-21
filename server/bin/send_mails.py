@@ -4,10 +4,14 @@ import smtplib
 from time import sleep
 from verserain.utils.text import *
 
-def send_mails():
+def get_connection():
+    return smtplib.SMTP(settings.IP_ADDRESS,port=25)
+
+def send_mails(connection=None):
     eqs = list(EmailQueue.collection.find())
     if len(eqs) > 0:
-        connection = smtplib.SMTP(settings.IP_ADDRESS,port=25)
+        if connection is None:
+            connection = get_connection()
         for eq in eqs:
             email = eq["to_address"]
             if type(eq["to_address"]) in (list, tuple):
@@ -18,7 +22,19 @@ def send_mails():
                 eq.remove()
                 continue
             print eq
-            eq.send_mail(connection=connection)
-        connection.quit()
+            try:
+                eq.send_mail(connection=connection)
+            except smtplib.SMTPException:
+                connection = get_connection()
+            except smtplib.socket.error:
+                connection = get_connection()
+    return connection
 
-send_mails()
+
+def send_mail_loop():
+    connection = None
+    while 1:
+        connection = send_mails(connection)
+        sleep(1)
+
+send_mail_loop()
