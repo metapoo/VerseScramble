@@ -13,7 +13,7 @@
 
 </td></tr>
 {% if (comment.user_id == user._id) or (user and user.is_admin()) %}
-<tr><td></td><td><a class="link" href="/comment/remove/{{str(comment._id)}}/">remove</a></td></tr>
+<tr><td></td><td><a class="link" href="/comment/remove/{{str(comment._id)}}/">{{gt("remove")}}</a></td></tr>
 {% end %}
 </table>
 
