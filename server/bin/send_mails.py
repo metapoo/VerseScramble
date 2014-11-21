@@ -21,9 +21,9 @@ def send_mails(connection=None):
                 print "invalid email: %s" % email
                 eq.remove()
                 continue
-            print eq
             try:
                 eq.send_mail(connection=connection)
+                print eq
             except smtplib.SMTPException:
                 connection = get_connection()
             except smtplib.socket.error:
