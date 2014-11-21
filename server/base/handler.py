@@ -45,22 +45,23 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         hash_code = user.email_hash()
         verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                           hash_code, user.session_key())
-        message = self.get_email_message("verify_email", verify_url=verify_url, user=user)
+        message, html = self.get_email_message("verify_email", verify_url=verify_url, user=user)
         
-        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message, html=html)
 
     def get_email_message(self, email_name, **kwargs):
         language_code = self.language_code()
         kwargs["gt"] = self.gt
 
-        def get_message(lang_code):
-            message = self.render_string("emails/%s/%s.txt" % (lang_code, email_name),
+        def get_message(lang_code, text_type="txt"):
+            message = self.render_string("emails/%s/%s.%s" % (lang_code, email_name, text_type),
                                          **kwargs)
             return message
 
-        message = get_message("en")
+        message = get_message("en", "txt")
+        html = get_message("en", "html")
 
-        return message
+        return message, html
 
     def _handle_request_exception(self, exc):
         super(BaseHandler, self)._handle_request_exception(exc)
