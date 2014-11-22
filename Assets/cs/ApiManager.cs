@@ -147,8 +147,10 @@ public class ApiManager: MonoBehaviour {
 	}
 	
     public void SetApiCache(string url,Hashtable resultData) {
-		if (Application.isWebPlayer) return;
-
+		if (Application.isWebPlayer) {
+			PlayerPrefs.DeleteKey(url);
+			return;
+		}
     	string json = JSONUtils.HashtableToJSON(resultData);
 		try {
 			PlayerPrefs.SetString(url, json);
