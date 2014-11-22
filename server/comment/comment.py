@@ -43,10 +43,10 @@ class CreateCommentHandler(BaseHandler):
         language = user.language()
         email = user['email']
         subject = "%s commented on %s" % (cuser.display_name(), verseset['name'])
-        message = self.get_email_message("notify_comment", verseset=verseset, gt=gt, settings=settings,
-                                         user=user, cuser=cuser)
+        message, html = self.get_email_message("notify_comment", verseset=verseset, gt=gt, settings=settings,
+                                               user=user, cuser=cuser)
 
-        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message, html=html)
 
     @require_login
     def post(self):

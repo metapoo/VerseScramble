@@ -76,9 +76,9 @@ class ForgotPasswordHandler(BaseHandler):
             hash_code = user.reset_password_hash()
             verify_url = "http://%s/login/reset_password?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                        hash_code, user.session_key())
-            message = self.get_email_message("reset_password", verify_url=verify_url, user=user)
+            message, html = self.get_email_message("reset_password", verify_url=verify_url, user=user)
 
-            EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+            EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message, html=html)
             
         return self.get(error_message=error_message, feedback_message=feedback_message)
 

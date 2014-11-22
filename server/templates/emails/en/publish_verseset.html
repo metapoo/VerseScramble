@@ -1,0 +1,11 @@
+{% autoescape None %}{{gt("Verse Set")}} URL: {{settings.SITE_URL}}{{verseset.url()}}
+
+<p><strong>{{verseset['name']}}</strong></p>
+<p>{{user['username']}}</p>
+
+{% for verse in verseset.verses() %}
+<p>
+<strong>{{verse['reference']}}</strong><br/>
+{{verse['text']}}
+</p>
+{% end %}

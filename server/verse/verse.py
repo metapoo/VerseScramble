@@ -49,9 +49,9 @@ class PublishVerseSetHandler(BaseHandler):
         language = subscriber.language()
         email = subscriber['email']
         subject = "%s - %s" % (verseset['name'], user['username'])
-        message = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings,
-                                         user=user, subscriber=subscriber)
-        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message)
+        message, html = self.get_email_message("publish_verseset", verseset=verseset, gt=gt, settings=settings,
+                                               user=user, subscriber=subscriber)
+        EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message, html=html)
 
     @require_login
     def get(self, verseset_id=None):
