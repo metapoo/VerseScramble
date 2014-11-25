@@ -67,7 +67,9 @@ def authenticate_login(fb_uid=None, email=None, password=None, username=None, de
     elif username:
         user = User.collection.find_one({'username':username})
         if user is None:
-            return None
+            user = User.collection.find_one({'username':username.lower()})
+            if user is None:
+                return None
     elif fb_uid:
         # find user with highest score for facebook login
         users = User.collection.find({'fb_uid':fb_uid}).sort("total_score", pymongo.DESCENDING)
