@@ -113,7 +113,7 @@ public class NavigationButton:MonoBehaviour{
 			
 			if (!UserSession.IsLoggedIn()) {
 				LoginPanel clone = LoginPanel.ShowLoginPanel(loginPanel, null);
-					clone.onLogin = ShowMySets;
+				clone.onLogin = ShowMySets;
 			} else {	
 				ShowMySets();
 			}

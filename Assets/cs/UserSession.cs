@@ -182,8 +182,9 @@ public class UserSession:MonoBehaviour{
 	}
 	
 	public void HandleLogin(Hashtable userData) {
-		
-		if (userData["logged_in"] == null) {
+		isLoggedIn = (bool) userData["logged_in"];
+
+		if (!isLoggedIn) {
 			return;
 		}
 		
@@ -214,6 +215,7 @@ public class UserSession:MonoBehaviour{
 		if (loginButton != null) {
 			loginButton.SyncLoginStatus();
 		}
+
 	}
 	
 	public void Save() {
@@ -238,6 +240,7 @@ public class UserSession:MonoBehaviour{
 		if (!String.IsNullOrEmpty(json)) {
 			UnityEngine.Debug.Log("loaded user json = " + json);
 			Hashtable userData = JSONUtils.ParseJSON(json);
+			Debug.Log (userData);
 			HandleLogin(userData);
 			// refresh by logging in again
 			sessionKey = (string)userData["session_key"];

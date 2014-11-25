@@ -35,7 +35,8 @@ public class LoginPanel:MonoBehaviour{
 	}
 	
 	public void HandleLogin(Hashtable resultData) {
-		if (resultData["logged_in"] == null) {
+		bool isLoggedIn = (bool) resultData["logged_in"];
+		if (!isLoggedIn) {
 			feedback.text = TextManager.GetText("Invalid username or password");
 			return;
 		} else {
@@ -46,6 +47,7 @@ public class LoginPanel:MonoBehaviour{
 		userSession.HandleLogin(resultData);
 		
 		if (onLogin != null) {
+			Debug.Log ("Call OnLogin");
 			onLogin();
 		}
 		
