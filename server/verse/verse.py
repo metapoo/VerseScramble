@@ -303,7 +303,7 @@ class ShowVerseSetHandler(BaseHandler):
         start_index = (page-1)*per_page
         end_index = start_index + per_page
         if time_slice is None:
-            time_slice = "7"
+            time_slice = "365"
 
         while int(time_slice) <= 365:
             min_time = datetime.now()-timedelta(days=int(time_slice))
