@@ -84,17 +84,22 @@
 </div>
 
 
-{% if is_me %}
-{% include "../verse/_form.html" %}
-<br/>
-{% end %}
-
-
 <br/>
 
+<a name="verses"></a>
 <div id="verses">
 {% include "_verses.html" %}
 </div>
+
+{% if is_me %}
+<a href="#" onclick="$('#add_verse').show(); return false;" class="pure-button pure-button-primary">{{gt("Add Verse")}}</a><br/>
+<div id="add_verse" style="display:none;">
+{% include "../verse/_form.html" %}
+<br/>
+</div>
+<br/>
+{% end %}
+
 
 {% from verserain.utils.date import pretty_date %}
 
