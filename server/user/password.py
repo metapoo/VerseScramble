@@ -23,18 +23,20 @@ def get_hexdigest(algorithm, salt, raw_password):
     """
     import hashlib
 
-    raw_password, salt = smart_text(raw_password).encode('utf-8'), smart_text(salt)
+    enc_password = smart_text(raw_password).encode('utf-8')
+    salt = smart_text(salt).encode('utf-8')
+
     if algorithm == 'crypt':
         try:
             import crypt
         except ImportError:
             raise ValueError('"crypt" password algorithm not supported in this environment')
-        return crypt.crypt(raw_password, salt)
+        return crypt.crypt(enc_password, salt)
 
     if algorithm == 'md5':
-        return hashlib.md5(salt + raw_password).hexdigest()
+        return hashlib.md5("%s%s" % (salt, enc_password)).hexdigest()
     elif algorithm == 'sha1':
-        return hashlib.sha1(salt + raw_password).hexdigest()
+        return hashlib.sha1("%s%s" % (salt, enc_password)).hexdigest()
     raise ValueError("Got unknown password algorithm type in password.")
 
 
