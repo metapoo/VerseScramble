@@ -6,6 +6,8 @@ extraspace_re = re.compile("\s\s+")
 email_re = re.compile("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,4}$")
 
 def uncapitalize(str):
+    if str is None:
+        return str
     if len(str) == 0:
         return str
     if len(str) == 1:
