@@ -1,4 +1,5 @@
 from verserain.utils.encoding import smart_text
+from verserain.utils.text import *
 
 class PasswordMixin:
     def check_password(self, raw_password):
@@ -6,8 +7,19 @@ class PasswordMixin:
             return (not raw_password)
 
         enc_password = self["password"]
+        lower_password = uncapitalize(raw_password)
+
         algo, salt, hsh = enc_password.split('$')
-        return hsh == get_hexdigest(algo, salt, raw_password)
+
+        def check(pw):
+            return (hsh == get_hexdigest(algo, salt, pw))
+
+        if check(raw_password):
+            return True
+        elif check(lower_password):
+            return True
+
+        return False
 
     def set_password(self, raw_password):
         import random
