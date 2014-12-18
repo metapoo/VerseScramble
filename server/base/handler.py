@@ -50,7 +50,6 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message, html=html)
 
     def get_email_message(self, email_name, **kwargs):
-        language_code = self.language_code()
         kwargs["gt"] = self.gt
 
         def get_message(lang_code, text_type="txt"):
