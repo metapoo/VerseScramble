@@ -211,6 +211,8 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             language = "zh-hans"
         elif locale == "zh-tw":
             language = "zh-hant"
+        elif locale == "zh-hk":
+            language = "zh-hant"
         else:
             language = locale.split("-")[0]
         return language
