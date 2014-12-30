@@ -73,8 +73,12 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def isSecure(self):
         return self.request.headers.get('X-Forwarded-Protocol','https') == 'https'
 
-    def current_url(self, protocol="http"):
+    def current_url(self, protocol="http", args=True):
         uri = self.request.uri
+        if not args:
+            if "?" in uri:
+                uri = uri.split("?")[0]
+
         url = "%s://%s%s" % (protocol,settings.SITE_DOMAIN,uri)
         return url
 
@@ -146,6 +150,24 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         current_user = authenticate_login(fb_uid=fb_uid, email=None, password=None)
         return current_user
 
+    def check_session_key_url_redirect(self):
+        session_key = self.get_argument('session_key', None)
+
+        if session_key is None:
+            session_key = self.get_argument('s',None)
+
+        if session_key is None:
+            return False
+
+        user_id = self.authenticate_session_key(session_key)
+
+        if user_id and session_key:
+            self.set_secure_cookie('session_key', session_key)
+            self.redirect(self.current_url(args=False))
+            return True
+
+        return False
+
     def get_current_user(self, cookieless_okay=False):
         session_key = self.get_argument('session_key', None)
 
@@ -162,7 +184,6 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
         if user_id and session_key:
             self.set_secure_cookie('session_key', session_key)
-        
 
         if not user_id:
             if cookieless_okay:
