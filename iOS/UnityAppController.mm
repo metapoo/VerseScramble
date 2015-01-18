@@ -42,6 +42,8 @@ bool	_ios50orNewer			= false;
 bool	_ios60orNewer			= false;
 bool	_ios70orNewer			= false;
 bool	_ios80orNewer			= false;
+bool	_ios81orNewer			= false;
+bool	_ios82orNewer			= false;
 
 bool	_supportsDiscard		= false;
 bool	_supportsMSAA			= false;
@@ -52,7 +54,10 @@ bool	_unityAppReady			= false;
 bool	_skipPresent			= false;
 bool	_didResignActive		= false;
 
+static bool	_isAutorotating		= false;
+
 void UnityInitJoysticks();
+
 
 @implementation UnityAppController
 
@@ -85,18 +90,48 @@ void UnityInitJoysticks();
 
 	[self showGameUI];
 	[self createDisplayLink];
-    
+
+	UnitySetPlayerFocus(1);
     if (self.appURL != nil) {
         [self application:application openURL:_appURL sourceApplication:nil annotation:nil];
     }
-
 }
+
+- (void)transitionToViewController:(UIViewController*)vc
+{
+	_rootController.view = nil;
+	vc.view = _rootView;
+	_rootController = vc;
+	_window.rootViewController = vc;
+
+	[_rootView layoutSubviews];
+}
+
+- (void)checkOrientationRequest
+{
+	ScreenOrientation requestedOrient = (ScreenOrientation)UnityRequestedScreenOrientation();
+	if(requestedOrient == autorotation)
+	{
+		if(!_isAutorotating)
+		{
+			[self transitionToViewController:[self createRootViewController]];
+			[UIViewController attemptRotationToDeviceOrientation];
+		}
+		_isAutorotating = true;
+	}
+	else
+	{
+		if(requestedOrient != _unityView.contentOrientation)
+			[self orientUnity:requestedOrient];
+		_isAutorotating = false;
+	}
+}
+
 
 - (void)onForcedOrientation:(ScreenOrientation)orient
 {
 	[_unityView willRotateTo:orient];
-	OrientView(_rootController, _rootView, orient);
-	[_rootView layoutSubviews];
+	[self transitionToViewController:[self createRootViewController]];
 	[_unityView didRotate];
 }
 
@@ -152,13 +187,6 @@ void UnityInitJoysticks();
 
 	NSDictionary* notifData = [NSDictionary dictionaryWithObjects:values forKeys:keys];
 	AppController_SendNotificationWithArg(kUnityOnOpenURL, notifData);
-    
-    const char *obj = "UserSession";
-    const char *method = "HandleURL";
-    const char *urlString = [url.absoluteString cStringUsingEncoding:NSASCIIStringEncoding];
-    
-    UnitySendMessage(obj, method, urlString);
-    
 	return YES;
 }
 
@@ -184,8 +212,9 @@ void UnityInitJoysticks();
 	if ([UIDevice currentDevice].generatesDeviceOrientationNotifications == NO)
 		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
-	[DisplayManager Initialize];
+	UnityInitApplicationNoGraphics([[[NSBundle mainBundle] bundlePath]UTF8String]);
 
+	[DisplayManager Initialize];
 	_mainDisplay	= [[[DisplayManager Instance] mainDisplay] createView:YES showRightAway:NO];
 	_window			= _mainDisplay->window;
 
@@ -193,13 +222,12 @@ void UnityInitJoysticks();
 
 	[self createViewHierarchy];
 	[self preStartUnity];
-	UnityInitApplicationNoGraphics([[[NSBundle mainBundle] bundlePath]UTF8String]);
 
     NSURL *urlToParse = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     self.appURL = urlToParse;
+    
 	return YES;
 }
-
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
@@ -222,11 +250,11 @@ void UnityInitJoysticks();
 	{
 		if(_didResignActive)
 			UnityPause(false);
+		UnitySetPlayerFocus(1);
 	}
 	else
 	{
 		[self performSelector:@selector(startUnity:) withObject:application afterDelay:0];
-
 	}
 
 	_didResignActive = false;
@@ -238,10 +266,16 @@ void UnityInitJoysticks();
 
 	if(_unityAppReady)
 	{
+		UnitySetPlayerFocus(0);
 		UnityPause(true);
 
 		extern void UnityStopVideoIfPlaying();
 		UnityStopVideoIfPlaying();
+
+		// Force player to do one more frame, so scripts get a chance to render custom screen for
+		// minimized app in task manager.
+		UnityForcedPlayerLoop();
+		[self repaintDisplayLink];
 	}
 
 	_didResignActive = true;
@@ -294,6 +328,11 @@ void AppController_SendNotificationWithArg(NSString* name, id arg)
 	[[NSNotificationCenter defaultCenter] postNotificationName:name object:GetAppController() userInfo:arg];
 }
 
+void AppController_SendMainViewControllerNotification(NSString* name)
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:name object:UnityGetGLViewController()];
+}
+
 extern "C" UIWindow*			UnityGetMainWindow()		{ return GetAppController().mainDisplay->window; }
 extern "C" UIViewController*	UnityGetGLViewController()	{ return GetAppController().rootViewController; }
 extern "C" UIView*				UnityGetGLView()			{ return GetAppController().unityView; }
@@ -320,6 +359,8 @@ void UnityInitTrampoline()
 	_ios60orNewer = [[[UIDevice currentDevice] systemVersion] compare: @"6.0" options: NSNumericSearch] != NSOrderedAscending;
 	_ios70orNewer = [[[UIDevice currentDevice] systemVersion] compare: @"7.0" options: NSNumericSearch] != NSOrderedAscending;
 	_ios80orNewer = [[[UIDevice currentDevice] systemVersion] compare: @"8.0" options: NSNumericSearch] != NSOrderedAscending;
+	_ios81orNewer = [[[UIDevice currentDevice] systemVersion] compare: @"8.1" options: NSNumericSearch] != NSOrderedAscending;
+	_ios82orNewer = [[[UIDevice currentDevice] systemVersion] compare: @"8.2" options: NSNumericSearch] != NSOrderedAscending;
 
 	// Try writing to console and if it fails switch to NSLog logging
 	fprintf(stdout, "\n");
@@ -331,4 +372,16 @@ void UnityInitTrampoline()
     setenv("XDG_CONFIG_HOME", newHomeDirectory, 1);
     
 	UnityInitJoysticks();
+}
+
+extern "C" const char* const* UnityFontDirs()
+{
+	static const char* const dirs[] = {
+		"/System/Library/Fonts/Cache",		// before iOS 8.2
+		"/System/Library/Fonts/AppFonts",	// iOS 8.2
+		"/System/Library/Fonts/Core",		// iOS 8.2
+		"/System/Library/Fonts/Extra",		// iOS 8.2
+		NULL
+	};
+	return dirs;
 }

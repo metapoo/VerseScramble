@@ -18,9 +18,9 @@
 	UIWindow*			_window;
 	UIView*				_rootView;
 	UIViewController*	_rootController;
-    NSURL*              _appUrl;
-	DisplayConnection*	_mainDisplay;
 
+	DisplayConnection*	_mainDisplay;
+    NSURL*              _appUrl;
 
 	id<RenderPluginDelegate>	_renderDelegate;
 }
@@ -39,6 +39,8 @@
 // in general this method just works, so override it only if you have very special reorientation logic
 // do not forget to call [UnityView willRotate] and [UnityView didRotate] inside
 - (void)onForcedOrientation:(ScreenOrientation)orient;
+
+- (void)checkOrientationRequest;
 
 // this is a part of UIApplicationDelegate protocol starting with ios5
 // setter will be generated empty
@@ -84,6 +86,8 @@ void AppController_RenderPluginMethodWithArg(SEL method, id arg);
 // these are simple wrappers about ios api, added for convenience
 void AppController_SendNotification(NSString* name);
 void AppController_SendNotificationWithArg(NSString* name, id arg);
+
+void AppController_SendMainViewControllerNotification(NSString* name);
 
 
 #endif // _TRAMPOLINE_UNITYAPPCONTROLLER_H_
