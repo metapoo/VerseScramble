@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Globalization;
 using System.Linq;
+using Utils;
 
 public class VerseManager:MonoBehaviour{
 	
@@ -27,7 +28,8 @@ public class VerseManager:MonoBehaviour{
 	public static Hashtable countries = new Hashtable();
 	
 	static List<string> RTL_LANGUAGE_CODES = new System.Collections.Generic.List<string>(new string[]{"ar","arc","bcc","bqi","ckb","dv","fa","glk","he","ku","mzn","pnb","ps","sd","ug","ur","yi"});
-	
+	static List<int> randomizedVerseIndexes;
+
 	public static void Unload() {
 		foreach(string view in versesetsByView.Keys) {
 			List<VerseSet> versesets = versesetsByView[view] as List<VerseSet>;
@@ -145,7 +147,7 @@ public class VerseManager:MonoBehaviour{
 		VerseSet vs = GetCurrentVerseSet();
 		
 		if (vs == null) {
-			return new System.Collections.Generic.List<Verse>();
+			return new List<Verse>();
 		}
 		return vs.verses;
 	}
@@ -356,12 +358,12 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public bool IsAtFinalVerseOfChallenge() {
-		System.Collections.Generic.List<Verse> verses = GetCurrentVerses();
+		List<Verse> verses = GetCurrentVerses();
 		return (GetChallengeModeEnabled()) && (verseIndex >= (verses.Count-1));
 	}
 	
 	public void GotoNextVerse() {
-		System.Collections.Generic.List<Verse> verses = GetCurrentVerses();
+		List<Verse> verses = GetCurrentVerses();
 		verseIndex = verseIndex + 1;
 	
 		if (verseIndex >= verses.Count) {
@@ -374,7 +376,6 @@ public class VerseManager:MonoBehaviour{
 	
 	public void Save() {
 		string language = GetLanguage();
-		PlayerPrefs.SetInt("verseIndex_"+language, verseIndex);
 	}
 	
 	public string MasteredVersesKey(Difficulty difficulty) {
@@ -778,7 +779,7 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public static void Load() {
-		verseIndex = PlayerPrefs.GetInt("verseIndex_"+GetLanguage(), 0);
+
 	}
 	
 	public void Start() {
