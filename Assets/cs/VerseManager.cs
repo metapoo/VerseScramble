@@ -47,6 +47,7 @@ public class VerseManager:MonoBehaviour{
 	}
 
 	public static void SetShuffled(bool _shuffled) {
+		Debug.Log ("set shuffled = " + _shuffled);
 		shuffled = _shuffled;
 		int s = 0;
 		if (shuffled) s = 1;
