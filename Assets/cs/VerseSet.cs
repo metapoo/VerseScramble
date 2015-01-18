@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using Utils;
 
 public class VerseSet
 {
@@ -14,6 +15,7 @@ public class VerseSet
 	public bool isOnline;
 	public string version;
 	public int playCount;
+	public List<int> randomizedIndexes;
 
 	public override bool Equals(System.Object obj)
 	{
@@ -106,7 +108,7 @@ public class VerseSet
 	public void AddVerse(Verse verse_) {
 		verses.Add(verse_);
 	}
-	
+
 	public override string ToString() {
 		return String.Format("verseset: {0}", setname);
 	}
@@ -159,7 +161,18 @@ public class VerseSet
 		}
 		verseCount = versesData.Count;
 	}
-	
+
+	public Verse VerseForIndex(int verseIndex, bool shuffled) {
+		if (shuffled) {
+			if (randomizedIndexes == null) {
+				Shuffle();
+			}
+			int shuffledVerseIndex = randomizedIndexes[verseIndex];
+			return verses[shuffledVerseIndex];
+		}
+		return verses[verseIndex];
+	}
+
 	public int IndexOfVerseId(string verseId) {
 		for(int i=0;i<verses.Count;i++) {
 			Verse verse = verses[i];
@@ -175,5 +188,12 @@ public class VerseSet
 		PlayerPrefs.SetString("vs_"+SaveKey(), metadataJSON);
 	}
     
-    
+    public void Shuffle() {
+		int l = verses.Count;
+		randomizedIndexes = new List<int>();
+		for (int i=0;i<l;i++) {
+			randomizedIndexes.Add(i);
+		}
+		randomizedIndexes.Shuffle();
+	}
 }

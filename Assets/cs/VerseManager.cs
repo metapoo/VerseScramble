@@ -25,6 +25,7 @@ public class VerseManager:MonoBehaviour{
 	public static bool offlineVersesLoaded = false;
 	public static bool started = false;
 	public static bool historyLoaded = false;
+	public static bool shuffled = true;
 	public static Hashtable countries = new Hashtable();
 	
 	static List<string> RTL_LANGUAGE_CODES = new System.Collections.Generic.List<string>(new string[]{"ar","arc","bcc","bqi","ckb","dv","fa","glk","he","ku","mzn","pnb","ps","sd","ug","ur","yi"});
@@ -153,8 +154,9 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public static Verse GetCurrentVerse() {
-		System.Collections.Generic.List<Verse> verses = GetCurrentVerses();
-		
+		List<Verse> verses = GetCurrentVerses();
+		VerseSet vs = GetCurrentVerseSet();
+
 		if (verseIndex >= verses.Count) {
 			verseIndex = 0;
 		}
@@ -165,14 +167,16 @@ public class VerseManager:MonoBehaviour{
 			verses = GetCurrentVerses();
 			if (verses.Count > 0) {
 				verseIndex = 0;
-				return verses[verseIndex];
 			} else {
 				return null;
 			}
 		}
-	
-		
-		return verses[verseIndex];
+
+		if (vs != null) {
+			return vs.VerseForIndex(verseIndex, shuffled && GetChallengeModeEnabled());
+		} else {
+			return verses[verseIndex];
+		}
 	}
 	
 	public static string GetCurrentReference() {
@@ -653,7 +657,11 @@ public class VerseManager:MonoBehaviour{
 		UserSession.GetUserSession().ClearUrlOptions();
 //		UnityEngine.Debug.Log("finished loading verse set");
 	}
-		
+
+	public void HandleChallengeStarted() {
+		currentVerseSet.Shuffle();
+	}
+
 	public void LoadOnlineVerseSet(string versesetId,string verseId) {
 		SetCurrentView("history");
 		apiVerseId = verseId;
@@ -745,6 +753,7 @@ public class VerseManager:MonoBehaviour{
 	  		
 	  		verseset.AddVerse(verse);  	
 	  	}
+
 	  	Load();
 	  	loaded = true;
 	  	if (previousView != null) {
