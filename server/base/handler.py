@@ -28,7 +28,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
             l = "/translation/%s"
         
         if l is None:
-            l = self.request.uri.split("?")[0]
+            l = uri.split("?")[0]
 
         l = "%s?l=%s" % (l,"%s")
         
@@ -50,7 +50,6 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         EmailQueue.queue_mail(settings.ADMIN_EMAIL, email, subject, message, html=html)
 
     def get_email_message(self, email_name, **kwargs):
-        language_code = self.language_code()
         kwargs["gt"] = self.gt
 
         def get_message(lang_code, text_type="txt"):
@@ -74,8 +73,12 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     def isSecure(self):
         return self.request.headers.get('X-Forwarded-Protocol','https') == 'https'
 
-    def current_url(self, protocol="http"):
+    def current_url(self, protocol="http", args=True):
         uri = self.request.uri
+        if not args:
+            if "?" in uri:
+                uri = uri.split("?")[0]
+
         url = "%s://%s%s" % (protocol,settings.SITE_DOMAIN,uri)
         return url
 
@@ -147,6 +150,24 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         current_user = authenticate_login(fb_uid=fb_uid, email=None, password=None)
         return current_user
 
+    def check_session_key_url_redirect(self):
+        session_key = self.get_argument('session_key', None)
+
+        if session_key is None:
+            session_key = self.get_argument('s',None)
+
+        if session_key is None:
+            return False
+
+        user_id = self.authenticate_session_key(session_key)
+
+        if user_id and session_key:
+            self.set_secure_cookie('session_key', session_key)
+            self.redirect(self.current_url(args=False))
+            return True
+
+        return False
+
     def get_current_user(self, cookieless_okay=False):
         session_key = self.get_argument('session_key', None)
 
@@ -163,7 +184,6 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
         if user_id and session_key:
             self.set_secure_cookie('session_key', session_key)
-        
 
         if not user_id:
             if cookieless_okay:
@@ -211,6 +231,8 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         if locale == "zh-cn":
             language = "zh-hans"
         elif locale == "zh-tw":
+            language = "zh-hant"
+        elif locale == "zh-hk":
             language = "zh-hant"
         else:
             language = locale.split("-")[0]

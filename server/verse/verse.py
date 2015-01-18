@@ -279,6 +279,9 @@ class CreateVerseHandler(BaseHandler):
         
 class ShowVerseSetHandler(BaseHandler):
     def get(self, verseset_id=None, time_slice=None, page=1):
+        if self.check_session_key_url_redirect():
+            return
+
         from verserain.verse.language import VERSION_BY_LANGUAGE_CODE
         verseset = VerseSet.by_id(verseset_id)
         page = int(page)

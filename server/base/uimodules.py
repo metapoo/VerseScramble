@@ -3,10 +3,10 @@ from tornado.escape import *
 from verserain.translation.localization import *
 
 class ProfilePhoto(tornado.web.UIModule):
-    def render(self, user=None, current_user=None, gt=None, subscribe=True):
+    def render(self, user=None, current_user=None, gt=None, subscribe=True, link=True):
         return self.render_string("profile/photo.html",
                                   user=user, current_user=current_user, gt=gt,
-                                  subscribe=subscribe)
+                                  subscribe=subscribe, link=link)
 
 
 class PlayButton(tornado.web.UIModule):

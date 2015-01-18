@@ -16,6 +16,11 @@
 {% end %}
 
 <br/>
+<h3>{{gt("Profile Photo")}}</h3>
+<a href="http://gravatar.com"> <img src="{{user.pic_url()}}" />
+<br/>{{gt("Update")}} Gravatar</a>
+<br/>
+<br/>
 
 <h3>{{gt("Change Password")}}</h3>
 <form class="pure-form pure-form-stacked" style="margin-top:10px;" method="POST" action="{{settings.SECURE_SITE_URL}}/profile/password/update">

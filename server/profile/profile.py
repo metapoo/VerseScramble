@@ -93,8 +93,8 @@ class ConfirmVerifyEmailHandler(BaseHandler, AccountMixin):
 class UpdateEmailHandler(BaseHandler, AccountMixin):
     @require_login
     def get(self):
-        email = self.get_argument("email").lower().strip()
         user = self.current_user
+        email = self.get_argument("email",user.email()).lower().strip()
         error_message = None
         if not is_valid_email(email):
             error_message = self.gt("Invalid email")
