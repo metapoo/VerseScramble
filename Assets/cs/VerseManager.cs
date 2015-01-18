@@ -25,7 +25,7 @@ public class VerseManager:MonoBehaviour{
 	public static bool offlineVersesLoaded = false;
 	public static bool started = false;
 	public static bool historyLoaded = false;
-	public static bool shuffled = true;
+	public static bool shuffled = false;
 	public static Hashtable countries = new Hashtable();
 	
 	static List<string> RTL_LANGUAGE_CODES = new System.Collections.Generic.List<string>(new string[]{"ar","arc","bcc","bqi","ckb","dv","fa","glk","he","ku","mzn","pnb","ps","sd","ug","ur","yi"});
@@ -45,7 +45,19 @@ public class VerseManager:MonoBehaviour{
 		offlineVersesLoaded = false;
 	
 	}
-	
+
+	public static void SetShuffled(bool _shuffled) {
+		shuffled = _shuffled;
+		int s = 0;
+		if (shuffled) s = 1;
+		PlayerPrefs.SetInt ("verseset_shuffled", s);
+	}
+
+	public static void SyncShuffled() {
+		int s = PlayerPrefs.GetInt ("verseset_shuffled");
+		shuffled = (s > 0);
+	}
+
 	public void SwitchLanguage(string language,Action<string> finishHandler) {
 		languageChosen = true;
 		SetLanguage(language, finishHandler);
@@ -375,11 +387,9 @@ public class VerseManager:MonoBehaviour{
 		}
 		
 		UnityEngine.Debug.Log("going to verse " + verseIndex);
-		Save();
 	}
 	
 	public void Save() {
-		string language = GetLanguage();
 	}
 	
 	public string MasteredVersesKey(Difficulty difficulty) {
@@ -788,7 +798,7 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public static void Load() {
-
+		SyncShuffled();
 	}
 	
 	public void Start() {
