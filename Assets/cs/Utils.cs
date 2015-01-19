@@ -9,12 +9,14 @@
 // ------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Utils {
 	public static class UtilMethods {
 		public static void Shuffle<T>(this IList<T> list)  
 		{  
-			Random rng = new Random();  
+			System.Random rng = new System.Random();  
 			int n = list.Count;  
 			while (n > 1) {  
 				n--;  
@@ -22,6 +24,13 @@ namespace Utils {
 				T value = list[k];  
 				list[k] = list[n];  
 				list[n] = value;  
+			}
+		}
+		public static void SetImageAlpha(this Button button, float alpha) {
+			Color c = button.image.color;
+			if (c.a != alpha) {
+				c.a = alpha;
+				button.image.color = c;
 			}
 		}
 	}
