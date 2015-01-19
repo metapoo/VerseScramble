@@ -383,6 +383,10 @@ public class WordLabel:MonoBehaviour{
 			}
 			gameManager.line += 1;
 		}
+
+		if (GameManager.autoplaying) {
+			StartCoroutine(gameManager.AutoplayNextWord());
+		}
 	}
 	
 	
@@ -433,6 +437,8 @@ public class WordLabel:MonoBehaviour{
 	}
 	
 	public void returnToVerse() {
+		if (gotoVerse) return;
+
 		// sync word index incase there is another word label which is duplicate of this one
 		if (wordIndex != GameManager.wordIndex) {
 			gameManager.SwapWords(wordIndex, GameManager.wordIndex);
@@ -490,7 +496,8 @@ public class WordLabel:MonoBehaviour{
 	    // fix bug where onmousedown is triggered when it shouldn't be
 		if (!wasReallyHit) return;
 		 */
-		 
+		if (gotoVerse) yield break;
+
 		int dScore = 0;
 		string str = "";
 		bool right = false;
