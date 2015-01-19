@@ -133,7 +133,7 @@ public class UserSession:MonoBehaviour{
 		DoLogin(sessionKey, null);
 	}
 	
-	public void DoLogin(string sessionKey,Action afterLogin) {
+	public IEnumerator DoLogin(string sessionKey,Action afterLogin) {
 		Action<Hashtable> onLogin = delegate( Hashtable userData) {
 			HandleLogin(userData);
 			if (afterLogin != null) {
@@ -150,7 +150,9 @@ public class UserSession:MonoBehaviour{
 		options.Add("cacheEnabled",false);
 		options.Add("protocol","https");
 		options.Add("method","post");
-						   
+
+		yield return new WaitForSeconds(0.5f);
+
 		StartCoroutine(apiManager.CallApi("login/login",
 			arguments, 
 			options));
