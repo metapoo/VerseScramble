@@ -187,6 +187,13 @@ void UnityInitJoysticks();
 
 	NSDictionary* notifData = [NSDictionary dictionaryWithObjects:values forKeys:keys];
 	AppController_SendNotificationWithArg(kUnityOnOpenURL, notifData);
+    
+    const char *obj = "UserSession";
+    const char *method = "HandleURL";
+    const char *urlString = [url.absoluteString cStringUsingEncoding:NSASCIIStringEncoding];
+    
+    UnitySendMessage(obj, method, urlString);
+    
 	return YES;
 }
 
