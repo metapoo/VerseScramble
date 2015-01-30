@@ -62,7 +62,11 @@ def get_versenums_from_reference(reference):
             if ("-" in p):
                 numlist.extend(get_versenums_from_reference(p))
             else:
-                numlist.append(int(p))
+                try:
+                    k = int(p)
+                    numlist.append(k)
+                except:
+                    pass
     elif "-" in verse_numbers:
         parts = verse_numbers.split("-")
         start = last_number(parts[0])
