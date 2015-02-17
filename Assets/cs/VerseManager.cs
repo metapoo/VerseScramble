@@ -303,7 +303,7 @@ public class VerseManager:MonoBehaviour{
 		}
 		return null;
 	}
-	
+
 	public static bool IsLanguageChinese(string language) {
 		return (language == "zh") || (language == "zh-hans") || (language == "zh-hant") || (language == "zh-CN") || (language == "zh-TW");
 	}
@@ -375,10 +375,17 @@ public class VerseManager:MonoBehaviour{
 	}
 	
 	public bool IsAtFinalVerseOfChallenge() {
-		List<Verse> verses = GetCurrentVerses();
-		return (GetChallengeModeEnabled()) && (verseIndex >= (verses.Count-1));
+		return (GetChallengeModeEnabled() && IsFinalVerse());
 	}
+
 	
+	public bool IsFinalVerse() {
+		List<Verse> verses = GetCurrentVerses();
+		Debug.Log ("verseIndex = " + verseIndex);
+		Debug.Log ("verseCount = " + verses.Count);
+		return verseIndex >= (verses.Count-1);
+	}
+
 	public void GotoNextVerse() {
 		List<Verse> verses = GetCurrentVerses();
 		verseIndex = verseIndex + 1;

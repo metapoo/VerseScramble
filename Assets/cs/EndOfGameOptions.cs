@@ -45,7 +45,7 @@ public class EndOfGameOptions:MonoBehaviour{
 	}
 		
 	public void SubmitScore(bool showPopup) {
-		Debug.Log("showPopup = " + showPopup);
+		//Debug.Log("showPopup = " + showPopup);
 		if (!showPopup) {
 			if (!ApiManager.IsConnectedToInternet()) {
 				Debug.Log("skipping submit score because not connected to internet");
@@ -228,17 +228,22 @@ public class EndOfGameOptions:MonoBehaviour{
 		OptionDialog optionDialog = DialogManager.CreateOptionDialog(title,description);
 			
 		optionDialog.onClose = DestroySelf;
-		
-		optionDialog.AddOption(String.Format(TextManager.GetText("Play Challenge"), nextDifficultyString),
-					PlayChallenge);
 
 		optionDialog.AddOption(TextManager.GetText("Next verse"), NextVerse);
 
 		if ((difficulty == Difficulty.Hard) || (gameManager.DidRanOutOfTime) || !scoreManager.WasVerseMastered()) {
-			optionDialog.AddOption(TextManager.GetText("Try again"), TryAgain);
+			// don't show next level
 		} else {
 			optionDialog.AddOption(String.Format(TextManager.GetText("Next level"), nextDifficultyString), NextLevel);
 		}
+
+		if (verseManager.IsFinalVerse() && scoreManager.WasVerseMastered() && !gameManager.DidRanOutOfTime) {
+			optionDialog.AddOption(String.Format(TextManager.GetText("Play Challenge"), nextDifficultyString),
+			                       PlayChallenge);
+		} else {
+			optionDialog.AddOption(TextManager.GetText("Try again"), TryAgain);
+		}
+		
 
 		if (UserSession.IsLoggedIn()) {
 			SubmitScore(false);

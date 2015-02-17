@@ -38,7 +38,7 @@ public class TerrainManager : MonoBehaviour
 
 	public void SetTargetProgress(float progress) {
 		targetProgress = progress;
-		Debug.Log ("target progress set to " + progress.ToString());
+		//Debug.Log ("target progress set to " + progress.ToString());
 		
 		if (progress >= 3.0f) {
 			targetGrassDetail = 1;
