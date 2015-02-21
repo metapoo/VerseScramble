@@ -9,6 +9,7 @@ def get_handlers():
             (r"/page/about/([^/]+)/?", AboutPageHandler),
             (r"/page/update/?", UpdatePageHandler),
             (r"/page/([^/]+)/([^/]+)/?", ShowPageHandler),
+            (r"/page/([^/]+)/?", ShowPageHandler),
             )
 
 class EditPageHandler(BaseHandler):
@@ -43,7 +44,7 @@ class ShowPageHandler(BaseHandler):
         if language is None:
             language = self.language_code()
 
-        selected_nav = "about"
+        selected_nav = name
         page = Page.collection.find_one({"name":name,"language":language})
         if language != "en":
             if page is None:
