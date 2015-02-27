@@ -284,6 +284,12 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
 
         super(BaseHandler, self).render(*args, **kwargs)
 
+    def get_argument(*args, **kwargs):
+        try:
+            return super(BaseHandler, self).get_argument(*args, **kwargs)
+        except:
+            return None
+
     def get_current_user_cookieless(self):
         fb_uid = self.get_argument("fb_uid", "unknown_fb_uid")
         return self.authenticate_login(fb_uid=fb_uid, email=None, password=None)
