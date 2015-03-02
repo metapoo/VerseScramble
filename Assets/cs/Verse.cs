@@ -113,10 +113,4 @@ public class Verse
 		metadata["difficulty"] =(int)Difficulty.Easy;
 		return metadata;
 	}
-	
-	// This function will return a string with  x words (1 <= x < = n) from a specific verse.
-	public string GetWords(int n) {
-		string word_string = "";
-		return word_string;
-	}
 }
