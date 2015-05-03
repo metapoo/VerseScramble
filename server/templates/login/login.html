@@ -33,7 +33,9 @@ $("input[name='email']").focus();
 <a href="/login/forgot_password" class="link">{{gt("Forgot password")}}</a>
 </p>
 
+{% if country != 'cn' %}
 <a href="/fb/login"><img src="/images/login-facebook.png" id="fb_login" /></a>
+{% end %}
 
 </form>
 </div>

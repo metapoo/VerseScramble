@@ -140,12 +140,13 @@ target="_blank">
 </a>
 </td>
 </tr>
-
+{% if country != 'cn' %}
 <tr><td colspan="3" style="text-align:center;"> 
 <br/>
 <div style="width:280px;" class="fb-like" data-href="https://www.facebook.com/verserain" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 </div>
 </td></tr>
+{% end %}
 </table>
 
 <br/>
@@ -176,6 +177,7 @@ Hope of Glory Publishing LLC
 
 </script>
 
+{% if country != "cn" %}
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -184,5 +186,6 @@ Hope of Glory Publishing LLC
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=1439577092991935&version=v2.0";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+{% end %}
 
 </body>

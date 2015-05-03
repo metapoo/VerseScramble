@@ -222,12 +222,16 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         if self.current_user:
             self.current_user.set_language(language_code)
 
-    def default_language(self):
+    def get_locale(self):
         accept_language = self.request.headers.get('Accept-Language','en-us').lower()
         parts = accept_language.split(",")
-        part = parts[0]
-        locale = part
+        return parts[0]
 
+    def country(self):
+        return self.get_locale().split("-")[1].lower()
+
+    def default_language(self):
+        locale = self.get_locale()
         if locale == "zh-cn":
             language = "zh-hans"
         elif locale == "zh-tw":
@@ -257,6 +261,8 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         kwargs['settings'] = settings
         kwargs['request'] = self.request
         kwargs['current_language'] = language_code
+        kwargs['locale'] = self.get_locale()
+        kwargs['country'] = self.country()
 
         if not kwargs.has_key('language_uri'):
             kwargs['language_uri'] = self.language_uri()
