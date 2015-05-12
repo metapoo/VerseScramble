@@ -28,7 +28,10 @@ def send_mail(sender, recipient, subject, body, reply_to=None, connection=None, 
     # We must choose the body charset manually
     for body_charset in 'US-ASCII', 'ISO-8859-1', 'UTF-8':
         try:
-            body.encode(body_charset)
+            if body:
+                body.encode(body_charset)
+            if html:
+                html.encode(body_charset)
         except UnicodeError:
             pass
         else:
@@ -50,8 +53,13 @@ def send_mail(sender, recipient, subject, body, reply_to=None, connection=None, 
     # Create the message ('plain' stands for Content-Type: text/plain)
     msg = MIMEMultipart('alternative')
 
-    text_part = MIMEText(body.encode(body_charset), 'plain', body_charset)
-    msg.attach(text_part)
+    if body:
+        text_part = MIMEText(body.encode(body_charset), 'plain', body_charset)
+    else:
+        text_part = None
+
+    if text_part:
+        msg.attach(text_part)
 
     if html:
         html_part = MIMEText(html.encode(body_charset), 'html', body_charset)
