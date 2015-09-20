@@ -88,7 +88,6 @@ static NSMutableArray *_queue = nil;
 - (void)dealloc {
     self.languageString = nil;
     self.textString = nil;
-    [super dealloc];
 }
 @end
 
@@ -125,7 +124,6 @@ extern "C" {
         NSString *textString = CreateNSString(text);
         VoiceSynthClient *client = [[VoiceSynthClient alloc] init];
         [client speakUtterance:languageString text:textString];
-        [client release];
         
         
 	}
