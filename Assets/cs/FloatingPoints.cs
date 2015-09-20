@@ -10,13 +10,13 @@ public class FloatingPoints:MonoBehaviour{
 	public TextMesh shadow;
 	
 	public void Start() {
-		rigidbody2D.velocity = (Vector2)new Vector3(0.0f,4.0f,0.0f);
-		var tmp_cs1 = renderer.material.color;
+		GetComponent<Rigidbody2D>().velocity = (Vector2)new Vector3(0.0f,4.0f,0.0f);
+		var tmp_cs1 = GetComponent<Renderer>().material.color;
         tmp_cs1.a = 1.0f;
-        renderer.material.color = tmp_cs1;
-		var tmp_cs2 = shadow.gameObject.renderer.material.color;
+        GetComponent<Renderer>().material.color = tmp_cs1;
+		var tmp_cs2 = shadow.gameObject.GetComponent<Renderer>().material.color;
         tmp_cs2.a = 1.0f;
-        shadow.gameObject.renderer.material.color = tmp_cs2;
+        shadow.gameObject.GetComponent<Renderer>().material.color = tmp_cs2;
 		startTime = Time.time;
 		startingScale = transform.localScale.x;
 		transform.localScale = new Vector3(0.0f,0.0f,1.0f);
@@ -42,12 +42,12 @@ public class FloatingPoints:MonoBehaviour{
 		} else if (alpha > 1) {
 			alpha = 1.0f;
 		}
-		var tmp_cs4 = renderer.material.color;
+		var tmp_cs4 = GetComponent<Renderer>().material.color;
         tmp_cs4.a = alpha;
-        renderer.material.color = tmp_cs4;
-		var tmp_cs5 = shadow.gameObject.renderer.material.color;
+        GetComponent<Renderer>().material.color = tmp_cs4;
+		var tmp_cs5 = shadow.gameObject.GetComponent<Renderer>().material.color;
         tmp_cs5.a = alpha;
-        shadow.gameObject.renderer.material.color = tmp_cs5;
+        shadow.gameObject.GetComponent<Renderer>().material.color = tmp_cs5;
 	}
 	
 	public void SetPoints(float dScore,bool right) {

@@ -41,12 +41,12 @@ public class WordLabel:MonoBehaviour{
 	bool shrinkingEdges = false;
 	
 	public float GetPercentFell() {
-		float maxY = gameManager.topWall.center.y;
-		float minY = gameManager.bottomWall.center.y;
+		float maxY = gameManager.topWall.offset.y;
+		float minY = gameManager.bottomWall.offset.y;
 		float y = transform.position.y;
 		float range = (maxY - minY)*.8f;
 		float pct = (maxY - y) / range;
-		float v = rigidbody2D.velocity.magnitude;
+		float v = GetComponent<Rigidbody2D>().velocity.magnitude;
 		
 		//Debug.Log(" v = " + v + " pct = " + pct + " y = " + y + " minY = " + minY);
 		
@@ -62,17 +62,17 @@ public class WordLabel:MonoBehaviour{
 	
 	public void SetColor(Color color) {
 		color.a = alpha;
-		bgMiddle.renderer.material.color = color;
+		bgMiddle.GetComponent<Renderer>().material.color = color;
 		if (bgLeft != null) {
-			bgLeft.renderer.material.color = color;
+			bgLeft.GetComponent<Renderer>().material.color = color;
 		}
 		if (bgRight != null) {
-			bgRight.renderer.material.color = color;
+			bgRight.GetComponent<Renderer>().material.color = color;
 		}
 	}
 	
 	public Color GetColor() {
-		return bgMiddle.renderer.material.color;
+		return bgMiddle.GetComponent<Renderer>().material.color;
 	}
 	
 	public BoxCollider2D boxCollider2D() {
@@ -89,7 +89,7 @@ public class WordLabel:MonoBehaviour{
 			}
 		}	
 		
-		Vector3 msize = bgMiddle.renderer.bounds.size;
+		Vector3 msize = bgMiddle.GetComponent<Renderer>().bounds.size;
 		float dx = 0.0f;
 		float dw = 0.0f;
 		if (bgLeft == null) {
@@ -118,12 +118,12 @@ public class WordLabel:MonoBehaviour{
 			bgRight.transform.localPosition = new Vector3(l*0.5f,0.0f,0.0f);
 		}
 		
-		Vector3 sm = bgMiddle.renderer.bounds.size;
+		Vector3 sm = bgMiddle.GetComponent<Renderer>().bounds.size;
 		
 		Vector3 sr = Vector3.zero;
 
 		if (bgLeft != null) {
-			sr = bgLeft.renderer.bounds.size;
+			sr = bgLeft.GetComponent<Renderer>().bounds.size;
 			edgeSize = sr;
 		}
 
@@ -147,7 +147,7 @@ public class WordLabel:MonoBehaviour{
 		StartCoroutine(AnimationManager.ScaleOverTime(bgLeft.transform,endScale, duration));
 		//AnimationManager.TranslationBy(bgLeft.transform,new Vector3(-1*dw,0,0), duration);
 		
-		float oldW = bgMiddle.renderer.bounds.size.x;
+		float oldW = bgMiddle.GetComponent<Renderer>().bounds.size.x;
 		float newW = oldW+dw;
 		startScale = bgMiddle.transform.localScale;
 		endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
@@ -180,7 +180,7 @@ public class WordLabel:MonoBehaviour{
 		//AnimationManager.TranslationBy(bgRight.transform,new Vector3(dw,0,0), duration);
 		
 	
-		float oldW = bgMiddle.renderer.bounds.size.x;
+		float oldW = bgMiddle.GetComponent<Renderer>().bounds.size.x;
 		float newW = oldW+dw;
 		startScale = bgMiddle.transform.localScale;
 		endScale = new Vector3(startScale.x*newW/oldW, startScale.y, startScale.z);
@@ -256,7 +256,7 @@ public class WordLabel:MonoBehaviour{
 	public void ResetBubble() {
 		Quaternion oldRotation = transform.rotation;
 		transform.rotation = Quaternion.identity;
-		Vector3 lsize = label.renderer.bounds.size;
+		Vector3 lsize = label.GetComponent<Renderer>().bounds.size;
 		float textWidth = lsize.x;
 		float textHeight  = lsize.y;
 		Vector2 padding = new Vector2(0.0f,textHeight*0.4f);
@@ -433,7 +433,7 @@ public class WordLabel:MonoBehaviour{
 	}
 	
 	public bool IsAvailable() {
-		return collider2D.enabled;
+		return GetComponent<Collider2D>().enabled;
 	}
 	
 	public void returnToVerse() {
@@ -444,11 +444,11 @@ public class WordLabel:MonoBehaviour{
 			gameManager.SwapWords(wordIndex, GameManager.wordIndex);
 		}
 		hinting = false;
-		collider2D.enabled = false;
-		rigidbody2D.fixedAngle = true;
-		rigidbody2D.gravityScale = 0.0f;
-		rigidbody2D.isKinematic = true;
-		rigidbody2D.velocity = (Vector2)new Vector3(0.0f,0.0f,0.0f);
+		GetComponent<Collider2D>().enabled = false;
+		GetComponent<Rigidbody2D>().fixedAngle = true;
+		GetComponent<Rigidbody2D>().gravityScale = 0.0f;
+		GetComponent<Rigidbody2D>().isKinematic = true;
+		GetComponent<Rigidbody2D>().velocity = (Vector2)new Vector3(0.0f,0.0f,0.0f);
 		oldRotation = transform.rotation;
 		
 		alpha = 0.5f;

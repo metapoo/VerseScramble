@@ -32,8 +32,8 @@ public class TerrainManager : MonoBehaviour
 		rain.minEmission = progress*20.0f*(float)Mathf.Pow (3.0f,progress);
 		rain.maxEmission = rain.minEmission*1.5f;
 		rainProgress = progress;
-		audio.volume = Mathf.Min (0.5f, 0.001f*rain.minEmission);
-		audio.loop = (progress > 0);
+		GetComponent<AudioSource>().volume = Mathf.Min (0.5f, 0.001f*rain.minEmission);
+		GetComponent<AudioSource>().loop = (progress > 0);
 	}
 
 	public void SetTargetProgress(float progress) {

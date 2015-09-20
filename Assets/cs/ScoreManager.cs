@@ -166,7 +166,7 @@ public class ScoreManager:MonoBehaviour{
 		}
 		while (newTime > maxTime) {
 			maxTime += 1;
-			audio.PlayOneShot(sndSelect, 1.0f);
+			GetComponent<AudioSource>().PlayOneShot(sndSelect, 1.0f);
 			yield return new WaitForSeconds(dt);
 		}
 	}
@@ -187,7 +187,7 @@ public class ScoreManager:MonoBehaviour{
 			}
 			score += Mathf.RoundToInt(10.0f*difficultyMultiplier(gameManager.difficulty)*healthBarUnits) * dTime;
 			timeLeft -= dTime;
-			audio.PlayOneShot(sndSelect, 1.0f);
+			GetComponent<AudioSource>().PlayOneShot(sndSelect, 1.0f);
 			yield return new WaitForSeconds(dt);
 		}
 		yield return new WaitForSeconds(0.5f);
