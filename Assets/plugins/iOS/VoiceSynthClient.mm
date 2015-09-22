@@ -68,7 +68,11 @@ static NSMutableArray *_queue = nil;
     
         float rate = 0.2f;
     
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+        
+        if (version >= 9.0) {
+            rate = 0.5f;
+        } else if (version >= 8.0) {
             rate = 0.12f;
         }
     
