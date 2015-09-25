@@ -77,7 +77,7 @@ public class FacebookManager : MonoBehaviour {
 		if (FB.IsLoggedIn) {
 			OnLogin (null);
 		} else {
-			FB.Login ("offline_access, email", OnLogin);
+			FB.Login ("email", OnLogin);
 		}
 	}
 
