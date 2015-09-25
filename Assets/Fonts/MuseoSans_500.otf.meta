@@ -11,6 +11,10 @@ TrueTypeFontImporter:
   fontNames:
   - Museo Sans
   - Sukhumvit
+  - STHeitiSC-Medium
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 
