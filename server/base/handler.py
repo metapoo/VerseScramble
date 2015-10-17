@@ -228,7 +228,11 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         return parts[0]
 
     def country(self):
-        return self.get_locale().split("-")[1].lower()
+        locale_parts = self.get_locale().split("-")
+        if len(locale_parts) > 1:
+            return locale_parts[1].lower()
+        else:
+            return "us"
 
     def default_language(self):
         locale = self.get_locale()
