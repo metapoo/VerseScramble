@@ -8,11 +8,12 @@
 </script>
 
 <title>{% block title %}Verse Rain - {{gt("Bible Verse Memorization Game")}}{% end %}</title>
-<meta name="google-site-verification" content="0WUHsMEmNzywrkFETZe6G2enPrC6WUZx7qwH80nDS6Y" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta name="description" content="" />
-<meta property='og:image' content="/images/vr_icon_small.png"/>
+<meta property='og:image' content="{{settings.SITE_URL}}/images/vr_icon_small.png" />
+<meta property='og:title' content="{% block title %}{% end %}" />
+<meta property='fb:app_id' content="{{settings.FACEBOOK_APP_ID}}" />
 
 {% if settings.VERSERAIN_ENV == "development" %}
 <link rel="stylesheet" href="/stylesheets/application.css" type="text/css" />
