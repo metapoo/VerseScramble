@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 
 public class VerseButton:MonoBehaviour{
@@ -99,7 +100,8 @@ public class VerseButton:MonoBehaviour{
 			PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
 							(int)parentScrollContent.anchoredPosition.y);
 		
-			Application.LoadLevel("scramble");
+//			Application.LoadLevel("scramble");
+			SceneManager.LoadScene("scramble");
 		};
 	
 		playVerse();

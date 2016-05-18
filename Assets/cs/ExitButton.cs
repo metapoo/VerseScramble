@@ -2,6 +2,7 @@ namespace CSDEP
 {
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 
 public class ExitButton:MonoBehaviour{
@@ -28,7 +29,8 @@ public class ExitButton:MonoBehaviour{
 		if (gameManager != null) {
 			gameManager.Cleanup();
 		}
-		Application.LoadLevel(level);
+//		Application.LoadLevel(level);
+		SceneManager.LoadScene(level);
 		Debug.Log("load level " + level);
 	}
 	

@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class EndOfGameOptions:MonoBehaviour{
@@ -15,7 +16,8 @@ public class EndOfGameOptions:MonoBehaviour{
 	public void BackToMenu() {
 		gameManager.Cleanup();
 		Destroy(this.gameObject);
-		Application.LoadLevel("versesets");
+//		Application.LoadLevel("versesets");
+		SceneManager.LoadScene ("versesets");
 	}
 	
 	public void SaveTotalScore(Hashtable resultData) {
