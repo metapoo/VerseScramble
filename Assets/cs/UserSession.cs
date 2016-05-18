@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 
 public class UserSession:MonoBehaviour{
@@ -126,7 +127,9 @@ public class UserSession:MonoBehaviour{
 		}
 		
 		VerseManager.loaded = false;
-		Application.LoadLevel("scramble");
+//		Application.LoadLevel("scramble");
+		SceneManager.LoadScene("scramble");
+
 	};
 	
 	public void DoLogin(string sessionKey) {

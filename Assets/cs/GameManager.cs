@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Globalization;
 using Utils;
+using UnityEngine.SceneManagement;
 
 public enum Difficulty {Easy, Medium, Hard, Impossible};
 
@@ -120,7 +121,8 @@ public class GameManager:MonoBehaviour{
 	public void ExitToVerseList() {
 		GetComponent<AudioSource>().PlayOneShot(sndSelect, 1.0f);
 		Cleanup();
-		Application.LoadLevel("versesets");
+//		Application.LoadLevel("versesets");
+		SceneManager.LoadScene("versesets");
 	}
 	
 	public bool CanShowSolution() {
@@ -1242,6 +1244,7 @@ public class GameManager:MonoBehaviour{
 		vm.Save();
 		SetChallengeModeEnabled(true);
 		
-		Application.LoadLevel("scramble");
+//		Application.LoadLevel("scramble");
+		SceneManager.LoadScene ("scramble");
 	}
 }

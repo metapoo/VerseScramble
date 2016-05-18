@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class LanguageButton:MonoBehaviour{
@@ -11,7 +12,9 @@ public class LanguageButton:MonoBehaviour{
 	
 	public void HandleOnClick() {
 		Action<string> onFinish = delegate( string language) {
-			Application.LoadLevel("versesets");
+//			Application.LoadLevel("versesets");
+			SceneManager.LoadScene("versesets");
+
 		};
 		VerseManager.GetInstance().SwitchLanguage(languageCode, onFinish);
 	}

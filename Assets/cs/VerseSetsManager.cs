@@ -3,6 +3,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class VerseSetsManager:MonoBehaviour{
@@ -153,7 +154,8 @@ public class VerseSetsManager:MonoBehaviour{
 	
 	public void GoBack() {
 		TitleManager.stayInTitleScreen = true;
-		Application.LoadLevel("title");
+//		Application.LoadLevel("title");
+		SceneManager.LoadScene("title");
 	}
 	
 	public void Awake() {

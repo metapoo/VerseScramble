@@ -445,7 +445,9 @@ public class WordLabel:MonoBehaviour{
 		}
 		hinting = false;
 		GetComponent<Collider2D>().enabled = false;
-		GetComponent<Rigidbody2D>().fixedAngle = true;
+//		GetComponent<Rigidbody2D>().fixedAngle = true;
+		// n Unity 5.1, the fixed angle effect is done via Rigidbody2D.constraints
+		GetComponent<Rigidbody2D> ().constraints = RigidbodyConstraints2D.FreezePosition;
 		GetComponent<Rigidbody2D>().gravityScale = 0.0f;
 		GetComponent<Rigidbody2D>().isKinematic = true;
 		GetComponent<Rigidbody2D>().velocity = (Vector2)new Vector3(0.0f,0.0f,0.0f);
