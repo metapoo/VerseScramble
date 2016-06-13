@@ -26,11 +26,13 @@ class SearchPageHandler(BaseHandler):
         self.render("search.html", selected_nav="search")
 
 class ContactPageHandler(BaseHandler):
+    @require_login
     def get(self):
         message_sent = self.get_boolean_argument("message_sent",False)
         self.render("contact.html", selected_nav="about", message_sent=message_sent)
 
 class ContactHandler(BaseHandler):
+    @require_login
     def post(self):
         import smtplib
         from_email = "admin@%s" % settings.MAIL_DOMAIN
@@ -39,10 +41,8 @@ class ContactHandler(BaseHandler):
         subject = self.get_argument('subject')
         
         message = self.get_argument('message')
-
-        if self.current_user:
-            message += "\n\nemail: %s" % self.current_user.get('email')
-            message += "\nuser info: %s" % self.current_user
+        message += "\n\nemail: %s" % self.current_user.get('email')
+        message += "\nuser info: %s" % self.current_user
         
         EmailQueue.queue_mail(from_email,to_email,subject,message,reply_to=reply_to_email)
 
