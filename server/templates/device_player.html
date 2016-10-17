@@ -3,10 +3,10 @@
 {% block init_js %}
 {% from verserain import settings %}
 {% if isIOS or isAndroid %}
-    setTimeout( function() { document.location = '{% if isIOS %}{{settings.IOS_APPSTORE_URL}}{% else %}{{settings.GOOGLE_PLAY_URL}}{% end %}'; }, 1000);
+{#    setTimeout( function() { document.location = '{% if isIOS %}{{settings.IOS_APPSTORE_URL}}{% else %}{{settings.GOOGLE_PLAY_URL}}{% end %}'; }, 1000);
     setTimeout( function() {
       window.history.back()
-    }, 1100);
+    }, 1100); #}
  
   document.location = '{{device_url}}';
 {% end %}
