@@ -2,12 +2,12 @@
 {% block init_js %}
 {% from verserain import settings %}
 {% if isIOS or isAndroid %}
-  {% if isIOS %}
+{#  {% if isIOS %}
     setTimeout( function() { document.location = '{{settings.IOS_APPSTORE_URL}}'; }, 300);
     setTimeout( function() {
       window.history.back()
     }, 400);
-  {% end %}
+  {% end %} #}
   document.location = '{{device_url}}';
 {% end %}
 {% end %}

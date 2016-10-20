@@ -16,7 +16,7 @@ def get_handlers():
 class PlayHandler(BaseHandler):
     def get(self):
         language = self.language_code(not_all=True)
-        if self.isIOS():
+        if self.isIOS() and False:
             verseset = list(VerseSet.collection.find(\
                                                      {"language":language, "play_count":{"$gt":10}, "verse_count":{"$gt":1}}).sort("_id",pymongo.DESCENDING)[0:1])
             
@@ -30,7 +30,8 @@ class PlayHandler(BaseHandler):
 
             self.redirect("/verseset/play/%s" % str(verseset._id))
             return
-        elif self.isAndroid():
+        
+        if self.isAndroid() or self.isIOS():
             # just open up the game without directing it anywhere
             template_name = "device_player.html"
             session_key = None
