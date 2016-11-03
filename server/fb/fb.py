@@ -85,7 +85,7 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
             yield self.authorize_redirect(
                 redirect_uri=fblogin_url,
                 client_id=self.settings["facebook_api_key"],
-                extra_params={"scope": ["offline_access","email"]})
+                extra_params={"scope": ["email"]})
             return
 
         fb_uid = user['fb_uid']
