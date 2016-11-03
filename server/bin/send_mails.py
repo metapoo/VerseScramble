@@ -37,4 +37,5 @@ def send_mail_loop():
         connection = send_mails(connection)
         sleep(1)
 
-send_mail_loop()
+#send_mail_loop()
+send_mails()
