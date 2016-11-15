@@ -196,7 +196,11 @@ public class UserSession:MonoBehaviour{
 		userId = userData["_id"].ToString();
 		sessionKey = userData["session_key"].ToString();
 		username = userData["username"].ToString();
-		email = userData["email"].ToString();
+
+		if (userData.ContainsKey ("email")) {
+			email = userData ["email"].ToString ();
+		}
+
 		if (userData.ContainsKey("total_score")) {
 			totalScore = (int)userData["total_score"];
 		} else {
@@ -226,7 +230,9 @@ public class UserSession:MonoBehaviour{
 	public void Save() {
 		
 		Hashtable userData = new Hashtable();
-		userData.Add("email",email);
+		if (email != null) {
+			userData.Add ("email", email);
+		}
 		userData.Add("username",username);
 		userData.Add("_id",userId);
 		userData.Add("session_key",sessionKey);
