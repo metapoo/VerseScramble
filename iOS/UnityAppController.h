@@ -5,6 +5,7 @@
 #include "PluginBase/RenderPluginDelegate.h"
 
 @class UnityView;
+@class UnityViewControllerBase;
 @class DisplayConnection;
 
 @interface UnityAppController : NSObject<UIApplicationDelegate>
@@ -21,9 +22,10 @@
 
 	// we will cache view controllers for fixed orientation
 	// auto-rotation view contoller goes to index=0
-	UIViewController*		_viewControllerForOrientation[5];
+	UnityViewControllerBase* _viewControllerForOrientation[5];
+#if !UNITY_TVOS
 	UIInterfaceOrientation	_curOrientation;
-
+#endif
 
 	id<RenderPluginDelegate>	_renderDelegate;
 }
@@ -52,9 +54,12 @@
 @property (readonly, copy, nonatomic) UIViewController*		rootViewController;
 @property (readonly, copy, nonatomic) DisplayConnection*	mainDisplay;
 
+#if !UNITY_TVOS
 @property (readonly, nonatomic) UIInterfaceOrientation		interfaceOrientation;
+#endif
 
 @property (nonatomic, retain) id							renderDelegate;
+@property (nonatomic, copy)									void(^quitHandler)();
 @property (nonatomic, retain)                               NSURL* appURL;
 
 @end
