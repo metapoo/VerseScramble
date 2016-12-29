@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 
-public class Main extends UnityPlayerNativeActivity
+public class Main extends UnityPlayerActivity
 {
 
         protected void checkIntent()
