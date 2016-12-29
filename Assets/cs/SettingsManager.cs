@@ -25,8 +25,9 @@ public class SettingsManager:MonoBehaviour{
 	public void Start() {
 		if (PlayerPrefs.HasKey("language") && !stayInTitleScreen) {
 			string language = VerseManager.GetLanguage();
+			Action<string> loadHandler = LoadVerseSetsMenu;
 			VerseManager vm = VerseManager.GetInstance();
-			vm.SwitchLanguage(language, LoadVerseSetsMenu as Action<string>);
+			vm.SwitchLanguage(language, loadHandler);
 		}
 	}
 	

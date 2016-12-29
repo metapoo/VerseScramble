@@ -118,13 +118,14 @@ public class VerseSetButton:MonoBehaviour{
 		StartCoroutine(verseSetsManager.ShowVerses());
 		
 	}
-	
+
 	public void HandleError() {
 		ApiManager apiManager = ApiManager.GetInstance();
 		Hashtable arguments = new Hashtable();
 		arguments.Add("verseset_id",verseset.onlineId);
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleApiVerseSetShow as Action<Hashtable>);
+		Action<Hashtable> handler = HandleApiVerseSetShow;
+		options.Add("handler", handler);
 		apiManager.GetApiCache("verseset/show",
 		arguments,
 		options);
@@ -144,8 +145,11 @@ public class VerseSetButton:MonoBehaviour{
 		Hashtable arguments = new Hashtable();
 		arguments.Add("verseset_id",verseset.onlineId);
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleApiVerseSetShow as Action<Hashtable>);
-		options.Add("errorHandler",HandleError as Action);
+		Action<Hashtable> handler = HandleApiVerseSetShow;
+		Action errorHandler = HandleError;
+
+		options.Add("handler", handler);
+		options.Add("errorHandler", errorHandler);
 		
 		if (verseset.isOnline && (verseset.verses.Count == 0)) {
 			StartCoroutine(apiManager.CallApi("verseset/show",
@@ -154,6 +158,11 @@ public class VerseSetButton:MonoBehaviour{
 		} else {
 			StartCoroutine(verseSetsManager.ShowVerses());
 		}
+	}
+
+	void HandleAction (Hashtable obj)
+	{
+		
 	}
 	
 	public void Update() {

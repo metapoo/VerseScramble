@@ -315,9 +315,10 @@ public class ApiManager: MonoBehaviour {
 				errorHandler();
 			}
 			
-			return false;
+			yield return false;
 		}
-		
+
+		bool gotError = false;
 		string data = www.text;
 		//Debug.Log ("www.text = " + data);
 		Hashtable apiData = null;
@@ -326,8 +327,13 @@ public class ApiManager: MonoBehaviour {
 		} catch (System.Exception err) {
 			Debug.Log ("parse error: " + err.ToString());
 			errorHandler();
-			return false;
+			gotError = true;
 		}
+
+		if (gotError) {
+			yield return false;
+		}
+
 		resultData = (Hashtable)apiData["result"];
 
 		//Debug.Log ("result = " + JSONUtils.HashtableToJSON(resultData));

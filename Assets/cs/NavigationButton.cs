@@ -48,13 +48,14 @@ public class NavigationButton:MonoBehaviour{
 	}
 	
 	public void HandleError() {
+		Action<Hashtable> handler = HandleApiVerseSetList;
 		Hashtable arguments = new Hashtable();
 		arguments.Add("order_by",view);
 		arguments.Add("page",1);
 		arguments.Add("language_code",VerseManager.GetLanguage());
 	
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleApiVerseSetList as Action<Hashtable>);
+		options.Add("handler", handler);
 		ApiManager api = ApiManager.GetInstance();
 		api.GetApiCache("verseset/list",
 		arguments,
@@ -65,11 +66,12 @@ public class NavigationButton:MonoBehaviour{
 		UserSession us = UserSession.GetUserSession();
 		Hashtable arguments = new Hashtable();
 		ApiManager apiManager = ApiManager.GetInstance();
+		Action<Hashtable> handler = HandleApiVerseSetList;
 		arguments.Add("user_id",us.userId);
 		arguments.Add("page",1);
 		arguments.Add("language_code",VerseManager.GetLanguage());
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleApiVerseSetList as Action<Hashtable>);
+		options.Add("handler", handler);
 		StartCoroutine(apiManager.CallApi("verseset/list",
 		arguments,
 		options));
@@ -90,19 +92,20 @@ public class NavigationButton:MonoBehaviour{
 		arguments.Add("order_by",view);
 		arguments.Add("page",1);
 		arguments.Add("language_code",VerseManager.GetLanguage());
-		
-	
+		Action<Hashtable> handler = HandleApiVerseSetList;
+		Action errorHandler = HandleError;
+
 		if ((view == "popular") || (view == "new")) {
 			options = new Hashtable();
-			options.Add("handler",HandleApiVerseSetList as Action<Hashtable>);
-			options.Add("errorHandler",HandleError as Action);
+			options.Add("handler", handler);
+			options.Add("errorHandler", errorHandler);
 			
 			StartCoroutine(apiManager.CallApi("verseset/list",
 			arguments,
 			options));
 		} else if (view == "history") {
 			options = new Hashtable();
-			options.Add("handler",HandleApiVerseSetList as Action<Hashtable>);
+			options.Add("handler", handler);
 			if (UserSession.IsLoggedIn() && (!VerseManager.historyLoaded)) {
 				StartCoroutine(apiManager.CallApi("profile/versesets/history",
 				new Hashtable(),

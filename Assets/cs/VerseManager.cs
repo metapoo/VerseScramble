@@ -629,9 +629,10 @@ public class VerseManager:MonoBehaviour{
 	public void LoadOnlineVerse(string verseId,bool includeSet) {
 		
 		Hashtable arguments = new Hashtable();
+		Action<Hashtable> handler = HandleVerseShow;
 		arguments.Add("verse_id",verseId);
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleVerseShow as Action<Hashtable>);
+		options.Add("handler", handler);
 		
 		StartCoroutine(ApiManager.GetInstance().CallApi("verse/show", 
 		arguments, 
@@ -686,7 +687,8 @@ public class VerseManager:MonoBehaviour{
 		Hashtable arguments = new Hashtable();
 		arguments.Add("verseset_id", versesetId);
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleShowVerseSet as Action<Hashtable>);
+		Action<Hashtable> handler = HandleShowVerseSet;
+		options.Add("handler", handler);
 		
 		StartCoroutine(ApiManager.GetInstance().CallApi("verseset/show",
 		arguments,

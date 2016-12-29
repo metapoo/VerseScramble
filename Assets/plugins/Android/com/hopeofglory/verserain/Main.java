@@ -7,7 +7,6 @@ import android.net.Uri;
 
 public class Main extends UnityPlayerActivity
 {
-
         protected void checkIntent()
         {
                 Intent intent = getIntent();

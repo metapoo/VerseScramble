@@ -75,16 +75,17 @@ public class LoginPanel:MonoBehaviour{
 	public void SubmitLogin() {
 		string username = usernameField.text;
 		string password = passwordField.text;
+		Action<Hashtable> handleLogin = HandleLogin;
 		ApiManager apiManager = ApiManager.GetInstance();
 		Hashtable arguments = new Hashtable();
 		arguments.Add("username",username);
 		arguments.Add("password",password);
 		
 		Hashtable options = new Hashtable();
-		options.Add("handler",HandleLogin as Action<Hashtable>);
-		options.Add("method","post");
-		options.Add("cacheEnabled",false);
-		options.Add("protocol","https");
+		options.Add("handler", handleLogin);
+		options.Add("method", "post");
+		options.Add("cacheEnabled", false);
+		options.Add("protocol", "https");
 		
 		StartCoroutine(apiManager.CallApi("login/login",arguments,options));
 	}
