@@ -1,9 +1,10 @@
 package com.hopeofglory.verserain;
 
-import com.unity3d.player.*;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
+import com.unity3d.player.UnityPlayer;
+import com.unity3d.player.UnityPlayerActivity;
 
 public class Main extends UnityPlayerActivity
 {
