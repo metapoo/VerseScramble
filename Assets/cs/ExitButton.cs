@@ -29,8 +29,7 @@ public class ExitButton:MonoBehaviour{
 		if (gameManager != null) {
 			gameManager.Cleanup();
 		}
-//		Application.LoadLevel(level);
-		SceneManager.LoadScene(level);
+		VerseSceneManager.loadScene(level);
 		Debug.Log("load level " + level);
 	}
 	

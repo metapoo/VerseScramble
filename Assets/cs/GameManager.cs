@@ -86,6 +86,7 @@ public class GameManager:MonoBehaviour{
 	public static List<WordLabel> activeWordLabels = new System.Collections.Generic.List<WordLabel>();
 
 	private static Hashtable langConfig = new Hashtable();
+	private static AsyncOperation loadSceneAsync;
 
 	Rect windowRect;
 	
@@ -121,8 +122,7 @@ public class GameManager:MonoBehaviour{
 	public void ExitToVerseList() {
 		GetComponent<AudioSource>().PlayOneShot(sndSelect, 1.0f);
 		Cleanup();
-//		Application.LoadLevel("versesets");
-		SceneManager.LoadScene("versesets");
+		VerseSceneManager.loadVersesets ();
 	}
 	
 	public bool CanShowSolution() {
@@ -1244,7 +1244,6 @@ public class GameManager:MonoBehaviour{
 		vm.Save();
 		SetChallengeModeEnabled(true);
 		
-//		Application.LoadLevel("scramble");
-		SceneManager.LoadScene ("scramble");
+		VerseSceneManager.loadScramble();
 	}
 }

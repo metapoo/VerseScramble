@@ -18,10 +18,10 @@ public class TitleManager:MonoBehaviour{
 	
 	public void LoadVerseSetsMenu(string language) {
 		UserSession us = UserSession.GetUserSession();
-		if (!us.IsUrlDirected()) {			
-//			Application.LoadLevel("versesets");
-			SceneManager.LoadScene ("versesets");
-
+		if (!us.IsUrlDirected()) {
+			Debug.Log ("Loading versesets");
+			VerseSceneManager.loadVersesets ();
+			Debug.Log ("Done loading versesets");
 		}
 	}
 	

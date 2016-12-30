@@ -127,8 +127,7 @@ public class UserSession:MonoBehaviour{
 		}
 		
 		VerseManager.loaded = false;
-//		Application.LoadLevel("scramble");
-		SceneManager.LoadScene("scramble");
+		VerseSceneManager.loadScramble ();
 
 	};
 	

@@ -16,8 +16,7 @@ public class EndOfGameOptions:MonoBehaviour{
 	public void BackToMenu() {
 		gameManager.Cleanup();
 		Destroy(this.gameObject);
-//		Application.LoadLevel("versesets");
-		SceneManager.LoadScene ("versesets");
+		VerseSceneManager.loadVersesets ();
 	}
 	
 	public void SaveTotalScore(Hashtable resultData) {

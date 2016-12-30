@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class SettingsManager:MonoBehaviour{
 	
@@ -18,7 +19,8 @@ public class SettingsManager:MonoBehaviour{
 	public void LoadVerseSetsMenu(string language) {
 		UserSession us = UserSession.GetUserSession();
 		if (!us.IsUrlDirected()) {			
-		//	Application.LoadLevel("versesets");
+			//Application.LoadLevel("versesets");
+			SceneManager.LoadSceneAsync("versesets");
 		}
 	}
 	

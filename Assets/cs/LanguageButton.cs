@@ -12,9 +12,7 @@ public class LanguageButton:MonoBehaviour{
 	
 	public void HandleOnClick() {
 		Action<string> onFinish = delegate( string language) {
-//			Application.LoadLevel("versesets");
-			SceneManager.LoadScene("versesets");
-
+			VerseSceneManager.loadVersesets ();
 		};
 		VerseManager.GetInstance().SwitchLanguage(languageCode, onFinish);
 	}

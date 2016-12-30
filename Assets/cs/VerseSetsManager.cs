@@ -154,8 +154,7 @@ public class VerseSetsManager:MonoBehaviour{
 	
 	public void GoBack() {
 		TitleManager.stayInTitleScreen = true;
-//		Application.LoadLevel("title");
-		SceneManager.LoadScene("title");
+		VerseSceneManager.loadTitle ();
 	}
 	
 	public void Awake() {

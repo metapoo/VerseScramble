@@ -13,7 +13,7 @@ public class VerseButton:MonoBehaviour{
 	public int verseIndex;
 	public VerseManager verseManager;
 	public RectTransform parentScrollContent;
-	
+
 	public void Awake() {
 		button = GetComponent<Button>();
 		button.onClick.AddListener(() => {HandleOnClick(); });
@@ -100,8 +100,7 @@ public class VerseButton:MonoBehaviour{
 			PlayerPrefs.SetInt("verse_scroll_content_anchored_y",
 							(int)parentScrollContent.anchoredPosition.y);
 		
-//			Application.LoadLevel("scramble");
-			SceneManager.LoadScene("scramble");
+			VerseSceneManager.loadScramble ();
 		};
 	
 		playVerse();
