@@ -451,6 +451,7 @@ public class WordLabel:MonoBehaviour{
 		GetComponent<Rigidbody2D>().gravityScale = 0.0f;
 		GetComponent<Rigidbody2D>().isKinematic = true;
 		GetComponent<Rigidbody2D>().velocity = (Vector2)new Vector3(0.0f,0.0f,0.0f);
+		GetComponent<Rigidbody2D>().freezeRotation = true;
 		oldRotation = transform.rotation;
 		
 		alpha = 0.5f;
