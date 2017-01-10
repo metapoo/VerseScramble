@@ -18,7 +18,7 @@ else:
 ADMIN_EMAIL = "\"Verse Rain\" <admin@%s>" % MAIL_DOMAIN
 MONGODB_HOST = "localhost"
 MONGODB_PORT = 27017
-MONGODB_USERNAME = "admin"
+MONGODB_USERNAME = "verserain"
 MONGODB_PASSWORD = "teaegg123"
 MONGODB_DATABASE = "verserain"
 SECRET_KEY = "X6yFzlxbSkyB7wjn/dHC49UGP10c7kj0uBj55zORhBw="
