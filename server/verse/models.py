@@ -131,6 +131,8 @@ class VerseSet(BaseModel, CommentaryMixin):
             days = 1
         time_decay = 1.0 / (pow(days,1.2))
         hotness = self.play_count() * time_decay * min(5, self.verse_count())
+        if (self.verse_count() <= 1):
+            hotness *= 0.1
         self["hotness"] = hotness
             
     def json(self):
