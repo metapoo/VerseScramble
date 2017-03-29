@@ -4,7 +4,7 @@ from verserain.email.models import *
 from verserain.api.api import ApiMixin
 from verserain.fb.fb import *
 from verserain import settings
-from tornado.auth import GoogleMixin, FacebookGraphMixin
+from tornado.auth import FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 

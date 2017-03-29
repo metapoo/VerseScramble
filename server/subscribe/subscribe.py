@@ -1,7 +1,7 @@
 from verserain.base.handler import BaseHandler
 from verserain.subscribe.models import *
 from verserain.login.auth import *
-from tornado.auth import GoogleMixin, FacebookGraphMixin
+from tornado.auth import FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 from tornado.escape import *

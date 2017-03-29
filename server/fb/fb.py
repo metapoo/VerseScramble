@@ -2,7 +2,7 @@ from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.email.models import *
 from verserain import settings
-from tornado.auth import GoogleMixin, FacebookGraphMixin
+from tornado.auth import FacebookGraphMixin
 from tornado.web import asynchronous
 from tornado.gen import coroutine
 
@@ -14,19 +14,9 @@ def get_handlers():
             (r"/fb/disconnect/?", FacebookDisconnectHandler),
 )
 
-def get_user_from_fb_profile(fb_user, fb_profile):
+def get_user_from_fb_user(fb_user):
     email = None
 
-    if fb_profile.has_key('name'):
-        fb_user['name'] = fb_profile['name']
-
-    if fb_profile.has_key('email'):
-        email = fb_profile['email']
-        fb_user['email'] = email
-    if fb_profile.has_key('gender'):
-        fb_user['gender'] = fb_profile['gender']
-
-    # Save the user with e.g. set_secure_cookie                                                                                                                                                  
     fb_uid = fb_user["id"]
     name = fb_user["name"]
     username = name
@@ -74,10 +64,10 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 redirect_uri=fblogin_url,
                 client_id=self.settings["facebook_api_key"],
                 client_secret=self.settings["facebook_secret"],
-                code=self.get_argument("code"))
+                code=self.get_argument("code"),
+                extra_fields=['email', 'gender'])
 
-            fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
-            user = get_user_from_fb_profile(fb_user, fb_profile)
+            user = get_user_from_fb_user(fb_user)
 
             session_key = user.session_key()
             self.set_secure_cookie("session_key", session_key)
