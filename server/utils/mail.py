@@ -72,7 +72,7 @@ def send_mail(sender, recipient, subject, body, reply_to=None, connection=None, 
         msg['Reply-To'] = reply_to
     created = False
     if connection is None:
-        connection = smtplib.SMTP('localhost',port=25)
+        connection = SMTP('localhost',port=25)
         created = True
 
     # Send the message via SMTP to localhost:25
