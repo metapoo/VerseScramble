@@ -23,7 +23,8 @@ class FacebookApiLoginHandler(BaseHandler, FacebookGraphMixin, ApiMixin):
         fb_pic_url = self.get_argument("fb_pic_url",None)
         fb_uid = self.get_argument("fb_uid")
         response = {}
-
+        user = self.current_user
+        
         if not access_token:
             response["logged_in"] = False
             self.return_success(response)
@@ -34,8 +35,11 @@ class FacebookApiLoginHandler(BaseHandler, FacebookGraphMixin, ApiMixin):
                  "access_token":access_token}
 
         fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
-        user = get_user_from_fb_user(fb_user)
-        
+        if user:
+            user = get_user_from_fb_user(fb_user)
+        else:
+            user.handle_fb_user(fb_user)
+            
         if user:
             response.update({"session_key": user.session_key(),
                              "logged_in": True

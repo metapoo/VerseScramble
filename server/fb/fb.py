@@ -67,8 +67,11 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 code=self.get_argument("code"),
                 extra_fields=['email', 'gender'])
 
-            user = get_user_from_fb_user(fb_user)
-
+            if not user:
+                user = get_user_from_fb_user(fb_user)
+            else:
+                user.handle_fb_user(fb_user)
+                
             session_key = user.session_key()
             self.set_secure_cookie("session_key", session_key)
         else:
