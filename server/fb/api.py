@@ -2,7 +2,7 @@ from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.email.models import *
 from verserain.api.api import ApiMixin
-from verserain.fb.fb import get_user_from_fb_profile
+from verserain.fb.fb import get_user_from_fb_user
 from verserain import settings
 from tornado.auth import FacebookGraphMixin
 from tornado.web import asynchronous
