@@ -15,10 +15,10 @@ def get_handlers():
 )
 
 def get_user_from_fb_user(fb_user, fb_profile):
-    email = None
+    email = fb_profile.get("email")
 
     fb_uid = fb_user["id"]
-    name = fb_user["name"]
+    name = fb_profile.get("name")
     username = name
     
     user = authenticate_login(fb_uid=fb_uid,
