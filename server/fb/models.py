@@ -16,10 +16,10 @@ class FacebookMixin:
 
         self.save()
 
-    def handle_fb_user(self, fb_user):
+    def handle_fb_user(self, fb_user, fb_profile):
         from verserain.fb.models import FbUser
         picture = fb_user.get('picture')
-        email = fb_user.get('email')
+        email = fb_profile.get('email')
 
         changed = False
         if picture:
@@ -30,8 +30,8 @@ class FacebookMixin:
                     self['fb_pic_url'] = url
                     changed = True
 
-        if self.get('name') != fb_user.get('name'):
-            self['name'] = fb_user.get('name')
+        if self.get('name') != fb_profile.get('name'):
+            self['name'] = fb_profile.get('name')
             changed = True
 
         if self.get('fb_uid') != fb_user.get('id'):

@@ -14,7 +14,7 @@ def get_handlers():
             (r"/fb/disconnect/?", FacebookDisconnectHandler),
 )
 
-def get_user_from_fb_user(fb_user):
+def get_user_from_fb_user(fb_user, fb_profile):
     email = None
 
     fb_uid = fb_user["id"]
@@ -36,7 +36,7 @@ def get_user_from_fb_user(fb_user):
 
         user = create_new_user(fb_uid=fb_uid, name=name, username=username)
 
-    user.handle_fb_user(fb_user)
+    user.handle_fb_user(fb_user, fb_profile)
     return user
 
 class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
@@ -67,10 +67,11 @@ class FacebookGraphLoginHandler(BaseHandler, FacebookGraphMixin):
                 code=self.get_argument("code"),
                 extra_fields=['email', 'gender'])
 
+            fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
             if user:
-                user.handle_fb_user(fb_user)
+                user.handle_fb_user(fb_user, fb_profile)
             else:
-                user = get_user_from_fb_user(fb_user)
+                user = get_user_from_fb_user(fb_user, fb_profile)
                 
             session_key = user.session_key()
             self.set_secure_cookie("session_key", session_key)

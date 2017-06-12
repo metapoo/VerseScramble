@@ -36,9 +36,9 @@ class FacebookApiLoginHandler(BaseHandler, FacebookGraphMixin, ApiMixin):
 
         fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
         if user:
-            user.handle_fb_user(fb_user)
+            user.handle_fb_user(fb_user, fb_profile)
         else:
-            user = get_user_from_fb_user(fb_user)
+            user = get_user_from_fb_user(fb_user, fb_profile)
             
         if user:
             response.update({"session_key": user.session_key(),
