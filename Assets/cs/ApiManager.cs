@@ -38,10 +38,8 @@ public class ApiManager: MonoBehaviour {
 		{
 		case NetworkReachability.ReachableViaLocalAreaNetwork:
 			return true;
-			break;
 		case NetworkReachability.ReachableViaCarrierDataNetwork:
 			return true;
-			break;
 		default:
 			return false;
 		}
