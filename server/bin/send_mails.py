@@ -5,7 +5,7 @@ from time import sleep
 from verserain.utils.text import *
 
 def get_connection():
-    return smtplib.SMTP(settings.IP_ADDRESS,port=25)
+    return smtplib.SMTP('localhost',port=25)
 
 def send_mails(connection=None):
     eqs = list(EmailQueue.collection.find())

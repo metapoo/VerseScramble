@@ -4,14 +4,12 @@ VERSERAIN_ENV = os.environ.get("VERSERAIN_ENV","development")
 
 if VERSERAIN_ENV == "development":
     SITE_DOMAIN = "dev.verserain.com"
-    IP_ADDRESS = "198.61.178.86"
     MAIL_DOMAIN = SITE_DOMAIN
     SITE_URL = "http://%s" % SITE_DOMAIN
     SECURE_SITE_URL = SITE_URL
 else:
     SITE_DOMAIN = "www.verserain.com"
     MAIL_DOMAIN = "verserain.com"
-    IP_ADDRESS = "162.242.175.244"
     SITE_URL = "http://%s" % SITE_DOMAIN
     SECURE_SITE_URL = SITE_URL.replace("http://","https://")
 
