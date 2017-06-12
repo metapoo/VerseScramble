@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Networking;
 using System;
 using System.IO;
 using System.Collections;
@@ -6,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 //using System.IO;
 	
@@ -32,22 +34,17 @@ public class ApiManager: MonoBehaviour {
 	}
 	
 	public static bool IsConnectedToInternet() {
-		bool isConnectedToInternet = false;
-		string ipAddress = Network.player.ipAddress.ToString().Trim();
-
-		ConnectionTesterStatus result = Network.TestConnection();
-
-		if (result == ConnectionTesterStatus.PublicIPIsConnectable) {
-			isConnectedToInternet = true;
-		} else if ((ipAddress == "127.0.0.1") || (ipAddress == "0.0.0.0"))
-    	{
-        	isConnectedToInternet = false;      
-    	} else {
-			isConnectedToInternet = true;
-    	}
-
-		UnityEngine.Debug.Log("Connected to the internet: " + isConnectedToInternet + " ip= " + ipAddress);
-		return isConnectedToInternet;
+		switch (Application.internetReachability)
+		{
+		case NetworkReachability.ReachableViaLocalAreaNetwork:
+			return true;
+			break;
+		case NetworkReachability.ReachableViaCarrierDataNetwork:
+			return true;
+			break;
+		default:
+			return false;
+		}
 	}
 	
 	public static string Md5(string strToEncrypt)
