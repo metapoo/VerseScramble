@@ -2,7 +2,7 @@ from verserain.base.handler import BaseHandler
 from verserain.login.auth import *
 from verserain.email.models import *
 from verserain.api.api import ApiMixin
-from verserain.fb.fb import *
+from verserain.fb.fb import get_user_from_fb_profile
 from verserain import settings
 from tornado.auth import FacebookGraphMixin
 from tornado.web import asynchronous
@@ -34,7 +34,7 @@ class FacebookApiLoginHandler(BaseHandler, FacebookGraphMixin, ApiMixin):
                  "access_token":access_token}
 
         fb_profile = yield self.facebook_request("/me",access_token=fb_user["access_token"])
-        user = get_user_from_fb_profile(fb_user, fb_profile)
+        user = get_user_from_fb_user(fb_user, fb_profile)
         
         if user:
             response.update({"session_key": user.session_key(),
