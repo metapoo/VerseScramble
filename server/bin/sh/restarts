@@ -1,0 +1,2 @@
+sudo /etc/init.d/supervisor stop
+sudo /etc/init.d/supervisor start

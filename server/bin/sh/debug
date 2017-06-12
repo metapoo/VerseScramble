@@ -1,0 +1,1 @@
+sudo cat /var/log/supervisor/verserain:4001-stderr---supervisor-*.log

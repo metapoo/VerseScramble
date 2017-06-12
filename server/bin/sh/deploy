@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/python/verserain/bin
+fab -H verserain@verserain.com deploy
