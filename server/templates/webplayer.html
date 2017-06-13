@@ -1,161 +1,30 @@
 {% extends "base.html" %}
 {% block init_js %}
-{% from verserain import settings %}
-{% if isIOS or isAndroid %}
-{#  {% if isIOS %}
-    setTimeout( function() { document.location = '{{settings.IOS_APPSTORE_URL}}'; }, 300);
-    setTimeout( function() {
-      window.history.back()
-    }, 400);
-  {% end %} #}
-  document.location = '{{device_url}}';
-{% end %}
+  {% from verserain import settings %}
+  {% if isIOS or isAndroid %}
+setTimeout( function() { document.location = '{{settings.IOS_APPSTORE_URL}}'; }, 300);
+setTimeout( function() {
+window.history.back()
+}, 400);
+document.location = '{{device_url}}';
+  {% end %}
 {% end %}
 
 {% block extra_js %}
-<script type='text/javascript' src='https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js'></script>
-<script type='text/javascript'>
-               var unityObjectUrl = "http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js";
-               if (document.location.protocol == 'https:')
-                       unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
-               document.write('<script type="text\/javascript" src="' + unityObjectUrl + '"><\/script>');
-</script>
-
-<script type='text/javascript'>
-
-			var config = {
-				width: 900, 
-				height: 600,
-				params: { enableDebugging:"0" }
-				
-			};
-			var u = new UnityObject2(config);
-			$("#unity_player_content").show();
-
-			jQuery(function() {
-				var $missingScreen = jQuery("#unityPlayer").find(".missing");
-				var $brokenScreen = jQuery("#unityPlayer").find(".broken");
-				$missingScreen.hide();
-				$brokenScreen.hide();
-				
-				u.observeProgress(function (progress) {
-					switch(progress.pluginStatus) {
-						case "broken":
-							$brokenScreen.find("a").click(function (e) {
-								e.stopPropagation();
-								e.preventDefault();
-								u.installPlugin();
-								return false;
-							});
-							$brokenScreen.show();
-						break;
-						case "missing":
-							$missingScreen.find("a").click(function (e) {
-								e.stopPropagation();
-								e.preventDefault();
-								u.installPlugin();
-								return false;
-							});
-							$missingScreen.show();
-						break;
-						case "installed":
-							$missingScreen.remove();
-						break;
-						case "first":
-						break;
-					}
-				});
-
-                                u.start_verserain = function() { 
-                                  var unity = u.getUnity();
-                                  $("#plugin_block_tip").hide();
-{% if device_url %}
-                                  unity.SendMessage("UserSession", "HandleURL", "{{device_url}}");
-{% else %}
-
-{% if user %}
-                                  unity.SendMessage("UserSession","DoLogin","{{user.session_key()}}");
+      var gameInstance = UnityLoader.instantiate("gameContainer", "webgl/Build/webgl.json", {onProgress: UnityProgress});
 {% end %}
 
+{% block head %}
+    <script src="webgl/TemplateData/UnityProgress.js"></script>
+    <script src="webgl/Build/UnityLoader.js"></script>
 {% end %}
-
-                                }
-				u.initPlugin(jQuery("#unityPlayer")[0], "/unity/versegame/versegame.unity3d?v=37.0");
-			});
-</script>
-{% end %}
-{% block page_content %}
-
-{% if isIOS or isAndroid %}
-<div class="centered_wrapper">
-  <form style="padding-top:30px;" class="centered"><h2>Download verserain on {% if isIOS %}the App Store{% else %}Google Play{% end %} to play.</h2></form>
-</div>
-{% end %}
-
-<div class="centered_wrapper">
-<div id="plugin_block_tip" class="centered" style="padding-bottom:20px;text-align:center;">
-<p>
-<h3><a style="text-decoration:underline;" class="link" target="_blank" href="http://unity3d.com/webplayer">{{gt("Verse Rain requires the Unity Player plug-in")}}</a></h3>
- {{gt("Please allow plug-ins to run on www.verserain.com in order to play")}} 
-</p>
-{% set user_guide_url = None %}
-
-
-{% if handler.isMacOS() %}
-
-{% if handler.isFirefox() %}
-{% set user_guide_url = "UserGuide_MacFirefox.pdf" %}
-{% elif handler.isChrome() %}
-{% set user_guide_url = "UserGuide_MacChrome.pdf" %}
-{% elif handler.isSafari() %}
-{% set user_guide_url = "UserGuide_MacSafari.pdf" %}
-{% end %}
-
-{% elif handler.isWindows() %}
-{% if handler.isFirefox() %}
-
-{% if current_language == "mn" %}
-{% set user_guide_url = "UserGuide_MN_WindowsFirefox.pdf" %}
-{% else %}
-{% set user_guide_url = "UserGuide_WindowsFirefox.pdf" %}
-{% end %}
-
-{% elif handler.isChrome() %}
-{% if current_language == "mn" %}
-{% set user_guide_url = "UserGuide_MN_WindowsChrome.pdf" %}
-{% else %}
-{% set user_guide_url = "UserGuide_WindowsChrome.pdf" %}
-{% end %}
-
-{% elif handler.isIE() %}
-{% set user_guide_Url = "UserGuide_WindowsIE.pdf" %}
-{% end %}
-
-{% end %}
-
-{% if user_guide_url %}
-<p>{{gt("Having Trouble?")}} <a class="link" href="/pdf/{{user_guide_url}}" target="_blank">{{gt("See instructions on how to install the Unity Player plug-in")}} </a></p>
-{% end %}
-
-</form>
-</div>
-
-<div id="unity_player_content" style="margin: 10px 0px 0px 0px;">
-		<div class="content">
-			<div id="unityPlayer">
-				<div class="missing">
-					<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
-						<img alt="Unity Web Player. Install now!" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" height="63" />
-					</a>
-				</div>
-				<div class="broken">
-					<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now! Restart your browser after install.">
-						<img alt="Unity Web Player. Install now! Restart your browser after install." src="http://webplayer.unity3d.com/installation/getunityrestart.png" width="193" height="63" />
-					</a>
-				</div>
-			</div>
-		</div>
-</div>
-</div>
-
+{% block page_content %}    
+    <div class="webgl-content">
+      <div id="gameContainer" style="width:1024px; height:576px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+        <div class="title">Verse Rain</div>
+      </div>
+    </div>
 {% end %}
