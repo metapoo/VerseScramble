@@ -103,7 +103,7 @@ public class UserSession:MonoBehaviour{
 		}
 	
 		apiDomain = apiDom;	
-		UnityEngine.Debug.Log("api domain set to " + apiDom);
+		UnityEngine.Debug.Log("Api domain set to " + apiDom);
 		
 		if (!IsLoggedIn() && (sessionKey != "None")) {
 			if (idstr != null) {
@@ -119,6 +119,7 @@ public class UserSession:MonoBehaviour{
 	}
 	
 	public Action StartGame = delegate() {
+		UnityEngine.Debug.Log("starting game");
 		GameObject gmObject = GameObject.Find("GameManager");	
 		
 		if (gmObject != null) {
@@ -134,8 +135,9 @@ public class UserSession:MonoBehaviour{
 	public void DoLogin(string sessionKey) {
 		DoLogin(sessionKey, null);
 	}
-	
-	public IEnumerator DoLogin(string sessionKey,Action afterLogin) {
+
+	public void DoLogin(string sessionKey,Action afterLogin) {
+		UnityEngine.Debug.Log("DoLogin with sessionKey: " + sessionKey);
 		Action<Hashtable> onLogin = delegate( Hashtable userData) {
 			HandleLogin(userData);
 			if (afterLogin != null) {
@@ -152,8 +154,6 @@ public class UserSession:MonoBehaviour{
 		options.Add("cacheEnabled",false);
 		options.Add("protocol","https");
 		options.Add("method","post");
-
-		yield return new WaitForSeconds(0.5f);
 
 		StartCoroutine(apiManager.CallApi("login/login",
 			arguments, 
@@ -279,7 +279,7 @@ public class UserSession:MonoBehaviour{
 	
 	public void Start() {
 	    // we're ready to pass in parameters from web client to user session
-		if (Application.isWebPlayer && !started) {
+		if ((Application.platform == RuntimePlatform.WebGLPlayer) && !started) {
 			Application.ExternalEval(
 	    	"u.start_verserain();"
 			);

@@ -22,7 +22,7 @@ public class ApiManager: MonoBehaviour {
 		if (UserSession.IsLoggedIn()) {
 			UserSession us = UserSession.GetUserSession();
 			if (!String.IsNullOrEmpty(us.sessionKey)) {
-				if (Application.isWebPlayer) {
+				if (Application.platform == RuntimePlatform.WebGLPlayer) {
 					sessionKeyString = "";
 				} else {
 					sessionKeyString = String.Format("?s={0}", us.sessionKey);
@@ -142,7 +142,7 @@ public class ApiManager: MonoBehaviour {
 	}
 	
     public void SetApiCache(string url,Hashtable resultData) {
-		if (Application.isWebPlayer) {
+		if (Application.platform == RuntimePlatform.WebGLPlayer) {
 			PlayerPrefs.DeleteKey(url);
 			return;
 		}
@@ -189,7 +189,9 @@ public class ApiManager: MonoBehaviour {
 		Debug.Log ("api cache hit for url: " + url);
 		*/
 
-		if (Application.isWebPlayer) return null;
+		if (Application.platform == RuntimePlatform.WebGLPlayer) {
+			return null;
+		}
 
 		string json = null;
 		try {
