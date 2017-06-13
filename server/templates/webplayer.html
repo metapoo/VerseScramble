@@ -17,7 +17,9 @@ var gameInstance = UnityLoader.instantiate("gameContainer", "/webgl/Build/webgl.
 var u = {
   start_verserain: function() {
     {% if device_url %}
-      gameInstance.SendMessage("UserSession", "HandleURL", "{{device_url}}");
+      setTimeout(function() {
+        gameInstance.SendMessage("UserSession", "HandleURL", "{{device_url}}");
+      }, 3000);
     {% else %}
       {% if user %}
         gameInstance.SendMessage("UserSession","DoLogin","{{user.session_key()}}");
