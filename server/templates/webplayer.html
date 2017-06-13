@@ -19,7 +19,7 @@ var u = {
     {% if device_url %}
       setTimeout(function() {
         gameInstance.SendMessage("UserSession", "HandleURL", "{{device_url}}");
-      }, 3000);
+      }, 1000);
     {% else %}
       {% if user %}
         gameInstance.SendMessage("UserSession","DoLogin","{{user.session_key()}}");
