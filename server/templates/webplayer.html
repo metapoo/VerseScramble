@@ -11,12 +11,26 @@ document.location = '{{device_url}}';
 {% end %}
 
 {% block extra_js %}
-      var gameInstance = UnityLoader.instantiate("gameContainer", "webgl/Build/webgl.json", {onProgress: UnityProgress});
+
+var gameInstance = UnityLoader.instantiate("gameContainer", "/webgl/Build/webgl.json?v=1", {onProgress: UnityProgress});
+
+var u = {
+  start_verserain: function() {
+    {% if device_url %}
+      gameInstance.SendMessage("UserSession", "HandleURL", "{{device_url}}");
+    {% else %}
+      {% if user %}
+        gameInstance.SendMessage("UserSession","DoLogin","{{user.session_key()}}");
+      {% end %}
+    {% end %}
+  }
+};
+
 {% end %}
 
 {% block head %}
-    <script src="webgl/TemplateData/UnityProgress.js"></script>
-    <script src="webgl/Build/UnityLoader.js"></script>
+    <script src="/webgl/TemplateData/UnityProgress.js"></script>
+    <script src="/webgl/Build/UnityLoader.js"></script>
 {% end %}
 {% block page_content %}    
     <div class="webgl-content">
