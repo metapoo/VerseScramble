@@ -21,10 +21,8 @@ document.location = '{{device_url}}';
 {% block page_content %}    
     <div class="webgl-content">
       <div id="gameContainer" style="width:1024px; height:576px; left:-87px;"></div>
-      <div class="footer">
-        <div class="webgl-logo"></div>
-        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-        <div class="title">Verse Rain</div>
+      <div class="footer" style="padding:10px;text-align:center;">
+	<a href="#" onclick="gameInstance.SetFullscreen(1); return false;" class="pure-button pure-button-primary">Play in Fullscreen</a>
       </div>
     </div>
 {% end %}
