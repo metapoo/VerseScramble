@@ -8,6 +8,7 @@ from tornado.web import asynchronous
 from tornado.gen import coroutine
 
 import re
+import urllib
 
 def get_handlers():
     return ((r"/login/logout/?", LogoutHandler),
@@ -148,7 +149,7 @@ class LoginHandler(BaseHandler):
             email = ""
         selected_nav = "login"
         if next_url:
-            self.set_cookie("next_url",next_url)
+            self.set_cookie("next_url",urllib.quote(next_url))
         self.render("login/login.html",user=user,error_message=error_message,email=email,
                     selected_nav=selected_nav, next_url=next_url)
 
@@ -178,8 +179,9 @@ class LoginHandler(BaseHandler):
         session_key = user.session_key()
         self.set_secure_cookie("session_key",session_key)
         self.set_secure_cookie("email",login_subject)
-
-        next_url = self.get_cookie("next_url","/")
+        next_url = self.get_cookie("next_url")
+        next_url = urllib.unquote(next_url) if next_url else "/"
+        
         self.redirectWithProtocol(uri=next_url,protocol="http")
         self.clear_cookie("next_url")
 
