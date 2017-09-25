@@ -149,7 +149,7 @@ class LoginHandler(BaseHandler):
             email = ""
         selected_nav = "login"
         if next_url:
-            self.set_cookie("next_url",urllib.quote(next_url))
+            self.set_cookie("next_url",urllib.quote(next_url.encode('utf-8')))
         self.render("login/login.html",user=user,error_message=error_message,email=email,
                     selected_nav=selected_nav, next_url=next_url)
 
