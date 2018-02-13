@@ -1,16 +1,24 @@
 fileFormatVersion: 2
 guid: 5b3a4cd2744d54b6e8280961d9049891
 TrueTypeFontImporter:
-  serializedVersion: 2
+  externalObjects: {}
+  serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  use2xBehaviour: 0
+  fontName: OptimusPrinceps
   fontNames:
   - OptimusPrinceps
   - Thonburi
+  - DFLiSongLight1B
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: df6347a3e52f6417c8612ee8540bc996, type: 3}
   customCharacters: 
   fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

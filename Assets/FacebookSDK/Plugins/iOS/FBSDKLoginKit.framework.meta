@@ -1,19 +1,24 @@
 fileFormatVersion: 2
 guid: a3eb20c92037e4e519a4811b34d297ba
 folderAsset: yes
-timeCreated: 1483047974
+timeCreated: 1518369621
 licenseType: Free
 PluginImporter:
-  serializedVersion: 1
+  externalObjects: {}
+  serializedVersion: 2
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
   isOverridable: 0
   platformData:
-    Any:
+  - first:
+      Any: 
+    second:
       enabled: 1
       settings: {}
-    Editor:
+  - first:
+      Editor: Editor
+    second:
       enabled: 0
       settings:
         DefaultValueInitialized: true

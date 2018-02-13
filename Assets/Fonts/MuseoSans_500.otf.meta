@@ -1,20 +1,25 @@
 fileFormatVersion: 2
 guid: 775ee19dfb80542e3ba1ef7c887cf0ca
 TrueTypeFontImporter:
-  serializedVersion: 2
+  externalObjects: {}
+  serializedVersion: 4
   fontSize: 16
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  use2xBehaviour: 0
+  fontName: Museo Sans
   fontNames:
   - Museo Sans
   - Sukhumvit
   - STHeitiSC-Medium
-  fallbackFontReferences: []
+  - DFLiSongLight1B
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: df6347a3e52f6417c8612ee8540bc996, type: 3}
   customCharacters: 
   fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
