@@ -103,6 +103,7 @@ def require_api_login(method):
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def require_login(method):
     """Decorate methods with this to require that the user be logged in                                                                                             
     and a superuser."""
@@ -120,6 +121,7 @@ def require_login(method):
         return method(self, *args, **kwargs)
     return wrapper
 
+
 def require_nonsecure(method):
     """Decorate methods with this to require that the user be logged in                                                                                             
     and a superuser."""
@@ -130,6 +132,7 @@ def require_nonsecure(method):
         else:
             return method(self, *args, **kwargs)
     return wrapper
+
 
 def require_secure(method):
     """Decorate methods with this to require that the user be logged in                                                                                             

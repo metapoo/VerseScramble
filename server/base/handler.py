@@ -1,11 +1,9 @@
-import logging
-import tornado.escape
-import tornado.httpclient
 import tornado.web
 
 from verserain.user.models import User
 from verserain import settings
 from verserain.translation.localization import *
+
 
 class BaseHandler(tornado.web.RequestHandler, TranslationManager):
     cookieless_okay = False
