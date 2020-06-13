@@ -41,7 +41,7 @@ class BaseHandler(tornado.web.RequestHandler, TranslationManager):
         email = user['email']
         subject = "%s" % (self.gt("Verify Email"),)
         hash_code = user.email_hash()
-        verify_url = "http://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
+        verify_url = "https://%s/profile/verify_email/verify?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                           hash_code, user.session_key())
         message, html = self.get_email_message("verify_email", verify_url=verify_url, user=user)
         

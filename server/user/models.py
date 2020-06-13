@@ -47,8 +47,8 @@ class User(BaseModel, PasswordMixin, FacebookMixin):
         if self.email():
             email_hash = md5(self.email().strip().lower().encode("utf-8")).hexdigest()
         else:
-            return "http://www.gravatar.com/avatar"
-        return "http://www.gravatar.com/avatar/%s" % email_hash
+            return "https://www.gravatar.com/avatar"
+        return "https://www.gravatar.com/avatar/%s" % email_hash
 
     def pic_url(self):
         if self.has_key('fb_pic_url'):

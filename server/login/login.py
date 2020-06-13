@@ -75,7 +75,7 @@ class ForgotPasswordHandler(BaseHandler):
             email = user['email']
             subject = "%s" % (self.gt("Reset Password"),)
             hash_code = user.reset_password_hash()
-            verify_url = "http://%s/login/reset_password?h=%s&s=%s" % (settings.SITE_DOMAIN,
+            verify_url = "https://%s/login/reset_password?h=%s&s=%s" % (settings.SITE_DOMAIN,
                                                                        hash_code, user.session_key())
             message, html = self.get_email_message("reset_password", verify_url=verify_url, user=user)
 
