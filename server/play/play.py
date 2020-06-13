@@ -14,6 +14,7 @@ def get_handlers():
             )
 
 class PlayHandler(BaseHandler):
+    @require_nonsecure
     def get(self):
         language = self.language_code(not_all=True)
         if self.isIOS() and False:
